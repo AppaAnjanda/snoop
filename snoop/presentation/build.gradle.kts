@@ -71,4 +71,6 @@ dependencies {
     implementation(libs.androidx.paging.compose)
     // Coil
     implementation(libs.bundles.coil)
+    // Sdp
+    implementation(libs.sdp)
 }

@@ -47,6 +47,8 @@ dependencies {
     implementation(project(":presentation"))
     implementation(project(":data"))
     implementation(project(":domain"))
+    testImplementation(libs.junit4)
+    androidTestImplementation(libs.androidx.test.ext.junit)
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

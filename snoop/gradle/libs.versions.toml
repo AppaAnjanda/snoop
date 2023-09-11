@@ -5,7 +5,7 @@ kotlin = "1.8.10"
 androidxActivity = "1.7.2"
 androidxLifecycle = "2.6.1"
 androidxHiltNavigationCompose = "1.0.0"
-androidxNavigation = "2.5.3"
+androidxNavigation = "2.7.1"
 androidxAppCompat = "1.6.1"
 androidxArchCore = "2.2.0"
 androidxCoreSplashscreen = "1.0.0"
@@ -26,6 +26,7 @@ androidxEspresso = "3.5.1"
 lifecycleRuntimeKtx = "2.6.1"
 material = "1.8.0"
 parcelize = "1.8.0"
+sdp = "1.1.0"
 hilt = "2.45"
 hiltJavax = "1"
 hiltCompiler = "2.45"
@@ -93,6 +94,9 @@ hilt-javax = { group= "javax.inject", name = "javax.inject", version.ref = "hilt
 #COROUTINE
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+
+#Sdp
+sdp = { group = "com.github.Kaaveh", name = "sdp-compose", version.ref = "sdp" }
 
 #Coil
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
