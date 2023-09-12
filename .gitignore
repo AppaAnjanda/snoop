@@ -275,3 +275,5 @@ hs_err_pid*
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,android,androidstudio,kobalt
+backend/snooping.mv.db
+backend/snooping.trace.db

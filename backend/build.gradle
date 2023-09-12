@@ -1,0 +1,63 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.15'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'appaanjanda'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '11'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// 롬복 라이브러리 사용
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// h2 데이터베이스
+	runtimeOnly 'com.h2database:h2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//swagger 의존성
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+
+//	// openfeign
+//	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// security, jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	implementation group: 'p6spy', name: 'p6spy', version: '3.9.1'
+
+	// firebase
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.1.1'
+
+	// 비밀번호 찾기 위해 이메일 인증
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
