@@ -60,7 +60,7 @@ public class MemberController {
 		return memberService.deleteUser(membersInfo.getId());
 	}
 
-	@Operation(summary = "토큰 재발급", description = "refreshToken이 있을 때 AccessToken 재발급", tags = { "Member Controller" })
+	@Operation(summary = "토큰 재발급", description = "refreshToken이 있을 때 AccessToken 재발급한다", tags = { "Member Controller" })
 	@PostMapping("/token")
 	public String getAccessToken (@RequestBody AccessTokenRequest request){
 		return memberService.getAccessToken(request);
