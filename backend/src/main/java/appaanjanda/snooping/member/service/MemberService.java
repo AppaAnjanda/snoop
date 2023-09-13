@@ -31,6 +31,7 @@ public class MemberService {
 	private final RefreshTokenRepository refreshTokenRepository;
 	private final JwtProvider jwtProvider;
 
+	// 유저 저장
 	public String save(UserSaveRequestDto userSaveRequestDto) {
 
 		Member member = Member.builder()
@@ -44,6 +45,8 @@ public class MemberService {
 		return userSaveRequestDto.getEmail();
 	}
 
+
+	// 유저 정보 조회
 	public UserResponse getUserInfo(Long id) {
 		Member member = memberRepository.findById(id).orElseThrow();
 
@@ -54,12 +57,15 @@ public class MemberService {
 			.build();
 	}
 
+	// 로그인
 	public String login(LoginRequest loginRequest) {
 		Member member = memberRepository.findByEmail(loginRequest.getEmail()).orElseThrow();
 
 		if (!loginRequest.getPassword().equals(member.getPassword())) {
 			throw new RuntimeException();
 		}
+
+		// 로그인 시 엑세스 토큰, 리프레시 토큰 발급
 		String accessToken = jwtProvider.createAccessToken(member);
 		String refreshToken = jwtProvider.createRefreshToken(member);
 
@@ -68,9 +74,10 @@ public class MemberService {
 			.memberId(member.getId())
 			.build();
 
+		// 레디스에 리프레시 토큰 저장
 		refreshTokenRepository.save(newRefreshToken);
 
-		return "Bearer " + accessToken + " \n " + "Bearer " + refreshToken;
+		return "Bearer " + accessToken + " \n" + "Bearer " + refreshToken;
 	}
 
 	// 닉네임 변경
@@ -101,4 +108,12 @@ public class MemberService {
 
 		return accessTokenResponse.getAccessToken();
 	}
+
+	// 비밀번호 변경
+	// public String
+
+
+	// 프로필 이미지 변경
+
+	// 이메일로 비밀 번호 찾기 -> sendeEmailServicie
 }
