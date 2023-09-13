@@ -19,6 +19,7 @@ import appaanjanda.snooping.member.service.dto.UpdateUserRequestDto;
 import appaanjanda.snooping.member.service.dto.UpdateUserResponseDto;
 import appaanjanda.snooping.member.service.dto.UserResponse;
 import appaanjanda.snooping.member.service.dto.UserSaveRequestDto;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,18 +43,21 @@ public class MemberController {
 		return memberService.login(loginRequest);
 	}
 
+	@SecurityRequirement(name = "Bearer Authentication")
 	@Operation(summary = "멤버 정보", description = "멤버 정보 불러오기", tags = { "Member Controller" })
 	@GetMapping("/info")
 	public UserResponse getUser (@MemberInfo MembersInfo membersInfo) throws Exception {
 		return memberService.getUserInfo(membersInfo.getId());
 	}
 
+	@SecurityRequirement(name = "Bearer Authentication")
 	@Operation(summary = "닉네임 변경", description = "서비스 내 나의 닉네임 변경", tags = { "Member Controller" })
 	@PutMapping("/change")
 	public UpdateUserResponseDto updateNickname (@MemberInfo MembersInfo membersInfo, @RequestBody UpdateUserRequestDto updateUserRequestDto){
 		return memberService.updateNickname(updateUserRequestDto, membersInfo.getId());
 	}
 
+	@SecurityRequirement(name = "Bearer Authentication")
 	@Operation(summary = "멤버 삭제", description = "멤버 정보 삭제", tags = { "Member Controller" })
 	@DeleteMapping("/delete")
 	public String delete (@MemberInfo MembersInfo membersInfo){
