@@ -17,15 +17,15 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: snooping@gmail.com
-    password: snooping!!123
+    username: k4minseung@gmail.com
+    password: jjeqtheoxnqsigvg
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
 
   datasource:
 #    url: jdbc:h2:tcp://localhost/~/shinhan
-    url : jdbc:h2:./snooping
+    url : jdbc:h2:tcp://localhost/~/snooping
     username: sa
     password:
     driver-class-name: org.h2.Driver
