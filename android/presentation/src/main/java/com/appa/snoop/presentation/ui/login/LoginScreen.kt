@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.appa.snoop.presentation.ui.login.component.GoSignupText
 import com.appa.snoop.presentation.ui.login.component.KakaoLoginButton
 import com.appa.snoop.presentation.ui.login.component.LoginImage
 import com.appa.snoop.presentation.ui.login.component.LoginText
@@ -38,6 +39,9 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center
         ) {
             LoginImage()
+        }
+        Box {
+            GoSignupText()
         }
         KakaoLoginButton()
     }

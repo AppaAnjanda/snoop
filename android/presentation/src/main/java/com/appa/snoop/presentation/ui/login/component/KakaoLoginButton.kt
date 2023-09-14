@@ -31,7 +31,6 @@ import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
-@SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
 fun KakaoLoginButton(
     modifier : Modifier = Modifier
