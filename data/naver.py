@@ -81,6 +81,12 @@ def naver_products_all():
 
         for item in response.json().get("items"):
 
+            # Price history
+            price_entry = {
+                "timestamp": current_time,
+                "price": item.get("lprice")
+            }
+
             # Product 메시지
             product_message = {
                 "id": f"product_{id}",
@@ -98,8 +104,7 @@ def naver_products_all():
                 "id": f"price_{id}",
                 "routing": f"product_{id}",
                 "index_name": major_category,
-                "timestamp": current_time,
-                "price": item.get("lprice")
+                "price_history": [price_entry]
             }
             # print(products_info)
 
@@ -138,6 +143,13 @@ def naver_products_digital():
 
         for item in response.json().get("items"):
             uuid = id + digital_list.get(query) + str(cnt)
+
+            # Price history
+            price_entry = {
+                "timestamp": current_time,
+                "price": item.get("lprice")
+            }
+
             # Product 메시지
             product_message = {
                 "id": f"product_{uuid}",
@@ -155,8 +167,7 @@ def naver_products_digital():
                 "id": f"price_{uuid}",
                 "routing": f"product_{uuid}",
                 "index_name": major_category,
-                "timestamp": current_time,
-                "price": item.get("lprice")
+                "price_history": [price_entry]
             }
             # print(item.get("title"))
             send_to_kafka2(product_message, price_message, topic)
@@ -194,6 +205,13 @@ def naver_products_furniture():
 
         for item in response.json().get("items"):
             uuid = id + furniture_list.get(query) + str(cnt)
+
+            # Price history
+            price_entry = {
+                "timestamp": current_time,
+                "price": item.get("lprice")
+            }
+
             # Product 메시지
             product_message = {
                 "id": f"product_{uuid}",
@@ -211,8 +229,7 @@ def naver_products_furniture():
                 "id": f"price_{uuid}",
                 "routing": f"product_{uuid}",
                 "index_name": major_category,
-                "timestamp": current_time,
-                "price": item.get("lprice")
+                "price_history": [price_entry]
             }
             # print(products_info)
 
@@ -250,6 +267,13 @@ def naver_products_necessaries():
 
         for item in response.json().get("items"):
             uuid = id + necessaries_list.get(query) + str(cnt)
+
+            # Price history
+            price_entry = {
+                "timestamp": current_time,
+                "price": item.get("lprice")
+            }
+
             # Product 메시지
             product_message = {
                 "id": f"product_{uuid}",
@@ -267,8 +291,7 @@ def naver_products_necessaries():
                 "id": f"price_{uuid}",
                 "routing": f"product_{uuid}",
                 "index_name": major_category,
-                "timestamp": current_time,
-                "price": item.get("lprice")
+                "price_history": [price_entry]
             }
             # print(products_info)
 
@@ -305,6 +328,13 @@ def naver_products_food():
 
         for item in response.json().get("items"):
             uuid = id + food_list.get(query) + str(cnt)
+
+            # Price history
+            price_entry = {
+                "timestamp": current_time,
+                "price": item.get("lprice")
+            }
+
             # Product 메시지
             product_message = {
                 "id": f"product_{uuid}",
@@ -322,8 +352,7 @@ def naver_products_food():
                 "id": f"price_{uuid}",
                 "routing": f"product_{uuid}",
                 "index_name": major_category,
-                "timestamp": current_time,
-                "price": item.get("lprice")
+                "price_history": [price_entry]
             }
             # print(products_info)
 
