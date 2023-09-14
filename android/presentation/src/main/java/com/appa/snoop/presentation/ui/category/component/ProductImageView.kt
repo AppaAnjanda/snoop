@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.appa.snoop.presentation.R
+import com.appa.snoop.presentation.common.LottieAnim
 import com.appa.snoop.presentation.ui.theme.BlackColor
 import com.appa.snoop.presentation.ui.theme.BlueColor
 import com.appa.snoop.presentation.ui.theme.RedColor
@@ -43,11 +44,24 @@ fun ProductImageView(
     productState: String,
     onLikeClicked: () -> Unit
 ) {
-    var liked by remember { mutableStateOf(false) }
+    var isChecked by remember { mutableStateOf(false) }
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(10.sdp))
     ) {
+        AsyncImage(
+            modifier = modifier
+                .width(140.sdp)
+                .aspectRatio(1f)
+                .align(Alignment.Center)
+                .background(color = WhiteColor),
+            model = ImageRequest.Builder(LocalContext.current)
+                .data("https://media.istockphoto.com/id/1358386001/photo/apple-macbook-pro.jpg?s=612x612&w=0&k=20&c=d14HA-i0EHpdvNvccdJQ5pAkQt8bahxjjb6fO6hs4E8=")
+                .build(),
+            contentDescription = "제품 이미지",
+            contentScale = ContentScale.FillWidth
+        )
+
         Box(
             modifier = modifier
                 .wrapContentSize()
@@ -65,17 +79,6 @@ fun ProductImageView(
                 )
             )
         }
-        AsyncImage(
-            modifier = modifier
-                .width(140.sdp)
-                .aspectRatio(1f)
-                .align(Alignment.Center),
-            model = ImageRequest.Builder(LocalContext.current)
-                .data("https://media.istockphoto.com/id/1358386001/photo/apple-macbook-pro.jpg?s=612x612&w=0&k=20&c=d14HA-i0EHpdvNvccdJQ5pAkQt8bahxjjb6fO6hs4E8=")
-                .build(),
-            contentDescription = "제품 이미지",
-            contentScale = ContentScale.Crop
-        )
         Box(
             modifier = modifier
                 .padding(bottom = 8.sdp, end = 8.sdp)
@@ -86,23 +89,21 @@ fun ProductImageView(
                     .size(24.sdp)
                     .shadow(
                         elevation = 4.sdp,
-                        shape =  CircleShape
+                        shape = CircleShape
                     )
                     .clip(CircleShape)
                     .background(color = WhiteColor)
+                    .padding(3.sdp)
                     .noRippleClickable {
                         // TODO("서버에 찜목록 추가")
                         onLikeClicked()
-                        liked = !liked
                     }
             ) {
-                Icon(
-                    painter = painterResource(
-                        id = if (liked) R.drawable.ic_filled_like else R.drawable.ic_like
-                    ),
-                    contentDescription = "좋아요",
-                    modifier = modifier.align(Alignment.Center),
-                    tint = if (liked) RedColor else BlackColor
+                LottieAnim(
+                    res = R.raw.lottie_like,
+                    isChecked = isChecked,
+                    startTime = 0.2f,
+                    endTime = 0.7f
                 )
             }
         }
