@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 val PrimaryColor = Color(0xFF48D1CC)
 val BlueColor = Color(0xFF0064FF)
 val BackgroundColor = Color(0xFFEBEBEB)
+val NavBarColor = Color(0xFFFAFAFA)
 val RedColor = Color(0xFFFF4F4F)
 val DarkGrayColor = Color(0xFF919191)
 val BlackColor = Color(0xFF202632)
