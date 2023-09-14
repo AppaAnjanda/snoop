@@ -3,6 +3,9 @@ package com.appa.snoop.presentation.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,6 +22,8 @@ fun SnoopNavHost(
     innerPaddings: PaddingValues,
     navController: NavHostController,
 ) {
+    val isLogined by remember { mutableStateOf(false) }
+
     NavHost(
         modifier = Modifier.padding(innerPaddings),
         navController = navController,
@@ -38,13 +43,23 @@ fun SnoopNavHost(
         }
         mainSlideTransitions(
             route = MainNav.Like.route,
+//            route = LoginNav.route
         ) {
-            LikeScreen(navController)
+            if (isLogined) {
+                LikeScreen(navController)
+            } else {
+                LoginScreen(navController = navController)
+//                navController.navigate(Router.MAIN_LOGIN_ROUTER_NAME)
+            }
         }
         mainSlideTransitions(
             route = MainNav.MyPage.route,
         ) {
-            MypageScreen(navController)
+            if (isLogined) {
+                MypageScreen(navController)
+            } else {
+                LoginScreen(navController = navController)
+            }
         }
         defaultSlideTransitions(
             route = SearchNav.route,

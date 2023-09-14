@@ -48,7 +48,7 @@ fun NavGraphBuilder.mainSlideTransitions(
         },
         popExitTransition = {
             fadeOut(
-                animationSpec = tween(300),
+                animationSpec = tween(100),
 //                targetAlpha = 0.5f
             )
 //            slideOutOfContainer(

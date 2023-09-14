@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.appa.snoop.presentation.navigation.MainNav
 import com.appa.snoop.presentation.navigation.NavUtil
+import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.theme.BackgroundColor
 import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.NavBarColor
@@ -76,6 +77,7 @@ fun CustomTabBar(
                     clip = true
                     shadowElevation = 20f
                 },
+            divider = {  },
             selectedTabIndex = bottomNavigationItems.indexOfFirst { it.route == currentRoute },
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(

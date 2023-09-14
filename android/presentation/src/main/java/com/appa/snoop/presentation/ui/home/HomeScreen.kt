@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.navigation.NavController
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.ui.home.component.HomeItem
@@ -49,7 +50,10 @@ fun HomeScreen(
 
         for (i in 0 .. 6) {
             HomeItemListTitleView(titleName = "맥북", titleImg = R.drawable.img_notebook)
-            LazyRow{
+            LazyRow (
+                modifier = Modifier
+                    .padding(horizontal = 16.sdp)
+            ) {
                 items(itemList) {
                     HomeItem(
                         onItemClicked = {},
