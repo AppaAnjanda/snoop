@@ -2,6 +2,7 @@ package appaanjanda.snooping.domain.card.controller;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,14 +27,14 @@ public class CardController {
 	@SecurityRequirement(name = "Bearer Authentication")
 	@Operation(summary = "카드 하나 삭제", description = "유저 정보를 jwt로 확인하고 request로 넘겨준 cardname을 삭제한다.", tags = { "Card Controller" })
 	@DeleteMapping("/delete")
-	public void deleteCard(@MemberInfo MembersInfo membersInfo, DeleteCardRequest request){
+	public void deleteCard(@MemberInfo MembersInfo membersInfo, @RequestBody DeleteCardRequest request){
 		cardService.deleteCard(membersInfo.getId(), request);
 	}
 
 	@SecurityRequirement(name = "Bearer Authentication")
 	@Operation(summary = "카드 추가", description = "유저 정보를 jwt로 확인하고 request로 넘겨준 cardname을 추가한다.", tags = { "Card Controller" })
 	@PutMapping("/addCard")
-	public void updateMyCard(@MemberInfo MembersInfo membersInfo, AddMyCardRequest request){
+	public void updateMyCard(@MemberInfo MembersInfo membersInfo, @RequestBody AddMyCardRequest request){
 		cardService.updateMyCard(membersInfo.getId(), request);
 	}
 }

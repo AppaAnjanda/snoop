@@ -1,15 +1,13 @@
 package appaanjanda.snooping.domain.member.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import appaanjanda.snooping.domain.card.entity.Card;
+import appaanjanda.snooping.domain.card.entity.MyCard;
 import appaanjanda.snooping.domain.card.repository.CardRepository;
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.entity.RefreshToken;
@@ -18,13 +16,13 @@ import appaanjanda.snooping.domain.member.repository.RefreshTokenRepository;
 import appaanjanda.snooping.domain.member.service.dto.AccessTokenRequest;
 import appaanjanda.snooping.domain.member.service.dto.AccessTokenResponse;
 import appaanjanda.snooping.domain.member.service.dto.ChangeMyPasswordRequestDto;
-import appaanjanda.snooping.domain.member.service.dto.SendEmailRequestDto;
 import appaanjanda.snooping.domain.member.service.dto.LoginRequest;
-import appaanjanda.snooping.domain.member.service.dto.UpdateProfilePictureDto;
+import appaanjanda.snooping.domain.member.service.dto.LoginResponse;
 import appaanjanda.snooping.domain.member.service.dto.UpdateUserRequestDto;
 import appaanjanda.snooping.domain.member.service.dto.UpdateUserResponseDto;
 import appaanjanda.snooping.domain.member.service.dto.UserResponse;
 import appaanjanda.snooping.domain.member.service.dto.UserSaveRequestDto;
+import appaanjanda.snooping.global.config.PasswordEncoder;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BadRequestException;
 // import appaanjanda.snooping.global.s3.S3Uploader;
@@ -45,32 +43,37 @@ public class MemberService {
 	private final JwtProvider jwtProvider;
 	private final CardRepository cardRepository;
 	// private final S3Uploader s3Uploader;
-	private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+	private final PasswordEncoder passwordEncoder;
 
 
 	// 유저 저장
 	public String save(UserSaveRequestDto userSaveRequestDto) {
 
-		List<Card> cardList = new ArrayList<>();
+		List<MyCard> myCardList = new ArrayList<>();
 		List<String> cardsList = userSaveRequestDto.getCardsList();
 
-		for (String cardName : cardsList) {
-			Card card = Card.builder()
-				.myCard(cardName)
-				.build();
 
-			cardList.add(card);
-		}
 
 		Member member = Member.builder()
 			.email(userSaveRequestDto.getEmail())
-			.password(bCryptPasswordEncoder.encode(userSaveRequestDto.getPassword()))
+			.password(passwordEncoder.encrypt(userSaveRequestDto.getEmail(), userSaveRequestDto.getPassword()))
 			.nickname(userSaveRequestDto.getNickname())
 			.role(Role.USER)
-			.cardList(cardList)
 			.build();
 
-		memberRepository.save(member);
+		memberRepository.saveAndFlush(member);
+
+		for (String cardName : cardsList) {
+			MyCard myCard = MyCard.builder()
+				.cardType(cardName)
+				.member(member)
+				.build();
+
+			myCardList.add(myCard);
+		}
+
+		member.setCardList(myCardList);
+
 		return userSaveRequestDto.getEmail();
 	}
 
@@ -82,20 +85,33 @@ public class MemberService {
 			new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID)
 		);
 
+		List<String> cardName = new ArrayList<>();
+
+		List<MyCard> cardByMemberId = cardRepository.findCardByMemberId(member.getId());
+
+		for (MyCard myCard : cardByMemberId) {
+			cardName.add(myCard.getCardType());
+		}
+
 		return UserResponse.builder()
 			.email(member.getEmail())
 			.nickname(member.getNickname())
+			.myCardList(cardName)
 			.role(member.getRole())
 			.build();
 	}
 
 	// 로그인
-	public String login(LoginRequest loginRequest) {
+	public LoginResponse login(LoginRequest loginRequest) {
 		Member member = memberRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() ->
 			new BadRequestException(ErrorCode.INVALID_USER_DATA)
 		);
 
-		if (!loginRequest.getPassword().equals(bCryptPasswordEncoder.encode(member.getPassword()))) {
+		log.info("loginRequest.getPassword()={}", loginRequest.getPassword());
+		log.info("passwordEncoder.encrypt(member.getEmail(), member.getPassword())={}", passwordEncoder.encrypt(member.getEmail(), member.getPassword()));
+
+
+		if (!member.getPassword().equals(passwordEncoder.encrypt(loginRequest.getEmail(), loginRequest.getPassword()))) {
 			throw new RuntimeException();
 		}
 
@@ -111,7 +127,9 @@ public class MemberService {
 		// 레디스에 리프레시 토큰 저장
 		refreshTokenRepository.save(newRefreshToken);
 
-		return "Bearer " + accessToken + " \n" + "Bearer " + refreshToken;
+		return LoginResponse.builder()
+			.accessToken(accessToken)
+			.build();
 	}
 
 	// 닉네임 변경
@@ -119,6 +137,7 @@ public class MemberService {
 		Member member = memberRepository.findById(id).orElseThrow(() ->
 			new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID)
 		);
+
 		member.setNickname(updateUserRequestDto.getNickName());
 
 		return UpdateUserResponseDto.builder()
@@ -147,10 +166,12 @@ public class MemberService {
 
 	// 비밀번호 변경
 	public void changeMyPassword(Long id, ChangeMyPasswordRequestDto requestDto){
-		Member member = memberRepository.findById(id).orElseThrow();
-		if(bCryptPasswordEncoder.matches(requestDto.getNowPassword(), member.getPassword())  &&
+		Member member = memberRepository.findById(id).orElseThrow(() ->
+				new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID)
+			);
+		if(passwordEncoder.encrypt(member.getEmail(),requestDto.getNowPassword()).equals(member.getPassword())  &&
 			requestDto.getPasswordOne().equals(requestDto.getPasswordTwo())){
-			member.setUserPassword(bCryptPasswordEncoder.encode(member.getPassword()));
+			member.setUserPassword(passwordEncoder.encrypt(member.getEmail(), member.getPassword()));
 		}
 	}
 

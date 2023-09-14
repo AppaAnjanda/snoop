@@ -32,10 +32,6 @@ spring:
   main:
     allow-circular-references: true
 
-  security:
-    user:
-      name: appaAnjanda
-      password: appaAnjanda!appaAnjanda!
 
   jpa:
     hibernate:

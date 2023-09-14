@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import appaanjanda.snooping.domain.card.entity.Card;
+import appaanjanda.snooping.domain.card.entity.MyCard;
 
-public interface CardRepository extends JpaRepository<Card, Long> {
+public interface CardRepository extends JpaRepository<MyCard, Long> {
 
-	List<Card> findCardByMemberId(Long id);
+	List<MyCard> findCardByMemberId(Long id);
 }

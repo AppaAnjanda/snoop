@@ -3,13 +3,13 @@ package appaanjanda.snooping.domain.member.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import appaanjanda.snooping.domain.member.service.dto.SendEmailRequestDto;
 import appaanjanda.snooping.domain.member.repository.MemberRepository;
 import appaanjanda.snooping.domain.member.service.dto.MailDto;
+import appaanjanda.snooping.global.config.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 
 
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class SendEmailService {
 
 	private final MemberRepository memberRepository;
-	private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+	private final PasswordEncoder passwordEncoder;
 	private final JavaMailSender mailSender;
 
 	@Value("${spring.mail.username}")
@@ -39,7 +39,7 @@ public class SendEmailService {
 	}
 
 	private void updatePassword(String str, String userEmail) {
-		String password = bCryptPasswordEncoder.encode(str);
+		String password = passwordEncoder.encrypt(userEmail, str);
 		memberRepository.findMemberByEmail(userEmail).orElseThrow();
 		memberRepository.updateMemberPassword(userEmail, password);
 	}

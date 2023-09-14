@@ -11,14 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import appaanjanda.snooping.domain.card.entity.Card;
+import appaanjanda.snooping.domain.card.entity.MyCard;
+import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.global.common.BaseTimeEntity;
 import appaanjanda.snooping.domain.member.entity.enumType.Role;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,11 +45,14 @@ public class Member extends BaseTimeEntity {
 	private String nickname;
 
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-	private List<Card> cardList;
+	private List<MyCard> myCardList;
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	private List<Wishbox> wishboxList;
 
 	@Builder
 	public Member(Long id, String name, String password, String profileUrl, String email, Role role, String nickname,
-		List<Card> cardList) {
+		List<MyCard> myCardList, List<Wishbox> wishboxList) {
 		this.id = id;
 		this.name = name;
 		this.password = password;
@@ -60,7 +60,8 @@ public class Member extends BaseTimeEntity {
 		this.email = email;
 		this.role = role;
 		this.nickname = nickname;
-		this.cardList = cardList;
+		this.myCardList = myCardList;
+		this.wishboxList = wishboxList;
 	}
 
 	public void setNickname(String nickName) {
@@ -75,7 +76,7 @@ public class Member extends BaseTimeEntity {
 		this.profileUrl = upload;
 	}
 
-	public void passwordEncode(BCryptPasswordEncoder bCryptPasswordEncoder) {
-		this.password = bCryptPasswordEncoder.encode(this.password);
+	public void setCardList(List<MyCard> myCardList) {
+		this.myCardList = myCardList;
 	}
 }
