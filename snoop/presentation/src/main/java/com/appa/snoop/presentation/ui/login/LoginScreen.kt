@@ -1,4 +1,4 @@
-package com.appa.snoop.presentation.ui.category
+package com.appa.snoop.presentation.ui.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -7,30 +7,28 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.appa.snoop.presentation.ui.theme.YellowColor
-import com.appa.snoop.presentation.util.effects.MainLaunchedEffect
+import com.appa.snoop.presentation.ui.theme.BlueColor
+import com.appa.snoop.presentation.util.effects.LoginLaunchEffect
 
 @Composable
-fun MainCategoryScreen(
+fun LoginScreen(
     navController: NavController
 ) {
-    MainLaunchedEffect(navController)
+    LoginLaunchEffect(navController)
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = "category",
+            text = "loginpage",
             fontSize = 30.sp
         )
-
         // 테스트 코드
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(YellowColor)
+                .background(BlueColor)
         )
     }
 }

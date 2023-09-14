@@ -2,7 +2,7 @@ package com.appa.snoop.presentation.navigation
 
 // TODO("Navigation Router end point 패키지")
 object Router {
-//    const val `시작 루트_도착 루트_ROUTER_NAME` = ""
+    //    const val `시작 루트_도착 루트_ROUTER_NAME` = ""
     const val MAIN_HOME_ROUTER_NAME = "main_home"
     const val MAIN_MY_PAGE_ROUTER_NAME = "main_my_page"
     const val MAIN_CATEGORY_ROUTER_NAME = "main_category"
@@ -10,6 +10,9 @@ object Router {
 
     // 검색 창
     const val MAIN_SEARCH_ROUTER_NAME = "main_search"
+
+    // 로그인 창
+    const val MAIN_LOGIN_ROUTER_NAME = "main_login"
 
     // 알림 화면
     const val MAIN_NOTIFICATION_ROUTER_NAME = "main_notification"
@@ -23,6 +26,9 @@ object Router {
 
         // 검색 창
         const val MAIN_SEARCH = "찾아보기"
+
+        // 로그인 창
+        const val MAIN_LOGIN = "로그인"
 
         // 알림 화면
         const val MAIN_NOTIFICATION = "알림"

@@ -73,4 +73,6 @@ dependencies {
     implementation(libs.bundles.coil)
     // Sdp
     implementation(libs.sdp)
+    // lottie
+    implementation(libs.lottie)
 }

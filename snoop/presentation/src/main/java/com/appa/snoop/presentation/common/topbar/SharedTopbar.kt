@@ -40,10 +40,7 @@ fun SharedTopAppBar(
     if (appBarState.isCenterTopBar) {
         CenterAlignedTopAppBar(
             modifier = modifier
-                .background(color = White)
-                .graphicsLayer {
-//                    shadowElevation = 10f
-                },
+                .background(color = White),
             navigationIcon = {
                 val icon = appBarState.navigationIcon
                 val callback = appBarState.onNavigationIconClick
@@ -62,6 +59,7 @@ fun SharedTopAppBar(
                 if (title is String) {
                     Text(
                         text = title,
+                        fontWeight = FontWeight.ExtraBold
                         style = TextStyle(fontFamily = GmarketSans, fontSize = 16.ssp)
                     )
                 } else if (title is Int) {
@@ -87,10 +85,7 @@ fun SharedTopAppBar(
     } else {
         TopAppBar(
             modifier = modifier
-                .background(WhiteColor)
-                .graphicsLayer {
-                    shadowElevation = 10f
-                },
+                .background(WhiteColor),
             navigationIcon = {
                 val icon = appBarState.navigationIcon
                 val callback = appBarState.onNavigationIconClick
@@ -109,6 +104,7 @@ fun SharedTopAppBar(
                 if (title is String) {
                     Text(
                         text = title,
+                        fontWeight = FontWeight.ExtraBold
                         style = TextStyle(fontFamily = GmarketSans, fontSize = 16.ssp)
                     )
                 } else if (title is Int) {

@@ -39,6 +39,7 @@ import com.appa.snoop.presentation.ui.theme.BackgroundColor
 import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.NavBarColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
+import com.appa.snoop.presentation.ui.theme.WhiteColor
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
@@ -96,7 +97,7 @@ fun CustomTabBar(
                 )
             },
             contentColor = DarkGrayColor, // 텍스트 색상
-            containerColor = NavBarColor
+            containerColor = WhiteColor
         ) {
             bottomNavigationItems.forEach { item ->
                 val selected = currentRoute == item.route
