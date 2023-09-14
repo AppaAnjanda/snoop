@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
 import com.appa.snoop.presentation.ui.category.component.CategoryItem
+import com.appa.snoop.presentation.util.effects.CategoryLaunchedEffect
 
 const val SIZE = 2
 @Composable
@@ -18,6 +19,9 @@ fun CategoryScreen(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController()
 ) {
+
+    CategoryLaunchedEffect(navController = navController)
+
     Column(
         modifier = modifier
             .fillMaxSize()
