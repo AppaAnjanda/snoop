@@ -3,7 +3,9 @@ package com.appa.snoop.presentation.ui.notification.component
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -58,6 +60,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
@@ -155,7 +158,7 @@ fun NotificationItem(
                 show = false
                 true
             } else false
-        }, positionalThreshold = { 150f }
+        }, positionalThreshold = { 400f }
     )
     AnimatedVisibility(
         show, exit = fadeOut(spring())
@@ -168,7 +171,8 @@ fun NotificationItem(
             },
             dismissContent = {
                 NotificationItemComponent(item)
-            }
+            },
+            directions = setOf(DismissDirection.EndToStart)
         )
     }
 
@@ -187,16 +191,22 @@ fun NotificationItem(
 fun DismissBackground(dismissState: DismissState) {
     val color by animateColorAsState(
         when (dismissState.targetValue) {
-            DismissValue.Default -> Color.Transparent // dismissThresholds 만족 안한 상태
-            DismissValue.DismissedToEnd -> Color.Green.copy(alpha = 0.4f) // -> 방향 스와이프 (수정)
+            DismissValue.Default -> Color.White // dismissThresholds 만족 안한 상태
+            DismissValue.DismissedToEnd -> Color.Transparent // -> 방향 스와이프 (수정)
             DismissValue.DismissedToStart -> Color.LightGray.copy(alpha = 0.5f) // <- 방향 스와이프 (삭제)
-        }, label = ""
+        }, label = "",
+        animationSpec = tween(durationMillis = 250)
     )
-//    val color = when (dismissState.dismissDirection) {
-//        DismissDirection.StartToEnd -> Color(0xFF1DE9B6)
-//        DismissDirection.EndToStart -> Color(0xFFBBBBBB)
-//        null -> Color.Transparent
-//    }
+
+    val iconColor by animateColorAsState(
+        when (dismissState.targetValue) {
+            DismissValue.Default -> Color.LightGray.copy(alpha = 0.5f)
+            DismissValue.DismissedToEnd -> Color.Transparent // -> 방향 스와이프 (수정)
+            DismissValue.DismissedToStart -> Color.White // <- 방향 스와이프 (삭제)
+        }, label = "",
+        animationSpec = tween(durationMillis = 250)
+    )
+
 //    val icon = when (dismissState.targetValue) {
 //        DismissValue.Default -> painterResource(R.drawable.ic_round_circle_24)
 //        DismissValue.DismissedToEnd -> painterResource(R.drawable.ic_round_edit_24)
@@ -215,8 +225,8 @@ fun DismissBackground(dismissState: DismissState) {
         Spacer(modifier = Modifier)
         if (direction == DismissDirection.EndToStart) Icon(
             Icons.Default.Delete,
-            contentDescription = "Archive",
-            tint = Color.White
+            contentDescription = "Delete",
+            tint = iconColor
         )
     }
 }
@@ -269,6 +279,16 @@ fun NotificationItemComponent(item: Notification) {
                     style = TextStyle(
                         fontWeight = FontWeight.Normal,
                         fontSize = 12.ssp,
+                        color = Color.Gray
+                    )
+                )
+                Spacer(modifier = Modifier.size(8.sdp))
+                Text(
+                    text = "1일전",
+                    lineHeight = 18.ssp,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 10.ssp,
                         color = Color.Gray
                     )
                 )
