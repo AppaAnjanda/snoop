@@ -19,19 +19,25 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.appa.snoop.presentation.ui.product.component.AlarmSnackBar
 import com.appa.snoop.presentation.ui.product.component.ButtonView
 import com.appa.snoop.presentation.ui.product.component.BuyTimingView
 import com.appa.snoop.presentation.ui.product.component.ProductDetailView
 import com.appa.snoop.presentation.ui.theme.WhiteColor
+import com.appa.snoop.presentation.util.effects.ProductLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun ProductDetailScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
+    ProductLaunchedEffect(navController = navController)
+
     val scrollState = rememberScrollState()
 
     var alarmChecked by remember { mutableStateOf(false) }
@@ -91,5 +97,5 @@ fun ProductDetailScreen(
 @Preview
 @Composable
 fun PreviewProductDetailScreen() {
-    ProductDetailScreen()
+    ProductDetailScreen(navController = rememberNavController())
 }

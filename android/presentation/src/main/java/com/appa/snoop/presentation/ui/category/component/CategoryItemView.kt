@@ -24,6 +24,7 @@ import com.appa.snoop.presentation.ui.theme.BlackColor
 import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.RedColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
+import com.appa.snoop.presentation.util.extensions.noRippleClickable
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
@@ -38,6 +39,9 @@ fun CategoryItem(
             .wrapContentHeight()
             .background(color = WhiteColor)
             .padding(horizontal = 16.sdp, vertical = 8.sdp)
+            .noRippleClickable {
+                onItemClicked()
+            }
     ) {
         ProductImageView(
             productState = "최저가"

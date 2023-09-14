@@ -12,6 +12,7 @@ import com.appa.snoop.presentation.ui.like.LikeScreen
 import com.appa.snoop.presentation.ui.login.LoginScreen
 import com.appa.snoop.presentation.ui.mypage.MypageScreen
 import com.appa.snoop.presentation.ui.notification.NotificationScreen
+import com.appa.snoop.presentation.ui.product.ProductDetailScreen
 import com.appa.snoop.presentation.ui.search.SearchScreen
 
 @Composable
@@ -60,6 +61,13 @@ fun SnoopNavHost(
             route = NotificationNav.route
         ) {
             NotificationScreen(navController)
+        }
+        defaultSlideTransitions(
+            route = Router.CATEGORY_PRODUCT_ROUTER_NAME
+        ) {
+            ProductDetailScreen(
+                navController = navController
+            )
         }
     }
 }
