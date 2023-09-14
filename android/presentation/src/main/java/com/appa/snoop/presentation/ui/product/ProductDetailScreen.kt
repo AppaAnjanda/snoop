@@ -25,6 +25,7 @@ import com.appa.snoop.presentation.ui.product.component.AlarmSnackBar
 import com.appa.snoop.presentation.ui.product.component.ButtonView
 import com.appa.snoop.presentation.ui.product.component.BuyTimingView
 import com.appa.snoop.presentation.ui.product.component.ProductDetailView
+import com.appa.snoop.presentation.ui.product.component.RecommendListView
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.effects.ProductLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
@@ -63,6 +64,7 @@ fun ProductDetailScreen(
                 }
             )
             BuyTimingView()
+            RecommendListView()
         }
         AlarmSnackBar(
             hostState = snackState,
@@ -70,6 +72,7 @@ fun ProductDetailScreen(
             percent = 10
         )
         Spacer(modifier = Modifier.height(16.sdp))
+        // TODO (가격 추이 그래프 추가하기)
         ButtonView(
             alarmChecked = alarmChecked,
             onBuyClicked = { /*TODO*/ },
