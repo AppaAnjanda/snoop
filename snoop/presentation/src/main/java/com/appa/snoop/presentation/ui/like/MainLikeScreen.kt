@@ -25,6 +25,7 @@ fun MainLikeScreen(
             text = "like",
             fontSize = 30.sp
         )
+
         // 테스트 코드
         Box(
             modifier = Modifier

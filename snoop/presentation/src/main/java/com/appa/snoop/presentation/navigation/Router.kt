@@ -14,6 +14,9 @@ object Router {
     // 로그인 창
     const val MAIN_LOGIN_ROUTER_NAME = "main_login"
 
+    // 알림 화면
+    const val MAIN_NOTIFICATION_ROUTER_NAME = "main_notification"
+
     object Title {
         //    const val `시작 루트_도착 루트` = ""
         const val MAIN_HOME = "홈"
@@ -26,5 +29,8 @@ object Router {
 
         // 로그인 창
         const val MAIN_LOGIN = "로그인"
+
+        // 알림 화면
+        const val MAIN_NOTIFICATION = "알림"
     }
 }

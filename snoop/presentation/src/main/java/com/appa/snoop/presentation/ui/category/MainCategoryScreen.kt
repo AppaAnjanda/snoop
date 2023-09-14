@@ -25,6 +25,7 @@ fun MainCategoryScreen(
             text = "category",
             fontSize = 30.sp
         )
+
         // 테스트 코드
         Box(
             modifier = Modifier

@@ -2,6 +2,7 @@ package com.appa.snoop.presentation.common.topbar
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -12,15 +13,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.TextStyle
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.topbar.utils.ActionsMenu
 import com.appa.snoop.presentation.common.topbar.utils.AppBarState
+import com.appa.snoop.presentation.ui.theme.GmarketSans
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import ir.kaaveh.sdpcompose.sdp
+import ir.kaaveh.sdpcompose.ssp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,9 +41,6 @@ fun SharedTopAppBar(
         CenterAlignedTopAppBar(
             modifier = modifier
                 .background(color = White),
-//                .graphicsLayer {
-//                    shadowElevation = 10f
-//                },
             navigationIcon = {
                 val icon = appBarState.navigationIcon
                 val callback = appBarState.onNavigationIconClick
@@ -47,7 +48,8 @@ fun SharedTopAppBar(
                     IconButton(onClick = { callback?.invoke() }) {
                         Icon(
                             painter = painterResource(id = icon),
-                            contentDescription = appBarState.navigationIconContentDescription
+                            contentDescription = appBarState.navigationIconContentDescription,
+                            modifier = Modifier.size(14.sdp)
                         )
                     }
                 }
@@ -58,6 +60,7 @@ fun SharedTopAppBar(
                     Text(
                         text = title,
                         fontWeight = FontWeight.ExtraBold
+                        style = TextStyle(fontFamily = GmarketSans, fontSize = 16.ssp)
                     )
                 } else if (title is Int) {
                     Image(
@@ -83,9 +86,6 @@ fun SharedTopAppBar(
         TopAppBar(
             modifier = modifier
                 .background(WhiteColor),
-//                .graphicsLayer {
-//                    shadowElevation = 10f
-//                },
             navigationIcon = {
                 val icon = appBarState.navigationIcon
                 val callback = appBarState.onNavigationIconClick
@@ -93,7 +93,8 @@ fun SharedTopAppBar(
                     IconButton(onClick = { callback?.invoke() }) {
                         Icon(
                             painter = painterResource(id = icon),
-                            contentDescription = appBarState.navigationIconContentDescription
+                            contentDescription = appBarState.navigationIconContentDescription,
+                            modifier = Modifier.size(14.sdp)
                         )
                     }
                 }
@@ -104,6 +105,7 @@ fun SharedTopAppBar(
                     Text(
                         text = title,
                         fontWeight = FontWeight.ExtraBold
+                        style = TextStyle(fontFamily = GmarketSans, fontSize = 16.ssp)
                     )
                 } else if (title is Int) {
                     Image(
