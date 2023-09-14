@@ -17,6 +17,9 @@ object Router {
     // 알림 화면
     const val MAIN_NOTIFICATION_ROUTER_NAME = "main_notification"
 
+    // 프로필 변경 화면
+    const val MY_PAGE_MODIFY_PROFILE_ROUTER_NAME = "mypage_modify_profile"
+
     object Title {
         //    const val `시작 루트_도착 루트` = ""
         const val MAIN_HOME = "홈"
@@ -32,5 +35,8 @@ object Router {
 
         // 알림 화면
         const val MAIN_NOTIFICATION = "알림"
+
+        // 프로필 변경
+        const val MY_PAGE_MODIFY_PROFILE = "프로필 변경"
     }
 }
