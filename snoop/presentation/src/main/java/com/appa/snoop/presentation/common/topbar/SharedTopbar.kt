@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.topbar.utils.ActionsMenu
 import com.appa.snoop.presentation.common.topbar.utils.AppBarState
@@ -35,10 +36,10 @@ fun SharedTopAppBar(
     if (appBarState.isCenterTopBar) {
         CenterAlignedTopAppBar(
             modifier = modifier
-                .background(color = White)
-                .graphicsLayer {
-                    shadowElevation = 10f
-                },
+                .background(color = White),
+//                .graphicsLayer {
+//                    shadowElevation = 10f
+//                },
             navigationIcon = {
                 val icon = appBarState.navigationIcon
                 val callback = appBarState.onNavigationIconClick
@@ -54,7 +55,10 @@ fun SharedTopAppBar(
             title = {
                 val title = appBarState.title
                 if (title is String) {
-                    Text(text = title)
+                    Text(
+                        text = title,
+                        fontWeight = FontWeight.ExtraBold
+                    )
                 } else if (title is Int) {
                     Image(
                         modifier = Modifier
@@ -78,10 +82,10 @@ fun SharedTopAppBar(
     } else {
         TopAppBar(
             modifier = modifier
-                .background(WhiteColor)
-                .graphicsLayer {
-                    shadowElevation = 10f
-                },
+                .background(WhiteColor),
+//                .graphicsLayer {
+//                    shadowElevation = 10f
+//                },
             navigationIcon = {
                 val icon = appBarState.navigationIcon
                 val callback = appBarState.onNavigationIconClick
@@ -97,7 +101,10 @@ fun SharedTopAppBar(
             title = {
                 val title = appBarState.title
                 if (title is String) {
-                    Text(text = title)
+                    Text(
+                        text = title,
+                        fontWeight = FontWeight.ExtraBold
+                    )
                 } else if (title is Int) {
                     Image(
                         modifier = Modifier

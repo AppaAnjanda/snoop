@@ -1,9 +1,16 @@
 package com.appa.snoop.presentation.navigation
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -11,6 +18,7 @@ import androidx.navigation.compose.composable
 import com.appa.snoop.presentation.ui.category.MainCategoryScreen
 import com.appa.snoop.presentation.ui.home.MainHomeScreen
 import com.appa.snoop.presentation.ui.like.MainLikeScreen
+import com.appa.snoop.presentation.ui.login.LoginScreen
 import com.appa.snoop.presentation.ui.mypage.MainMypageScreen
 import com.appa.snoop.presentation.ui.search.SearchScreen
 
@@ -24,30 +32,35 @@ fun SnoopNavHost(
         navController = navController,
         startDestination = MainNav.Home.route
     ) {
-        composable(
-            route = MainNav.Home.route,
+        mainSlideTransitions(
+            route = MainNav.Home.route
         ) {
-            MainHomeScreen()
+            MainHomeScreen(navController)
         }
-        composable(
+        mainSlideTransitions(
             route = MainNav.Category.route,
         ) {
-            MainCategoryScreen()
+            MainCategoryScreen(navController)
         }
-        composable(
+        mainSlideTransitions(
             route = MainNav.Like.route,
         ) {
-            MainLikeScreen()
+            MainLikeScreen(navController)
         }
-        composable(
+        mainSlideTransitions(
             route = MainNav.MyPage.route,
         ) {
-            MainMypageScreen()
+            MainMypageScreen(navController)
         }
-        composable(
+        defaultSlideTransitions(
             route = SearchNav.route,
         ) {
-            SearchScreen()
+            SearchScreen(navController)
+        }
+        defaultSlideTransitions(
+            route = LoginNav.route,
+        ) {
+            LoginScreen(navController)
         }
     }
 }

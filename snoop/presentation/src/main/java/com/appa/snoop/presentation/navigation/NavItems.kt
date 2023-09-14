@@ -41,9 +41,14 @@ sealed class MainNav(
     }
 }
 
+// 검색 페이지
 object SearchNav : Destination {
     override val route: String = Router.MAIN_SEARCH_ROUTER_NAME
     override val title: String = Router.Title.MAIN_SEARCH
 }
 
-// 추가 화면 코드 아래에 작성
+// 로그인 페이지
+object LoginNav : Destination {
+    override val route = Router.MAIN_LOGIN_ROUTER_NAME
+    override val title = Router.Title.MAIN_LOGIN
+}

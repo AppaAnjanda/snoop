@@ -51,7 +51,7 @@ class AppBarState(
         @Composable get() = currentScreen?.onNavigationIconClick
 
     val title: Any?
-//        @Composable get() = currentScreen?.title.orEmpty()
+        //        @Composable get() = currentScreen?.title.orEmpty()
         @Composable get() = currentScreen?.title
 
     val actions: List<ActionMenuItem>

@@ -35,6 +35,7 @@ okhttp = "4.10.0"
 retrofit = "2.9.0"
 room = "2.5.2"
 coil = "2.4.0"
+lottie = "6.1.0"
 
 [libraries]
 
@@ -101,6 +102,9 @@ sdp = { group = "com.github.Kaaveh", name = "sdp-compose", version.ref = "sdp" }
 #Coil
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }
+
+#Lottie
+lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 
 [plugins]
 
