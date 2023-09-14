@@ -2,6 +2,7 @@ package appaanjanda.snooping.domain.member.controller;
 
 import appaanjanda.snooping.domain.member.service.MemberService;
 import appaanjanda.snooping.domain.member.service.dto.AccessTokenRequest;
+import appaanjanda.snooping.domain.member.service.dto.ChangeMyPasswordRequestDto;
 import appaanjanda.snooping.domain.member.service.dto.LoginRequest;
 import appaanjanda.snooping.domain.member.service.dto.UpdateUserRequestDto;
 import appaanjanda.snooping.domain.member.service.dto.UpdateUserResponseDto;
@@ -67,6 +68,13 @@ public class MemberController {
 	@PostMapping("/token")
 	public String getAccessToken (@RequestBody AccessTokenRequest request){
 		return memberService.getAccessToken(request);
+	}
+
+	@Operation(summary = "비밀번호 변경", description = "현재 비밀번호를 입력후 1, 2차 확인 후 변경할 비밀번호로 바꾼다 ", tags = { "Member Controller" })
+	@PostMapping("/token")
+	public void changeMyPassword (@MemberInfo MembersInfo membersInfo, ChangeMyPasswordRequestDto requestDto){
+		memberService.changeMyPassword(membersInfo.getId(), requestDto);
+
 	}
 
 }

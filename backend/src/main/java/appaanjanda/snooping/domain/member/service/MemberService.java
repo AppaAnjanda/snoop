@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +45,7 @@ public class MemberService {
 	private final JwtProvider jwtProvider;
 	private final CardRepository cardRepository;
 	// private final S3Uploader s3Uploader;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
 
 	// 유저 저장
@@ -62,7 +64,7 @@ public class MemberService {
 
 		Member member = Member.builder()
 			.email(userSaveRequestDto.getEmail())
-			.password(userSaveRequestDto.getPassword())
+			.password(bCryptPasswordEncoder.encode(userSaveRequestDto.getPassword()))
 			.nickname(userSaveRequestDto.getNickname())
 			.role(Role.USER)
 			.cardList(cardList)
@@ -93,7 +95,7 @@ public class MemberService {
 			new BadRequestException(ErrorCode.INVALID_USER_DATA)
 		);
 
-		if (!loginRequest.getPassword().equals(member.getPassword())) {
+		if (!loginRequest.getPassword().equals(bCryptPasswordEncoder.encode(member.getPassword()))) {
 			throw new RuntimeException();
 		}
 
@@ -146,9 +148,9 @@ public class MemberService {
 	// 비밀번호 변경
 	public void changeMyPassword(Long id, ChangeMyPasswordRequestDto requestDto){
 		Member member = memberRepository.findById(id).orElseThrow();
-		if(member.getPassword().equals(requestDto.getPasswordOne()) &&
+		if(bCryptPasswordEncoder.matches(requestDto.getNowPassword(), member.getPassword())  &&
 			requestDto.getPasswordOne().equals(requestDto.getPasswordTwo())){
-			member.setUserPassword(member.getPassword());
+			member.setUserPassword(bCryptPasswordEncoder.encode(member.getPassword()));
 		}
 	}
 

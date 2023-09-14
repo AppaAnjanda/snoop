@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import appaanjanda.snooping.domain.card.entity.Card;
 import appaanjanda.snooping.global.common.BaseTimeEntity;
 import appaanjanda.snooping.domain.member.entity.enumType.Role;
@@ -71,5 +73,9 @@ public class Member extends BaseTimeEntity {
 
 	public void setProfileImageUrl(String upload) {
 		this.profileUrl = upload;
+	}
+
+	public void passwordEncode(BCryptPasswordEncoder bCryptPasswordEncoder) {
+		this.password = bCryptPasswordEncoder.encode(this.password);
 	}
 }
