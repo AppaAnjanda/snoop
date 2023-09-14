@@ -1,4 +1,4 @@
-package com.appa.snoop.presentation.product
+package com.appa.snoop.presentation.ui.product
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,10 +19,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.appa.snoop.presentation.product.component.AlarmSnackBar
-import com.appa.snoop.presentation.product.component.ButtonView
-import com.appa.snoop.presentation.product.component.BuyTimingView
-import com.appa.snoop.presentation.product.component.ProductDetailView
+import com.appa.snoop.presentation.ui.product.component.AlarmSnackBar
+import com.appa.snoop.presentation.ui.product.component.ButtonView
+import com.appa.snoop.presentation.ui.product.component.BuyTimingView
+import com.appa.snoop.presentation.ui.product.component.ProductDetailView
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.delay

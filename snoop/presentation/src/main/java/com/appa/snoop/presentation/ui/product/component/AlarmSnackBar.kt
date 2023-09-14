@@ -1,4 +1,4 @@
-package com.appa.snoop.presentation.product.component
+package com.appa.snoop.presentation.ui.product.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image

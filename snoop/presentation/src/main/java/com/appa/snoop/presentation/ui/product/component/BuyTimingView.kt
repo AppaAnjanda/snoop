@@ -1,4 +1,4 @@
-package com.appa.snoop.presentation.product.component
+package com.appa.snoop.presentation.ui.product.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
