@@ -94,6 +94,7 @@ fun NotificationView() {
             pages.forEachIndexed { index, title ->
                 Tab(
                     content = {
+                        Spacer(modifier = Modifier.size(8.sdp))
                         Text(
                             text = title,
                             style = TextStyle(fontSize = 14.ssp, fontWeight = FontWeight.Normal)
@@ -130,7 +131,6 @@ fun NotificationView() {
                         NotificationItem(content, onRemove = { currentItem ->
                             notificaitonViewModel.removeItem(currentItem)
                         })
-                        HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
                     }
             }
         }
@@ -157,7 +157,7 @@ fun NotificationItem(
         }, positionalThreshold = { 150f }
     )
     AnimatedVisibility(
-        show,exit = fadeOut(spring())
+        show, exit = fadeOut(spring())
     ) {
         SwipeToDismiss(
             state = dismissState,
@@ -179,7 +179,6 @@ fun NotificationItem(
         }
     }
 }
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -239,45 +238,55 @@ fun NotificationSettingComponent() {
 
 @Composable
 fun NotificationItemComponent(item: Notification) {
-    Row(
-        modifier = Modifier.padding(start = 16.sdp, end = 16.sdp, top = 10.sdp, bottom = 10.sdp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(3f)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_user), contentDescription = "로고",
-                    modifier = Modifier.size(20.sdp)
-                )
+    Column {
+        Row(
+            modifier = Modifier.padding(
+                start = 16.sdp,
+                end = 16.sdp,
+                top = 10.sdp,
+                bottom = 10.sdp
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(3f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_user),
+                        contentDescription = "로고",
+                        modifier = Modifier.size(20.sdp)
+                    )
+                    Spacer(modifier = Modifier.size(4.sdp))
+                    Text(
+                        text = "${item.type} 알림",
+                        style = TextStyle(fontWeight = FontWeight.Normal, fontSize = 12.ssp)
+                    )
+                }
                 Spacer(modifier = Modifier.size(4.sdp))
                 Text(
-                    text = "${item.type} 알림",
-                    style = TextStyle(fontWeight = FontWeight.Normal, fontSize = 12.ssp)
+                    text = "${item.name} 현재 ${item.type}입니다!",
+                    lineHeight = 18.ssp,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.ssp,
+                        color = Color.Gray
+                    )
                 )
             }
-            Spacer(modifier = Modifier.size(4.sdp))
-            Text(
-                text = "${item.name} 현재 ${item.type}입니다!",
-                lineHeight = 18.ssp,
-                style = TextStyle(
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.ssp,
-                    color = Color.Gray
-                )
+
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(item.img)
+                    .build(),
+                contentDescription = "상품 사진",
+                modifier = Modifier
+                    .weight(1f)
+                    .aspectRatio(1f),
+                contentScale = ContentScale.Inside
             )
         }
-
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(item.img)
-                .build(),
-            contentDescription = "상품 사진",
-            modifier = Modifier
-                .weight(1f)
-                .aspectRatio(1f),
-            contentScale = ContentScale.Inside
-        )
+        HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
     }
+
 
 }
 
