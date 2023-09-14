@@ -177,5 +177,5 @@ data class Notification(
     var type: String = "최저가",
     var name: String = "Apple 맥북 프로 14 스페이스 그레이 M2 pro 10코어",
     var img: String = "https://media.istockphoto.com/id/1358386001/photo/apple-macbook-pro.jpg?s=612x612&w=0&k=20&c=d14HA-i0EHpdvNvccdJQ5pAkQt8bahxjjb6fO6hs4E8=",
-    var date: String = "2023-09-12"
+    var date: String = "2023-09-12T00:00:00.000"
 )

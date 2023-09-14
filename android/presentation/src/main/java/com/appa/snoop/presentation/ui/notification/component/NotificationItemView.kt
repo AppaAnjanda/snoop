@@ -1,5 +1,7 @@
 package com.appa.snoop.presentation.ui.notification.component
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,9 +24,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.appa.snoop.presentation.R
+import com.appa.snoop.presentation.util.DateUtil
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NotificationItemComponent(item: Notification) {
     Column {
@@ -62,7 +66,7 @@ fun NotificationItemComponent(item: Notification) {
                 )
                 Spacer(modifier = Modifier.size(8.sdp))
                 Text(
-                    text = "1일전",
+                    text = DateUtil.dateToString(item.date),
                     lineHeight = 18.ssp,
                     style = TextStyle(
                         fontWeight = FontWeight.Normal,
