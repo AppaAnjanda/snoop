@@ -37,7 +37,7 @@ fun SearchScreen(
     var active by remember { mutableStateOf(false) }
 
     Scaffold(
-        
+
     ) {
 
     }

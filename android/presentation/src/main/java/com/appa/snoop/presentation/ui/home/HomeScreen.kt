@@ -19,12 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.navigation.NavController
 import com.appa.snoop.presentation.R
+import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.home.component.HomeItem
 import com.appa.snoop.presentation.ui.home.component.HomeItemListTitleView
 import com.appa.snoop.presentation.ui.home.component.MultipleImageView
 import com.appa.snoop.presentation.ui.home.dumy.imageLinks
 import com.appa.snoop.presentation.ui.home.dumy.imageLinksToCoupang
 import com.appa.snoop.presentation.ui.home.dumy.itemList
+import com.appa.snoop.presentation.ui.login.component.GoSignupText
 import com.appa.snoop.presentation.util.effects.MainLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
 
