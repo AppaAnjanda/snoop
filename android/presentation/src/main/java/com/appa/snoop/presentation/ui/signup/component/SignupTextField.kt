@@ -1,5 +1,7 @@
 package com.appa.snoop.presentation.ui.signup.component
 
+import android.util.Log
+import android.widget.NumberPicker.OnValueChangeListener
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +14,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,86 +29,94 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.ui.theme.BackgroundColor
 import com.appa.snoop.presentation.ui.theme.DarkGrayColor
+import com.appa.snoop.presentation.ui.theme.InvalidRedColor
+import com.appa.snoop.presentation.ui.theme.PrimaryColor
+import com.appa.snoop.presentation.ui.theme.RedColor
 import ir.kaaveh.sdpcompose.sdp
+import java.util.regex.Pattern
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignupTextField() {
-    var text by remember { mutableStateOf("") }
-
-    BasicTextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(color= BackgroundColor, width = 1.sdp, shape = RoundedCornerShape(10.sdp))
-            .padding(8.sdp),
+fun SignupTextField(
+    modifier: Modifier = Modifier,
+    title: String = "입력",
+    text: String = "",
+    onValueChange: (String) -> Unit,
+) {
+    OutlinedTextField(
         value = text,
-        onValueChange = { text = it },
+        onValueChange = onValueChange,
+        label = { Text(title) },
+        shape = RoundedCornerShape(10.sdp),
         maxLines = 1,
-        decorationBox = {}
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = DarkGrayColor,
+            unfocusedBorderColor = DarkGrayColor,
+            cursorColor = DarkGrayColor,
+            focusedLabelColor = DarkGrayColor,
+            unfocusedLabelColor = DarkGrayColor,
+        ),
+        modifier = modifier
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DuckieTextField(
-    text: String,
-    onTextChanged: (String) -> Unit,
+fun PasswordTextField(
+    modifier: Modifier = Modifier,
+    title: String = "입력",
+    text: String = "",
+    onValueChange: (String) -> Unit,
 ) {
-    BasicTextField(
+    var passwordVisibility by remember { mutableStateOf(false) }
+    var isPasswordValid by remember { mutableStateOf(true) }
+
+    OutlinedTextField(
         value = text,
-        onValueChange = onTextChanged,
-        decorationBox = {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                text.forEachIndexed { index, char ->
-                    DuckieTextFieldCharContainer(
-                        text = char,
-                        isFocused = index == text.lastIndex,
-                    )
-                }
-                repeat(5 - text.length) {
-                    DuckieTextFieldCharContainer(
-                        text = ' ',
-                        isFocused = false,
-                    )
-                }
+        onValueChange = {
+            // 비밀번호 유효성 검사
+            isPasswordValid = isValidPassword(it)
+            onValueChange(it)
+        },
+        label = { Text(title) },
+        shape = RoundedCornerShape(10.sdp),
+        maxLines = 1,
+        visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+        trailingIcon = {
+            IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                Icon(
+                    modifier = Modifier
+                        .padding(8.sdp),
+                    imageVector = if (passwordVisibility) ImageVector.vectorResource(id = R.drawable.ic_visibility) else ImageVector.vectorResource(id = R.drawable.ic_visibility_off),
+                    contentDescription = "password visibility",
+                    tint = DarkGrayColor
+                )
             }
         },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = if (!isPasswordValid) InvalidRedColor else DarkGrayColor,
+            unfocusedBorderColor = if (!isPasswordValid) InvalidRedColor else DarkGrayColor,
+            cursorColor = DarkGrayColor,
+            focusedLabelColor = if (!isPasswordValid) InvalidRedColor else DarkGrayColor,
+            unfocusedLabelColor = if (!isPasswordValid) InvalidRedColor else DarkGrayColor,
+        ),
+        modifier = modifier
     )
 }
 
-@Composable
-private fun DuckieTextFieldCharContainer(
-    modifier: Modifier = Modifier,
-    text: Char,
-    isFocused: Boolean,
-) {
-    val shape = remember { RoundedCornerShape(4.dp) }
+fun isValidPassword(password: String): Boolean {
+    val pwPattern4 =
+        "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@!%*#?&.])[A-Za-z[0-9]$@!%*#?&.]{8,20}$" // 영문, 숫자, 특수문자
 
-    Box(
-        modifier = modifier
-            .size(
-                width = 29.dp,
-                height = 40.dp,
-            )
-            .background(
-                color = Color(0xFFF6F6F6),
-                shape = shape,
-            )
-            .run {
-                if (isFocused) {
-                    border(
-                        width = 1.dp,
-                        color = Color(0xFFFF8300),
-                        shape = shape,
-                    )
-                } else {
-                    this
-                }
-            },
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(text = text.toString())
-    }
+    return (Pattern.matches (pwPattern4, password))
 }
-
