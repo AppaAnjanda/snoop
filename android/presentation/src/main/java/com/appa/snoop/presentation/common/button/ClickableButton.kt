@@ -5,6 +5,7 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -19,6 +20,7 @@ fun ClickableButton(
     modifier: Modifier = Modifier,
     shape: Shape = ButtonDefaults.shape,
     buttonColor: Color = PrimaryColor,
+    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
     content: @Composable RowScope.() -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -35,6 +37,7 @@ fun ClickableButton(
         shape = shape,
         colors = ButtonDefaults.buttonColors(bgColor),
         interactionSource = interactionSource,
+        elevation = elevation
     ) {
         content()
     }

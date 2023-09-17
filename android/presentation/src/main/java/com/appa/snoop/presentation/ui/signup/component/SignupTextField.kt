@@ -28,6 +28,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.modifier.modifierLocalConsumer
@@ -52,13 +54,14 @@ fun SignupTextField(
     title: String = "입력",
     text: String = "",
     onValueChange: (String) -> Unit,
+    focusManager: FocusManager
 ) {
     OutlinedTextField(
         value = text,
         onValueChange = onValueChange,
+        singleLine = true,
         label = { Text(title) },
         shape = RoundedCornerShape(10.sdp),
-        maxLines = 1,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = DarkGrayColor,
             unfocusedBorderColor = DarkGrayColor,
@@ -66,57 +69,9 @@ fun SignupTextField(
             focusedLabelColor = DarkGrayColor,
             unfocusedLabelColor = DarkGrayColor,
         ),
-        modifier = modifier
+        modifier = modifier,
+        keyboardActions = KeyboardActions(onDone = {
+            focusManager.moveFocus(FocusDirection.Next)
+        })
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PasswordTextField(
-    modifier: Modifier = Modifier,
-    title: String = "입력",
-    text: String = "",
-    onValueChange: (String) -> Unit,
-) {
-    var passwordVisibility by remember { mutableStateOf(false) }
-    var isPasswordValid by remember { mutableStateOf(true) }
-
-    OutlinedTextField(
-        value = text,
-        onValueChange = {
-            // 비밀번호 유효성 검사
-            isPasswordValid = isValidPassword(it)
-            onValueChange(it)
-        },
-        label = { Text(title) },
-        shape = RoundedCornerShape(10.sdp),
-        maxLines = 1,
-        visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
-        trailingIcon = {
-            IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
-                Icon(
-                    modifier = Modifier
-                        .padding(8.sdp),
-                    imageVector = if (passwordVisibility) ImageVector.vectorResource(id = R.drawable.ic_visibility) else ImageVector.vectorResource(id = R.drawable.ic_visibility_off),
-                    contentDescription = "password visibility",
-                    tint = DarkGrayColor
-                )
-            }
-        },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = if (!isPasswordValid) InvalidRedColor else DarkGrayColor,
-            unfocusedBorderColor = if (!isPasswordValid) InvalidRedColor else DarkGrayColor,
-            cursorColor = DarkGrayColor,
-            focusedLabelColor = if (!isPasswordValid) InvalidRedColor else DarkGrayColor,
-            unfocusedLabelColor = if (!isPasswordValid) InvalidRedColor else DarkGrayColor,
-        ),
-        modifier = modifier
-    )
-}
-
-fun isValidPassword(password: String): Boolean {
-    val pwPattern4 =
-        "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@!%*#?&.])[A-Za-z[0-9]$@!%*#?&.]{8,20}$" // 영문, 숫자, 특수문자
-
-    return (Pattern.matches (pwPattern4, password))
 }
