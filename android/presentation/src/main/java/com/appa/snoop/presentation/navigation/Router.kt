@@ -17,6 +17,9 @@ object Router {
     // 알림 화면
     const val MAIN_NOTIFICATION_ROUTER_NAME = "main_notification"
 
+    // 제품 상세화면
+    const val CATEGORY_PRODUCT_ROUTER_NAME = "category_product"
+
     object Title {
         //    const val `시작 루트_도착 루트` = ""
         const val MAIN_HOME = "홈"
@@ -32,5 +35,8 @@ object Router {
 
         // 알림 화면
         const val MAIN_NOTIFICATION = "알림"
+
+        // 제품 상세화면
+        const val CATEGORY_PRODUCT = "상세화면"
     }
 }
