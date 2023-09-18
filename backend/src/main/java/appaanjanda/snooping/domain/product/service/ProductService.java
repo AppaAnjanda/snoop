@@ -1,7 +1,6 @@
-package appaanjanda.snooping.product.service;
+package appaanjanda.snooping.domain.product.service;
 
-import appaanjanda.snooping.product.dto.ProductDetailDto;
-import appaanjanda.snooping.product.entity.product.BaseProduct;
+import appaanjanda.snooping.domain.product.dto.ProductDetailDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;

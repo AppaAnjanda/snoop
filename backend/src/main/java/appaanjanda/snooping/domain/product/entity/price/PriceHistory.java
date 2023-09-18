@@ -1,4 +1,4 @@
-package appaanjanda.snooping.product.entity.price;
+package appaanjanda.snooping.domain.product.entity.price;
 
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
