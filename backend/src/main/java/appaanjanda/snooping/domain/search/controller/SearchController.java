@@ -1,9 +1,16 @@
 package appaanjanda.snooping.domain.search.controller;
 
 
+import appaanjanda.snooping.domain.member.service.dto.UserResponse;
 import appaanjanda.snooping.domain.search.service.SearchService;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +29,8 @@ public class SearchController {
     private final SearchService searchService;
 
     // 카테고리로 상품 검색
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "카테고리로 검색", description = "대분류와 소분류 입력", tags = { "Search Controller" })
     @GetMapping("/{major}/{minor}")
     public List<?> getProductByCategory(@PathVariable String major, @PathVariable String minor) {
 
@@ -29,6 +38,8 @@ public class SearchController {
     }
 
     // 키워드로 상품 검색
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "키워드로 검색", description = "검색하고 싶은 단어 입력", tags = { "Search Controller" })
     @GetMapping("/{keyword}")
     public List<?> getProductByKeyword(@PathVariable String keyword, @MemberInfo MembersInfo membersInfo) {
         // 검색 기록 추가
@@ -38,6 +49,8 @@ public class SearchController {
     }
 
     // 검색 기록 조회
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "검색기록", description = "검색창 진입시 검색 기록 최근 5개 반환", tags = { "Search Controller" })
     @GetMapping("/")
     public List<String> getSearchHistory(@MemberInfo MembersInfo membersInfo) {
 

@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+// 검색 기록
 @Entity
 @Setter
 @Getter
