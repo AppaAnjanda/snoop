@@ -28,7 +28,9 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import ir.kaaveh.sdpcompose.sdp
@@ -80,34 +82,20 @@ fun ModifyProfileImg(
         Surface(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(end = 12.sdp)
+                .padding(end = 12.sdp, bottom = 8.sdp)
                 .clickable {
                     getContent.launch("image/*")
                 },
             color = PrimaryColor,
             shape = CircleShape
         ) {
-            Icon(
-                imageVector = Icons.Rounded.Edit,
-                contentDescription = "Edit",
+            Image(
+                painter = painterResource(id = R.drawable.ic_camera),
+                contentDescription = "사진 불러오기",
                 modifier = Modifier
                     .size(24.sdp)
-                    .padding(4.sdp),
-                tint = WhiteColor
+                    .padding(4.sdp)
             )
         }
-//        IconButton(
-//            onClick = {  },
-//            modifier = Modifier
-//                .align(Alignment.BottomEnd)
-//                .padding(end = 24.dp),
-//            colors = IconButtonColors(containerColor = PrimaryColor)
-//        ) {
-//            Image(
-//                imageVector = Icons.Rounded.Edit,
-//                contentDescription = "Edit",
-//                modifier = Modifier.size(40.dp)
-//            )
-//        }
     }
 }

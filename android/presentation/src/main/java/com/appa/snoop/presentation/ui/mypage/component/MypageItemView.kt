@@ -25,6 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import com.appa.snoop.presentation.R
+import com.appa.snoop.presentation.common.product.HomeLabel
+import com.appa.snoop.presentation.common.product.ProductItemView
 import com.appa.snoop.presentation.ui.home.component.HomeItem
 import com.appa.snoop.presentation.ui.home.dumy.itemList
 import com.appa.snoop.presentation.ui.mypage.User
@@ -77,10 +79,11 @@ fun CurrentProductItemView() {
     Spacer(modifier = Modifier.size(4.sdp))
     LazyRow {
         items(itemList) {
-            HomeItem(
-                onItemClicked = {},
-                onLikeClicked = {}
-            )
+            ProductItemView(
+                label = HomeLabel,
+                ratio = 0.85f,
+                onItemClicked = { /*TODO*/ }) {
+            }
         }
     }
 }
