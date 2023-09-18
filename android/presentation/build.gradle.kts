@@ -75,4 +75,6 @@ dependencies {
     implementation(libs.sdp)
     // lottie
     implementation(libs.lottie)
+    // kakao
+    implementation(libs.bundles.kakao)
 }
