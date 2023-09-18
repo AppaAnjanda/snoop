@@ -35,10 +35,6 @@ spring:
   main:
     allow-circular-references: true
 
-  profiles:
-    active: es
-    include: db
-
   jpa:
     hibernate:
       ddl-auto: update #create update none
@@ -67,3 +63,19 @@ jwt:
   password: appaanjanda!appaanjanda!appaanjanda!appaanjanda!hhwehweertappaanjanda!appaanjanda!appaanjanda!appaanjanda!
   atk: 86400000 # 24 * 60 * 60 * 1000L; 밀리초로 계산한 값
   rtk: 2592000000 # 30 * 24 * 60 * 60 * 1000L; 밀리초로 계산한 값
+
+
+#cloud:
+#  aws:
+#    s3:
+#      bucket: ENC(f+pRtzHFinJoboi00ELAXPKKSGyPo9WE)
+#    credentials:
+#      access-key: ENC(gM+eVGXbg4N0VTlBAA0thgpCZzsfIk3FhvhO1R4jgkg=)
+#      secret-key: ENC(AgB9NPKiGb0yXaKLJLu9/lQW/UMG8TvUhHC6thBgUQurIlbvUA79rQIiR0vY177ZSpHmGSI1m2M=)
+#    region:
+#      static: ap-northeast-2
+#      auto: false
+#    stack:
+#      auto: false
+#    cloudfront:
+#      url: d3byqpylj7jy1e.cloudfront.net
