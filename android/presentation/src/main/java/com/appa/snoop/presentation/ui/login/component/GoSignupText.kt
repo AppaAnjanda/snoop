@@ -19,7 +19,7 @@ fun GoSignupText(
         color = LightGreyColor,
         textDecoration = TextDecoration.Underline,
         fontSize = 10.ssp,
-        modifier = Modifier
+        modifier = modifier
             .clickable {
                 onClick()
             }

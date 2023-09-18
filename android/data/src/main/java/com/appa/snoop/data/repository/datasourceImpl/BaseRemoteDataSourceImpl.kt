@@ -1,6 +1,6 @@
 package com.appa.snoop.data.repository.datasourceImpl
 
-import com.appa.snoop.data.remote.BaseService
+import com.appa.snoop.data.service.BaseService
 import com.appa.snoop.data.repository.datasource.BaseRemoteDataSource
 import com.appa.snoop.domain.model.BaseModel
 import kotlinx.coroutines.flow.Flow

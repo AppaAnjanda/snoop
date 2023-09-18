@@ -1,6 +1,5 @@
-package com.appa.snoop.presentation.ui.signup.component
+package com.appa.snoop.presentation.ui.login.component
 
-import androidx.compose.foundation.interaction.FocusInteraction
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -26,11 +25,10 @@ import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.InvalidRedColor
 import ir.kaaveh.sdpcompose.sdp
-import java.util.regex.Pattern
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordTextField(
+fun LoginPasswordTextField(
     modifier: Modifier = Modifier,
     title: String = "입력",
     text: String = "",
@@ -38,15 +36,10 @@ fun PasswordTextField(
     focusManager: FocusManager
 ) {
     var passwordVisibility by remember { mutableStateOf(false) }
-    var isPasswordValid by remember { mutableStateOf(true) }
 
     OutlinedTextField(
         value = text,
-        onValueChange = {
-            // 비밀번호 유효성 검사
-            isPasswordValid = isValidPassword(it)
-            onValueChange(it)
-        },
+        onValueChange = onValueChange,
         singleLine = true,
         label = { Text(title) },
         shape = RoundedCornerShape(10.sdp),
@@ -64,23 +57,15 @@ fun PasswordTextField(
         },
         // valid 체크로 색 분기 태우기
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = if (!isPasswordValid) InvalidRedColor else DarkGrayColor,
-            unfocusedBorderColor = if (!isPasswordValid) InvalidRedColor else DarkGrayColor,
+            focusedBorderColor = DarkGrayColor,
+            unfocusedBorderColor = DarkGrayColor,
             cursorColor = DarkGrayColor,
-            focusedLabelColor = if (!isPasswordValid) InvalidRedColor else DarkGrayColor,
-            unfocusedLabelColor = if (!isPasswordValid) InvalidRedColor else DarkGrayColor,
+            focusedLabelColor = DarkGrayColor,
+            unfocusedLabelColor = DarkGrayColor,
         ),
         modifier = modifier,
         keyboardActions = KeyboardActions(onDone = {
             focusManager.moveFocus(FocusDirection.Next)
         })
     )
-}
-
-// 영문, 숫자, 특수문자 각 1개 이상 포함 && 8자 이상
-private fun isValidPassword(password: String): Boolean {
-    val pwPattern4 =
-        "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@!%*#?&.])[A-Za-z[0-9]$@!%*#?&.]{8,20}$" // 영문, 숫자, 특수문자
-
-    return (Pattern.matches (pwPattern4, password))
 }

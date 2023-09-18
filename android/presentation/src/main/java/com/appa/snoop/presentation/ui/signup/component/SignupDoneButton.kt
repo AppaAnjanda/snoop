@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,14 +34,14 @@ fun SignupDoneButton(
     isPasswordValid: Boolean = false,
     isNicknameValid: Boolean = false
 ) {
-    ClickableButton(
+    Button(
         onClick = { /* TODO 회원가입 완료 로직 구현 */ },
         modifier = Modifier
             .height(44.sdp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(10.sdp),
-        buttonColor = PrimaryColor,
-        elevation = ButtonDefaults.buttonElevation(2.sdp)
+        elevation = ButtonDefaults.buttonElevation(2.sdp),
+        enabled = (isIdValid && isPasswordValid && isNicknameValid),
     ) {
         Row(
             modifier = Modifier

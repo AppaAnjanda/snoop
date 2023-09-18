@@ -27,7 +27,7 @@ fun LoginImage() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(300.sdp)
+            .height(240.sdp)
     ) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lottie_meerkat))
         val progress by animateLottieCompositionAsState(

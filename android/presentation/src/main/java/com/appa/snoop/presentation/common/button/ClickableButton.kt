@@ -21,6 +21,7 @@ fun ClickableButton(
     shape: Shape = ButtonDefaults.shape,
     buttonColor: Color = PrimaryColor,
     elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
+    enabled: Boolean = true,
     content: @Composable RowScope.() -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -37,7 +38,8 @@ fun ClickableButton(
         shape = shape,
         colors = ButtonDefaults.buttonColors(bgColor),
         interactionSource = interactionSource,
-        elevation = elevation
+        elevation = elevation,
+        enabled = enabled
     ) {
         content()
     }
