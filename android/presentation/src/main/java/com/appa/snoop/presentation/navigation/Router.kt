@@ -20,6 +20,9 @@ object Router {
     // 프로필 변경 화면
     const val MY_PAGE_MODIFY_PROFILE_ROUTER_NAME = "mypage_modify_profile"
 
+    // 제품 상세화면
+    const val CATEGORY_PRODUCT_ROUTER_NAME = "category_product"
+
     object Title {
         //    const val `시작 루트_도착 루트` = ""
         const val MAIN_HOME = "홈"
@@ -38,5 +41,9 @@ object Router {
 
         // 프로필 변경
         const val MY_PAGE_MODIFY_PROFILE = "프로필 변경"
+
+        // 제품 상세화면
+        const val CATEGORY_PRODUCT = "상세화면"
+
     }
 }

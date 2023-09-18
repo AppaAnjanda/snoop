@@ -1,4 +1,4 @@
-package com.appa.snoop.presentation.ui.category.component
+package com.appa.snoop.presentation.common.product
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,13 +24,15 @@ import com.appa.snoop.presentation.ui.theme.BlackColor
 import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.RedColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
-import com.appa.snoop.presentation.util.extensions.noRippleClickable
+import com.appa.snoop.presentation.util.extensions.calculateSize
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @Composable
-fun CategoryItem(
+fun ProductItemView(
     modifier: Modifier = Modifier,
+    label: Label,
+    ratio: Float,
     onItemClicked: () -> Unit,
     onLikeClicked: () -> Unit
 ) {
@@ -38,44 +40,45 @@ fun CategoryItem(
         modifier = modifier
             .wrapContentHeight()
             .background(color = WhiteColor)
-            .padding(horizontal = 16.sdp, vertical = 8.sdp)
-            .noRippleClickable {
-                onItemClicked()
-            }
+            .padding(
+                horizontal = ratio.calculateSize(16).sdp,
+                vertical = ratio.calculateSize(8).sdp
+            )
     ) {
         ProductImageView(
-            productState = "최저가"
+            ratio = ratio,
+            productState = "지금 최저가"
         ) {
             onLikeClicked()
         }
-        Spacer(modifier = modifier.height(8.sdp))
+        Spacer(modifier = modifier.height(ratio.calculateSize(8).sdp))
         Text(
             modifier = modifier
-                .width(140.sdp),
+                .width(ratio.calculateSize(140).sdp),
             text = "Apple 맥북 프로 14 스페이스 그레이 M2 pro 10코어",
             style = TextStyle(
-                fontSize = 11.ssp,
+                fontSize = ratio.calculateSize(11).ssp,
                 fontWeight = FontWeight.Bold,
                 color = BlackColor,
             )
         )
-        Spacer(modifier = modifier.height(8.sdp))
+        Spacer(modifier = modifier.height(ratio.calculateSize(8).sdp))
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "2,790,000원",
                 style = TextStyle(
-                    fontSize = 12.ssp,
+                    fontSize = ratio.calculateSize(12).ssp,
                     color = DarkGrayColor,
                     textDecoration = TextDecoration.LineThrough,
                 )
             )
-            Spacer(modifier = modifier.width(4.sdp))
+            Spacer(modifier = modifier.width(ratio.calculateSize(4).sdp))
             Text(
                 text = "10.0%",
                 style = TextStyle(
-                    fontSize = 14.ssp,
+                    fontSize = ratio.calculateSize(14).ssp,
                     fontWeight = FontWeight.SemiBold,
                     color = RedColor,
                 )
@@ -83,13 +86,13 @@ fun CategoryItem(
             Image(
                 painterResource(id = R.drawable.ic_increase),
                 contentDescription = "가격 하락",
-                modifier = modifier.size(12.sdp)
+                modifier = modifier.size(ratio.calculateSize(12).sdp)
             )
         }
         Text(
             text = "2,620,000원",
             style = TextStyle(
-                fontSize = 16.ssp,
+                fontSize = ratio.calculateSize(16).ssp,
                 fontWeight = FontWeight.ExtraBold,
             )
         )
@@ -98,10 +101,12 @@ fun CategoryItem(
 
 @Preview
 @Composable
-fun PreviewCategoryItem() {
-    CategoryItem(
-        modifier = Modifier,
-        onItemClicked = {},
-        onLikeClicked = {}
-    )
+fun PreviewProductItemView() {
+    ProductItemView(
+        label = HomeLabel,
+        ratio = 0.9f,
+        onItemClicked = { /*TODO*/ }
+    ) {
+        
+    }
 }

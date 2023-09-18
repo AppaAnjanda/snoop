@@ -14,3 +14,6 @@ val WhiteColor = Color(0xFFFFFFFF)
 val YellowColor = Color(0xFFFFCE4F)
 
 val Black_70 = Color(0xB2000000)
+
+// Chat Background
+val PrimaryColor_70 = Color(0xB348D1CC)
