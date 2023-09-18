@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from apscheduler.schedulers.background import BackgroundScheduler
-from coupang import coupang_products, coupang_products_all, coupang_products_digital, coupang_products_furniture
+from coupang import coupang_products, coupang_products_all, coupang_products_digital, coupang_products_furniture, coupang_products_necessaries
 from naver import naver_products, naver_products_all, naver_products_digital, naver_products_furniture, naver_products_necessaries, naver_products_food
 import pandas as pd
 import requests
@@ -34,6 +34,10 @@ def coupang_digital():
 @app.get("/coupang/furniture")
 def coupang_furniture():
     return coupang_products_furniture()
+
+@app.get("/coupang/necessaries")
+def coupang_necessaries():
+    return coupang_products_necessaries()
 ########################################## 네이버 #####################################################
 
 # 네이버 쇼핑 API 함수

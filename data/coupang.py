@@ -329,5 +329,80 @@ def coupang_products_furniture():
                 send_to_kafka2(product_message, price_message, topic)
                 cnt += 1
 ################################## 생활용품 키워드 크롤링 #####################################
+def coupang_products_necessaries():
+    necessaries_list = {"주방" : "1", "욕실" : "2", "청소" : "3", "수납": "4"}
 
+    BASE_URL = 'https://www.coupang.com'  # Corrected URL format
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
+        'Accept-Language': 'ko-KR,ko;q=0.8,en-US;q=0.5,en;q=0.3'
+    }
+
+   # 상위 카테고리 설정
+    major_category = "생활용품"
+    # Product Id 설정
+    id = "3"
+    # 토픽 설정
+    topic = "necessaries"
+    for keyword in necessaries_list:
+        cnt = 1        
+        for page in range(1, 27):
+            url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=false'
+            print('check url ' + url)
+
+            response = requests.get(url, headers=headers)
+            time.sleep(0.5)
+
+            print('Check Response', page)
+            soup = BeautifulSoup(response.content, 'html.parser')
+
+            if (soup.find('ul', id='productList')):
+                products_list = soup.find('ul', id='productList').find_all('li',
+                                                                        class_='search-product')  # Added class attribute
+            else:
+                break
+
+            for li in products_list:
+                uuid = id + furniture_list.get(keyword) + str(cnt)
+
+                a_link = li.find('a', href=True)['href']
+                prd_link = BASE_URL + a_link
+                prd_name = li.find('div', class_='name').text.strip()
+
+                base_price_element = li.find('del', class_='base-price')
+                base_price = base_price_element.text if base_price_element else ''
+
+                price_element = li.find('strong', class_='price-value')
+                price = price_element.text if price_element else ''
+                current_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+                
+                price_entry = {
+                    "timestamp": current_time,
+                    "price": price
+                }
+
+                # Product 메시지
+                product_message = {
+                    "id": f"product_{uuid}",
+                    "major_category": major_category,
+                    "minor_category": keyword,
+                    "product_name": prd_name,
+                    "index_name": major_category,
+                    "product_link": prd_link,
+                    "product_image": "http://example.com/images/ex.jpg",
+                    'provider' : '쿠팡',
+                    "last_update" : current_time
+                }
+
+                # Price 메시지
+                price_message = {
+                    "id": f"price_{uuid}",
+                    "routing": f"product_{uuid}",
+                    "index_name": major_category,
+                    "price_history": [price_entry],
+                }
+
+                # send_to_kafka(products_info) # Kafka에 전송
+                send_to_kafka2(product_message, price_message, topic)
+                cnt += 1
 ################################## 식품 키워드 크롤링 #####################################
