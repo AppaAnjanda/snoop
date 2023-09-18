@@ -1,11 +1,18 @@
 package appaanjanda.snooping.domain.product.controller;
 
 
+import appaanjanda.snooping.domain.member.service.dto.UserResponse;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import appaanjanda.snooping.domain.product.dto.ProductDetailDto;
 import appaanjanda.snooping.domain.product.service.ProductSearchService;
 import appaanjanda.snooping.domain.product.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,10 +28,22 @@ public class ProductDetailController {
     private final ProductSearchService productSearchService;
 
     // 상품 상세 조회
-    @GetMapping("/{majorCategory}/{productId}")
-    public ProductDetailDto getProductDetail(@PathVariable String majorCategory, @PathVariable String productId, @MemberInfo MembersInfo membersInfo){
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "조회 성공",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "400", description = "요청 오류 "),
+            @ApiResponse(responseCode = "500", description = "서버 내부 오류")
+    })
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "상품 상세 조회", description = "상품id로 정보 조회", tags = { "Product Controller" })
+    @GetMapping("/{productId}")
+    public Object getProductDetail(@PathVariable String productId, @MemberInfo MembersInfo membersInfo){
 
-        return productService.getProductById(membersInfo.getId(), majorCategory, productId);
+        // 최근 본 상품 추가
+        productService.updateRecentProduct(membersInfo.getId(), productId);
+
+        return productSearchService.searchProductById(productId);
 
     }
 }
