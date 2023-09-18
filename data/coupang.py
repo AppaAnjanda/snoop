@@ -235,7 +235,8 @@ def coupang_products_digital():
                     "index_name": major_category,
                     "product_link": prd_link,
                     "product_image": "http://example.com/images/ex.jpg",
-                    'provider' : '쿠팡'
+                    'provider' : '쿠팡',
+                    "last_update" : current_time
                     }
 
                 # Price 메시지

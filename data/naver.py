@@ -89,14 +89,15 @@ def naver_products_all():
 
             # Product 메시지
             product_message = {
-                "id": f"product_{id}",
+                "id": f"product_{uuid}",
                 "major_category": major_category,
                 "minor_category": query,
                 "product_name": item.get("title"),
                 "index_name": major_category,
                 "product_link": item.get("link"),
                 "product_image": item.get("image"),
-                'provider' : item.get("mallName")
+                'provider' : item.get("mallName"),
+                "last_update" : current_time
             }
 
             # Price 메시지
@@ -222,7 +223,8 @@ def naver_products_furniture():
                 "index_name": major_category,
                 "product_link": item.get("link"),
                 "product_image": item.get("image"),
-                'provider' : item.get("mallName")
+                'provider' : item.get("mallName"),
+                "last_update" : current_time
             }
 
             # Price 메시지
@@ -284,7 +286,8 @@ def naver_products_necessaries():
                 "index_name": major_category,
                 "product_link": item.get("link"),
                 "product_image": item.get("image"),
-                'provider' : item.get("mallName")
+                'provider' : item.get("mallName"),
+                "last_update" : current_time
             }
 
             # Price 메시지
@@ -345,7 +348,8 @@ def naver_products_food():
                 "index_name": major_category,
                 "product_link": item.get("link"),
                 "product_image": item.get("image"),
-                'provider' : item.get("mallName")
+                'provider' : item.get("mallName"),
+                "last_update" : current_time
             }
 
             # Price 메시지
