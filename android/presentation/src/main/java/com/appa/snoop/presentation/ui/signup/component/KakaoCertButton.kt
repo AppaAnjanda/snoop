@@ -1,5 +1,7 @@
 package com.appa.snoop.presentation.ui.signup.component
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -16,15 +18,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.button.ClickableButton
+import com.appa.snoop.presentation.ui.signup.SignupViewModel
 import com.appa.snoop.presentation.ui.theme.BlackColor
+import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.KakaoColor
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
+private const val TAG = "KakaoCertButton_싸피"
 @Composable
-fun KakaoCertButton() {
+fun KakaoCertButton(
+    context: Context,
+    signupViewModel: SignupViewModel,
+) {
     ClickableButton(
-        onClick = { /* TODO 카카오 인증 구현 */ },
+        onClick = { signupViewModel.kakaoLogin(context, signupViewModel.kakaoCallback) },
         modifier = Modifier
             .height(36.sdp),
         shape = RoundedCornerShape(10.sdp),

@@ -1,6 +1,7 @@
 package com.appa.snoop.presentation.ui.signup
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,7 +22,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.appa.snoop.presentation.common.topbar.utils.rememberAppBarState
 import com.appa.snoop.presentation.ui.signup.component.KakaoCertButton
@@ -31,13 +34,14 @@ import com.appa.snoop.presentation.ui.signup.component.SignupTextField
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.effects.SignupLaunchedEffect
 import com.appa.snoop.presentation.util.extensions.addFocusCleaner
-import com.kakao.sdk.user.UserApiClient
 import ir.kaaveh.sdpcompose.sdp
 
 @Composable
 fun SignupScreen(
-    navController: NavController
+    navController: NavController,
+    signupViewModel: SignupViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     // TopBar 표기 해주기 위함
     val appBarState = rememberAppBarState(navController = navController)
     // text input focus 조절하기 위함
@@ -62,6 +66,9 @@ fun SignupScreen(
         var idValid by remember { mutableStateOf(false) }
         var passwordValid by remember { mutableStateOf(false) }
         var nicknameValid by remember { mutableStateOf(false) }
+
+        // TODO 코드 교체 필요
+//        val signupViewModel = SignupViewModel()
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,7 +104,11 @@ fun SignupScreen(
                     Spacer(modifier = Modifier.width(10.sdp))
 
                     // TODO 카카오 인증 로직 구현
-                    KakaoCertButton()
+                    // TODO 읽고있다가 값에 변경이 있으면 버튼 색 바꿔주고, 이메일 칸 채워주는 코드 필요
+                    KakaoCertButton(
+                        context,
+                        signupViewModel
+                    )
                 }
                 SignupPasswordTextField(
                     modifier = Modifier
@@ -139,17 +150,5 @@ fun SignupScreen(
             }
             SignupDoneButton(idValid, passwordValid, nicknameValid)
         }
-    }
-}
-
-fun loginKakao(context: Context) {
-    if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-        // 카카오톡 설치시
-        UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->  
-            
-        }
-    } else {
-        // 카카오톡 미설치시
-
     }
 }
