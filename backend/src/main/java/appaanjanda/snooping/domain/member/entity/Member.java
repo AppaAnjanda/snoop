@@ -50,6 +50,7 @@ public class Member extends BaseTimeEntity {
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private List<Wishbox> wishboxList;
 
+	
 	@Builder
 	public Member(Long id, String name, String password, String profileUrl, String email, Role role, String nickname,
 		List<MyCard> myCardList, List<Wishbox> wishboxList) {

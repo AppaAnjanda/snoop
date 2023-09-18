@@ -30,6 +30,7 @@ import appaanjanda.snooping.jwt.JwtProvider;
 import appaanjanda.snooping.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.webjars.NotFoundException;
 
 @Service
 @Slf4j
@@ -193,4 +194,11 @@ public class MemberService {
 	// }
 
 	// 이메일로 비밀 번호 찾기 -> sendeEmailServicie
+
+	// id로 멤버 찾기
+	// TODO : exception 처리 수정
+	public Member findMemberById(Long memberId){
+		return memberRepository.findById(memberId)
+				.orElseThrow(() -> new NotFoundException("멤버를 찾을 수 없습니다."));
+	}
 }

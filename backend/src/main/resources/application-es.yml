@@ -1,0 +1,3 @@
+elasticsearch:
+  host: j9d104.p.ssafy.io
+  port: 9200
