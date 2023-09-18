@@ -17,14 +17,15 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: k4minseung@gmail.com
-    password: jjeqtheoxnqsigvg
+    username: ENC(m6MbBpmIJAK2qG+ZRXPWUegfDJw/qRcy7bSqpZgOC7g=)
+    password:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
 
   datasource:
     url : jdbc:h2:tcp://localhost/~/snooping
+#    url : jdbc:h2.~/snooping
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -56,7 +57,7 @@ springdoc:
     - /api/**
 
 jwt:
-  password: appaanjanda!appaanjanda!appaanjanda!appaanjanda!hhwehweertappaanjanda!appaanjanda!appaanjanda!appaanjanda!
+  password: ENC(EkScQq/G1fRkMjzEBuJm2929lWSio0h2SP4muyxM5dLQVAMlFLOV5rst66cGRjLTVo6hgqDDcNmzXMegiy6oWj7j8jF8pPX49p6vsWOmgo281iBPdk6kJnhW+mBZ+GN/wd6Vu8twkvKz5pz/PSnpB7/3FN+Et6tKBwZ4OcmQREIoQ5U0m1cJFB2MF/aZwiMfLeLkF7HBRtmlFnUiNKTc80dsFXwkacE6ZMg2QDktra8FI8XNECFhBKEnIWs4pvta82wtMafWl6k=)
   atk: 86400000 # 24 * 60 * 60 * 1000L; 밀리초로 계산한 값
   rtk: 2592000000 # 30 * 24 * 60 * 60 * 1000L; 밀리초로 계산한 값
 
