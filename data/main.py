@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from apscheduler.schedulers.background import BackgroundScheduler
-from coupang import coupang_products, coupang_products_all
+from coupang import coupang_products, coupang_products_all, coupang_products_digital
 from naver import naver_products, naver_products_all, naver_products_digital, naver_products_furniture, naver_products_necessaries, naver_products_food
 import pandas as pd
 import requests
@@ -27,7 +27,9 @@ def coupang_all():
     df = coupang_products_all()
     return {"message": "Crawling completed!"}
 
-
+@app.get("/coupang/digital")
+def naver_digital():
+    return coupang_products_digital()
 ########################################## 네이버 #####################################################
 
 # 네이버 쇼핑 API 함수

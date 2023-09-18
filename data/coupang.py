@@ -143,7 +143,8 @@ def coupang_products_all():
                     "index_name": major_category,
                     "product_link": prd_link,
                     "product_image": "http://example.com/images/ex.jpg",
-                    'provider' : '쿠팡'
+                    'provider' : '쿠팡',
+                    "last_update" : current_time
                     }
 
                 # Price 메시지
@@ -185,25 +186,14 @@ def coupang_products_digital():
     id = "1"
     # 토픽 설정
     topic = "digital"
-    for keyword in all_list:
-
-        # Product Id 설정
-        id = 0
-        if major_category == "디지털가전":
-            id = 1
-        elif major_category == "가구":
-            id = 2
-        elif major_category == "생활용품":
-            id = 3
-        else:
-            id = 4
-        
+    for keyword in digital_list:
+        cnt = 1        
         for page in range(1, 27):
             url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=false'
             print('check url ' + url)
 
             response = requests.get(url, headers=headers)
-            time.sleep(1)
+            time.sleep(0.5)
 
             print('Check Response', page)
             soup = BeautifulSoup(response.content, 'html.parser')
@@ -215,6 +205,8 @@ def coupang_products_digital():
                 break
 
             for li in products_list:
+                uuid = id + digital_list.get(keyword) + str(cnt)
+
                 a_link = li.find('a', href=True)['href']
                 prd_link = BASE_URL + a_link
                 prd_name = li.find('div', class_='name').text.strip()
@@ -225,10 +217,15 @@ def coupang_products_digital():
                 price_element = li.find('strong', class_='price-value')
                 price = price_element.text if price_element else ''
                 current_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+                
+                price_entry = {
+                    "timestamp": current_time,
+                    "price": price
+                }
 
                 # Product 메시지
                 product_message = {
-                    "id": f"product_{id}",
+                    "id": f"product_{uuid}",
                     "major_category": major_category,
                     "minor_category": keyword,
                     "product_name": prd_name,
@@ -237,28 +234,23 @@ def coupang_products_digital():
                     "product_image": "http://example.com/images/ex.jpg",
                     'provider' : '쿠팡',
                     "last_update" : current_time
-                    }
+                }
 
                 # Price 메시지
                 price_message = {
-                    "id": f"price_{id}",
-                    "routing": f"product_{id}",
+                    "id": f"price_{uuid}",
+                    "routing": f"product_{uuid}",
                     "index_name": major_category,
-                    "timestamp": current_time,
-                    "price": price
+                    "price_history": [price_entry],
                 }
 
                 # send_to_kafka(products_info) # Kafka에 전송
-                send_to_kafka2(product_message, price_message, major_category)
-                products_link.append(products_info)
+                send_to_kafka2(product_message, price_message, topic)
+                cnt += 1
 
-        print(len(products_link))
-        
     ## 크롤링한 데이터 프레임 생성
     # df = pd.DataFrame(products_link)
     # print(df)
-
-# df = coupang_products('노트북', 1)
 ################################## 가구 키워드 크롤링 #####################################
 ################################## 생활용품 키워드 크롤링 #####################################
 ################################## 식품 키워드 크롤링 #####################################
