@@ -33,6 +33,9 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// postgre
+	implementation 'org.postgresql:postgresql:42.6.0'
+
 	//swagger 의존성
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
 
