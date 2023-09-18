@@ -27,9 +27,10 @@ import coil.compose.AsyncImage
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.product.HomeLabel
 import com.appa.snoop.presentation.common.product.ProductItemView
-import com.appa.snoop.presentation.ui.home.component.HomeItem
 import com.appa.snoop.presentation.ui.home.dumy.itemList
 import com.appa.snoop.presentation.ui.mypage.User
+import com.appa.snoop.presentation.ui.mypage.common.MyPageLabel
+import com.appa.snoop.presentation.util.extensions.noRippleClickable
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
@@ -89,18 +90,18 @@ fun CurrentProductItemView() {
 }
 
 @Composable
-fun SettingComponent(index: Int, title: String, onClick: () -> Unit) {
+fun SettingComponent(index: Int, title: MyPageLabel, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.sdp)
-            .clickable {
+            .noRippleClickable {
                 onClick()
             },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = title, style = TextStyle(
+            text = title.label, style = TextStyle(
                 fontSize = 12.ssp,
                 fontWeight = FontWeight.Normal
             )
@@ -110,9 +111,9 @@ fun SettingComponent(index: Int, title: String, onClick: () -> Unit) {
 }
 
 @Composable
-fun DisplayIcon(title: String) {
+fun DisplayIcon(title: MyPageLabel) {
     when (title) {
-        "알림 설정", "프로필 변경" -> {
+        MyPageLabel.NOTIFICATION, MyPageLabel.MODIFY_PROFILE, MyPageLabel.SELECT_CARD -> {
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_forward),
                 contentDescription = "화면 이동",
@@ -120,6 +121,8 @@ fun DisplayIcon(title: String) {
                 tint = Color.Gray
             )
         }
+
+        else -> {}
     }
 }
 

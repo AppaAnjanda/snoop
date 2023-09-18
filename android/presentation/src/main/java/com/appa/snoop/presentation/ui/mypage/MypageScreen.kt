@@ -3,42 +3,61 @@ package com.appa.snoop.presentation.ui.mypage
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.appa.snoop.presentation.navigation.ModifyProfileNav
-import com.appa.snoop.presentation.ui.home.component.HomeItem
-import com.appa.snoop.presentation.ui.home.dumy.itemList
+import com.appa.snoop.presentation.ui.mypage.common.MyPageLabel
+import com.appa.snoop.presentation.ui.mypage.component.BottomSheet
 import com.appa.snoop.presentation.ui.mypage.component.CurrentProductItemView
 import com.appa.snoop.presentation.ui.mypage.component.MyPageInformation
 import com.appa.snoop.presentation.ui.mypage.component.SettingComponent
-import com.appa.snoop.presentation.ui.theme.BackgroundColor
 import com.appa.snoop.presentation.ui.theme.BackgroundColor2
 import com.appa.snoop.presentation.util.effects.MainLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
-import ir.kaaveh.sdpcompose.ssp
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MypageScreen(
     navController: NavController,
 ) {
-    MainLaunchedEffect(navController)
+    val scope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState()
+
+    if (sheetState.isVisible) {
+        BottomSheet(sheetState) {
+            scope.launch {
+                sheetState.hide()
+            }
+        }
+    }
+
     val scrollableState = rememberScrollState()
-    val settings = listOf("알림 설정", "프로필 변경", "로그아웃", "회원 탈퇴")
+    val settings = listOf(
+        MyPageLabel.NOTIFICATION,
+        MyPageLabel.MODIFY_PROFILE,
+        MyPageLabel.SELECT_CARD,
+        MyPageLabel.LOGOUT,
+        MyPageLabel.WITHDRAWAL,
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,7 +71,11 @@ fun MypageScreen(
         settings.forEachIndexed { index, title ->
             SettingComponent(index, title) {
                 when (title) {
-                    "프로필 변경" -> navController.navigate(ModifyProfileNav.route)
+                    MyPageLabel.MODIFY_PROFILE -> navController.navigate(ModifyProfileNav.route)
+                    MyPageLabel.SELECT_CARD ->  scope.launch {
+                        sheetState.expand()
+                    }
+                    else -> {}
                 }
             }
         }
