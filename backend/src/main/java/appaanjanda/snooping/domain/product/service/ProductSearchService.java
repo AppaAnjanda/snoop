@@ -1,19 +1,18 @@
-package appaanjanda.snooping.product.service;
+package appaanjanda.snooping.domain.product.service;
 
-import appaanjanda.snooping.product.entity.product.*;
+import appaanjanda.snooping.domain.product.entity.product.DigitalProduct;
+import appaanjanda.snooping.domain.product.entity.product.FoodProduct;
+import appaanjanda.snooping.domain.product.entity.product.FurnitureProduct;
+import appaanjanda.snooping.domain.product.entity.product.NecessariesProduct;
+import appaanjanda.snooping.domain.product.entity.product.*;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
-
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

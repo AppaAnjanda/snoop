@@ -1,7 +1,5 @@
-package appaanjanda.snooping.product.dto;
+package appaanjanda.snooping.domain.product.dto;
 
-import appaanjanda.snooping.product.entity.product.BaseProduct;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

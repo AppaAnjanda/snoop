@@ -1,4 +1,4 @@
-package appaanjanda.snooping.product.entity.product;
+package appaanjanda.snooping.domain.product.entity.product;
 
 
 import lombok.Getter;
@@ -9,10 +9,10 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.persistence.Id;
 
-@Document(indexName = "식품")
+@Document(indexName = "가구")
 @Getter
 @Setter
-public class FoodProduct {
+public class FurnitureProduct {
 
     @Id
     private String id;

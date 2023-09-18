@@ -1,13 +1,12 @@
-package appaanjanda.snooping.product.controller;
+package appaanjanda.snooping.domain.product.controller;
 
 
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
-import appaanjanda.snooping.product.dto.ProductDetailDto;
-import appaanjanda.snooping.product.service.ProductSearchService;
-import appaanjanda.snooping.product.service.ProductService;
+import appaanjanda.snooping.domain.product.dto.ProductDetailDto;
+import appaanjanda.snooping.domain.product.service.ProductSearchService;
+import appaanjanda.snooping.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

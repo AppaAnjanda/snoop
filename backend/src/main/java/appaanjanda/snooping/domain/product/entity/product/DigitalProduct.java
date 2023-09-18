@@ -1,4 +1,4 @@
-package appaanjanda.snooping.product.entity.product;
+package appaanjanda.snooping.domain.product.entity.product;
 
 
 import lombok.Getter;

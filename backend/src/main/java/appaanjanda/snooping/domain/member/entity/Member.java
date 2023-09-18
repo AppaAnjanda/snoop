@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import appaanjanda.snooping.domain.card.entity.MyCard;
+import appaanjanda.snooping.domain.search.entity.SearchHistory;
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.global.common.BaseTimeEntity;
 import appaanjanda.snooping.domain.member.entity.enumType.Role;
@@ -49,6 +50,9 @@ public class Member extends BaseTimeEntity {
 
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private List<Wishbox> wishboxList;
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	private List<SearchHistory> searchHistoryList;
 
 	
 	@Builder
