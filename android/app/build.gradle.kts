@@ -56,4 +56,7 @@ dependencies {
     // retrofit && okhttp
     implementation(libs.bundles.retrofit)
     implementation(libs.bundles.okhttp)
+
+    //kakao
+    implementation(libs.bundles.kakao)
 }

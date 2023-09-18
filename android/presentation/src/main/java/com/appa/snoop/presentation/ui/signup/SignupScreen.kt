@@ -1,5 +1,6 @@
 package com.appa.snoop.presentation.ui.signup
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import com.appa.snoop.presentation.ui.signup.component.SignupTextField
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.effects.SignupLaunchedEffect
 import com.appa.snoop.presentation.util.extensions.addFocusCleaner
+import com.kakao.sdk.user.UserApiClient
 import ir.kaaveh.sdpcompose.sdp
 
 @Composable
@@ -137,5 +139,17 @@ fun SignupScreen(
             }
             SignupDoneButton(idValid, passwordValid, nicknameValid)
         }
+    }
+}
+
+fun loginKakao(context: Context) {
+    if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+        // 카카오톡 설치시
+        UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->  
+            
+        }
+    } else {
+        // 카카오톡 미설치시
+
     }
 }
