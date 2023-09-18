@@ -159,7 +159,8 @@ def naver_products_digital():
                 "index_name": major_category,
                 "product_link": item.get("link"),
                 "product_image": item.get("image"),
-                'provider' : item.get("mallName")
+                'provider' : item.get("mallName"),
+                "last_update" : current_time
             }
 
             # Price 메시지
@@ -167,7 +168,7 @@ def naver_products_digital():
                 "id": f"price_{uuid}",
                 "routing": f"product_{uuid}",
                 "index_name": major_category,
-                "price_history": [price_entry]
+                "price_history": [price_entry],
             }
             # print(item.get("title"))
             send_to_kafka2(product_message, price_message, topic)
