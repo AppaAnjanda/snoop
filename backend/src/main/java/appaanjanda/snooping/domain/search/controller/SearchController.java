@@ -1,8 +1,6 @@
 package appaanjanda.snooping.domain.search.controller;
 
 
-import appaanjanda.snooping.domain.search.dto.SearchHistoryDto;
-import appaanjanda.snooping.domain.search.entity.SearchHistory;
 import appaanjanda.snooping.domain.search.service.SearchService;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;

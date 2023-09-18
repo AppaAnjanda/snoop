@@ -10,8 +10,10 @@ server:
 
 
 spring:
+  profiles:
+    active: es
   redis:
-    host: localhost
+    host: 52.78.159.20
     port: 6379
 
   mail:

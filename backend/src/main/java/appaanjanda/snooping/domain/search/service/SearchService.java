@@ -3,16 +3,12 @@ package appaanjanda.snooping.domain.search.service;
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.service.MemberService;
 import appaanjanda.snooping.domain.product.service.ProductSearchService;
-import appaanjanda.snooping.domain.search.dto.SearchHistoryDto;
 import appaanjanda.snooping.domain.search.entity.SearchHistory;
 import appaanjanda.snooping.domain.search.repository.SearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -24,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 @Slf4j
