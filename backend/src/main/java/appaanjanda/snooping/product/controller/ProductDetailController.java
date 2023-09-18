@@ -3,7 +3,6 @@ package appaanjanda.snooping.product.controller;
 
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
-import appaanjanda.snooping.member.entity.Member;
 import appaanjanda.snooping.product.dto.ProductDetailDto;
 import appaanjanda.snooping.product.service.ProductSearchService;
 import appaanjanda.snooping.product.service.ProductService;
