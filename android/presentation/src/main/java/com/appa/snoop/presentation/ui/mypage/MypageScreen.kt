@@ -21,6 +21,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.appa.snoop.presentation.navigation.ModifyProfileNav
@@ -37,13 +39,15 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MypageScreen(
-    navController: NavController,
+    navController: NavController
 ) {
+    // 추후 hiltViewModel로 수정
+    val viewModel = MyPageViewModel()
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
 
     if (sheetState.isVisible) {
-        BottomSheet(sheetState) {
+        BottomSheet(viewModel = viewModel, sheetState) {
             scope.launch {
                 sheetState.hide()
             }
