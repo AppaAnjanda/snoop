@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
+import com.appa.snoop.presentation.ui.login.LoginViewModel
 import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import ir.kaaveh.sdpcompose.sdp
 
@@ -20,7 +21,8 @@ fun LoginIdTextField(
     title: String = "입력",
     text: String = "",
     onValueChange: (String) -> Unit,
-    focusManager: FocusManager
+    focusManager: FocusManager,
+    loginViewModel: LoginViewModel
 ) {
     OutlinedTextField(
         value = text,

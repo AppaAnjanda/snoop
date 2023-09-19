@@ -68,7 +68,7 @@ fun SignupScreen(
         signupViewModel.isSignupSuccess
     ) {
         if (signupViewModel.isSignupSuccess) {
-            showSnackBar("로그인에 성공했습니다!")
+            showSnackBar("회원가입을 환영합니다!")
             navController.popBackStack()
         }
     }

@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.login.component.GoSignupText
@@ -44,18 +47,23 @@ import ir.kaaveh.sdpcompose.sdp
 
 @Composable
 fun LoginScreen(
-    navController: NavController
+    navController: NavController,
+    loginViewModel: LoginViewModel = hiltViewModel(),
+    showSnackBar: (String) -> Unit
 ) {
     LoginLaunchEffect(navController)
 
+    LaunchedEffect(
+        loginViewModel.isLoginSuccessState
+    ) {
+        if (loginViewModel.isLoginSuccessState) {
+            showSnackBar("로그인에 성공했습니다!")
+            navController.popBackStack()
+        }
+    }
+
     val scrollableState = rememberScrollState()
     val focusManager = LocalFocusManager.current
-
-    var textId by remember { mutableStateOf("") }
-    var textPassword by remember { mutableStateOf("") }
-
-    var idFilled by remember { mutableStateOf(false) }
-    var passwordFilled by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier
@@ -89,28 +97,26 @@ fun LoginScreen(
                         .fillMaxWidth()
                         .padding(vertical = 4.sdp),
                     title = "아이디",
-                    text = textId,
+                    text = loginViewModel.textIdState,
                     onValueChange = {
-                        textId = it
-                        idFilled = textId.isNotEmpty()
+                        loginViewModel.setTextId(it)
                     },
-                    focusManager = focusManager
+                    focusManager = focusManager,
+                    loginViewModel = loginViewModel
                 )
                 LoginPasswordTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 4.sdp),
                     title = "비밀번호",
-                    text = textPassword,
+                    text = loginViewModel.textPasswordState,
                     onValueChange = {
-                        textPassword = it
-                        passwordFilled = textPassword.isNotEmpty()
+                        loginViewModel.setTextPassword(it)
                     },
                     focusManager = focusManager
                 )
                 LoginButton(
-                    idFilled = idFilled,
-                    passwordFilled = passwordFilled
+                    loginViewModel = loginViewModel
                 )
                 Spacer(modifier = Modifier.size(6.sdp))
                 GoSignupText(

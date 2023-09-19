@@ -50,12 +50,15 @@ fun MainNavHost(
             route = MainNav.Like.route,
 //            route = LoginNav.route
         ) {
-            if (isLogined) {
-                LikeScreen(navController)
-            } else {
-                LoginScreen(navController = navController)
+//            if (isLogined) {
+//                LikeScreen(navController)
+//            } else {
+                LoginScreen(
+                    navController = navController,
+                    showSnackBar = showSnackBar
+                )
 //                navController.navigate(Router.MAIN_LOGIN_ROUTER_NAME)
-            }
+//            }
         }
         mainSlideTransitions(
             route = MainNav.MyPage.route,
@@ -63,7 +66,10 @@ fun MainNavHost(
             if (isLogined) {
                 MypageScreen(navController)
             } else {
-                LoginScreen(navController = navController)
+                LoginScreen(
+                    navController = navController,
+                    showSnackBar = showSnackBar
+                )
             }
         }
         defaultSlideTransitions(
@@ -74,7 +80,10 @@ fun MainNavHost(
         defaultSlideTransitions(
             route = LoginNav.route,
         ) {
-            LoginScreen(navController)
+            LoginScreen(
+                navController = navController,
+                showSnackBar = showSnackBar
+            )
         }
         defaultSlideTransitions(
             route = NotificationNav.route

@@ -16,26 +16,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.button.ClickableButton
+import com.appa.snoop.presentation.ui.login.LoginViewModel
 import com.appa.snoop.presentation.ui.theme.BlackColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
+import kotlin.math.log
 
 @Composable
 fun LoginButton(
-    idFilled: Boolean = false,
-    passwordFilled: Boolean = false,
-    modifier : Modifier = Modifier
+//    idFilled: Boolean = false,
+//    passwordFilled: Boolean = false,
+    modifier : Modifier = Modifier,
+    loginViewModel: LoginViewModel
 ) {
     ClickableButton(
-        onClick = { /* TODO 로그인 구현 */ },
+        onClick = {
+                  loginViewModel.login()
+        },
         modifier = Modifier
             .fillMaxWidth()
             .height(40.sdp),
         shape = RoundedCornerShape(10.sdp),
         buttonColor = PrimaryColor,
         elevation = ButtonDefaults.buttonElevation(2.sdp),
-        enabled = idFilled && passwordFilled
+//        enabled = idFilled && passwordFilled
+        enabled = loginViewModel.idFilledState && loginViewModel.passwordFilledState
     ) {
         Row(
             modifier = Modifier
