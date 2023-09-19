@@ -59,6 +59,7 @@ public class WishboxService {
 	}
 
 	// 찜 상품 목록 조회
+	// TODO : 추가적으로 Response DTO 명확하게 수정
 	@Transactional(readOnly = true)
 	public List<Wishbox> getWishboxList(Long memberId) {
 		Member member = memberRepository.findById(memberId)
@@ -67,7 +68,7 @@ public class WishboxService {
 	}
 
 	// 찜 상품 삭제
-	public Object removeWishbox(Long wishboxId) {
+	public RemoveWishboxResponseDto removeWishbox(Long memberId, Long wishboxId) {
 		Wishbox wishbox = wishboxRepository.findById(wishboxId)
 				.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_WISHBOX_ID));
 		wishboxRepository.delete(wishbox);

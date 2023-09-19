@@ -4,7 +4,7 @@ import appaanjanda.snooping.domain.member.service.dto.UserResponse;
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.domain.wishbox.service.dto.AddWishboxResponseDto;
-import appaanjanda.snooping.global.response.Response;
+import appaanjanda.snooping.domain.wishbox.service.dto.RemoveWishboxResponseDto;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,6 +53,21 @@ public class WishboxController {
     @GetMapping("")
     public ResponseEntity<List<Wishbox>> getWishboxList(@MemberInfo MembersInfo membersInfo) {
         return ResponseEntity.ok(wishboxService.getWishboxList(membersInfo.getId()));
+    }
+
+    // 찜 상품 삭제
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "조회 성공",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "400", description = "요청 오류 "),
+            @ApiResponse(responseCode = "500", description = "서버 내부 오류")
+    })
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "찜 상품 삭제", description = "찜 페이지에서 선택항목에 대한 찜 상품 삭제", tags = { "Wishbox Controller" })
+    @DeleteMapping("/remove/{wishboxId}")
+    public ResponseEntity<RemoveWishboxResponseDto> removeWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable Long wishboxId) {
+        return ResponseEntity.ok(wishboxService.removeWishbox(membersInfo.getId(), wishboxId));
     }
 
 
