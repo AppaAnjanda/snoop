@@ -7,6 +7,8 @@ import appaanjanda.snooping.domain.search.entity.SearchHistory;
 import appaanjanda.snooping.domain.search.repository.SearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.common.unit.Fuzziness;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -42,6 +44,7 @@ public class SearchService {
         // 쿼리 작성
         NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
                 .withQuery(QueryBuilders.boolQuery()
+                        // 대분류, 소분류 일치하는 상품
                         .must(QueryBuilders.termQuery("_index", index))
                         .must(QueryBuilders.termQuery("minor_category.keyword", minor))
                 )
@@ -65,11 +68,28 @@ public class SearchService {
         String[] indices = {"디지털가전", "가구", "생활용품", "식품"}; // 검색할 인덱스들
 
         for (String index : indices) {
+            // 반환타입 결정
             Class<?> productType = productSearchService.searchProductByIndex(index);
 
+
+            BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
+                    /*
+                     *  keyword를 must - match 쿼리로 1차 검색
+                     *  keyword의 각 단어를 or조건으로 검색
+                     */
+                    .must(QueryBuilders.matchQuery("product_name", keyword).fuzziness(Fuzziness.ONE))
+                    /*
+                     * match_phrase로 검색어의 각 단어들을 순서까지 고려하여 완전히 포함하는 상품에 대해 should로 가중치를 줌
+                     * slop=1 설정으로 단어 사이 임의의 단어가 1개까지 포함될 수 있다
+                     */
+                    .should(QueryBuilders.matchPhraseQuery("product_name", keyword).slop(1));
+
             NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
-                    .withQuery(QueryBuilders.fuzzyQuery("product_name", keyword))
+                    .withQuery(boolQuery)
+                    .withPageable(Pageable.ofSize(50)) // 50 개
                     .build();
+
+            log.info(keyword);
 
             SearchHits<?> searchHits = elasticsearchRestTemplate.search(searchQuery, productType);
 
