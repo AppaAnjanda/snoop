@@ -33,12 +33,13 @@ fun ModifyProfilNickname(onNicknameChange: (String) -> Unit) {
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 2.sdp),
+            .padding(start = 8.sdp),
         text = "닉네임",
         textAlign = TextAlign.Start,
         style = TextStyle(
             fontWeight = FontWeight.SemiBold,
-            fontSize = 12.ssp
+            fontSize = 12.ssp,
+            color = Color.DarkGray
         )
     )
     Spacer(modifier = Modifier.size(8.sdp))
