@@ -1,6 +1,5 @@
 package com.appa.snoop.presentation.ui.mypage.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -113,7 +112,7 @@ fun SettingComponent(index: Int, title: MyPageLabel, onClick: () -> Unit) {
 @Composable
 fun DisplayIcon(title: MyPageLabel) {
     when (title) {
-        MyPageLabel.NOTIFICATION, MyPageLabel.MODIFY_PROFILE, MyPageLabel.SELECT_CARD -> {
+        MyPageLabel.NOTIFICATION, MyPageLabel.MODIFY_PROFILE -> {
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_forward),
                 contentDescription = "화면 이동",
