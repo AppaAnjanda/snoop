@@ -17,7 +17,7 @@ public class RecentProduct extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @Column(name = "recent_id")
     private Long id;
 
     private String productId;
