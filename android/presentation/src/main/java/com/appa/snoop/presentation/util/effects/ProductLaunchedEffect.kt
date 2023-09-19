@@ -3,19 +3,19 @@ package com.appa.snoop.presentation.util.effects
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
-import com.appa.snoop.presentation.common.topbar.component.LoginTopBar
+import com.appa.snoop.presentation.common.topbar.component.ProductTopbar
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @Composable
-fun LoginLaunchEffect(
+fun ProductLaunchedEffect(
     navController: NavController
 ) {
     LaunchedEffect(key1 = Unit) {
-        LoginTopBar.buttons
+        ProductTopbar.buttons
             .onEach { button ->
                 when (button) {
-                    LoginTopBar.AppBarIcons.NavigationIcon -> {
+                    ProductTopbar.AppBarIcons.NavigationIcon -> {
                         navController.popBackStack()
                     }
                 }

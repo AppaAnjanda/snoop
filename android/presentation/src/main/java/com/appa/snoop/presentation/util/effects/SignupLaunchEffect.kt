@@ -3,7 +3,6 @@ package com.appa.snoop.presentation.util.effects
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
-import com.appa.snoop.presentation.common.topbar.component.BackTopbar
 import com.appa.snoop.presentation.common.topbar.component.LoginTopBar
 import com.appa.snoop.presentation.common.topbar.component.SignupTopBar
 import kotlinx.coroutines.flow.launchIn

@@ -15,7 +15,9 @@ import com.appa.snoop.presentation.ui.home.HomeScreen
 import com.appa.snoop.presentation.ui.like.LikeScreen
 import com.appa.snoop.presentation.ui.login.LoginScreen
 import com.appa.snoop.presentation.ui.mypage.MypageScreen
+import com.appa.snoop.presentation.ui.mypage.profile.ModifyProfileScreen
 import com.appa.snoop.presentation.ui.notification.NotificationScreen
+import com.appa.snoop.presentation.ui.product.ProductDetailScreen
 import com.appa.snoop.presentation.ui.search.SearchScreen
 import com.appa.snoop.presentation.ui.signup.SignupScreen
 
@@ -25,7 +27,7 @@ fun MainNavHost(
     navController: NavHostController,
     showSnackBar: (String) -> Unit
 ) {
-    val isLogined by remember { mutableStateOf(false) }
+    val isLogined by remember { mutableStateOf(true) }
 
     NavHost(
         modifier = Modifier.padding(innerPaddings),
@@ -90,6 +92,18 @@ fun MainNavHost(
                 signupViewModel = hiltViewModel(parentEntry),
                 showSnackBar
             )
+        }
+        defaultSlideTransitions(
+            route = Router.CATEGORY_PRODUCT_ROUTER_NAME
+        ) {
+            ProductDetailScreen(
+                navController = navController
+            )
+        }
+        defaultSlideTransitions(
+            route = ModifyProfileNav.route
+        ) {
+            ModifyProfileScreen(navController)
         }
     }
 }

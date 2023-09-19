@@ -9,8 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.appa.snoop.presentation.navigation.Router
 
 import com.appa.snoop.presentation.ui.category.component.CategoryItem
+import com.appa.snoop.presentation.util.effects.CategoryLaunchedEffect
 
 const val SIZE = 2
 @Composable
@@ -18,6 +20,9 @@ fun CategoryScreen(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController()
 ) {
+
+    CategoryLaunchedEffect(navController = navController)
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -28,7 +33,9 @@ fun CategoryScreen(
             items(count = 10) {
                 CategoryItem(
                     modifier = Modifier,
-                    onItemClicked = { /*TODO*/ },
+                    onItemClicked = {
+                        navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
+                    },
                     onLikeClicked = { /*TODO*/ }
                 )
             }
