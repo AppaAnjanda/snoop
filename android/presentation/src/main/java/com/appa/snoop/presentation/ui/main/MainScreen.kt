@@ -3,9 +3,12 @@ package com.appa.snoop.presentation.ui.main
 import android.util.Log
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -14,12 +17,15 @@ import com.appa.snoop.presentation.common.topbar.SharedTopAppBar
 import com.appa.snoop.presentation.common.topbar.utils.rememberAppBarState
 import com.appa.snoop.presentation.navigation.MainNav
 import com.appa.snoop.presentation.navigation.MainNavHost
+import kotlinx.coroutines.launch
 
+private const val TAG = "[김희웅] MainScreen"
 @Composable
 fun MainScreen(
     type: String? = null,
     articleId: String? = null
 ) {
+    val snackBarHostState = remember { SnackbarHostState() }
     val navController = rememberNavController()
     val appBarState = rememberAppBarState(navController = navController)
     val scope = rememberCoroutineScope()
@@ -29,6 +35,7 @@ fun MainScreen(
     Scaffold(
         modifier = Modifier
             .navigationBarsPadding(),
+        snackbarHost = { SnackbarHost(snackBarHostState) },
         topBar = {
             if (appBarState.isVisible) {
                 SharedTopAppBar(appBarState = appBarState)
@@ -43,11 +50,11 @@ fun MainScreen(
         MainNavHost(
             innerPaddings = it,
             navController = navController,
-//            showSnackBar = { message ->
-//                scope.launch {
-//                    snackBarHostState.showSnackbar(message)
-//                }
-//            }
+            showSnackBar = { message ->
+                scope.launch {
+                    snackBarHostState.showSnackbar(message)
+                }
+            }
         )
         LaunchedEffect(Unit) {
             if (type != null && articleId != null) {

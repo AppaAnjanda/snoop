@@ -2,6 +2,8 @@ package com.appa.snoop.presentation.navigation
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -17,40 +19,44 @@ fun NavGraphBuilder.mainSlideTransitions(
     composable(
         route,
         enterTransition = {
-            fadeIn(
-                animationSpec = tween(300),
-//                initialAlpha = 0.5f
-            )
+                          EnterTransition.None
+//            fadeIn(
+//                animationSpec = tween(300),
+////                initialAlpha = 0.5f
+//            )
 //            slideIntoContainer(
 //                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
 //                animationSpec = tween(300)
 //            )
         },
         exitTransition = {
-            fadeOut(
-                animationSpec = tween(100),
-//                targetAlpha = 0.5f
-            )
+                         ExitTransition.None
+//            fadeOut(
+//                animationSpec = tween(100),
+////                targetAlpha = 0.5f
+//            )
 //            slideOutOfContainer(
 //                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
 //                animationSpec = tween(300)
 //            )
         },
         popEnterTransition = {
-            fadeIn(
-                animationSpec = tween(300),
-//                initialAlpha = 0.5f
-            )
+                             EnterTransition.None
+//            fadeIn(
+//                animationSpec = tween(300),
+////                initialAlpha = 0.5f
+//            )
 //            slideIntoContainer(
 //                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
 //                animationSpec = tween(300)
 //            )
         },
         popExitTransition = {
-            fadeOut(
-                animationSpec = tween(100),
-//                targetAlpha = 0.5f
-            )
+            ExitTransition.None
+//            fadeOut(
+//                animationSpec = tween(100),
+////                targetAlpha = 0.5f
+//            )
 //            slideOutOfContainer(
 //                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
 //                animationSpec = tween(300)
@@ -68,26 +74,26 @@ fun NavGraphBuilder.defaultSlideTransitions(
         route,
         enterTransition = {
             slideIntoContainer(
-                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                animationSpec = tween(300)
+                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
+                animationSpec = tween(700)
             )
         },
         exitTransition = {
             slideOutOfContainer(
-                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                animationSpec = tween(200)
+                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
+                animationSpec = tween(500)
             )
         },
         popEnterTransition = {
             slideIntoContainer(
-                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                animationSpec = tween(200)
+                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                animationSpec = tween(500)
             )
         },
         popExitTransition = {
             slideOutOfContainer(
-                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                animationSpec = tween(300)
+                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                animationSpec = tween(500)
             )
         },
         content = content

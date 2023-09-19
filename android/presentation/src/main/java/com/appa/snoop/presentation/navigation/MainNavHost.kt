@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.appa.snoop.presentation.ui.category.CategoryScreen
@@ -22,6 +23,7 @@ import com.appa.snoop.presentation.ui.signup.SignupScreen
 fun MainNavHost(
     innerPaddings: PaddingValues,
     navController: NavHostController,
+    showSnackBar: (String) -> Unit
 ) {
     val isLogined by remember { mutableStateOf(false) }
 
@@ -80,7 +82,14 @@ fun MainNavHost(
         defaultSlideTransitions(
             route = Router.LOGIN_SIGNUP_ROUTER_NAME
         ) {
-            SignupScreen(navController = navController)
+            val parentEntry = remember(it) {
+                navController.getBackStackEntry(Router.LOGIN_SIGNUP_ROUTER_NAME)
+            }
+            SignupScreen(
+                navController = navController,
+                signupViewModel = hiltViewModel(parentEntry),
+                showSnackBar
+            )
         }
     }
 }

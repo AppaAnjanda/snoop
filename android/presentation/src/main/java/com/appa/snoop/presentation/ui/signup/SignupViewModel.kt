@@ -9,27 +9,33 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.appa.snoop.domain.model.NetworkResult
+import com.appa.snoop.domain.model.member.Register
+import com.appa.snoop.domain.model.member.RegisterDone
+import com.appa.snoop.domain.usecase.register.SignUpUseCase
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SignupViewModel @Inject constructor(
+private const val TAG = "[김희웅] SignupViewModel"
 
+@HiltViewModel
+class SignupViewModel @Inject constructor(
+    private val signUpUseCase: SignUpUseCase
 ): ViewModel() {
     //TODO 읽고있다가 값에 변경이 있으면 버튼 색 바꿔주고, 이메일 칸 채워주는 코드 필요
-    private var _isLoginSuccess by
-        mutableStateOf<Boolean>(false)
-    val isLoginSuccess = _isLoginSuccess
+    var isKakaoLoginSuccess by mutableStateOf<Boolean>(false)
+//    val isLoginSuccess = _isLoginSuccess
 
-    private var _kakaoEmail by
-        mutableStateOf<String>("")
-    val kakaoEmail = _kakaoEmail
+    var kakaoEmail by mutableStateOf<String>("")
 
     val kakaoCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         when {
@@ -38,7 +44,7 @@ class SignupViewModel @Inject constructor(
             }
             token != null -> {
                 // 카카오 로그인이 성공했으면
-                _isLoginSuccess = true
+                isKakaoLoginSuccess = true
                 getKakaoEmail()
             }
         }
@@ -73,7 +79,7 @@ class SignupViewModel @Inject constructor(
                 user != null -> {
                     val email = user.kakaoAccount?.email.orEmpty()
 
-                    _kakaoEmail = email
+                    kakaoEmail = email
 
                     Log.d("[김희웅] Kakao: ", "받아온 카카오 이메일? => $email")
                     UserApiClient.instance.logout {
@@ -82,5 +88,33 @@ class SignupViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private val _signUpState = MutableStateFlow<NetworkResult<RegisterDone>>(NetworkResult.Loading)
+    val signUpState : StateFlow<NetworkResult<RegisterDone>> = _signUpState
+
+    var isSignupSuccess by mutableStateOf(false)
+        private set
+
+    fun signUp(email: String, password: String, nickname: String, cardList: List<String> = listOf()) = viewModelScope.launch {
+        Log.d(TAG, "signUp: email $email")
+        Log.d(TAG, "signUp: password $password")
+        Log.d(TAG, "signUp: nickname $nickname")
+        Log.d(TAG, "signUp: cardList $cardList")
+        val register = Register(
+            email = email,
+            password = password,
+            nickname = nickname,
+            cardList = cardList
+        )
+        _signUpState.emit(signUpUseCase.invoke(register))
+
+        if (signUpState.value is NetworkResult.Success) {
+            Log.d(TAG, "signUp 서버통신 성공적")
+            isSignupSuccess = true
+        } else {
+            Log.d(TAG, "signUp 서버통신 실패")
+        }
+
     }
 }

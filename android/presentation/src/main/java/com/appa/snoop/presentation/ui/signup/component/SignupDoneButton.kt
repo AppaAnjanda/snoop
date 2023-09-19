@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.button.ClickableButton
+import com.appa.snoop.presentation.ui.signup.SignupViewModel
 import com.appa.snoop.presentation.ui.theme.BlackColor
 import com.appa.snoop.presentation.ui.theme.KakaoColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
@@ -32,10 +33,11 @@ import ir.kaaveh.sdpcompose.ssp
 fun SignupDoneButton(
     isIdValid: Boolean = false,
     isPasswordValid: Boolean = false,
-    isNicknameValid: Boolean = false
+    isNicknameValid: Boolean = false,
+    onClick: () -> Unit
 ) {
     Button(
-        onClick = { /* TODO 회원가입 완료 로직 구현 */ },
+        onClick = { /* TODO 회원가입 완료 로직 구현 */ onClick() },
         modifier = Modifier
             .height(44.sdp)
             .fillMaxWidth(),

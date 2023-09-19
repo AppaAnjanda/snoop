@@ -1,6 +1,9 @@
 package com.appa.snoop.di
 
+import com.appa.snoop.data.repository.RegisterRepositoryImpl
 import com.appa.snoop.data.service.BaseService
+import com.appa.snoop.data.service.RegisterService
+import com.appa.snoop.domain.repository.RegisterRepository
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -60,4 +63,9 @@ object NetworkModule {
         retrofit: Retrofit
     ): BaseService = retrofit.create(BaseService::class.java)
 
+    @Provides
+    @Singleton
+    fun provideRegisterService(
+        retrofit: Retrofit
+    ): RegisterService = retrofit.create(RegisterService::class.java)
 }

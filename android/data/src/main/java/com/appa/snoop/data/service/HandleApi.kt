@@ -1,7 +1,7 @@
 package com.appa.snoop.data.service
 
 import android.util.Log
-import com.appa.snoop.data.model.NetworkResult
+import com.appa.snoop.domain.model.NetworkResult
 
 internal inline fun <T> handleApi(transform: () -> T): NetworkResult<T> = try {
     NetworkResult.Success(transform.invoke())

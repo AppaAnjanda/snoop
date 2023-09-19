@@ -37,7 +37,8 @@ fun KakaoCertButton(
             .height(36.sdp),
         shape = RoundedCornerShape(10.sdp),
         buttonColor = KakaoColor,
-        elevation = ButtonDefaults.buttonElevation(2.sdp)
+        elevation = ButtonDefaults.buttonElevation(2.sdp),
+        enabled = !signupViewModel.isKakaoLoginSuccess
     ) {
         Row(
             modifier = Modifier

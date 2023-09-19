@@ -40,6 +40,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.ui.theme.BackgroundColor
+import com.appa.snoop.presentation.ui.theme.BlueColor
 import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.InvalidRedColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
@@ -54,7 +55,9 @@ fun SignupTextField(
     title: String = "입력",
     text: String = "",
     onValueChange: (String) -> Unit,
-    focusManager: FocusManager
+    focusManager: FocusManager,
+    enabled: Boolean = true,
+    isCerted: Boolean = false
 ) {
     OutlinedTextField(
         value = text,
@@ -68,10 +71,13 @@ fun SignupTextField(
             cursorColor = DarkGrayColor,
             focusedLabelColor = DarkGrayColor,
             unfocusedLabelColor = DarkGrayColor,
+            disabledBorderColor = if (isCerted) BlueColor else RedColor,
+            disabledLabelColor = if (isCerted) BlueColor else DarkGrayColor
         ),
         modifier = modifier,
         keyboardActions = KeyboardActions(onDone = {
             focusManager.moveFocus(FocusDirection.Next)
-        })
+        }),
+        enabled = enabled
     )
 }

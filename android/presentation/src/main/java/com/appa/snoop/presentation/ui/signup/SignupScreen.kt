@@ -9,13 +9,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,29 +30,52 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.presentation.common.topbar.utils.rememberAppBarState
 import com.appa.snoop.presentation.ui.signup.component.KakaoCertButton
 import com.appa.snoop.presentation.ui.signup.component.SignupDoneButton
 import com.appa.snoop.presentation.ui.signup.component.SignupPasswordTextField
 import com.appa.snoop.presentation.ui.signup.component.SignupTextField
+import com.appa.snoop.presentation.ui.theme.BlueColor
+import com.appa.snoop.presentation.ui.theme.RedColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.effects.SignupLaunchedEffect
 import com.appa.snoop.presentation.util.extensions.addFocusCleaner
+import com.kakao.sdk.friend.m.t
 import ir.kaaveh.sdpcompose.sdp
+import ir.kaaveh.sdpcompose.ssp
+import kotlinx.coroutines.flow.onSubscription
 
+private const val TAG = "[김희웅] SignupScreen"
 @Composable
 fun SignupScreen(
     navController: NavController,
-    signupViewModel: SignupViewModel = hiltViewModel()
+    signupViewModel: SignupViewModel,
+    showSnackBar: (String) -> Unit
 ) {
     val context = LocalContext.current
     // TopBar 표기 해주기 위함
-    val appBarState = rememberAppBarState(navController = navController)
+//    val appBarState = rememberAppBarState(navController = navController)
     // text input focus 조절하기 위함
     val focusManager = LocalFocusManager.current
     val scrollableState = rememberScrollState()
 
     SignupLaunchedEffect(navController = navController)
+
+    Log.d(TAG, "회원가입 페이지 컴포지션 됨")
+
+    LaunchedEffect(
+        signupViewModel.isSignupSuccess
+    ) {
+        if (signupViewModel.isSignupSuccess) {
+            showSnackBar("로그인에 성공했습니다!")
+            navController.popBackStack()
+        }
+    }
+//    if (signupViewModel.isSignupSuccess) {
+//        showSnackBar("로그인에 성공했습니다!")
+//        navController.popBackStack()
+//    }
 
     Scaffold(
         modifier = Modifier
@@ -58,6 +85,7 @@ fun SignupScreen(
 //        topBar = { SharedTopAppBar(appBarState = appBarState) }
     ) { paddingValue ->
         paddingValue
+        // TODO viewmodel로 넣어야됨
         var textId by remember { mutableStateOf("") }
         var textPass by remember { mutableStateOf("") }
         var textPassCheck by remember { mutableStateOf("") }
@@ -69,6 +97,7 @@ fun SignupScreen(
 
         // TODO 코드 교체 필요
 //        val signupViewModel = SignupViewModel()
+        idValid = signupViewModel.isKakaoLoginSuccess
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -92,14 +121,15 @@ fun SignupScreen(
                     SignupTextField(
                         modifier = Modifier
                             .weight(1f),
-                        title = "이메일",
-                        text = textId,
+                        title = if (!signupViewModel.isKakaoLoginSuccess) "인증이 필요합니다." else "인증 되었습니다!",
+                        text = signupViewModel.kakaoEmail,
                         onValueChange = {
                             // TODO 서버 통신 코드 구현 필요
                             textId = it
-                            idValid = textId.isNotEmpty()
                         },
-                        focusManager = focusManager
+                        focusManager = focusManager,
+                        enabled = false,
+                        isCerted = signupViewModel.isKakaoLoginSuccess
                     )
                     Spacer(modifier = Modifier.width(10.sdp))
 
@@ -114,7 +144,7 @@ fun SignupScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 4.sdp),
-                    title = "비밀번호",
+                    title = "비밀번호 (영어, 숫자, 특수문자 포함 8 ~ 20자)",
                     text = textPass,
                     onValueChange = { text, isValid ->
                         // TODO 서버 통신 코드 구현 필요
@@ -135,6 +165,26 @@ fun SignupScreen(
                     },
                     focusManager = focusManager
                 )
+                // 비밀번호 동일 체크
+                if (textPass.isNotEmpty() && textPassCheck.isNotEmpty()) {
+                    if (textPass == textPassCheck) {
+                        Text(
+                            modifier = Modifier
+                                .padding(start = 8.sdp),
+                            text = "비밀번호가 일치합니다!",
+                            fontSize = 10.ssp,
+                            color = BlueColor
+                        )
+                    } else {
+                        Text(
+                            modifier = Modifier
+                                .padding(start = 8.sdp),
+                            text = "비밀번호가 일치하지 않습니다.",
+                            fontSize = 10.ssp,
+                            color = RedColor
+                        )
+                    }
+                }
                 SignupTextField(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -148,7 +198,18 @@ fun SignupScreen(
                     focusManager = focusManager
                 )
             }
-            SignupDoneButton(idValid, passwordValid, nicknameValid)
+            SignupDoneButton(
+                idValid,
+                passwordValid,
+                nicknameValid,
+                onClick = {
+                    signupViewModel.signUp(
+                        email = signupViewModel.kakaoEmail,
+                        password = textPass,
+                        nickname = textNickname
+                    )
+                }
+            )
         }
     }
 }

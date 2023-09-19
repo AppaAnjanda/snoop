@@ -1,4 +1,4 @@
-package com.appa.snoop.data.model
+package com.appa.snoop.domain.model
 
 sealed class NetworkResult<out R> {
 
