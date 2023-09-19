@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
@@ -46,4 +48,21 @@ public class ProductDetailController {
         return productSearchService.searchProductById(productId);
 
     }
+
+    // 주, 일, 시 가격 추이 조회
+    @GetMapping("/graph/{productId}/{period}")
+    public List<?> getPriceHistory(@PathVariable String productId, @PathVariable String period) {
+        switch (period) {
+            case "week":
+                return productService.getPriceHistoryByWeek(productId);
+            case "day":
+                return productService.getPriceHistoryByDay(productId);
+            case "hour":
+                return productService.getPriceHistoryByHour(productId);
+            default:
+                throw new IllegalArgumentException("Invalid index");
+        }
+
+    }
+
 }

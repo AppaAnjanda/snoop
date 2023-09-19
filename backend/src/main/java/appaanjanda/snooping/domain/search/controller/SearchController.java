@@ -29,7 +29,6 @@ public class SearchController {
     private final SearchService searchService;
 
     // 카테고리로 상품 검색
-    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "카테고리로 검색", description = "대분류와 소분류 입력", tags = { "Search Controller" })
     @GetMapping("/{major}/{minor}")
     public List<?> getProductByCategory(@PathVariable String major, @PathVariable String minor) {
@@ -37,6 +36,10 @@ public class SearchController {
         return searchService.searchProductByCategory(major, minor);
     }
 
+    /**
+     * 분기 어떻게 태울지
+     * @return
+     */
     // 키워드로 상품 검색
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "키워드로 검색", description = "검색하고 싶은 단어 입력", tags = { "Search Controller" })
