@@ -45,8 +45,10 @@ public enum ErrorCode {
     NOT_EXISTS_FURNITURE_PRODUCT(HttpStatus.BAD_REQUEST, "P-002", "가구 상품이 존재하지 않습니다."),
     NOT_EXISTS_NECESSARIES_PRODUCT(HttpStatus.BAD_REQUEST, "P-003", "생활용품 상품이 존재하지 않습니다."),
     NOT_EXISTS_FOOD_PRODUCT(HttpStatus.BAD_REQUEST, "P-004", "식품 상품이 존재하지 않습니다."),
-    NOT_EXISTS_PRODUCT(HttpStatus.BAD_REQUEST, "P-005", "상품이 존재하지 않습니다.");
+    NOT_EXISTS_PRODUCT(HttpStatus.BAD_REQUEST, "P-005", "상품이 존재하지 않습니다."),
 
+    // 찜 상품
+    NOT_EXISTS_WISHBOX_ID(HttpStatus.BAD_REQUEST, "W-005", "찜 상품이 존재하지 않습니다.");
 
     private HttpStatus httpStatus;
     private String errorCode;

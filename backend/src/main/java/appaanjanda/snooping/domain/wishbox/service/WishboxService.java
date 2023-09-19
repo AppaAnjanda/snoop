@@ -8,6 +8,7 @@ import appaanjanda.snooping.domain.product.repository.FurnitureProductRepository
 import appaanjanda.snooping.domain.product.repository.NecessariesProductRepository;
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.service.dto.AddWishboxResponseDto;
+import appaanjanda.snooping.domain.wishbox.service.dto.RemoveWishboxResponseDto;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BadRequestException;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ public class WishboxService {
 	public void save(Long id, SaveItemRequest request){
 
 	}
+
 	//찜 상품 등록
 	public AddWishboxResponseDto addWishbox(Long memberId, String productId) {
 		Member member = memberRepository.findById(memberId)
@@ -57,13 +59,26 @@ public class WishboxService {
 	}
 
 	// 찜 상품 목록 조회
+	@Transactional(readOnly = true)
 	public List<Wishbox> getWishboxList(Long memberId) {
 		Member member = memberRepository.findById(memberId)
 				.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID));
 		return member.getWishboxList();
 	}
 
-	//상품id로 조회
+	// 찜 상품 삭제
+	public Object removeWishbox(Long wishboxId) {
+		Wishbox wishbox = wishboxRepository.findById(wishboxId)
+				.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_WISHBOX_ID));
+		wishboxRepository.delete(wishbox);
+
+		return RemoveWishboxResponseDto
+				.builder()
+				.removeId(wishboxId)
+				.build();
+	}
+
+	// 상품id로 조회
 	public Object searchProductById(String productId) {
 		// product_123 에서 1(대분류 코드) 추출
 		char index = productId.split("_")[1].charAt(0);
