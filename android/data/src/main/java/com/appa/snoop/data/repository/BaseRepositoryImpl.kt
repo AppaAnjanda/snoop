@@ -11,5 +11,6 @@ class BaseRepositoryImpl(
 ): BaseRepository {
     override suspend fun getAllList(): Flow<BaseModel> {
         TODO("Not yet implemented")
+        
     }
 }
