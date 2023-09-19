@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.global.common.BaseTimeEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,24 +27,26 @@ public class Wishbox extends BaseTimeEntity {
 	@Column(name = "wishbox_id")
 	private Long id;
 
-	private String productName;
-
-	private int price;
-
 	private int alertPrice;
 
 	private Boolean alertYn;
 
+	/**
+	Elasticsearch에 연결되는 상품 ID
+	 */
+	private String productId;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "wishboxList")
+	@JsonIgnore
 	private Member member;
 
-	public Wishbox(Long id, String productName, int price, int alertPrice, Boolean alertYn, Member member) {
+	@Builder
+	public Wishbox(Long id, int alertPrice, Boolean alertYn, String productId, Member member) {
 		this.id = id;
-		this.productName = productName;
-		this.price = price;
 		this.alertPrice = alertPrice;
 		this.alertYn = alertYn;
+		this.productId = productId;
 		this.member = member;
 	}
 }

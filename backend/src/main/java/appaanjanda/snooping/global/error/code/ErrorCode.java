@@ -38,7 +38,17 @@ public enum ErrorCode {
     NOT_EXISTS_CARD_NAME(HttpStatus.BAD_REQUEST, "C-001", "삭제 요청하신 카드가 존재하지 않습니다."),
 
     // 이미지
-    FAIL_DELETE_FILE(HttpStatus.INTERNAL_SERVER_ERROR, "F-001", "이미지 파일 삭제에 실패");
+    FAIL_DELETE_FILE(HttpStatus.INTERNAL_SERVER_ERROR, "F-001", "이미지 파일 삭제에 실패"),
+
+    // 상품
+    NOT_EXISTS_DIGITAL_PRODUCT(HttpStatus.BAD_REQUEST, "P-001", "디지털가전 상품이 존재하지 않습니다."),
+    NOT_EXISTS_FURNITURE_PRODUCT(HttpStatus.BAD_REQUEST, "P-002", "가구 상품이 존재하지 않습니다."),
+    NOT_EXISTS_NECESSARIES_PRODUCT(HttpStatus.BAD_REQUEST, "P-003", "생활용품 상품이 존재하지 않습니다."),
+    NOT_EXISTS_FOOD_PRODUCT(HttpStatus.BAD_REQUEST, "P-004", "식품 상품이 존재하지 않습니다."),
+    NOT_EXISTS_PRODUCT(HttpStatus.BAD_REQUEST, "P-005", "상품이 존재하지 않습니다."),
+
+    // 찜 상품
+    NOT_EXISTS_WISHBOX_ID(HttpStatus.BAD_REQUEST, "W-005", "찜 상품이 존재하지 않습니다.");
 
     private HttpStatus httpStatus;
     private String errorCode;
