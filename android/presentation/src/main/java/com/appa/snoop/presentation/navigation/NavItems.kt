@@ -58,3 +58,9 @@ object NotificationNav : Destination {
     override val route = Router.MAIN_NOTIFICATION_ROUTER_NAME
     override val title = Router.Title.MAIN_NOTIFICATION
 }
+
+// 닉네임 변경 화면
+object ModifyProfileNav : Destination {
+    override val route = Router.MY_PAGE_MODIFY_PROFILE_ROUTER_NAME
+    override val title = Router.Title.MY_PAGE_MODIFY_PROFILE
+}

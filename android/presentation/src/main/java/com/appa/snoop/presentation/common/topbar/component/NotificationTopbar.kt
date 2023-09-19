@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-object BackTopbar : Topbars {
+object NotificationTopbar : Topbars {
     override val isCenterTopBar: Boolean = true
     override val route: String = Router.MAIN_NOTIFICATION_ROUTER_NAME
     override val isAppBarVisible: Boolean = true

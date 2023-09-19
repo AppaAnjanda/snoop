@@ -17,6 +17,9 @@ object Router {
     // 알림 화면
     const val MAIN_NOTIFICATION_ROUTER_NAME = "main_notification"
 
+    // 프로필 변경 화면
+    const val MY_PAGE_MODIFY_PROFILE_ROUTER_NAME = "mypage_modify_profile"
+
     // 제품 상세화면
     const val CATEGORY_PRODUCT_ROUTER_NAME = "category_product"
 
@@ -36,7 +39,11 @@ object Router {
         // 알림 화면
         const val MAIN_NOTIFICATION = "알림"
 
+        // 프로필 변경
+        const val MY_PAGE_MODIFY_PROFILE = "프로필 변경"
+
         // 제품 상세화면
         const val CATEGORY_PRODUCT = "상세화면"
+
     }
 }
