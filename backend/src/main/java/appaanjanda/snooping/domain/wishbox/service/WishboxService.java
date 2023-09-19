@@ -18,6 +18,8 @@ import appaanjanda.snooping.domain.wishbox.service.dto.SaveItemRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -53,7 +55,14 @@ public class WishboxService {
 				.alertPrice(0)
 				.build();
 	}
-	
+
+	// 찜 상품 목록 조회
+	public List<Wishbox> getWishboxList(Long memberId) {
+		Member member = memberRepository.findById(memberId)
+				.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID));
+		return member.getWishboxList();
+	}
+
 	//상품id로 조회
 	public Object searchProductById(String productId) {
 		// product_123 에서 1(대분류 코드) 추출
