@@ -1,6 +1,7 @@
 package appaanjanda.snooping.domain.wishbox.controller;
 
 import appaanjanda.snooping.domain.member.service.dto.UserResponse;
+import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.domain.wishbox.service.dto.AddWishboxResponseDto;
 import appaanjanda.snooping.global.response.Response;
@@ -15,10 +16,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/wishbox")
@@ -39,6 +39,21 @@ public class WishboxController {
     @PostMapping("/add/{productId}")
     public ResponseEntity<AddWishboxResponseDto> addWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable String productId) {
         return ResponseEntity.ok(wishboxService.addWishbox(membersInfo.getId(), productId));
+    }
+
+    // 찜 상품 목록 조회
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "조회 성공",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "400", description = "요청 오류 "),
+            @ApiResponse(responseCode = "500", description = "서버 내부 오류")
+    })
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "찜 상품 목록 조회", description = "찜 페이지 이동 시 진행되는 찜 목록 조회", tags = { "Wishbox Controller" })
+    @GetMapping("")
+    public ResponseEntity<List<Wishbox>> getWishboxList(@MemberInfo MembersInfo membersInfo) {
+        return ResponseEntity.ok(wishboxService.getWishboxList(membersInfo.getId()));
     }
 
 
