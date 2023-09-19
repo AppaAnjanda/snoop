@@ -17,6 +17,9 @@ object Router {
     // 알림 화면
     const val MAIN_NOTIFICATION_ROUTER_NAME = "main_notification"
 
+    // 회원가입 화면
+    const val LOGIN_SIGNUP_ROUTER_NAME = "login_signup"
+
     // 프로필 변경 화면
     const val MY_PAGE_MODIFY_PROFILE_ROUTER_NAME = "mypage_modify_profile"
 
@@ -38,6 +41,9 @@ object Router {
 
         // 알림 화면
         const val MAIN_NOTIFICATION = "알림"
+
+        // 회원가입 화면
+        const val LOGIN_SIGNUP = "회원가입"
 
         // 프로필 변경
         const val MY_PAGE_MODIFY_PROFILE = "프로필 변경"

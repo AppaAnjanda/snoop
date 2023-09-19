@@ -1,13 +1,16 @@
 package com.appa.snoop.presentation.common.topbar.utils
 
+import com.appa.snoop.presentation.common.topbar.component.LoginTopBar
 import com.appa.snoop.presentation.common.topbar.component.NotificationTopbar
 import com.appa.snoop.presentation.common.topbar.component.CategoryTopbar
 import com.appa.snoop.presentation.common.topbar.component.MainTopbar
 import com.appa.snoop.presentation.common.topbar.component.ModifyProfileTopbar
 import com.appa.snoop.presentation.common.topbar.component.ProductTopbar
 import com.appa.snoop.presentation.common.topbar.component.SearchTopbar
+import com.appa.snoop.presentation.common.topbar.component.SignupTopBar
 import com.appa.snoop.presentation.common.topbar.component.Topbars
 import com.appa.snoop.presentation.navigation.Router
+import retrofit2.http.HEAD
 
 fun getTopbar(route: String?): Topbars? = when (route) {
     Router.MAIN_HOME_ROUTER_NAME,
@@ -20,6 +23,10 @@ fun getTopbar(route: String?): Topbars? = when (route) {
     Router.MAIN_SEARCH_ROUTER_NAME -> SearchTopbar
     Router.MAIN_NOTIFICATION_ROUTER_NAME -> NotificationTopbar
     Router.MY_PAGE_MODIFY_PROFILE_ROUTER_NAME -> ModifyProfileTopbar
+
+    Router.MAIN_LOGIN_ROUTER_NAME -> LoginTopBar
+
+    Router.LOGIN_SIGNUP_ROUTER_NAME -> SignupTopBar
 
     else -> null
 }
