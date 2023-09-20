@@ -189,7 +189,7 @@ def coupang_products_digital():
     for keyword in digital_list:
         cnt = 1        
         for page in range(1, 27):
-            url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=false'
+            url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=true'
             print('check url ' + url)
 
             response = requests.get(url, headers=headers)
@@ -229,6 +229,7 @@ def coupang_products_digital():
                     "major_category": major_category,
                     "minor_category": keyword,
                     "product_name": prd_name,
+                    "price": price,
                     "index_name": major_category,
                     "product_link": prd_link,
                     "product_image": "http://example.com/images/ex.jpg",
@@ -270,7 +271,7 @@ def coupang_products_furniture():
     for keyword in furniture_list:
         cnt = 1        
         for page in range(1, 27):
-            url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=false'
+            url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=true'
             print('check url ' + url)
 
             response = requests.get(url, headers=headers)
@@ -310,6 +311,7 @@ def coupang_products_furniture():
                     "major_category": major_category,
                     "minor_category": keyword,
                     "product_name": prd_name,
+                    "price": price,
                     "index_name": major_category,
                     "product_link": prd_link,
                     "product_image": "http://example.com/images/ex.jpg",
@@ -347,7 +349,7 @@ def coupang_products_necessaries():
     for keyword in necessaries_list:
         cnt = 1        
         for page in range(1, 27):
-            url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=false'
+            url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=true'
             print('check url ' + url)
 
             response = requests.get(url, headers=headers)
@@ -387,6 +389,7 @@ def coupang_products_necessaries():
                     "major_category": major_category,
                     "minor_category": keyword,
                     "product_name": prd_name,
+                    "price": price,
                     "index_name": major_category,
                     "product_link": prd_link,
                     "product_image": "http://example.com/images/ex.jpg",
@@ -424,7 +427,7 @@ def coupang_products_food():
     for keyword in food_list:
         cnt = 1        
         for page in range(1, 27):
-            url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=false'
+            url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=true'
             print('check url ' + url)
 
             response = requests.get(url, headers=headers)
@@ -464,6 +467,7 @@ def coupang_products_food():
                     "major_category": major_category,
                     "minor_category": keyword,
                     "product_name": prd_name,
+                    "price": price,
                     "index_name": major_category,
                     "product_link": prd_link,
                     "product_image": "http://example.com/images/ex.jpg",
