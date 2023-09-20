@@ -9,15 +9,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.member.LoginInfo
+import com.appa.snoop.domain.usecase.register.JwtTokenInputUseCase
 import com.appa.snoop.domain.usecase.register.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val TAG = "[김희웅] LoginViewModel"
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val jwtTokenInputUseCase: JwtTokenInputUseCase
 ): ViewModel() {
     var textIdState by mutableStateOf("")
         private set
@@ -26,11 +31,14 @@ class LoginViewModel @Inject constructor(
 
     var idFilledState by mutableStateOf(false)
         private set
+
     var passwordFilledState by mutableStateOf(false)
         private set
 
-    var isLoginSuccessState by mutableStateOf(false)
+    var isLoginSuccessState by mutableStateOf<Boolean?>(null)
         private set
+
+    var loginButtonClickToggle by mutableStateOf(0)
 
     // 아이디 입력에대한 처리
     fun setTextId(str: String) {
@@ -64,11 +72,13 @@ class LoginViewModel @Inject constructor(
                 // token 값 sharedpreference에 넣어주자
                 Log.d(TAG, "login에 성공하였습니다. ${result.data.accessToken}")
                 isLoginSuccessState = true
-//                loginResultInputUseCase.invoke(result.data)
-//                putMemberInfo()
+                loginButtonClickToggle++
+                jwtTokenInputUseCase.invoke(result.data)
             }
             else -> {
-                Log.e(TAG, "login에 실패하였습니다.")
+                isLoginSuccessState = false
+                loginButtonClickToggle++
+                Log.e(TAG, "login에 실패하였습니다. $isLoginSuccessState 랑 $loginButtonClickToggle")
             }
         }
     }

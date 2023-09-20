@@ -3,7 +3,7 @@ package com.appa.snoop.data.mapper
 import com.appa.snoop.data.model.registration.request.RegisterRequest
 import com.appa.snoop.data.model.registration.response.LoginResponse
 import com.appa.snoop.data.model.registration.response.RegisterResponse
-import com.appa.snoop.domain.model.member.JwtAccessToken
+import com.appa.snoop.domain.model.member.JwtTokens
 import com.appa.snoop.domain.model.member.Register
 import com.appa.snoop.domain.model.member.RegisterDone
 
@@ -24,8 +24,8 @@ fun RegisterResponse.toDomain(): RegisterDone {
     )
 }
 
-fun LoginResponse.toDoain(): JwtAccessToken {
-    return JwtAccessToken(
+fun LoginResponse.toDoain(): JwtTokens {
+    return JwtTokens(
         accessToken = data.accessToken
     )
 }

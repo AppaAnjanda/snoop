@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.res.painterResource
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.button.ClickableButton
@@ -25,14 +26,15 @@ import kotlin.math.log
 
 @Composable
 fun LoginButton(
-//    idFilled: Boolean = false,
-//    passwordFilled: Boolean = false,
     modifier : Modifier = Modifier,
-    loginViewModel: LoginViewModel
+    loginViewModel: LoginViewModel,
+    focusManager: FocusManager
 ) {
     ClickableButton(
         onClick = {
-                  loginViewModel.login()
+            loginViewModel.login()
+            focusManager.clearFocus()
+//            loginViewModel.loginButtonClickToggle++
         },
         modifier = Modifier
             .fillMaxWidth()

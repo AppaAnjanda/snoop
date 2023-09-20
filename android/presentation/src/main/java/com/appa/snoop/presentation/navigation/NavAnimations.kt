@@ -75,7 +75,7 @@ fun NavGraphBuilder.defaultSlideTransitions(
         enterTransition = {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
-                animationSpec = tween(700)
+                animationSpec = tween(500)
             )
         },
         exitTransition = {
