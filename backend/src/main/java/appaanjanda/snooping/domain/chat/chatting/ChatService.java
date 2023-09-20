@@ -37,7 +37,5 @@ public class ChatService {
 			.build();
 
 		chatRepository.save(chatHistory);
-
-		return chatHistory;
 	}
 }

@@ -1,7 +1,7 @@
 package appaanjanda.snooping.domain.member.controller;
 
 import appaanjanda.snooping.domain.member.service.MemberService;
-import appaanjanda.snooping.domain.member.service.dto.ReAccessTokenRequest;
+import appaanjanda.snooping.domain.member.service.dto.AccessTokenRequest;
 import appaanjanda.snooping.domain.member.service.dto.ChangeMyPasswordRequestDto;
 import appaanjanda.snooping.domain.member.service.dto.LoginRequest;
 import appaanjanda.snooping.domain.member.service.dto.LoginResponse;
@@ -117,7 +117,7 @@ public class MemberController {
 	})
 	@Operation(summary = "토큰 재발급", description = "refreshToken이 있을 때 AccessToken 재발급한다", tags = { "Member Controller" })
 	@PostMapping("/token")
-	public Response<?> getAccessToken (@RequestBody ReAccessTokenRequest request){
+	public Response<?> getAccessToken (@RequestBody AccessTokenRequest request){
 		return new Response<>( HttpStatus.CREATED, "토큰 재발급", memberService.getAccessToken(request));
 	}
 

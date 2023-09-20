@@ -35,8 +35,6 @@ public class Member extends BaseTimeEntity {
 
 	private String profileUrl;
 
-	private String refreshToken;
-
 	@Column(length = 20)
 	private String email;
 
@@ -54,23 +52,18 @@ public class Member extends BaseTimeEntity {
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private List<SearchHistory> searchHistoryList;
 
+	
 	@Builder
-	public Member(Long id, String password, String profileUrl, String refreshToken, String email, Role role,
-		String nickname, List<MyCard> myCardList, List<Wishbox> wishboxList, List<SearchHistory> searchHistoryList) {
+	public Member(Long id, String password, String profileUrl, String email, Role role, String nickname,
+		List<MyCard> myCardList, List<Wishbox> wishboxList) {
 		this.id = id;
 		this.password = password;
 		this.profileUrl = profileUrl;
-		this.refreshToken = refreshToken;
 		this.email = email;
 		this.role = role;
 		this.nickname = nickname;
 		this.myCardList = myCardList;
 		this.wishboxList = wishboxList;
-		this.searchHistoryList = searchHistoryList;
-	}
-
-	public  void setRefreshToken(String refreshToken) {
-		this.refreshToken = refreshToken;
 	}
 
 	public void setNickname(String nickName) {

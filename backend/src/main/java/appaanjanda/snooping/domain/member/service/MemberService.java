@@ -9,12 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import appaanjanda.snooping.domain.card.entity.MyCard;
 import appaanjanda.snooping.domain.card.repository.CardRepository;
-import appaanjanda.snooping.domain.member.entity.AccessToken;
 import appaanjanda.snooping.domain.member.entity.Member;
+import appaanjanda.snooping.domain.member.entity.RefreshToken;
 import appaanjanda.snooping.domain.member.entity.enumType.Role;
 import appaanjanda.snooping.domain.member.repository.RefreshTokenRepository;
-import appaanjanda.snooping.domain.member.service.d.ReAccessTokenResponse;
-import appaanjanda.snooping.domain.member.service.dto.ReAccessTokenRequest;
+import appaanjanda.snooping.domain.member.service.dto.AccessTokenRequest;
 import appaanjanda.snooping.domain.member.service.dto.AccessTokenResponse;
 import appaanjanda.snooping.domain.member.service.dto.ChangeMyPasswordRequestDto;
 import appaanjanda.snooping.domain.member.service.dto.LoginRequest;
@@ -121,20 +120,16 @@ public class MemberService {
 		String accessToken = jwtProvider.createAccessToken(member);
 		String refreshToken = jwtProvider.createRefreshToken(member);
 
-		AccessToken newRefreshToken = AccessToken.builder()
-			.accessToken(accessToken)
+		RefreshToken newRefreshToken = RefreshToken.builder()
+			.refreshToken(refreshToken)
 			.memberId(member.getId())
 			.build();
-
-
-		member.setRefreshToken(refreshToken);
 
 		// 레디스에 리프레시 토큰 저장
 		refreshTokenRepository.save(newRefreshToken);
 
 		return LoginResponse.builder()
 			.accessToken(accessToken)
-			.refreshToken(refreshToken)
 			.build();
 	}
 
@@ -162,12 +157,12 @@ public class MemberService {
 
 
 	// 유저 accessToken 재발급
-	public ReAccessTokenResponse getAccessToken(ReAccessTokenRequest request){
+	public String getAccessToken(AccessTokenRequest request){
 		log.info("refreshToken={}", request.getRefreshToken());
 
-		ReAccessTokenResponse reAccessTokenResponse = tokenService.generateAccessToken(request.getRefreshToken());
+		AccessTokenResponse accessTokenResponse = tokenService.generateAccessToken(request);
 
-		return reAccessTokenResponse;
+		return accessTokenResponse.getAccessToken();
 	}
 
 	// 비밀번호 변경
