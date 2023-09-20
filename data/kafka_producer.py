@@ -51,7 +51,7 @@ def on_send_error(excp):
 #         producer.flush()
 #         # producer.close()
 
-def send_to_kafka2(product_message, price_message, topic):
+def send_to_kafka(product_message, topic):
     producer = KafkaProducer(
         bootstrap_servers=['j9d104a.p.ssafy.io:9092'],
         value_serializer=lambda v: json.dumps(v).encode('utf-8'),
@@ -59,6 +59,5 @@ def send_to_kafka2(product_message, price_message, topic):
     )
 
     producer.send(topic, key=f"product_{id}", value=product_message).add_callback(on_send_success).add_errback(on_send_error)
-    producer.send(topic, key=f"price_{id}", value=price_message).add_callback(on_send_success).add_errback(on_send_error)
 
     producer.flush()
