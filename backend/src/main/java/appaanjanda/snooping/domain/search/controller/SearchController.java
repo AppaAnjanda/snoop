@@ -13,10 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -54,9 +52,22 @@ public class SearchController {
     // 검색 기록 조회
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "검색기록", description = "검색창 진입시 검색 기록 최근 5개 반환", tags = { "Search Controller" })
-    @GetMapping("/")
+    @GetMapping("/history")
     public List<String> getSearchHistory(@MemberInfo MembersInfo membersInfo) {
 
         return searchService.getSearchHistory(membersInfo.getId());
     }
+
+    // 검색 기록 삭제
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "검색기록 삭제", description = "특정 검색 기록 삭제", tags = { "Search Controller" })
+    @DeleteMapping("/history/{keyword}")
+    public ResponseEntity<String> deleteSearchHistory(@MemberInfo MembersInfo membersInfo, @PathVariable String keyword) {
+
+        searchService.deleteSearchHistory(keyword, membersInfo.getId());
+
+        return ResponseEntity.ok(String.format("검색어 삭제 : %d", keyword));
+    }
+
+
 }
