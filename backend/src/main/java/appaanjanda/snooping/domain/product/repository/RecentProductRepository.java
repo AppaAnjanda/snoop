@@ -4,9 +4,11 @@ import appaanjanda.snooping.domain.product.entity.RecentProduct;
 import appaanjanda.snooping.domain.search.entity.SearchHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface RecentProductRepository extends JpaRepository<RecentProduct, Long> {
 
     // 최근 본 상품
