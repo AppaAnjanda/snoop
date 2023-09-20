@@ -16,6 +16,9 @@ public class NecessariesProduct {
     @Id
     private String id;
 
+    @Field(name = "code", type = FieldType.Text)
+    private String code;
+
     @Field(name = "major_category", type = FieldType.Text)
     private String majorCategory;
 
@@ -28,8 +31,8 @@ public class NecessariesProduct {
     @Field(name = "message", type = FieldType.Text)
     private String message;
 
-    @Field(name = "price", type = FieldType.Text)
-    private String price;
+    @Field(name = "price", type = FieldType.Integer)
+    private int price;
 
     @Field(name = "product_name", type = FieldType.Text)
     private String productName;
@@ -39,4 +42,7 @@ public class NecessariesProduct {
 
     @Field(name = "product_image", type = FieldType.Text)
     private String productImage;
+
+    @Field(name = "last_update", type = FieldType.Text)
+    private String lastUpdate;
 }
