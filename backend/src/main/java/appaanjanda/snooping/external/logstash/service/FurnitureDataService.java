@@ -1,15 +1,21 @@
 package appaanjanda.snooping.external.logstash.service;
 
-
-import appaanjanda.snooping.domain.product.entity.price.DigitalPrice;
 import appaanjanda.snooping.domain.product.entity.price.FurniturePrice;
-import appaanjanda.snooping.domain.product.entity.product.DigitalProduct;
-import appaanjanda.snooping.domain.product.repository.price.DigitalPriceRepository;
-import appaanjanda.snooping.domain.product.repository.product.DigitalProductRepository;
+import appaanjanda.snooping.domain.product.entity.product.FurnitureProduct;
+import appaanjanda.snooping.domain.product.repository.price.FurniturePriceRepository;
+import appaanjanda.snooping.domain.product.repository.product.FurnitureProductRepository;
 import appaanjanda.snooping.external.logstash.entity.ProductInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.redis.connection.SortParameters;
+import org.springframework.data.redis.core.query.SortQueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,15 +28,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class DigitalDataService {
+public class FurnitureDataService {
 
-    private final DigitalProductRepository digitalProductRepository;
-    private final DigitalPriceRepository digitalPriceRepository;
+    private final FurnitureProductRepository furnitureProductRepository;
+    private final FurniturePriceRepository furniturePriceRepository;
 
     // 최근 업데이트 확인
-    public boolean checkUpdateTime(DigitalProduct digitalProduct) {
+    public boolean checkUpdateTime(FurnitureProduct furnitureProduct) {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime lastUpdateTime = LocalDateTime.parse(digitalProduct.getLastUpdate());
+        LocalDateTime lastUpdateTime = LocalDateTime.parse(furnitureProduct.getLastUpdate());
         // 업데이트 경과 시간
         Duration duration = Duration.between(lastUpdateTime, now);
         // 5분 지났으면 업데이트 진행
@@ -42,10 +48,10 @@ public class DigitalDataService {
     public void checkPrice(ProductInfo productInfo) {
         String currentName = productInfo.getProductName();
 
-        Optional<DigitalProduct> existProduct = digitalProductRepository.findByProductName(currentName);
+        Optional<FurnitureProduct> existProduct = furnitureProductRepository.findByProductName(currentName);
         // 일치 상품 있는 경우
         if (existProduct.isPresent()) {
-            DigitalProduct originProduct = existProduct.get();
+            FurnitureProduct originProduct = existProduct.get();
             // 최근에 업데이트 되었으면 중단
             if (checkUpdateTime(originProduct)) {
 
@@ -56,9 +62,10 @@ public class DigitalDataService {
                 if (minute < 5) {
                     createPriceData(productInfo, productInfo.getCode());
 
-                // 가격이 더 떨어졌으면 업데이트
+                    // 가격이 더 떨어졌으면 업데이트
                 } else if (originProduct.getPrice() > productInfo.getPrice()) {
                     updateData(originProduct, productInfo);
+                    updatePriceData(productInfo);
                 }
             }
         } else {
@@ -70,23 +77,23 @@ public class DigitalDataService {
 
     // 새상품 데이터 생성
     public String createData(ProductInfo productInfo) {
-        DigitalProduct digitalProduct = new DigitalProduct(productInfo);
+        FurnitureProduct furnitureProduct = new FurnitureProduct(productInfo);
         // 기존 코드는 중복될 수 있으므로 새로 생성
         String newCode = productInfo.getCode().substring(0, 2) + productInfo.getProductName();
-        digitalProduct.setCode(newCode);
-        digitalProductRepository.save(digitalProduct);
+        furnitureProduct.setCode(newCode);
+        furnitureProductRepository.save(furnitureProduct);
 
         return newCode;
     }
 
     // 상품 정보 업데이트
-    public void updateData(DigitalProduct digitalProduct, ProductInfo productInfo) {
+    public void updateData(FurnitureProduct furnitureProduct, ProductInfo productInfo) {
         // 링크, 출처, 가격 업데이트 후 저장
-        digitalProduct.setProductLink(productInfo.getProductLink());
-        digitalProduct.setProvider(productInfo.getProvider());
-        digitalProduct.setPrice(productInfo.getPrice());
+        furnitureProduct.setProductLink(productInfo.getProductLink());
+        furnitureProduct.setProvider(productInfo.getProvider());
+        furnitureProduct.setPrice(productInfo.getPrice());
 
-        digitalProductRepository.save(digitalProduct);
+        furnitureProductRepository.save(furnitureProduct);
 
     }
 
@@ -96,18 +103,18 @@ public class DigitalDataService {
         // 정렬 기준
         Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
         // 가격 정보 최신순
-        List<DigitalPrice> productList = digitalPriceRepository.findSortedByCode(productInfo.getCode(), sort);
+        List<FurniturePrice> productList = furniturePriceRepository.findSortedByCode(productInfo.getCode(), sort);
         // 마지막 가격 정보의 가격 업데이트
-        DigitalPrice lastPrice = productList.get(0);
+        FurniturePrice lastPrice = productList.get(0);
         lastPrice.setPrice(productInfo.getPrice());
 
-        digitalPriceRepository.save(lastPrice);
+        furniturePriceRepository.save(lastPrice);
     }
 
     // 가격 정보 생성
     public void createPriceData(ProductInfo productInfo, String productCode) {
-        DigitalPrice digitalPrice = new DigitalPrice(productCode, productInfo.getPrice());
+        FurniturePrice furniturePrice = new FurniturePrice(productCode, productInfo.getPrice());
 
-        digitalPriceRepository.save(digitalPrice);
+        furniturePriceRepository.save(furniturePrice);
     }
 }
