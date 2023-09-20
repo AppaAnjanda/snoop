@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from apscheduler.schedulers.background import BackgroundScheduler
-from coupang import coupang_products, coupang_products_all, coupang_products_digital, coupang_products_furniture, coupang_products_necessaries, coupang_products_food
-from naver import naver_products, naver_products_all, naver_products_digital, naver_products_furniture, naver_products_necessaries, naver_products_food
+from coupang import coupang_products, coupang_products_digital, coupang_products_furniture, coupang_products_necessaries, coupang_products_food
+from naver import naver_products, naver_products_digital, naver_products_furniture, naver_products_necessaries, naver_products_food
 import pandas as pd
 import requests
 
