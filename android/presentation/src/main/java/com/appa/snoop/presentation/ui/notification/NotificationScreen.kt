@@ -19,6 +19,7 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import com.appa.snoop.presentation.ui.notification.component.NotificationItem
 import com.appa.snoop.presentation.ui.notification.viewmodel.NotificationViewModel
 import com.appa.snoop.presentation.ui.theme.WhiteColor
+import com.appa.snoop.presentation.util.effects.NotificationLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 import kotlinx.coroutines.launch
@@ -37,6 +39,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NotificationScreen(navController: NavController) {
+    NotificationLaunchedEffect(navController = navController)
     val pages = listOf("찜 알림", "채팅 알림")
     val notificaitonViewModel = NotificationViewModel()
     val notificationState = notificaitonViewModel.notificationState
