@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import appaanjanda.snooping.domain.member.entity.RefreshToken;
+import appaanjanda.snooping.domain.member.entity.AccessToken;
 import lombok.extern.slf4j.Slf4j;
 
 @Repository
@@ -27,16 +27,16 @@ public class RefreshTokenRepository {
 		this.redisTemplate = redisTemplate;
 	}
 
-	public void save(final RefreshToken refreshToken) {
+	public void save(final AccessToken accessToken) {
 		ValueOperations<String, Long> valueOperations = redisTemplate.opsForValue();
-		valueOperations.set(refreshToken.getRefreshToken(), refreshToken.getMemberId());
-		redisTemplate.expire(refreshToken.getRefreshToken(), REFRESH_TOKEN_VALID_TIME, TimeUnit.MILLISECONDS);
+		valueOperations.set(accessToken.getAccessToken(), accessToken.getMemberId());
+		redisTemplate.expire(accessToken.getAccessToken(), REFRESH_TOKEN_VALID_TIME, TimeUnit.MILLISECONDS);
 
-		log.info("Refresh token saved. Token: {}, Member ID: {}", refreshToken.getRefreshToken(), refreshToken.getMemberId());
+		log.info("Refresh token saved. Token: {}, Member ID: {}", accessToken.getAccessToken(), accessToken.getMemberId());
 	}
 
 
-	public Optional<RefreshToken> findById(String refreshToken) {
+	public Optional<AccessToken> findById(String refreshToken) {
 		ValueOperations<String, Long> valueOperations = redisTemplate.opsForValue();
 		Long memberId = valueOperations.get(refreshToken);
 
@@ -44,6 +44,6 @@ public class RefreshTokenRepository {
 			return Optional.empty();
 		}
 
-		return Optional.of(new RefreshToken(refreshToken, memberId));
+		return Optional.of(new AccessToken(refreshToken, memberId));
 	}
 }
