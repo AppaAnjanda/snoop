@@ -5,6 +5,7 @@ import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.domain.wishbox.service.dto.AddWishboxResponseDto;
 import appaanjanda.snooping.domain.wishbox.service.dto.RemoveWishboxResponseDto;
+import appaanjanda.snooping.domain.wishbox.service.dto.WishboxResponseDto;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,7 +52,7 @@ public class WishboxController {
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "찜 상품 목록 조회", description = "찜 페이지 이동 시 진행되는 찜 목록 조회", tags = { "Wishbox Controller" })
     @GetMapping("")
-    public ResponseEntity<List<Wishbox>> getWishboxList(@MemberInfo MembersInfo membersInfo) {
+    public ResponseEntity<List<WishboxResponseDto>> getWishboxList(@MemberInfo MembersInfo membersInfo) {
         return ResponseEntity.ok(wishboxService.getWishboxList(membersInfo.getId()));
     }
 
