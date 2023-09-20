@@ -22,4 +22,8 @@ public class FoodPrice {
     @Field(name = "price", type = FieldType.Integer)
     private int price;
 
+    public FoodPrice(String code, int price) {
+        this.code = code;
+        this.price = price;
+    }
 }

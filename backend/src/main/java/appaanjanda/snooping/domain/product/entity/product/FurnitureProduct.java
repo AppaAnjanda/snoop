@@ -1,6 +1,7 @@
 package appaanjanda.snooping.domain.product.entity.product;
 
 
+import appaanjanda.snooping.external.logstash.entity.ProductInfo;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -46,4 +47,15 @@ public class FurnitureProduct {
 
     @Field(name = "last_update", type = FieldType.Text)
     private String lastUpdate;
+
+    public FurnitureProduct(ProductInfo productInfo) {
+        this.majorCategory = productInfo.getMajorCategory();
+        this.minorCategory = productInfo.getMinorCategory();
+        this.provider = productInfo.getProvider();
+        this.price = productInfo.getPrice();
+        this.productName = productInfo.getProductName();
+        this.productLink = productInfo.getProductLink();
+        this.productImage = productInfo.getProductImage();
+        this.lastUpdate = productInfo.getLastUpdate();
+    }
 }

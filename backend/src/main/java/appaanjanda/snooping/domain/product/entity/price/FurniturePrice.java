@@ -23,4 +23,9 @@ public class FurniturePrice {
     @Field(name = "price", type = FieldType.Integer)
     private int price;
 
+    public FurniturePrice(String code, int price) {
+        this.code = code;
+        this.price = price;
+    }
+
 }
