@@ -4,7 +4,6 @@ package appaanjanda.snooping.domain.product.controller;
 import appaanjanda.snooping.domain.member.service.dto.UserResponse;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
-import appaanjanda.snooping.domain.product.dto.ProductDetailDto;
 import appaanjanda.snooping.domain.product.service.ProductSearchService;
 import appaanjanda.snooping.domain.product.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,26 +38,26 @@ public class ProductDetailController {
     })
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "상품 상세 조회", description = "상품id로 정보 조회", tags = { "Product Controller" })
-    @GetMapping("/{productId}")
-    public Object getProductDetail(@PathVariable String productId, @MemberInfo MembersInfo membersInfo){
+    @GetMapping("/{productCode}")
+    public Object getProductDetail(@PathVariable String productCode, @MemberInfo MembersInfo membersInfo){
 
         // 최근 본 상품 추가
-        productService.updateRecentProduct(membersInfo.getId(), productId);
+        productService.updateRecentProduct(membersInfo.getId(), productCode);
 
-        return productSearchService.searchProductById(productId);
+        return productSearchService.searchProductById(productCode);
 
     }
 
     // 주, 일, 시 가격 추이 조회
-    @GetMapping("/graph/{productId}/{period}")
-    public List<?> getPriceHistory(@PathVariable String productId, @PathVariable String period) {
+    @GetMapping("/graph/{productCode}/{period}")
+    public List<?> getPriceHistory(@PathVariable String productCode, @PathVariable String period) {
         switch (period) {
             case "week":
-                return productService.getPriceHistoryByWeek(productId);
+                return productService.getPriceHistoryByWeek(productCode);
             case "day":
-                return productService.getPriceHistoryByDay(productId);
+                return productService.getPriceHistoryByDay(productCode);
             case "hour":
-                return productService.getPriceHistoryByHour(productId);
+                return productService.getPriceHistoryByHour(productCode);
             default:
                 throw new IllegalArgumentException("Invalid index");
         }

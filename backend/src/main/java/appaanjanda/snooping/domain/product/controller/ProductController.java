@@ -1,6 +1,5 @@
 package appaanjanda.snooping.domain.product.controller;
 
-import appaanjanda.snooping.domain.product.dto.ProductDetailDto;
 import appaanjanda.snooping.domain.product.service.ProductService;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/mypage")
