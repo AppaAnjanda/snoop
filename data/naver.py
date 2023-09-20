@@ -75,7 +75,7 @@ def naver_products_digital():
             re_name = re.sub(pattern, '', name)
             # Product 메시지
             product_message = {
-                "id": f"product_{uuid}",
+                "code": f"product_{uuid}",
                 "major_category": major_category,
                 "minor_category": query,
                 "product_name": re_name,
@@ -126,7 +126,7 @@ def naver_products_furniture():
             re_name = re.sub(pattern, '', name)
             # Product 메시지
             product_message = {
-                "id": f"product_{uuid}",
+                "code": f"product_{uuid}",
                 "major_category": major_category,
                 "minor_category": query,
                 "product_name": re_name,
@@ -176,7 +176,7 @@ def naver_products_necessaries():
             re_name = re.sub(pattern, '', name)
             # Product 메시지
             product_message = {
-                "id": f"product_{uuid}",
+                "code": f"product_{uuid}",
                 "major_category": major_category,
                 "minor_category": query,
                 "product_name": re_name,
@@ -225,7 +225,7 @@ def naver_products_food():
             re_name = re.sub(pattern, '', name)
             # Product 메시지
             product_message = {
-                "id": f"product_{uuid}",
+                "code": f"product_{uuid}",
                 "major_category": major_category,
                 "minor_category": query,
                 "product_name": re_name,

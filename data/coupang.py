@@ -123,7 +123,7 @@ def coupang_products_digital():
 
                 # Product 메시지
                 product_message = {
-                    "id": f"product_{uuid}",
+                    "code": f"product_{uuid}",
                     "major_category": major_category,
                     "minor_category": keyword,
                     "product_name": prd_name,
@@ -192,7 +192,7 @@ def coupang_products_furniture():
 
                 # Product 메시지
                 product_message = {
-                    "id": f"product_{uuid}",
+                    "code": f"product_{uuid}",
                     "major_category": major_category,
                     "minor_category": keyword,
                     "product_name": prd_name,
@@ -257,7 +257,7 @@ def coupang_products_necessaries():
 
                 # Product 메시지
                 product_message = {
-                    "id": f"product_{uuid}",
+                    "code": f"product_{uuid}",
                     "major_category": major_category,
                     "minor_category": keyword,
                     "product_name": prd_name,
@@ -322,7 +322,7 @@ def coupang_products_food():
 
                 # Product 메시지
                 product_message = {
-                    "id": f"product_{uuid}",
+                    "code": f"product_{uuid}",
                     "major_category": major_category,
                     "minor_category": keyword,
                     "product_name": prd_name,
