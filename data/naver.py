@@ -2,9 +2,12 @@ import requests
 from datetime import datetime
 from kafka_producer import send_to_kafka
 import time
+import re
 
 CLIENT_ID = "19zwPizN26iliYHy73Jf"
 CLIENT_SECRET = "aH1kfQkVIF"
+
+pattern = re.compile(r'<.*?>')
 
 ################################## 단일 키워드 API 호출 #####################################
 def naver_products(query):
@@ -21,8 +24,10 @@ def naver_products(query):
 
     response = requests.get(url, headers=headers, params=params)
     for item in response.json().get("items"):
+        name = item.get("title")
+        re_name = re.sub(pattern, '', name)
         products_info = {
-                    'name': item.get("title"),
+                    'name': re_name,
                     'base_price': 0,
                     'price': item.get("lprice"),
                     'product_url': item.get("link"),
@@ -66,13 +71,14 @@ def naver_products_digital():
 
         for item in response.json().get("items"):
             uuid = id + digital_list.get(query) + str(cnt)
-
+            name = item.get("title")
+            re_name = re.sub(pattern, '', name)
             # Product 메시지
             product_message = {
                 "id": f"product_{uuid}",
                 "major_category": major_category,
                 "minor_category": query,
-                "product_name": item.get("title"),
+                "product_name": re_name,
                 "price": item.get("lprice"),
                 "index_name": major_category,
                 "product_link": item.get("link"),
@@ -116,13 +122,14 @@ def naver_products_furniture():
 
         for item in response.json().get("items"):
             uuid = id + furniture_list.get(query) + str(cnt)
-
+            name = item.get("title")
+            re_name = re.sub(pattern, '', name)
             # Product 메시지
             product_message = {
                 "id": f"product_{uuid}",
                 "major_category": major_category,
                 "minor_category": query,
-                "product_name": item.get("title"),
+                "product_name": re_name,
                 "price": item.get("lprice"),
                 "index_name": major_category,
                 "product_link": item.get("link"),
@@ -165,13 +172,14 @@ def naver_products_necessaries():
 
         for item in response.json().get("items"):
             uuid = id + necessaries_list.get(query) + str(cnt)
-
+            name = item.get("title")
+            re_name = re.sub(pattern, '', name)
             # Product 메시지
             product_message = {
                 "id": f"product_{uuid}",
                 "major_category": major_category,
                 "minor_category": query,
-                "product_name": item.get("title"),
+                "product_name": re_name,
                 "price": item.get("lprice"),
                 "index_name": major_category,
                 "product_link": item.get("link"),
@@ -213,13 +221,14 @@ def naver_products_food():
 
         for item in response.json().get("items"):
             uuid = id + food_list.get(query) + str(cnt)
-
+            name = item.get("title")
+            re_name = re.sub(pattern, '', name)
             # Product 메시지
             product_message = {
                 "id": f"product_{uuid}",
                 "major_category": major_category,
                 "minor_category": query,
-                "product_name": item.get("title"),
+                "product_name": re_name,
                 "price": item.get("lprice"),
                 "index_name": major_category,
                 "product_link": item.get("link"),
