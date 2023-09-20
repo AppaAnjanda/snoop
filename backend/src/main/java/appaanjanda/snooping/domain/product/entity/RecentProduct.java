@@ -20,7 +20,7 @@ public class RecentProduct extends BaseTimeEntity {
     @Column(name = "recent_id")
     private Long id;
 
-    private String productId;
+    private String productCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;

@@ -2,10 +2,10 @@ package appaanjanda.snooping.domain.wishbox.service;
 
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.repository.MemberRepository;
-import appaanjanda.snooping.domain.product.repository.DigitalProductRepository;
-import appaanjanda.snooping.domain.product.repository.FoodProductRepository;
-import appaanjanda.snooping.domain.product.repository.FurnitureProductRepository;
-import appaanjanda.snooping.domain.product.repository.NecessariesProductRepository;
+import appaanjanda.snooping.domain.product.repository.product.DigitalProductRepository;
+import appaanjanda.snooping.domain.product.repository.product.FoodProductRepository;
+import appaanjanda.snooping.domain.product.repository.product.FurnitureProductRepository;
+import appaanjanda.snooping.domain.product.repository.product.NecessariesProductRepository;
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.service.dto.AddWishboxResponseDto;
 import appaanjanda.snooping.domain.wishbox.service.dto.RemoveWishboxResponseDto;
