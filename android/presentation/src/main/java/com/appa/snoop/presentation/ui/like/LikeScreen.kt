@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
+import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.effects.MainLaunchedEffect
 
 @Composable
@@ -18,18 +19,8 @@ fun LikeScreen(
 ) {
     MainLaunchedEffect(navController)
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().background(WhiteColor)
     ) {
-        Text(
-            text = "like",
-            fontSize = 30.sp
-        )
 
-        // 테스트 코드
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(PrimaryColor)
-        )
     }
 }
