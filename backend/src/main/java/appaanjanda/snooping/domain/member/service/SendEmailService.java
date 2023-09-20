@@ -11,8 +11,9 @@ import appaanjanda.snooping.domain.member.repository.MemberRepository;
 import appaanjanda.snooping.domain.member.service.dto.MailDto;
 import appaanjanda.snooping.global.config.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -58,7 +59,7 @@ public class SendEmailService {
 		return str;
 	}
 
-	public String mailSend(MailDto mailDto){
+	public void mailSend(MailDto mailDto){
 		System.out.println("이멜 전송 완료!");
 		SimpleMailMessage message = new SimpleMailMessage();
 
@@ -70,7 +71,6 @@ public class SendEmailService {
 
 		mailSender.send(message);
 
-		return "성공";
 	}
 
 }

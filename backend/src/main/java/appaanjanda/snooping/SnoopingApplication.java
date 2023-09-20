@@ -11,7 +11,7 @@ public class SnoopingApplication {
 
 	public static void main(String[] args) {
 		// timezone 설정
-		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
 		SpringApplication.run(SnoopingApplication.class, args);
 
 		LocalDateTime now = LocalDateTime.now();
