@@ -6,4 +6,4 @@ spring:
       authentication-database: admin
       username: username
       password: password
-      database: snooping
+      database: my_db
