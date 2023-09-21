@@ -2,17 +2,22 @@ package appaanjanda.snooping.domain.product.entity.product;
 
 
 import appaanjanda.snooping.external.logstash.entity.ProductInfo;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Document(indexName = "식품")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class FoodProduct {
 
     @Id
@@ -45,8 +50,8 @@ public class FoodProduct {
     @Field(name = "product_image", type = FieldType.Text)
     private String productImage;
 
-    @Field(name = "last_update", type = FieldType.Text)
-    private String lastUpdate;
+    @Field(name = "@timestamp", type = FieldType.Date)
+    private String timestamp;
 
     public FoodProduct(ProductInfo productInfo) {
         this.majorCategory = productInfo.getMajorCategory();
@@ -56,6 +61,5 @@ public class FoodProduct {
         this.productName = productInfo.getProductName();
         this.productLink = productInfo.getProductLink();
         this.productImage = productInfo.getProductImage();
-        this.lastUpdate = productInfo.getLastUpdate();
     }
 }
