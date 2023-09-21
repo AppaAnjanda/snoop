@@ -19,9 +19,9 @@ fun MainLaunchedEffect(
                     MainTopbar.AppBarIcons.NavigationIcon -> {
                         navController.popBackStack()
                     }
-                    MainTopbar.AppBarIcons.Search -> {
-                        navController.navigate(Router.MAIN_SEARCH_ROUTER_NAME)
-                    }
+//                    MainTopbar.AppBarIcons.Search -> {
+//                        navController.navigate(Router.MAIN_SEARCH_ROUTER_NAME)
+//                    }
                     MainTopbar.AppBarIcons.Alarm -> {
                         navController.navigate(Router.MAIN_NOTIFICATION_ROUTER_NAME)
                     }

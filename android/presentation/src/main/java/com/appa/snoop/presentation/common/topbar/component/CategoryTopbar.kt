@@ -21,6 +21,14 @@ object CategoryTopbar: Topbars {
     override val actions: List<ActionMenuItem> =
         listOf(
             ActionMenuItem.IconMenuItem.AlwaysShown(
+                title = "Search",
+                onClick = {
+                    _buttons.tryEmit(AppBarIcons.SearchIcon)
+                },
+                icon = R.drawable.ic_search,
+                contentDescription = null,
+            ),
+            ActionMenuItem.IconMenuItem.AlwaysShown(
                 title = "Alarm",
                 onClick = {
                     _buttons.tryEmit(AppBarIcons.ChatIcon)
@@ -34,6 +42,7 @@ object CategoryTopbar: Topbars {
     val buttons: Flow<AppBarIcons> = _buttons.asSharedFlow()
 
     enum class AppBarIcons {
-        ChatIcon
+        ChatIcon,
+        SearchIcon
     }
 }

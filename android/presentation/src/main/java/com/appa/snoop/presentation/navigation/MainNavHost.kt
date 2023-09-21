@@ -49,7 +49,8 @@ fun MainNavHost(
             route = MainNav.Category.route,
         ) {
             CategoryScreen(
-                navController = navController
+                navController = navController,
+                showSnackBar = showSnackBar
             )
         }
         mainSlideTransitions(
