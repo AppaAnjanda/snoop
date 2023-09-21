@@ -108,7 +108,7 @@ public class ProductService {
         LocalDateTime firstTime = now.minusHours(48);
 
         // 반환타입
-        Class<?> productType = productSearchService.searchProductByIndex(productId);
+        Class<?> productType = productSearchService.searchEntityById(productId);
 
         log.info(String.valueOf(now));
         

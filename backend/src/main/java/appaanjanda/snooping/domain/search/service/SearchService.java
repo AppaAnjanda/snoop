@@ -40,13 +40,13 @@ public class SearchService {
     // TODO 페이징 처리
     public List<?> searchProductByCategory(String index, String minor) {
         // 반환할 상품 타입
-        Class<?> productType = productSearchService.searchProductByIndex(index);
+        Class<?> productType = productSearchService.searchEntityByIndex(index);
 
         // 쿼리 작성
         NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
                 .withQuery(QueryBuilders.boolQuery()
                         // 대분류, 소분류 일치하는 상품
-                        .must(QueryBuilders.termQuery("_index", index))
+                        .must(QueryBuilders.termQuery("major_category.keyword", index))
                         .must(QueryBuilders.termQuery("minor_category.keyword", minor))
                 )
                 .withSourceFilter(new FetchSourceFilter(null, null))
@@ -70,7 +70,7 @@ public class SearchService {
 
         for (String index : indices) {
             // 반환타입 결정
-            Class<?> productType = productSearchService.searchProductByIndex(index);
+            Class<?> productType = productSearchService.searchEntityByIndex(index);
 
             // 각 단어를 or조건으로 상품명과 소분류에 대해서 match 쿼리로 1차 검색
             MatchQueryBuilder productNameQuery = QueryBuilders.matchQuery("product_name", keyword).fuzziness(Fuzziness.ONE);

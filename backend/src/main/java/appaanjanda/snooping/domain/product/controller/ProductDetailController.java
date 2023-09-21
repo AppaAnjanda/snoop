@@ -48,6 +48,14 @@ public class ProductDetailController {
 
     }
 
+    @Operation(summary = "상품 상세 조회(게스트)", description = "상품id로 정보 조회", tags = { "Product Controller" })
+    @GetMapping("/guest/{productCode}")
+    public Object getProductDetailForGuest(@PathVariable String productCode){
+
+        return productSearchService.searchProductById(productCode);
+
+    }
+
     // 주, 일, 시 가격 추이 조회
     @GetMapping("/graph/{productCode}/{period}")
     public List<?> getPriceHistory(@PathVariable String productCode, @PathVariable String period) {
