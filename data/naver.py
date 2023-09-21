@@ -32,59 +32,61 @@ def naver_product(query):
     topic = ""
     product_list = []
 
-    if query[0] == 1:
-        major_category = "디지털 가전"
+    if query[0] == '1':
+        major_category = "디지털가전"
         id = "1"
         topic = "digital"
         product_list = digital_list
-        
-        if query[1] == 1: minor_category = "TV"
-        elif query[1] == 2: minor_category = "냉장고"
-        elif query[1] == 3: minor_category = "세탁기"
-        elif query[1] == 4: minor_category = "청소기"
-        elif query[1] == 5: minor_category = "노트북"
-        elif query[1] == 6: minor_category = "데스크탑"
-        elif query[1] == 7: minor_category = "키보드"
-        elif query[1] == 8: minor_category = "마우스"
-        elif query[1] == 9: minor_category = "모니터"
+    
+        if query[1] == '1': minor_category = "TV"
+        elif query[1] == '2': minor_category = "냉장고"
+        elif query[1] == '3': minor_category = "세탁기"
+        elif query[1] == '4': minor_category = "청소기"
+        elif query[1] == '5': minor_category = "노트북"
+        elif query[1] == '6': minor_category = "데스크탑"
+        elif query[1] == '7': minor_category = "키보드"
+        elif query[1] == '8': minor_category = "마우스"
+        elif query[1] == '9': minor_category = "모니터"
             
-    elif query[0] == 2:
+    elif query[0] == '2':
         major_category = "가구"
         id = "2"
         topic = "furniture"
         product_list = furniture_list
 
-        if query[1] == 1: minor_category = "침대"
-        elif query[1] == 2: minor_category = "쇼파"
-        elif query[1] == 3: minor_category = "책상"
-        elif query[1] == 4: minor_category = "옷장"
-    elif query[0] == 3:
+        if query[1] == '1': minor_category = "침대"
+        elif query[1] == '2': minor_category = "쇼파"
+        elif query[1] == '3': minor_category = "책상"
+        elif query[1] == '4': minor_category = "옷장"
+
+    elif query[0] == '3':
         major_category = "생활용품"
         id = "3"
         topic = "necessaries"
         product_list = necessaries_list
 
-        if query[1] == 1: minor_category = "주방"
-        elif query[1] == 2: minor_category = "욕실"
-        elif query[1] == 3: minor_category = "청소"
-        elif query[1] == 4: minor_category = "수납"
-    elif query[0] == 4:
+        if query[1] == '1': minor_category = "주방"
+        elif query[1] == '2': minor_category = "욕실"
+        elif query[1] == '3': minor_category = "청소"
+        elif query[1] == '4': minor_category = "수납"
+
+    elif query[0] == '4':
         major_category = "식품"
         id = "4"
         topic = "food"
         product_list = food_list
 
-        if query[1] == 1: minor_category = "음료"
-        elif query[1] == 2: minor_category = "과일"
-        elif query[1] == 3: minor_category = "채소"
-        elif query[1] == 4: minor_category = "과자"
-        elif query[1] == 5: minor_category = "축산"
-        elif query[1] == 6: minor_category = "가공식품"
+        if query[1] == '1': minor_category = "음료"
+        elif query[1] == '2': minor_category = "과일"
+        elif query[1] == '3': minor_category = "채소"
+        elif query[1] == '4': minor_category = "과자"
+        elif query[1] == '5': minor_category = "축산"
+        elif query[1] == '6': minor_category = "가공식품"
     
     params = {
         "query": query[2:],
         "display": 1
-        }
+    }
 
     response = requests.get(url, headers=headers, params=params)
     current_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
@@ -105,6 +107,7 @@ def naver_product(query):
         }
 
         send_to_kafka(product_message, topic)
+        # print(re_name, major_category, minor_category)
 
     # if response.status_code == 200:
     #     return response.json()
