@@ -13,8 +13,10 @@ object CategoryTopbar: Topbars {
     override val isCenterTopBar: Boolean = true
     override val route: String = Router.MAIN_CATEGORY_ROUTER_NAME
     override val isAppBarVisible: Boolean = true
-    override val navigationIcon: Int? = null
-    override val onNavigationIconClick: () -> Unit = {}
+    override val navigationIcon: Int = R.drawable.ic_category_list
+    override val onNavigationIconClick: () -> Unit = {
+        _buttons.tryEmit(AppBarIcons.FilterIcon)
+    }
     override val navigationIconContentDescription: String? = null
     override val title: String = Router.Title.MAIN_CATEGORY
 
@@ -42,6 +44,7 @@ object CategoryTopbar: Topbars {
     val buttons: Flow<AppBarIcons> = _buttons.asSharedFlow()
 
     enum class AppBarIcons {
+        FilterIcon,
         ChatIcon,
         SearchIcon
     }

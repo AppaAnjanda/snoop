@@ -1,6 +1,9 @@
 package com.appa.snoop.presentation.ui.category
 
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,5 +31,12 @@ class CategoryViewModel @Inject constructor(
         when {
 
         }
+    }
+
+    var firstCategoryState by mutableStateOf(false)
+        private set
+
+    fun firstCategoryToggle() {
+        firstCategoryState = !firstCategoryState
     }
 }
