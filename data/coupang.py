@@ -129,8 +129,7 @@ def coupang_products_digital():
                     "price": price,
                     "productLink": prd_link,
                     "productImage": "http://example.com/images/ex.jpg",
-                    'provider' : '쿠팡',
-                    "lastUpdate" : current_time
+                    'provider' : '쿠팡'
                 }
 
                 # send_to_kafka(products_info) # Kafka에 전송
@@ -196,8 +195,7 @@ def coupang_products_furniture():
                     "price": price,
                     "productLink": prd_link,
                     "productImage": "http://example.com/images/ex.jpg",
-                    'provider' : '쿠팡',
-                    "lastUpdate" : current_time
+                    'provider' : '쿠팡'
                 }
 
                 # send_to_kafka(products_info) # Kafka에 전송
@@ -259,8 +257,7 @@ def coupang_products_necessaries():
                     "price": price,
                     "productLink": prd_link,
                     "productImage": "http://example.com/images/ex.jpg",
-                    'provider' : '쿠팡',
-                    "lastUpdate" : current_time
+                    'provider' : '쿠팡'
                 }
 
                 # send_to_kafka(products_info) # Kafka에 전송
@@ -322,8 +319,7 @@ def coupang_products_food():
                     "price": price,
                     "productLink": prd_link,
                     "productImage": "http://example.com/images/ex.jpg",
-                    'provider' : '쿠팡',
-                    "lastUpdate" : current_time
+                    'provider' : '쿠팡'
                 }
 
                 # send_to_kafka(products_info) # Kafka에 전송
