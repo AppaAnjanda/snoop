@@ -17,7 +17,6 @@ import com.appa.snoop.presentation.ui.signup.component.SignupTextField
 import ir.kaaveh.sdpcompose.sdp
 
 @SuppressLint("UnusedContentLambdaTargetStateParameter")
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun SnoopSearchBar(
     modifier: Modifier = Modifier,

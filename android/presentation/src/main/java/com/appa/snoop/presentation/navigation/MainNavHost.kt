@@ -14,6 +14,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.appa.snoop.presentation.ui.category.CategoryScreen
+import com.appa.snoop.presentation.ui.chatting.ChattingScreen
+import com.appa.snoop.presentation.ui.chatting.chatList
 import com.appa.snoop.presentation.ui.home.HomeScreen
 import com.appa.snoop.presentation.ui.like.LikeScreen
 import com.appa.snoop.presentation.ui.login.LoginScreen
@@ -121,6 +123,15 @@ fun MainNavHost(
             route = ModifyProfileNav.route
         ) {
             ModifyProfileScreen(navController)
+        }
+        defaultSlideTransitions(
+            route = Router.CATEGORY_CHATTING_ROUTER_NAME
+        ) {
+            // 더미 데이터 넣어놓음
+            ChattingScreen(
+                chatList = chatList,
+                navController = navController
+            )
         }
     }
 }

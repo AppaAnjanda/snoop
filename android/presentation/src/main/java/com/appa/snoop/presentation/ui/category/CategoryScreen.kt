@@ -1,6 +1,17 @@
 package com.appa.snoop.presentation.ui.category
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +26,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -48,15 +61,38 @@ fun CategoryScreen(
             .fillMaxSize()
             .addFocusCleaner(focusManager),
         topBar = {
-            if (categoryViewModel.searchBarState) {
-                SnoopSearchBar(
-                    modifier = Modifier
-                        .wrapContentHeight(),
-                    focusManager = focusManager,
-                    categoryViewModel = categoryViewModel,
-                    showSnackBar = showSnackBar
-                )
+            AnimatedContent(
+                targetState = categoryViewModel.searchBarState,
+                transitionSpec = {
+                     slideInVertically(
+                         initialOffsetY = { -200 },
+                         animationSpec = tween(200)
+                     ) togetherWith slideOutVertically (
+                         targetOffsetY = { -200 },
+                         animationSpec = tween(200)
+                     ) using SizeTransform(false)
+                },
+                label = ""
+            ) { searchBarVisible ->
+                if (searchBarVisible) {
+                    SnoopSearchBar(
+                        modifier = Modifier
+                            .wrapContentHeight(),
+                        focusManager = focusManager,
+                        categoryViewModel = categoryViewModel,
+                        showSnackBar = showSnackBar
+                    )
+                }
             }
+//            if (categoryViewModel.searchBarState) {
+//                SnoopSearchBar(
+//                    modifier = Modifier
+//                        .wrapContentHeight(),
+//                    focusManager = focusManager,
+//                    categoryViewModel = categoryViewModel,
+//                    showSnackBar = showSnackBar
+//                )
+//            }
         },
     ) { paddingValue ->
         paddingValue
