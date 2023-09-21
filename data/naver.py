@@ -75,12 +75,11 @@ def naver_products_digital():
             re_name = re.sub(pattern, '', name)
             # Product 메시지
             product_message = {
-                "code": f"product_{uuid}",
+                "code": f"{uuid}{re_name}",
                 "major_category": major_category,
                 "minor_category": query,
                 "product_name": re_name,
                 "price": item.get("lprice"),
-                "index_name": major_category,
                 "product_link": item.get("link"),
                 "product_image": item.get("image"),
                 'provider' : item.get("mallName"),
@@ -126,12 +125,11 @@ def naver_products_furniture():
             re_name = re.sub(pattern, '', name)
             # Product 메시지
             product_message = {
-                "code": f"product_{uuid}",
+                "code": f"{uuid}{re_name}",
                 "major_category": major_category,
                 "minor_category": query,
                 "product_name": re_name,
                 "price": item.get("lprice"),
-                "index_name": major_category,
                 "product_link": item.get("link"),
                 "product_image": item.get("image"),
                 'provider' : item.get("mallName"),
@@ -176,12 +174,11 @@ def naver_products_necessaries():
             re_name = re.sub(pattern, '', name)
             # Product 메시지
             product_message = {
-                "code": f"product_{uuid}",
+                "code": f"{uuid}{re_name}",
                 "major_category": major_category,
                 "minor_category": query,
                 "product_name": re_name,
                 "price": item.get("lprice"),
-                "index_name": major_category,
                 "product_link": item.get("link"),
                 "product_image": item.get("image"),
                 'provider' : item.get("mallName"),
@@ -225,12 +222,11 @@ def naver_products_food():
             re_name = re.sub(pattern, '', name)
             # Product 메시지
             product_message = {
-                "code": f"product_{uuid}",
+                "code": f"{uuid}{re_name}",
                 "major_category": major_category,
                 "minor_category": query,
                 "product_name": re_name,
                 "price": item.get("lprice"),
-                "index_name": major_category,
                 "product_link": item.get("link"),
                 "product_image": item.get("image"),
                 'provider' : item.get("mallName"),

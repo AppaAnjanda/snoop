@@ -123,12 +123,11 @@ def coupang_products_digital():
 
                 # Product 메시지
                 product_message = {
-                    "code": f"product_{uuid}",
+                    "code": f"{uuid}{prd_name}",
                     "major_category": major_category,
                     "minor_category": keyword,
                     "product_name": prd_name,
                     "price": price,
-                    "index_name": major_category,
                     "product_link": prd_link,
                     "product_image": "http://example.com/images/ex.jpg",
                     'provider' : '쿠팡',
@@ -192,12 +191,11 @@ def coupang_products_furniture():
 
                 # Product 메시지
                 product_message = {
-                    "code": f"product_{uuid}",
+                    "code": f"{uuid}{prd_name}",
                     "major_category": major_category,
                     "minor_category": keyword,
                     "product_name": prd_name,
                     "price": price,
-                    "index_name": major_category,
                     "product_link": prd_link,
                     "product_image": "http://example.com/images/ex.jpg",
                     'provider' : '쿠팡',
@@ -257,12 +255,11 @@ def coupang_products_necessaries():
 
                 # Product 메시지
                 product_message = {
-                    "code": f"product_{uuid}",
+                    "code": f"{uuid}{prd_name}",
                     "major_category": major_category,
                     "minor_category": keyword,
                     "product_name": prd_name,
                     "price": price,
-                    "index_name": major_category,
                     "product_link": prd_link,
                     "product_image": "http://example.com/images/ex.jpg",
                     'provider' : '쿠팡',
@@ -322,12 +319,11 @@ def coupang_products_food():
 
                 # Product 메시지
                 product_message = {
-                    "code": f"product_{uuid}",
+                    "code": f"{uuid}{prd_name}",
                     "major_category": major_category,
                     "minor_category": keyword,
                     "product_name": prd_name,
                     "price": price,
-                    "index_name": major_category,
                     "product_link": prd_link,
                     "product_image": "http://example.com/images/ex.jpg",
                     'provider' : '쿠팡',
