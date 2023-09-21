@@ -16,8 +16,6 @@ public class ProductInfo {
 
     private String provider;
 
-    private String message;
-
     private String productName;
 
     private String productLink;
@@ -26,5 +24,4 @@ public class ProductInfo {
 
     private int price;
 
-    private String lastUpdate;
 }
