@@ -73,7 +73,7 @@ public class SearchController {
 
         searchService.deleteSearchHistory(keyword, membersInfo.getId());
 
-        return ResponseEntity.ok(String.format("검색어 삭제 : %d", keyword));
+        return ResponseEntity.ok(String.format("검색어 삭제 : %s", keyword));
     }
 
 

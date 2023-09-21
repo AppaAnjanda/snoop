@@ -35,9 +35,6 @@ public class FurnitureProduct {
     @Field(name = "provider", type = FieldType.Text)
     private String provider;
 
-    @Field(name = "message", type = FieldType.Text)
-    private String message;
-
     @Field(name = "price", type = FieldType.Integer)
     private int price;
 
