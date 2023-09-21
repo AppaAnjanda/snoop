@@ -91,7 +91,7 @@ def coupang_products_digital():
     topic = "digital"
     for keyword in digital_list:
         cnt = 1        
-        for page in range(1, 27):
+        for page in range(1, 10):
             url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=true'
             print('check url ' + url)
 
@@ -159,7 +159,7 @@ def coupang_products_furniture():
     topic = "furniture"
     for keyword in furniture_list:
         cnt = 1        
-        for page in range(1, 27):
+        for page in range(1, 10):
             url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=true'
             print('check url ' + url)
 
@@ -223,7 +223,7 @@ def coupang_products_necessaries():
     topic = "necessaries"
     for keyword in necessaries_list:
         cnt = 1        
-        for page in range(1, 27):
+        for page in range(1, 10):
             url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=true'
             print('check url ' + url)
 
@@ -287,7 +287,7 @@ def coupang_products_food():
     topic = "food"
     for keyword in food_list:
         cnt = 1        
-        for page in range(1, 27):
+        for page in range(1, 10):
             url = f'https://www.coupang.com/np/search?q={keyword}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={page}&rocketAll=true'
             print('check url ' + url)
 
