@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,13 +13,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 @Getter
 @Builder
+@Setter
 @AllArgsConstructor
 @Document(collection = "chatting")
 @NoArgsConstructor
@@ -31,7 +28,7 @@ public class ChatHistory {
 	private String id;
 
 	// @Field("room_idx")
-	private int roomIdx;
+	private int roomNum;
 
 	// @Field("sender_name")
 	private String senderName;
@@ -49,5 +46,9 @@ public class ChatHistory {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public void setCreatedAt(LocalDateTime now) {
+		this.createdAt = now;
 	}
 }

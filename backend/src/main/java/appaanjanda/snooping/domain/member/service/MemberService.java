@@ -130,6 +130,7 @@ public class MemberService {
 
 		return LoginResponse.builder()
 			.accessToken(accessToken)
+				.refreshToken(newRefreshToken.getRefreshToken())
 			.build();
 	}
 
