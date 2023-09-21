@@ -70,7 +70,7 @@ def naver_products_digital():
         current_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
         for item in response.json().get("items"):
-            uuid = id + digital_list.get(query) + str(cnt)
+            uuid = id + digital_list.get(query)
             name = item.get("title")
             re_name = re.sub(pattern, '', name)
             # Product 메시지
@@ -87,7 +87,6 @@ def naver_products_digital():
             }
 
             send_to_kafka(product_message, topic)
-            cnt += 1
         # if response.status_code == 200:
         #     return response.json()
         # else:
@@ -120,7 +119,7 @@ def naver_products_furniture():
         current_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
         for item in response.json().get("items"):
-            uuid = id + furniture_list.get(query) + str(cnt)
+            uuid = id + furniture_list.get(query)
             name = item.get("title")
             re_name = re.sub(pattern, '', name)
             # Product 메시지
@@ -137,7 +136,6 @@ def naver_products_furniture():
             }
 
             send_to_kafka(product_message, topic)
-            cnt += 1
         # if response.status_code == 200:
         #     return response.json()
         # else:
@@ -169,7 +167,7 @@ def naver_products_necessaries():
         current_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
         for item in response.json().get("items"):
-            uuid = id + necessaries_list.get(query) + str(cnt)
+            uuid = id + necessaries_list.get(query)
             name = item.get("title")
             re_name = re.sub(pattern, '', name)
             # Product 메시지
@@ -186,7 +184,6 @@ def naver_products_necessaries():
             }
 
             send_to_kafka(product_message, topic)
-            cnt += 1
         # if response.status_code == 200:
         #     return response.json()
         # else:
@@ -217,7 +214,7 @@ def naver_products_food():
         current_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
         for item in response.json().get("items"):
-            uuid = id + food_list.get(query) + str(cnt)
+            uuid = id + food_list.get(query)
             name = item.get("title")
             re_name = re.sub(pattern, '', name)
             # Product 메시지
@@ -234,7 +231,6 @@ def naver_products_food():
             }
 
             send_to_kafka(product_message, topic)
-            cnt += 1
         # if response.status_code == 200:
         #     return response.json()
         # else:

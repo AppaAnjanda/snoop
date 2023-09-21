@@ -108,8 +108,7 @@ def coupang_products_digital():
                 break
 
             for li in products_list:
-                uuid = id + digital_list.get(keyword) + str(cnt)
-
+                uuid = id + digital_list.get(keyword)
                 a_link = li.find('a', href=True)['href']
                 prd_link = BASE_URL + a_link
                 prd_name = li.find('div', class_='name').text.strip()
@@ -136,7 +135,6 @@ def coupang_products_digital():
 
                 # send_to_kafka(products_info) # Kafka에 전송
                 send_to_kafka(product_message, topic)
-                cnt += 1
 
     ## 크롤링한 데이터 프레임 생성
     # df = pd.DataFrame(products_link)
@@ -176,7 +174,7 @@ def coupang_products_furniture():
                 break
 
             for li in products_list:
-                uuid = id + furniture_list.get(keyword) + str(cnt)
+                uuid = id + furniture_list.get(keyword)
 
                 a_link = li.find('a', href=True)['href']
                 prd_link = BASE_URL + a_link
@@ -204,7 +202,6 @@ def coupang_products_furniture():
 
                 # send_to_kafka(products_info) # Kafka에 전송
                 send_to_kafka(product_message, topic)
-                cnt += 1
 ################################## 생활용품 키워드 크롤링 #####################################
 def coupang_products_necessaries():
     necessaries_list = {"주방" : "1", "욕실" : "2", "청소" : "3", "수납": "4"}
@@ -240,7 +237,7 @@ def coupang_products_necessaries():
                 break
 
             for li in products_list:
-                uuid = id + furniture_list.get(keyword) + str(cnt)
+                uuid = id + furniture_list.get(keyword)
 
                 a_link = li.find('a', href=True)['href']
                 prd_link = BASE_URL + a_link
@@ -268,7 +265,6 @@ def coupang_products_necessaries():
 
                 # send_to_kafka(products_info) # Kafka에 전송
                 send_to_kafka(product_message, topic)
-                cnt += 1
 ################################## 식품 키워드 크롤링 #####################################
 def coupang_products_food():
     food_list = {"음료" : "1", "과일" : "2", "채소": "3", "과자": "4", "축산": "5", "가공식품": "6"}
@@ -304,7 +300,7 @@ def coupang_products_food():
                 break
 
             for li in products_list:
-                uuid = id + furniture_list.get(keyword) + str(cnt)
+                uuid = id + furniture_list.get(keyword)
 
                 a_link = li.find('a', href=True)['href']
                 prd_link = BASE_URL + a_link
@@ -332,4 +328,3 @@ def coupang_products_food():
 
                 # send_to_kafka(products_info) # Kafka에 전송
                 send_to_kafka(product_message, topic)
-                cnt += 1
