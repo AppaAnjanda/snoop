@@ -39,7 +39,12 @@ dependencies {
 
 	// h2 데이터베이스
 	runtimeOnly 'com.h2database:h2'
+
+	// 테스트를 위한 의존성
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mockito:mockito-core:3.12.4'
+	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+
 
 	// postgre
 	implementation 'org.postgresql:postgresql:42.6.0'
@@ -85,6 +90,7 @@ dependencies {
 
 	//mongoDB
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 tasks.named('test') {
