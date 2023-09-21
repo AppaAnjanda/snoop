@@ -16,7 +16,6 @@ public class RoomService {
 
 	private final RoomRepository roomRepository;
 
-	@PostConstruct
 	public void save(){
 
 		String[] category = {"디지털가전", "가구", "생활용품", "식품"};
