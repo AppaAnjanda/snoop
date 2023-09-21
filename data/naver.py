@@ -76,14 +76,14 @@ def naver_products_digital():
             # Product 메시지
             product_message = {
                 "code": f"{uuid}{re_name}",
-                "major_category": major_category,
-                "minor_category": query,
-                "product_name": re_name,
+                "majorCategory": major_category,
+                "minorCategory": query,
+                "productName": re_name,
                 "price": item.get("lprice"),
-                "product_link": item.get("link"),
-                "product_image": item.get("image"),
+                "productLink": item.get("link"),
+                "productImage": item.get("image"),
                 'provider' : item.get("mallName"),
-                "last_update" : current_time
+                "lastUpdate" : current_time
             }
 
             send_to_kafka(product_message, topic)
@@ -125,14 +125,14 @@ def naver_products_furniture():
             # Product 메시지
             product_message = {
                 "code": f"{uuid}{re_name}",
-                "major_category": major_category,
-                "minor_category": query,
-                "product_name": re_name,
+                "majorCategory": major_category,
+                "minorCategory": query,
+                "productName": re_name,
                 "price": item.get("lprice"),
-                "product_link": item.get("link"),
-                "product_image": item.get("image"),
+                "productLink": item.get("link"),
+                "productImage": item.get("image"),
                 'provider' : item.get("mallName"),
-                "last_update" : current_time
+                "lastUpdate" : current_time
             }
 
             send_to_kafka(product_message, topic)
@@ -173,14 +173,14 @@ def naver_products_necessaries():
             # Product 메시지
             product_message = {
                 "code": f"{uuid}{re_name}",
-                "major_category": major_category,
-                "minor_category": query,
-                "product_name": re_name,
+                "majorCategory": major_category,
+                "minorCategory": query,
+                "productName": re_name,
                 "price": item.get("lprice"),
-                "product_link": item.get("link"),
-                "product_image": item.get("image"),
+                "productLink": item.get("link"),
+                "productImage": item.get("image"),
                 'provider' : item.get("mallName"),
-                "last_update" : current_time
+                "lastUpdate" : current_time
             }
 
             send_to_kafka(product_message, topic)
@@ -220,14 +220,14 @@ def naver_products_food():
             # Product 메시지
             product_message = {
                 "code": f"{uuid}{re_name}",
-                "major_category": major_category,
-                "minor_category": query,
-                "product_name": re_name,
+                "majorCategory": major_category,
+                "minorCategory": query,
+                "productName": re_name,
                 "price": item.get("lprice"),
-                "product_link": item.get("link"),
-                "product_image": item.get("image"),
+                "productLink": item.get("link"),
+                "productImage": item.get("image"),
                 'provider' : item.get("mallName"),
-                "last_update" : current_time
+                "lastUpdate" : current_time
             }
 
             send_to_kafka(product_message, topic)

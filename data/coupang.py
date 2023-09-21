@@ -123,14 +123,14 @@ def coupang_products_digital():
                 # Product 메시지
                 product_message = {
                     "code": f"{uuid}{prd_name}",
-                    "major_category": major_category,
-                    "minor_category": keyword,
-                    "product_name": prd_name,
+                    "majorCategory": major_category,
+                    "minorCategory": keyword,
+                    "productName": prd_name,
                     "price": price,
-                    "product_link": prd_link,
-                    "product_image": "http://example.com/images/ex.jpg",
+                    "productLink": prd_link,
+                    "productImage": "http://example.com/images/ex.jpg",
                     'provider' : '쿠팡',
-                    "last_update" : current_time
+                    "lastUpdate" : current_time
                 }
 
                 # send_to_kafka(products_info) # Kafka에 전송
@@ -190,14 +190,14 @@ def coupang_products_furniture():
                 # Product 메시지
                 product_message = {
                     "code": f"{uuid}{prd_name}",
-                    "major_category": major_category,
-                    "minor_category": keyword,
-                    "product_name": prd_name,
+                    "majorCategory": major_category,
+                    "minorCategory": keyword,
+                    "productName": prd_name,
                     "price": price,
-                    "product_link": prd_link,
-                    "product_image": "http://example.com/images/ex.jpg",
+                    "productLink": prd_link,
+                    "productImage": "http://example.com/images/ex.jpg",
                     'provider' : '쿠팡',
-                    "last_update" : current_time
+                    "lastUpdate" : current_time
                 }
 
                 # send_to_kafka(products_info) # Kafka에 전송
@@ -253,14 +253,14 @@ def coupang_products_necessaries():
                 # Product 메시지
                 product_message = {
                     "code": f"{uuid}{prd_name}",
-                    "major_category": major_category,
-                    "minor_category": keyword,
-                    "product_name": prd_name,
+                    "majorCategory": major_category,
+                    "minorCategory": keyword,
+                    "productName": prd_name,
                     "price": price,
-                    "product_link": prd_link,
-                    "product_image": "http://example.com/images/ex.jpg",
+                    "productLink": prd_link,
+                    "productImage": "http://example.com/images/ex.jpg",
                     'provider' : '쿠팡',
-                    "last_update" : current_time
+                    "lastUpdate" : current_time
                 }
 
                 # send_to_kafka(products_info) # Kafka에 전송
@@ -316,14 +316,14 @@ def coupang_products_food():
                 # Product 메시지
                 product_message = {
                     "code": f"{uuid}{prd_name}",
-                    "major_category": major_category,
-                    "minor_category": keyword,
-                    "product_name": prd_name,
+                    "majorCategory": major_category,
+                    "minorCategory": keyword,
+                    "productName": prd_name,
                     "price": price,
-                    "product_link": prd_link,
-                    "product_image": "http://example.com/images/ex.jpg",
+                    "productLink": prd_link,
+                    "productImage": "http://example.com/images/ex.jpg",
                     'provider' : '쿠팡',
-                    "last_update" : current_time
+                    "lastUpdate" : current_time
                 }
 
                 # send_to_kafka(products_info) # Kafka에 전송
