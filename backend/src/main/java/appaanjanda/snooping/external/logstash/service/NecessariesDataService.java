@@ -1,9 +1,9 @@
 package appaanjanda.snooping.external.logstash.service;
 
-import appaanjanda.snooping.domain.product.entity.price.FurniturePrice;
-import appaanjanda.snooping.domain.product.entity.product.FurnitureProduct;
-import appaanjanda.snooping.domain.product.repository.price.FurniturePriceRepository;
-import appaanjanda.snooping.domain.product.repository.product.FurnitureProductRepository;
+import appaanjanda.snooping.domain.product.entity.price.NecessariesPrice;
+import appaanjanda.snooping.domain.product.entity.product.NecessariesProduct;
+import appaanjanda.snooping.domain.product.repository.price.NecessariesPriceRepository;
+import appaanjanda.snooping.domain.product.repository.product.NecessariesProductRepository;
 import appaanjanda.snooping.external.logstash.entity.ProductInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,15 +21,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class FurnitureDataService {
+public class NecessariesDataService {
 
-    private final FurnitureProductRepository furnitureProductRepository;
-    private final FurniturePriceRepository furniturePriceRepository;
+    private final NecessariesProductRepository necessariesProductRepository;
+    private final NecessariesPriceRepository necessariesPriceRepository;
 
     // 최근 업데이트 확인
-    public boolean checkUpdateTime(FurnitureProduct furnitureProduct) {
+    public boolean checkUpdateTime(NecessariesProduct necessariesProduct) {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime lastUpdateTime = LocalDateTime.parse(furnitureProduct.getTimestamp());
+        LocalDateTime lastUpdateTime = LocalDateTime.parse(necessariesProduct.getTimestamp());
         // 업데이트 경과 시간
         Duration duration = Duration.between(lastUpdateTime, now);
         // 5분 지났으면 업데이트 진행
@@ -41,10 +41,10 @@ public class FurnitureDataService {
     public void checkPrice(ProductInfo productInfo) {
         String currentName = productInfo.getProductName();
 
-        Optional<FurnitureProduct> existProduct = furnitureProductRepository.findByProductName(currentName);
+        Optional<NecessariesProduct> existProduct = necessariesProductRepository.findByProductName(currentName);
         // 일치 상품 있는 경우
         if (existProduct.isPresent()) {
-            FurnitureProduct originProduct = existProduct.get();
+            NecessariesProduct originProduct = existProduct.get();
             // 최근에 업데이트 되었으면 중단
             if (checkUpdateTime(originProduct)) {
 
@@ -70,31 +70,31 @@ public class FurnitureDataService {
 
     // 새상품 데이터 생성
     public String createData(ProductInfo productInfo) {
-        FurnitureProduct furnitureProduct = new FurnitureProduct(productInfo);
+        NecessariesProduct necessariesProduct = new NecessariesProduct(productInfo);
 
         String formatTime = parseTime();
 
         // 기존 코드는 중복될 수 있으므로 새로 생성
         String newCode = productInfo.getCode().substring(0, 2) + productInfo.getProductName();
-        furnitureProduct.setCode(newCode);
-        furnitureProduct.setTimestamp(formatTime);
-        furnitureProductRepository.save(furnitureProduct);
+        necessariesProduct.setCode(newCode);
+        necessariesProduct.setTimestamp(formatTime);
+        necessariesProductRepository.save(necessariesProduct);
 
         return newCode;
     }
 
     // 상품 정보 업데이트
-    public void updateData(FurnitureProduct furnitureProduct, ProductInfo productInfo) {
+    public void updateData(NecessariesProduct necessariesProduct, ProductInfo productInfo) {
 
         String formatTime = parseTime();
 
         // 링크, 출처, 가격 업데이트 후 저장
-        furnitureProduct.setProductLink(productInfo.getProductLink());
-        furnitureProduct.setProvider(productInfo.getProvider());
-        furnitureProduct.setPrice(productInfo.getPrice());
-        furnitureProduct.setTimestamp(formatTime);
+        necessariesProduct.setProductLink(productInfo.getProductLink());
+        necessariesProduct.setProvider(productInfo.getProvider());
+        necessariesProduct.setPrice(productInfo.getPrice());
+        necessariesProduct.setTimestamp(formatTime);
 
-        furnitureProductRepository.save(furnitureProduct);
+        necessariesProductRepository.save(necessariesProduct);
 
     }
 
@@ -105,13 +105,13 @@ public class FurnitureDataService {
         Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
 
         // 가격 정보 최신순
-        List<FurniturePrice> priceList = furniturePriceRepository.findSortedByCode(productInfo.getCode(), sort);
+        List<NecessariesPrice> priceList = necessariesPriceRepository.findSortedByCode(productInfo.getCode(), sort);
 
         // 마지막 가격 정보의 가격 업데이트
-        FurniturePrice lastPrice = priceList.get(0);
+        NecessariesPrice lastPrice = priceList.get(0);
         lastPrice.setPrice(productInfo.getPrice());
 
-        furniturePriceRepository.save(lastPrice);
+        necessariesPriceRepository.save(lastPrice);
     }
 
     // 가격 정보 생성
@@ -119,9 +119,9 @@ public class FurnitureDataService {
 
         String formatTime = parseTime();
 
-        FurniturePrice furniturePrice = new FurniturePrice(productCode, productInfo.getPrice(), formatTime);
+        NecessariesPrice necessariesPrice = new NecessariesPrice(productCode, productInfo.getPrice(), formatTime);
 
-        furniturePriceRepository.save(furniturePrice);
+        necessariesPriceRepository.save(necessariesPrice);
     }
 
     public String parseTime() {
