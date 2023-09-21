@@ -49,6 +49,7 @@ public class ProductSearchService {
     }
 
     //상품id로 조회
+    // TODO 찜 여부
     public Object searchProductById(String productId) {
         // product_123 에서 1(대분류 코드) 추출
         char index = productId.split("_")[1].charAt(0);
@@ -89,27 +90,6 @@ public class ProductSearchService {
 //        }
 //    }
 
-    // 상품 가격 검색
-//    public SearchHits<?> searchPriceById(String index, String productId){
-//
-//        // "product_123" => "price_123"
-//        String priceId = "price" + productId.split("_")[1];
-//
-//        // 반환할 상품 타입
-//        Class<?> productType = searchDocumentByIndex(index);
-//
-//        // index, id로 상품 찾아서 시간 내림차순 정렬
-//        NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
-//                .withQuery(QueryBuilders.boolQuery()
-//                        .must(QueryBuilders.termQuery("_index", index))
-//                        .must(QueryBuilders.termQuery("_id", priceId))
-//                )
-//                .withSort(Sort.by(Sort.Order.desc("price_history.timestamp")))
-//                .build();// 정렬
-//
-//        // 검색결과
-//        SearchHits<Map> searchHits = elasticsearchRestTemplate.search(nativeSearchQuery, Map.class);
-//    }
 
 
 }

@@ -11,7 +11,7 @@ server:
 
 spring:
   profiles:
-    active: es, swagger, redis, mail, mongo
+    active: es, swagger, redis, mongo
   datasource:
 #    url: jdbc:postgresql://52.78.159.20:5432/snoop
 #    username: ENC(JIxLlHeC+6u59PjTWidzjw==)
@@ -21,6 +21,15 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ENC(m6MbBpmIJAK2qG+ZRXPWUegfDJw/qRcy7bSqpZgOC7g=)
+    password:
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
 
   main:
     allow-circular-references: true

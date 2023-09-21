@@ -26,15 +26,6 @@ public class ChatController {
 	private final ChatRepository chatRepository;
 	private final ChatService chatService;
 
-	@PutMapping("chat/{id}")
-	public void update(@RequestBody ChatSaveDto dto, @PathVariable String id) {
-
-		ChatHistory chatHistory = dto.toEntity();
-		chatHistory.setId(id); // save함수는 같은 아이디면 수정한다.
-
-		chatRepository.save(chatHistory);
-	}
-
 	@DeleteMapping("chat/{id}")
 	public int deleteById(@PathVariable String id) {
 

@@ -18,7 +18,8 @@ public class SearchHistory extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long searchId;
+    @Column(name = "search_id")
+    private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
