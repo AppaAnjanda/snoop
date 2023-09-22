@@ -2,13 +2,16 @@ package com.appa.snoop.di
 
 import android.content.Context
 import com.appa.snoop.data.local.PreferenceDataSource
+import com.appa.snoop.data.repository.CategoryRepositoryImpl
 import com.appa.snoop.data.repository.MemberRepositoryImpl
 import com.appa.snoop.data.repository.RegisterRepositoryImpl
 import com.appa.snoop.data.repository.datasource.BaseRemoteDataSource
 import com.appa.snoop.data.repository.datasourceImpl.BaseRemoteDataSourceImpl
 import com.appa.snoop.data.service.BaseService
+import com.appa.snoop.data.service.CategoryService
 import com.appa.snoop.data.service.MemberService
 import com.appa.snoop.data.service.RegisterService
+import com.appa.snoop.domain.repository.CategoryRepository
 import com.appa.snoop.domain.repository.MemberRepository
 import com.appa.snoop.domain.repository.RegisterRepository
 import dagger.Module
@@ -16,6 +19,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Module
@@ -37,5 +41,11 @@ object RepositoryModule {
     @Singleton
     fun providePreferenceDataSource(@ApplicationContext context: Context) : PreferenceDataSource {
         return PreferenceDataSource(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCategoryRepository(categoryService: CategoryService): CategoryRepository {
+        return CategoryRepositoryImpl(categoryService = categoryService)
     }
 }

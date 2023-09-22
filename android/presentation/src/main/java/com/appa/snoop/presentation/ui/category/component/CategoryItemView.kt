@@ -19,11 +19,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.ui.theme.BlackColor
 import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.RedColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
+import com.appa.snoop.presentation.util.PriceUtil
 import com.appa.snoop.presentation.util.extensions.noRippleClickable
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -31,6 +33,7 @@ import ir.kaaveh.sdpcompose.ssp
 @Composable
 fun CategoryItem(
     modifier: Modifier = Modifier,
+    product: Product,
     onItemClicked: () -> Unit,
     onLikeClicked: () -> Unit
 ) {
@@ -44,7 +47,7 @@ fun CategoryItem(
             }
     ) {
         ProductImageView(
-            productState = "최저가"
+            product = product
         ) {
             onLikeClicked()
         }
@@ -52,7 +55,7 @@ fun CategoryItem(
         Text(
             modifier = modifier
                 .width(140.sdp),
-            text = "Apple 맥북 프로 14 스페이스 그레이 M2 pro 10코어",
+            text = product.productName,
             style = TextStyle(
                 fontSize = 11.ssp,
                 fontWeight = FontWeight.Bold,
@@ -63,31 +66,31 @@ fun CategoryItem(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "2,790,000원",
-                style = TextStyle(
-                    fontSize = 12.ssp,
-                    color = DarkGrayColor,
-                    textDecoration = TextDecoration.LineThrough,
-                )
-            )
-            Spacer(modifier = modifier.width(4.sdp))
-            Text(
-                text = "10.0%",
-                style = TextStyle(
-                    fontSize = 14.ssp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = RedColor,
-                )
-            )
-            Image(
-                painterResource(id = R.drawable.ic_increase),
-                contentDescription = "가격 하락",
-                modifier = modifier.size(12.sdp)
-            )
+//            Text(
+//                text = product.price.toString(),
+//                style = TextStyle(
+//                    fontSize = 12.ssp,
+//                    color = DarkGrayColor,
+//                    textDecoration = TextDecoration.LineThrough,
+//                )
+//            )
+//            Spacer(modifier = modifier.width(4.sdp))
+//            Text(
+//                text = "10.0%",
+//                style = TextStyle(
+//                    fontSize = 14.ssp,
+//                    fontWeight = FontWeight.SemiBold,
+//                    color = RedColor,
+//                )
+//            )
+//            Image(
+//                painterResource(id = R.drawable.ic_increase),
+//                contentDescription = "가격 하락",
+//                modifier = modifier.size(12.sdp)
+//            )
         }
         Text(
-            text = "2,620,000원",
+            text = PriceUtil.formatPrice(product.price.toString()) + " 원",
             style = TextStyle(
                 fontSize = 16.ssp,
                 fontWeight = FontWeight.ExtraBold,
@@ -96,12 +99,12 @@ fun CategoryItem(
     }
 }
 
-@Preview
-@Composable
-fun PreviewCategoryItem() {
-    CategoryItem(
-        modifier = Modifier,
-        onItemClicked = {},
-        onLikeClicked = {}
-    )
-}
+//@Preview
+//@Composable
+//fun PreviewCategoryItem() {
+//    CategoryItem(
+//        modifier = Modifier,
+//        onItemClicked = {},
+//        onLikeClicked = {}
+//    )
+//}

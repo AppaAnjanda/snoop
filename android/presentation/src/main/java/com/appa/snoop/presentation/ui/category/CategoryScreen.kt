@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -24,7 +25,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.category.component.CategoryBottomSheet
-
 import com.appa.snoop.presentation.ui.category.component.CategoryItem
 import com.appa.snoop.presentation.ui.category.component.SnoopSearchBar
 import com.appa.snoop.presentation.util.effects.CategoryLaunchedEffect
@@ -92,15 +92,6 @@ fun CategoryScreen(
                     )
                 }
             }
-//            if (categoryViewModel.searchBarState) {
-//                SnoopSearchBar(
-//                    modifier = Modifier
-//                        .wrapContentHeight(),
-//                    focusManager = focusManager,
-//                    categoryViewModel = categoryViewModel,
-//                    showSnackBar = showSnackBar
-//                )
-//            }
         },
     ) { paddingValue ->
         paddingValue
@@ -111,9 +102,12 @@ fun CategoryScreen(
             LazyVerticalGrid(
                 columns = GridCells.Fixed(SIZE)
             ) {
-                items(count = 10) {
+                items(
+                    categoryViewModel.productList.value
+                ) { it ->
                     CategoryItem(
                         modifier = Modifier,
+                        product = it,
                         onItemClicked = {
                             navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
                         },
