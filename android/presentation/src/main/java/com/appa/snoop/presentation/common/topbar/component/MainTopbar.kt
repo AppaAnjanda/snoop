@@ -21,14 +21,14 @@ object MainTopbar : Topbars {
 
     override val actions: List<ActionMenuItem> =
         listOf(
-            ActionMenuItem.IconMenuItem.AlwaysShown(
-                title = "Search",
-                onClick = {
-                    _buttons.tryEmit(AppBarIcons.Search)
-                },
-                icon = R.drawable.ic_search,
-                contentDescription = null,
-            ),
+//            ActionMenuItem.IconMenuItem.AlwaysShown(
+//                title = "Search",
+//                onClick = {
+//                    _buttons.tryEmit(AppBarIcons.Search)
+//                },
+//                icon = R.drawable.ic_search,
+//                contentDescription = null,
+//            ),
             ActionMenuItem.IconMenuItem.AlwaysShown(
                 title = "Alarm",
                 onClick = {
@@ -44,7 +44,7 @@ object MainTopbar : Topbars {
 
     enum class AppBarIcons {
         NavigationIcon,
-        Search,
+//        Search,
         Alarm,
     }
 }

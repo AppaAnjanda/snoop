@@ -26,6 +26,9 @@ object Router {
     // 제품 상세화면
     const val CATEGORY_PRODUCT_ROUTER_NAME = "category_product"
 
+    // 채팅 화면
+    const val CATEGORY_CHATTING_ROUTER_NAME = "category_chatting"
+
     object Title {
         //    const val `시작 루트_도착 루트` = ""
         const val MAIN_HOME = "홈"
@@ -51,5 +54,7 @@ object Router {
         // 제품 상세화면
         const val CATEGORY_PRODUCT = "상세화면"
 
+        // 채팅 화면
+        const val CATEGORY_CHATTING = "채팅방"
     }
 }

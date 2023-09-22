@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +34,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.appa.snoop.presentation.ui.main.MainViewModel
+import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -61,7 +67,8 @@ import ir.kaaveh.sdpcompose.ssp
 
 @Composable
 fun LikeScreen(
-    navController: NavController
+    navController: NavController,
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
     MainLaunchedEffect(navController)
     var itemList = listOf(Item(), Item(), Item(), Item())
