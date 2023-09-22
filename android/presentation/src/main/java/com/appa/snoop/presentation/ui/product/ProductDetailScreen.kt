@@ -24,6 +24,8 @@ import androidx.navigation.compose.rememberNavController
 import com.appa.snoop.presentation.ui.product.component.AlarmSnackBar
 import com.appa.snoop.presentation.ui.product.component.ButtonView
 import com.appa.snoop.presentation.ui.product.component.BuyTimingView
+import com.appa.snoop.presentation.ui.product.component.DataPoints
+import com.appa.snoop.presentation.ui.product.component.PriceGraph
 import com.appa.snoop.presentation.ui.product.component.ProductDetailView
 import com.appa.snoop.presentation.ui.product.component.RecommendListView
 import com.appa.snoop.presentation.ui.theme.WhiteColor
@@ -64,6 +66,7 @@ fun ProductDetailScreen(
                 }
             )
             BuyTimingView()
+            PriceGraph(lines = listOf(DataPoints.dataPoints1), Modifier)
             RecommendListView()
         }
         AlarmSnackBar(
@@ -72,7 +75,6 @@ fun ProductDetailScreen(
             percent = 10
         )
         Spacer(modifier = Modifier.height(16.sdp))
-        // TODO (가격 추이 그래프 추가하기)
         ButtonView(
             alarmChecked = alarmChecked,
             onBuyClicked = { /*TODO*/ },
@@ -83,7 +85,8 @@ fun ProductDetailScreen(
                     if (alarmChecked) {
                         coroutineScope.launch {
                             val job = coroutineScope.launch {
-                                snackState.showSnackbar("",
+                                snackState.showSnackbar(
+                                    "",
                                     duration = SnackbarDuration.Indefinite
                                 )
                             }
