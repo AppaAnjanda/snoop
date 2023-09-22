@@ -92,7 +92,7 @@ def kafka_send():
 
 
 # 스케줄러 설정
-# scheduler = BackgroundScheduler()
+scheduler = BackgroundScheduler()
 ##################  쿠팡 스케줄러 ########################
 scheduler.add_job(coupang_digital, "cron", hour="0-23", minute=0)
 scheduler.add_job(coupang_furniture, "cron", hour="0-23", minute=0)
