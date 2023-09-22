@@ -26,29 +26,6 @@ public class ProductService {
     private final RecentProductRepository recentProductRepository;
 
 
-//    // 상품 정보 조회
-//    // TODO : 찜목록에 (memberId, productId) 있으면 찜 처리, 최근 본 상품에 추가
-//    public ProductDetailDto getProductById(Long memberId, String index, String productId){
-//
-//        SearchHits<?> searchHits = productSearchService.searchProductById(index, productId);
-//        Object searchProduct;
-//
-//        // 첫번째 객체 가져오기
-//        if (!searchHits.isEmpty()) {
-//            // 상품 기본정보
-//            SearchHit<?> hit = searchHits.getSearchHit(0);
-//            searchProduct =  hit.getContent();
-//
-//        } else{
-//            throw new NotFoundException("상품을 찾을 수 없습니다.");
-//        }
-//
-//        // boolean isWishlist;  // 찜 여부
-//
-//        return new ProductDetailDto(searchProduct);
-//
-//    }
-
     // 최근 본 상품 추가
     public void updateRecentProduct(Long memberId, String productCode) {
 
