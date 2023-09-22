@@ -12,6 +12,7 @@ val DarkGrayColor = Color(0xFF919191)
 val BlackColor = Color(0xFF202632)
 val WhiteColor = Color(0xFFFFFFFF)
 val YellowColor = Color(0xFFFFCE4F)
+val GreenColor = Color(0xFF1EC800)
 
 val Black_70 = Color(0xB2000000)
 val KakaoColor = Color(0xFFFEE500)

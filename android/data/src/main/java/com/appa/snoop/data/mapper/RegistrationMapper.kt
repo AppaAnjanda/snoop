@@ -24,7 +24,7 @@ fun RegisterResponse.toDomain(): RegisterDone {
     )
 }
 
-fun LoginResponse.toDoain(): JwtTokens {
+fun LoginResponse.toDomain(): JwtTokens {
     return JwtTokens(
         accessToken = data.accessToken
     )

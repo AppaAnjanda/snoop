@@ -2,7 +2,6 @@ package com.appa.snoop.data.repository
 
 import android.util.Log
 import com.appa.snoop.data.local.PreferenceDataSource
-import com.appa.snoop.data.mapper.toDoain
 import com.appa.snoop.data.mapper.toDomain
 import com.appa.snoop.data.service.RegisterService
 import com.appa.snoop.data.service.handleApi
@@ -25,7 +24,7 @@ class RegisterRepositoryImpl @Inject constructor(
     }
     // 로그인
     override suspend fun login(loginInfo: LoginInfo): NetworkResult<JwtTokens> {
-        return handleApi { registerService.login(loginInfo).toDoain() }
+        return handleApi { registerService.login(loginInfo).toDomain() }
     }
     // 토큰 저장
     override suspend fun putJwtTokens(jwtTokens: JwtTokens) {

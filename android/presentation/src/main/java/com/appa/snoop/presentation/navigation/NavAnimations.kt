@@ -19,48 +19,16 @@ fun NavGraphBuilder.mainSlideTransitions(
     composable(
         route,
         enterTransition = {
-                          EnterTransition.None
-//            fadeIn(
-//                animationSpec = tween(300),
-////                initialAlpha = 0.5f
-//            )
-//            slideIntoContainer(
-//                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-//                animationSpec = tween(300)
-//            )
+            EnterTransition.None
         },
         exitTransition = {
-                         ExitTransition.None
-//            fadeOut(
-//                animationSpec = tween(100),
-////                targetAlpha = 0.5f
-//            )
-//            slideOutOfContainer(
-//                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-//                animationSpec = tween(300)
-//            )
+            ExitTransition.None
         },
         popEnterTransition = {
-                             EnterTransition.None
-//            fadeIn(
-//                animationSpec = tween(300),
-////                initialAlpha = 0.5f
-//            )
-//            slideIntoContainer(
-//                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-//                animationSpec = tween(300)
-//            )
+            EnterTransition.None
         },
         popExitTransition = {
             ExitTransition.None
-//            fadeOut(
-//                animationSpec = tween(100),
-////                targetAlpha = 0.5f
-//            )
-//            slideOutOfContainer(
-//                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-//                animationSpec = tween(300)
-//            )
         },
         content = content
     )

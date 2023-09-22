@@ -1,14 +1,10 @@
 package com.appa.snoop.presentation.ui.category.component
 
 import android.annotation.SuppressLint
-import android.content.res.loader.ResourcesProvider
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,27 +12,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.ui.category.CategoryViewModel
-import com.appa.snoop.presentation.ui.mypage.component.CheckBoxRow
+import com.appa.snoop.presentation.ui.theme.BackgroundColor2
+import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -45,17 +35,17 @@ import ir.kaaveh.sdpcompose.ssp
 @Composable
 fun BottomSheetItem(
     majorName: String = "대분류",
-    minorList: List<String> = listOf("소분류", "소분류", "소분류", "소분류", "소분류"),
+    minorList: List<String>,
     categoryViewModel: CategoryViewModel,
     categoryState: Boolean,
+    onDismiss: () -> Unit,
     onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(30.sdp)
-            .clickable { categoryViewModel.firstCategoryToggle() },
-//            .background(BackgroundColor)
+            .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -69,66 +59,45 @@ fun BottomSheetItem(
             fontSize = 14.ssp
         )
     }
-//    Spacer(modifier = Modifier.height(4.sdp))
     AnimatedContent(
         targetState = categoryState,
         transitionSpec = {
-            slideInVertically(
-                initialOffsetY = { -200 },
-                animationSpec = tween(200)
-            ) togetherWith slideOutVertically (
-                targetOffsetY = { -200 },
-                animationSpec = tween(200)
-            ) using SizeTransform(false)
+             scaleIn(
+                 transformOrigin = TransformOrigin(0.3f, -1f)
+             ) togetherWith scaleOut(
+                 transformOrigin = TransformOrigin(0.3f, -1f)
+             )
         },
         label = ""
     ) {
         if (it) {
             LazyColumn(
                 modifier = Modifier
-                    .padding(start = 12.sdp)
+                    .padding(start = 20.sdp)
             ) {
                 items(minorList) {minorName ->
-//                    AnimatedContent(
-//                        targetState = categoryState,
-//                        transitionSpec = {
-//                            slideInVertically(
-//                                initialOffsetY = { -100 },
-//                                animationSpec = tween(200)
-//                            ) togetherWith slideOutVertically (
-//                                targetOffsetY = { -100 },
-//                                animationSpec = tween(200)
-//                            ) using SizeTransform(false)
-//                        },
-//                        label = ""
-//                    ) {
-//                        Text(
-//                            text = minorName,
-//                            fontSize = 12.ssp
-//                        )
-//                        Spacer(modifier = Modifier.height(4.sdp))
-//                    }
-                    Text(
-                        text = minorName,
-                        fontSize = 12.ssp
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable{
+                                categoryViewModel.getProductListByCategory(majorName, minorName)
+                                onDismiss()
+                            },
+                    ) {
+                        Text(
+                            modifier = Modifier,
+                            text = minorName,
+                            fontSize = 12.ssp,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(3.sdp))
+                    HorizontalDivider(
+                        thickness = 1.sdp,
+                        color = BackgroundColor2
                     )
-                    Spacer(modifier = Modifier.height(4.sdp))
+                    Spacer(modifier = Modifier.height(3.sdp))
                 }
             }
         }
     }
-//    if (categoryState) {
-//        LazyColumn(
-//            modifier = Modifier
-//                .padding(start = 12.sdp)
-//        ) {
-//            items(minorList) {
-//                Text(
-//                    text = it,
-//                    fontSize = 12.ssp
-//                )
-//                Spacer(modifier = Modifier.height(4.sdp))
-//            }
-//        }
-//    }
 }
