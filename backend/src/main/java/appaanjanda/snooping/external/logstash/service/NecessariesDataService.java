@@ -23,17 +23,21 @@ import java.util.Optional;
 @Slf4j
 public class NecessariesDataService {
 
+    // 현재시간
+    private final LocalDateTime now = LocalDateTime.now();
+
     private final NecessariesProductRepository necessariesProductRepository;
     private final NecessariesPriceRepository necessariesPriceRepository;
 
     // 최근 업데이트 확인
     public boolean checkUpdateTime(NecessariesProduct necessariesProduct) {
-        LocalDateTime now = LocalDateTime.now();
+
         LocalDateTime lastUpdateTime = LocalDateTime.parse(necessariesProduct.getTimestamp());
+        LocalDateTime realTime = lastUpdateTime.plusHours(9);
         // 업데이트 경과 시간
-        Duration duration = Duration.between(lastUpdateTime, now);
+        Duration duration = Duration.between(realTime, now);
         // 5분 지났으면 업데이트 진행
-        if (duration.toMinutes() >= 5) return true;
+        if (duration.toMinutes() >= 10) return true;
         else return false;
     }
 
@@ -49,7 +53,6 @@ public class NecessariesDataService {
             if (checkUpdateTime(originProduct)) {
 
                 // 그 시간대의 첫 데이터인지 확인
-                LocalDateTime now = LocalDateTime.now();
                 int minute = now.getMinute();
 
                 if (minute < 10) {
@@ -102,17 +105,22 @@ public class NecessariesDataService {
     // 그 시간대의 가격 정보 업데이트
     public void updatePriceData(ProductInfo productInfo) {
 
-        // 정렬 기준
-        Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
+        int minute = now.getMinute();
 
-        // 가격 정보 최신순
-        List<NecessariesPrice> priceList = necessariesPriceRepository.findSortedByCode(productInfo.getCode(), sort);
+        if (minute < 10) {
 
-        // 마지막 가격 정보의 가격 업데이트
-        NecessariesPrice lastPrice = priceList.get(0);
-        lastPrice.setPrice(productInfo.getPrice());
+            // 정렬 기준
+            Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
 
-        necessariesPriceRepository.save(lastPrice);
+            // 가격 정보 최신순
+            List<NecessariesPrice> priceList = necessariesPriceRepository.findSortedByCode(productInfo.getCode(), sort);
+
+            // 마지막 가격 정보의 가격 업데이트
+            NecessariesPrice lastPrice = priceList.get(0);
+            lastPrice.setPrice(productInfo.getPrice());
+
+            necessariesPriceRepository.save(lastPrice);
+        }
     }
 
     // 가격 정보 생성
@@ -126,8 +134,9 @@ public class NecessariesDataService {
     }
 
     public String parseTime() {
-        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime realTime = now.minusHours(9);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        return now.format(formatter);
+        return realTime.format(formatter);
     }
 }
