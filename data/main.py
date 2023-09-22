@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from apscheduler.schedulers.background import BackgroundScheduler
-from coupang import coupang_products, coupang_products_digital, coupang_products_furniture, coupang_products_necessaries, coupang_products_food
-from naver import naver_products, naver_products_digital, naver_products_furniture, naver_products_necessaries, naver_products_food
+from coupang import coupang_product, coupang_products_digital, coupang_products_furniture, coupang_products_necessaries, coupang_products_food
+from naver import naver_product, naver_products_digital, naver_products_furniture, naver_products_necessaries, naver_products_food
 import pandas as pd
 import requests
 
@@ -18,8 +18,7 @@ app = FastAPI()
 # 쿠팡 크롤링 함수
 @app.get("/coupang")
 def coupang(query:str):
-    default_page = 27
-    df = coupang_products(query, default_page)
+    coupang_product(query)
     return {"message": "Crawling completed!"}
 
 @app.get("/coupang/all")
@@ -44,10 +43,10 @@ def coupang_food():
     return coupang_products_food()
 ########################################## 네이버 #####################################################
 
-# 네이버 쇼핑 API 함수
+# 네이버 쇼핑 API 찜 상품 함수
 @app.get("/naver")
 def naver(query:str):
-    return naver_products(query)
+    return naver_product(query)
 
 # 네이버 쇼핑 API 전체 조회 함수
 @app.get("/naver/all")
