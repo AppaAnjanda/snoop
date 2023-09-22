@@ -1,25 +1,38 @@
 package appaanjanda.snooping.domain.product.entity.price;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.persistence.Id;
-import java.util.List;
+import java.time.LocalDateTime;
 
-@Document(indexName = "디지털가전")
+@Document(indexName = "디지털가전가격")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class DigitalPrice {
 
     @Id
     private String id;
 
-    @Field(name = "routing", type = FieldType.Text)
-    private String routing;
+    @Field(name = "code", type = FieldType.Text)
+    private String code;
 
-    @Field(name = "price_history", type = FieldType.Nested)
-    private List<PriceHistory> priceHistory;
+    @Field(name = "price", type = FieldType.Integer)
+    private int price;
+
+    @Field(name = "@timestamp", type = FieldType.Date)
+    private String timestamp;
+
+    public DigitalPrice(String code, int price, String date) {
+        this.code = code;
+        this.price = price;
+        this.timestamp = date;
+    }
 }

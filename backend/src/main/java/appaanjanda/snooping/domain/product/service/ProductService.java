@@ -2,29 +2,17 @@ package appaanjanda.snooping.domain.product.service;
 
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.service.MemberService;
-import appaanjanda.snooping.domain.product.dto.ProductDetailDto;
 import appaanjanda.snooping.domain.product.entity.RecentProduct;
 import appaanjanda.snooping.domain.product.repository.*;
-import co.elastic.clients.util.DateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.webjars.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +50,7 @@ public class ProductService {
 //    }
 
     // 최근 본 상품 추가
-    public void updateRecentProduct(Long memberId, String productId) {
+    public void updateRecentProduct(Long memberId, String productCode) {
 
         Member member = memberService.findMemberById(memberId);
         // 최근 본 상품
@@ -70,7 +58,7 @@ public class ProductService {
 
         // 최근 본 상품에 현재 상품이 포함되어 있는지 확인, 없으면 null
         RecentProduct existProduct = recentProducts.stream()
-                .filter(search -> search.getProductId().equals(productId))
+                .filter(search -> search.getProductCode().equals(productCode))
                 .findFirst()
                 .orElse(null);
 
@@ -83,10 +71,10 @@ public class ProductService {
         // 새로 본 상품 추가
         RecentProduct newWatchProduct = new RecentProduct();
         newWatchProduct.setMember(member);
-        newWatchProduct.setProductId(productId);
+        newWatchProduct.setProductCode(productCode);
         recentProductRepository.save(newWatchProduct);
 
-        // 최근 검색어가 10개 이상이면 마지막꺼 지우고 추가
+        // 최근 본 상품 10개 이상이면 마지막꺼 지우고 추가
         if (recentProducts.size() >= 10) {
             RecentProduct oldestProduct = recentProducts.get(recentProducts.size()-1);
             recentProductRepository.delete(oldestProduct);
@@ -101,9 +89,9 @@ public class ProductService {
         List<Object> products = new ArrayList<>();
 
         for (RecentProduct recentProduct : recentProducts) {
-            String productId = recentProduct.getProductId();
+            String productCode = recentProduct.getProductCode();
 
-            Object product = productSearchService.searchProductById(productId);
+            Object product = productSearchService.searchProductById(productCode);
 
             if (product != null) {
                 products.add(product);
@@ -120,7 +108,7 @@ public class ProductService {
         LocalDateTime firstTime = now.minusHours(48);
 
         // 반환타입
-        Class<?> productType = productSearchService.searchProductByIndex(productId);
+        Class<?> productType = productSearchService.searchEntityById(productId);
 
         log.info(String.valueOf(now));
         

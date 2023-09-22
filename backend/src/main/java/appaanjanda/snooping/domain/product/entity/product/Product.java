@@ -1,30 +1,34 @@
 package appaanjanda.snooping.domain.product.entity.product;
 
+
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import javax.persistence.Id;
+@Getter
+@Setter
+@NoArgsConstructor
+public class Product {
 
-
-public class BaseProduct {
-
-    @Id
-    private String id;
+    @Field(name = "code", type = FieldType.Text)
+    public String code;
 
     @Field(name = "major_category", type = FieldType.Text)
-    private String majorCategory;
+    public String majorCategory;
 
     @Field(name = "minor_category", type = FieldType.Text)
-    private String minorCategory;
+    public String minorCategory;
 
     @Field(name = "provider", type = FieldType.Text)
-    private String provider;
+    public String provider;
 
     @Field(name = "message", type = FieldType.Text)
-    private String message;
+    public String message;
+
+    @Field(name = "price", type = FieldType.Integer)
+    public int price;
 
     @Field(name = "product_name", type = FieldType.Text)
     private String productName;
@@ -34,4 +38,7 @@ public class BaseProduct {
 
     @Field(name = "product_image", type = FieldType.Text)
     private String productImage;
+
+    @Field(name = "last_update", type = FieldType.Text)
+    private String lastUpdate;
 }

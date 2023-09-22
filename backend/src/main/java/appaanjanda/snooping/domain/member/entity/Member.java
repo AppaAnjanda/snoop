@@ -31,8 +31,6 @@ public class Member extends BaseTimeEntity {
 	@Column(name = "member_id")
 	private Long id;
 
-	private String name;
-
 	private String password;
 
 	private String profileUrl;
@@ -56,10 +54,9 @@ public class Member extends BaseTimeEntity {
 
 	
 	@Builder
-	public Member(Long id, String name, String password, String profileUrl, String email, Role role, String nickname,
+	public Member(Long id, String password, String profileUrl, String email, Role role, String nickname,
 		List<MyCard> myCardList, List<Wishbox> wishboxList) {
 		this.id = id;
-		this.name = name;
 		this.password = password;
 		this.profileUrl = profileUrl;
 		this.email = email;
