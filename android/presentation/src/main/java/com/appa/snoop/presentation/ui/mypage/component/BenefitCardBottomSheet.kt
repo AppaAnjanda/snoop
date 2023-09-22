@@ -49,7 +49,7 @@ fun BottomSheet(viewModel: MyPageViewModel, sheetState: SheetState, onDismiss: (
             onDismiss()
         },
     ) {
-        LazyColumn() {
+        LazyColumn(modifier = Modifier.padding(start = 16.sdp, end = 16.sdp)) {
             itemsIndexed(cards) { index, item ->
                 var checkState by remember {
                     mutableStateOf(item.checked)
@@ -64,7 +64,8 @@ fun BottomSheet(viewModel: MyPageViewModel, sheetState: SheetState, onDismiss: (
                     onClick = { /* TODO 카드 저장 */ },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(44.sdp).padding(4.sdp),
+                        .height(44.sdp)
+                        .padding(4.sdp),
                     shape = RoundedCornerShape(10.sdp),
                     colors = ButtonDefaults.buttonColors(PrimaryColor),
                     elevation = ButtonDefaults.buttonElevation(2.sdp)
@@ -88,7 +89,9 @@ fun BottomSheet(viewModel: MyPageViewModel, sheetState: SheetState, onDismiss: (
 
 @Composable
 fun CheckBoxRow(text: String, value: Boolean, onClick: (Any) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Checkbox(checked = value, onCheckedChange = onClick)
         ClickableText(
             text = AnnotatedString(text), onClick = onClick, modifier = Modifier.fillMaxWidth()

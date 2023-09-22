@@ -77,7 +77,7 @@ fun MypageScreen(
                 when (title) {
                     MyPageLabel.MODIFY_PROFILE -> navController.navigate(ModifyProfileNav.route)
                     MyPageLabel.SELECT_CARD ->  scope.launch {
-                        sheetState.expand()
+                        sheetState.partialExpand()
                     }
                     else -> {}
                 }
