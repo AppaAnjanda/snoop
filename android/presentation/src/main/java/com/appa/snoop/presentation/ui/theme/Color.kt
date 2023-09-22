@@ -20,3 +20,6 @@ val InvalidRedColor = Color(0xFFFF9797)
 
 // Chat Background
 val PrimaryColor_70 = Color(0xB348D1CC)
+// Price Graph Background
+val PrimaryColor_30 = Color(0xFFFFEEC2)
+val InvalidRedColor_60 = Color(0x99FF9797)
