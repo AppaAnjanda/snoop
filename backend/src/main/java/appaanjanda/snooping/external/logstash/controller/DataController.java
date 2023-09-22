@@ -7,6 +7,7 @@ import appaanjanda.snooping.external.logstash.service.FurnitureDataService;
 import appaanjanda.snooping.external.logstash.service.NecessariesDataService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ public class DataController {
     private final FoodDataService foodDataService;
 
     // 디지털가전 데이터 처리
+    @Operation(summary = "디지털가전", description = "디지털가전 크롤링 데이터 처리", tags = { "Data Controller" })
     @PostMapping("/digital")
     public void digitalToElasticsearch(@RequestBody JsonNode requestBody) {
         try {
@@ -43,6 +45,7 @@ public class DataController {
     }
 
     // 가구 데이터 처리
+    @Operation(summary = "가구", description = "가구 크롤링 데이터 처리", tags = { "Data Controller" })
     @PostMapping("/furniture")
     public void furnitureToElasticsearch(@RequestBody JsonNode requestBody) {
         try {
@@ -57,6 +60,7 @@ public class DataController {
     }
 
     // 생활용품 데이터 처리
+    @Operation(summary = "생활용품", description = "생활용품 크롤링 데이터 처리", tags = { "Data Controller" })
     @PostMapping("/necessaries")
     public void necessariesToElasticsearch(@RequestBody JsonNode requestBody) {
         try {
@@ -71,6 +75,7 @@ public class DataController {
     }
 
     // 식품 데이터 처리
+    @Operation(summary = "식품", description = "식품 크롤링 데이터 처리", tags = { "Data Controller" })
     @PostMapping("/food")
     public void foodToElasticsearch(@RequestBody JsonNode requestBody) {
         try {
