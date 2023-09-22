@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,21 +16,29 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.appa.snoop.presentation.ui.chatting.component.BottomChatFieldView
 import com.appa.snoop.presentation.ui.chatting.component.MyChatView
 import com.appa.snoop.presentation.ui.chatting.component.OtherChatView
 import com.appa.snoop.presentation.ui.theme.WhiteColor
+import com.appa.snoop.presentation.util.effects.ChattingLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
 
 // TODO(실 데이터로 나중에 ChatList 교체)
 @Composable
 fun ChattingScreen(
     modifier: Modifier = Modifier,
+    navController: NavController,
     chatList: List<TestChatUser>
 ) {
+    ChattingLaunchedEffect(
+        navController = navController
+    )
     var chatTextState by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
+        modifier = Modifier
+            .imePadding(),
         bottomBar = {
             BottomChatFieldView(
                 chatText = chatTextState,
@@ -63,8 +72,8 @@ fun ChattingScreen(
     }
 }
 
-@Preview
-@Composable
-fun PreviewChattingScreen() {
-    ChattingScreen(chatList = chatList)
-}
+//@Preview
+//@Composable
+//fun PreviewChattingScreen() {
+//    ChattingScreen(chatList = chatList)
+//}

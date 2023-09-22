@@ -1,5 +1,7 @@
 package com.appa.snoop.di
 
+import android.content.Context
+import com.appa.snoop.data.local.PreferenceDataSource
 import com.appa.snoop.data.repository.MemberRepositoryImpl
 import com.appa.snoop.data.repository.RegisterRepositoryImpl
 import com.appa.snoop.data.repository.datasource.BaseRemoteDataSource
@@ -12,6 +14,7 @@ import com.appa.snoop.domain.repository.RegisterRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -26,7 +29,13 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideRegisterRepository(registerService: RegisterService) : RegisterRepository {
-        return RegisterRepositoryImpl(registerService)
+    fun provideRegisterRepository(registerService: RegisterService, preferenceDataSource: PreferenceDataSource) : RegisterRepository {
+        return RegisterRepositoryImpl(registerService = registerService, preferenceDatasource = preferenceDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun providePreferenceDataSource(@ApplicationContext context: Context) : PreferenceDataSource {
+        return PreferenceDataSource(context)
     }
 }

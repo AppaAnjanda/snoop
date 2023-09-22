@@ -3,6 +3,7 @@ package com.appa.snoop.presentation.common.topbar.utils
 import com.appa.snoop.presentation.common.topbar.component.LoginTopBar
 import com.appa.snoop.presentation.common.topbar.component.NotificationTopbar
 import com.appa.snoop.presentation.common.topbar.component.CategoryTopbar
+import com.appa.snoop.presentation.common.topbar.component.ChattingTopbar
 import com.appa.snoop.presentation.common.topbar.component.MainTopbar
 import com.appa.snoop.presentation.common.topbar.component.ModifyProfileTopbar
 import com.appa.snoop.presentation.common.topbar.component.ProductTopbar
@@ -27,6 +28,8 @@ fun getTopbar(route: String?): Topbars? = when (route) {
     Router.MAIN_LOGIN_ROUTER_NAME -> LoginTopBar
 
     Router.LOGIN_SIGNUP_ROUTER_NAME -> SignupTopBar
+
+    Router.CATEGORY_CHATTING_ROUTER_NAME -> ChattingTopbar
 
     else -> null
 }

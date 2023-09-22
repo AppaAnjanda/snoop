@@ -13,29 +13,37 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.res.painterResource
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.button.ClickableButton
+import com.appa.snoop.presentation.ui.login.LoginViewModel
 import com.appa.snoop.presentation.ui.theme.BlackColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
+import kotlin.math.log
 
 @Composable
 fun LoginButton(
-    idFilled: Boolean = false,
-    passwordFilled: Boolean = false,
-    modifier : Modifier = Modifier
+    modifier : Modifier = Modifier,
+    loginViewModel: LoginViewModel,
+    focusManager: FocusManager
 ) {
     ClickableButton(
-        onClick = { /* TODO 로그인 구현 */ },
+        onClick = {
+            loginViewModel.login()
+            focusManager.clearFocus()
+//            loginViewModel.loginButtonClickToggle++
+        },
         modifier = Modifier
             .fillMaxWidth()
             .height(40.sdp),
         shape = RoundedCornerShape(10.sdp),
         buttonColor = PrimaryColor,
         elevation = ButtonDefaults.buttonElevation(2.sdp),
-        enabled = idFilled && passwordFilled
+//        enabled = idFilled && passwordFilled
+        enabled = loginViewModel.idFilledState && loginViewModel.passwordFilledState
     ) {
         Row(
             modifier = Modifier
