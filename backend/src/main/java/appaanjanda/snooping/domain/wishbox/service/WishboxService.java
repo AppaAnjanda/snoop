@@ -41,15 +41,15 @@ public class WishboxService {
 	}
 
 	//찜 상품 등록
-	public AddWishboxResponseDto addWishbox(Long memberId, String productId) {
+	public AddWishboxResponseDto addWishbox(Long memberId, String productId, AddWishboxRequestDto addWishboxRequestDto) {
 		Member member = memberRepository.findById(memberId)
 				.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID));
 
 		searchProductById(productId);
 
 		Wishbox wishbox = Wishbox.builder()
-				.alertPrice(0)
-				.alertYn(false)
+				.alertPrice(addWishboxRequestDto.getAlertPrice())
+				.alertYn(true)
 				.productId(productId)
 				.member(member)
 				.build();
@@ -58,8 +58,8 @@ public class WishboxService {
 		return AddWishboxResponseDto
 				.builder()
 				.productId(productId)
-				.alertYn(false)
-				.alertPrice(0)
+				.alertYn(true)
+				.alertPrice(addWishboxRequestDto.getAlertPrice())
 				.build();
 	}
 

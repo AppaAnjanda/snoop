@@ -3,6 +3,7 @@ package appaanjanda.snooping.domain.wishbox.controller;
 import appaanjanda.snooping.domain.member.service.dto.UserResponse;
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.service.WishboxService;
+import appaanjanda.snooping.domain.wishbox.service.dto.AddWishboxRequestDto;
 import appaanjanda.snooping.domain.wishbox.service.dto.AddWishboxResponseDto;
 import appaanjanda.snooping.domain.wishbox.service.dto.RemoveWishboxResponseDto;
 import appaanjanda.snooping.domain.wishbox.service.dto.WishboxResponseDto;
@@ -37,8 +38,8 @@ public class WishboxController {
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "찜 상품 등록", description = "상세 상품 화면에서 찜 버튼을 통해 상품id로 찜 상품 등록", tags = { "Wishbox Controller" })
     @PostMapping("/add/{productId}")
-    public ResponseEntity<AddWishboxResponseDto> addWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable String productId) {
-        return ResponseEntity.ok(wishboxService.addWishbox(membersInfo.getId(), productId));
+    public ResponseEntity<AddWishboxResponseDto> addWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable String productId, @RequestBody AddWishboxRequestDto addWishboxRequestDto) {
+        return ResponseEntity.ok(wishboxService.addWishbox(membersInfo.getId(), productId, addWishboxRequestDto));
     }
 
     // 찜 상품 목록 조회
