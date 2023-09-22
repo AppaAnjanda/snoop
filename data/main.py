@@ -74,14 +74,15 @@ def naver_necessaries():
 def naver_food():
     return naver_products_food()
 
+########################################## Kafka test API #####################################################
 @app.get("/kafka")
 def kafka_send():
     product_message = {
-            "code": "11test",
+            "code": "11test3",
             "majorCategory": "디지털가전",
             "minorCategory": "TV",
-            "productName": "test",
-            "price": 1000,
+            "productName": "test3",
+            "price": 900,
             "productLink": "https://test",
             "productImage": "https://test",
             'provider' : "test"
@@ -92,11 +93,17 @@ def kafka_send():
 
 # 스케줄러 설정
 # scheduler = BackgroundScheduler()
-# scheduler.add_job(naver_digital, "interval", minutes=60)
-# scheduler.add_job(naver_furniture, "interval", minutes=60)
-# scheduler.add_job(naver_necessaries, "interval", minutes=60)
-# scheduler.add_job(naver_food, "interval", minutes=60)
-# scheduler.start()
+##################  쿠팡 스케줄러 ########################
+scheduler.add_job(coupang_digital, "cron", hour="0-23", minute=0)
+scheduler.add_job(coupang_furniture, "cron", hour="0-23", minute=0)
+scheduler.add_job(coupang_necessaries, "cron", hour="0-23", minute=0)
+scheduler.add_job(coupang_food, "cron", hour="0-23", minute=0)
+################## 네이버 스케줄러 #######################
+scheduler.add_job(naver_digital, "cron", hour="0-23", minute=0)
+scheduler.add_job(naver_furniture, "cron", hour="0-23", minute=0)
+scheduler.add_job(naver_necessaries, "cron", hour="0-23", minute=0)
+scheduler.add_job(naver_food, "cron", hour="0-23", minute=0)
+scheduler.start()
 
 # 메인함수에 설정해서 자동 실행되도록
 if __name__ == "__main__":
