@@ -41,13 +41,15 @@ public class SearchService {
     private final MemberService memberService;
 
     // 카테고리로 상품 검색
-    public SearchResponseDto searchProductByCategory(String index, String minor, int page) {
+    public SearchResponseDto searchProductByCategory(String major, String minor, int page) {
+        // 반환할 상품 타입
+        Class<?> productType = productSearchService.searchEntityByIndex(major);
 
         // 쿼리 작성
         NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
                 .withQuery(QueryBuilders.boolQuery()
                         // 대분류, 소분류 일치하는 상품
-                        .must(QueryBuilders.termQuery("major_category.keyword", index))
+                        .must(QueryBuilders.termQuery("major_category.keyword", major))
                         .must(QueryBuilders.termQuery("minor_category.keyword", minor))
                 )
                 .withSourceFilter(new FetchSourceFilter(null, null))
@@ -55,7 +57,7 @@ public class SearchService {
                 .build();
 
         // 검색 결과
-        SearchHits<?> searchHits = elasticsearchRestTemplate.search(nativeSearchQuery, Product.class);
+        SearchHits<?> searchHits = elasticsearchRestTemplate.search(nativeSearchQuery, productType);
 
         return searchResponseWithPaging(searchHits, page);
     }

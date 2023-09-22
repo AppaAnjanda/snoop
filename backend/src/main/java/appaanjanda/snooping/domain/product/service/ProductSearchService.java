@@ -39,6 +39,23 @@ public class ProductSearchService {
         }
     }
 
+    // 상품인덱스 별 상품 엔티티
+    public Class<?> searchEntityByIndex(String index) {
+
+        switch (index) {
+            case "디지털가전":
+                return DigitalProduct.class;
+            case "가구":
+                return FurnitureProduct.class;
+            case "생활용품":
+                return NecessariesProduct.class;
+            case "식품":
+                return FoodProduct.class;
+            default:
+                throw new IllegalArgumentException("Invalid index");
+        }
+    }
+
     //상품id로 조회
     // TODO 찜 여부
     public Object searchProductById(String productCode) {
