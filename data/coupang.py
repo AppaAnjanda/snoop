@@ -99,8 +99,11 @@ def coupang_product(query):
     prd_link = BASE_URL + a_link
     prd_name = li.find('div', class_='name').text.strip()
 
-    base_price_element = li.find('del', class_='base-price')
-    base_price = base_price_element.text if base_price_element else ''
+    image = li.find('img', class_='search-product-wrap-img').get('src')
+    image_link = "https:"+image
+
+    # base_price_element = li.find('del', class_='base-price')
+    # base_price = base_price_element.text if base_price_element else ''
 
     price_element = li.find('strong', class_='price-value')
     price = price_element.text if price_element else ''
@@ -117,11 +120,11 @@ def coupang_product(query):
         "productName": prd_name,
         "price": int(re_price),
         "productLink": prd_link,
-        "productImage": "http://example.com/images/ex.jpg",
+        "productImage": image_link,
         'provider' : '쿠팡'
     }
 
-    send_to_kafka(product_message, topic) # Kafka에 전송
+    # send_to_kafka(product_message, topic) # Kafka에 전송
 
 
 ################################## 디지털가전 키워드 크롤링 #####################################
@@ -166,8 +169,11 @@ def coupang_products_digital():
                 prd_link = BASE_URL + a_link
                 prd_name = li.find('div', class_='name').text.strip()
 
-                base_price_element = li.find('del', class_='base-price')
-                base_price = base_price_element.text if base_price_element else ''
+                image = li.find('img', class_='search-product-wrap-img').get('src')
+                image_link = "https:"+image
+
+                # base_price_element = li.find('del', class_='base-price')
+                # base_price = base_price_element.text if base_price_element else ''
 
                 price_element = li.find('strong', class_='price-value')
                 price = price_element.text if price_element else ''
@@ -183,7 +189,7 @@ def coupang_products_digital():
                     "productName": prd_name,
                     "price": int(re_price),
                     "productLink": prd_link,
-                    "productImage": "http://example.com/images/ex.jpg",
+                    "productImage": image_link,
                     'provider' : '쿠팡'
                 }
 
@@ -234,8 +240,11 @@ def coupang_products_furniture():
                 prd_link = BASE_URL + a_link
                 prd_name = li.find('div', class_='name').text.strip()
 
-                base_price_element = li.find('del', class_='base-price')
-                base_price = base_price_element.text if base_price_element else ''
+                image = li.find('img', class_='search-product-wrap-img').get('src')
+                image_link = "https:"+image
+
+                # base_price_element = li.find('del', class_='base-price')
+                # base_price = base_price_element.text if base_price_element else ''
 
                 price_element = li.find('strong', class_='price-value')
                 price = price_element.text if price_element else ''
@@ -251,7 +260,7 @@ def coupang_products_furniture():
                     "productName": prd_name,
                     "price": int(re_price),
                     "productLink": prd_link,
-                    "productImage": "http://example.com/images/ex.jpg",
+                    "productImage": image_link,
                     'provider' : '쿠팡'
                 }
 
@@ -298,8 +307,11 @@ def coupang_products_necessaries():
                 prd_link = BASE_URL + a_link
                 prd_name = li.find('div', class_='name').text.strip()
 
-                base_price_element = li.find('del', class_='base-price')
-                base_price = base_price_element.text if base_price_element else ''
+                image = li.find('img', class_='search-product-wrap-img').get('src')
+                image_link = "https:"+image
+
+                # base_price_element = li.find('del', class_='base-price')
+                # base_price = base_price_element.text if base_price_element else ''
 
                 price_element = li.find('strong', class_='price-value')
                 price = price_element.text if price_element else ''
@@ -315,7 +327,7 @@ def coupang_products_necessaries():
                     "productName": prd_name,
                     "price": int(re_price),
                     "productLink": prd_link,
-                    "productImage": "http://example.com/images/ex.jpg",
+                    "productImage": image_link,
                     'provider' : '쿠팡'
                 }
 
@@ -362,8 +374,11 @@ def coupang_products_food():
                 prd_link = BASE_URL + a_link
                 prd_name = li.find('div', class_='name').text.strip()
 
-                base_price_element = li.find('del', class_='base-price')
-                base_price = base_price_element.text if base_price_element else ''
+                image = li.find('img', class_='search-product-wrap-img').get('src')
+                image_link = "https:"+image
+
+                # base_price_element = li.find('del', class_='base-price')
+                # base_price = base_price_element.text if base_price_element else ''
 
                 price_element = li.find('strong', class_='price-value')
                 price = price_element.text if price_element else ''
@@ -379,7 +394,7 @@ def coupang_products_food():
                     "productName": prd_name,
                     "price": int(re_price),
                     "productLink": prd_link,
-                    "productImage": "http://example.com/images/ex.jpg",
+                    "productImage": image_link,
                     'provider' : '쿠팡'
                 }
 
