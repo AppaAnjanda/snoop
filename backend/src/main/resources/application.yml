@@ -11,10 +11,16 @@ server:
 
 spring:
   profiles:
-    active: es
-  redis:
-    host: 52.78.159.20
-    port: 6379
+    active: es,swagger,redis,mongo
+  datasource:
+#    url: jdbc:postgresql://52.78.159.20:5432/snoop
+#    username: ENC(JIxLlHeC+6u59PjTWidzjw==)
+#    password: ENC(uYYlHgHg5hh6vRr84SVLcEm7kq66Dw0A)
+#    driver-class-name: org.postgresql.Driver
+    url : jdbc:h2:tcp://localhost/~/snooping
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
 
   mail:
     host: smtp.gmail.com
@@ -25,42 +31,17 @@ spring:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
 
-  datasource:
-    url: jdbc:postgresql://52.78.159.20:5432/snoop
-    username: ENC(JIxLlHeC+6u59PjTWidzjw==)
-    password: ENC(uYYlHgHg5hh6vRr84SVLcEm7kq66Dw0A)
-    driver-class-name: org.postgresql.Driver
-#    url : jdbc:h2:tcp://localhost/~/snooping
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
-
   main:
     allow-circular-references: true
 
   jpa:
     hibernate:
-      ddl-auto: update #create update none
+      ddl-auto: create #create update none
     show-sql: true
     properties:
       hibernate:
         show_sql: false
         format_sql: true
-
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-    groups-order: DESC
-    operationsSorter: method
-    disable-swagger-default-url: true
-    display-request-duration: true
-  api-docs:
-    path: /api-docs
-  show-actuator: true
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-  paths-to-match:
-    - /api/**
 
 jwt:
   password: ENC(EkScQq/G1fRkMjzEBuJm2929lWSio0h2SP4muyxM5dLQVAMlFLOV5rst66cGRjLTVo6hgqDDcNmzXMegiy6oWj7j8jF8pPX49p6vsWOmgo281iBPdk6kJnhW+mBZ+GN/wd6Vu8twkvKz5pz/PSnpB7/3FN+Et6tKBwZ4OcmQREIoQ5U0m1cJFB2MF/aZwiMfLeLkF7HBRtmlFnUiNKTc80dsFXwkacE6ZMg2QDktra8FI8XNECFhBKEnIWs4pvta82wtMafWl6k=)
