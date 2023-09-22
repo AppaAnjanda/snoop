@@ -23,15 +23,13 @@ import java.util.Optional;
 @Slf4j
 public class FoodDataService {
 
-    // 현재시간
-    private final LocalDateTime now = LocalDateTime.now();
 
     private final FoodProductRepository foodProductRepository;
     private final FoodPriceRepository foodPriceRepository;
 
     // 최근 업데이트 확인
     public boolean checkUpdateTime(FoodProduct foodProduct) {
-
+        LocalDateTime now = LocalDateTime.now();
         LocalDateTime lastUpdateTime = LocalDateTime.parse(foodProduct.getTimestamp());
         LocalDateTime realTime = lastUpdateTime.plusHours(9);
         // 업데이트 경과 시간
@@ -53,9 +51,10 @@ public class FoodDataService {
             if (checkUpdateTime(originProduct)) {
 
                 // 그 시간대의 첫 데이터인지 확인
+                LocalDateTime now = LocalDateTime.now();
                 int minute = now.getMinute();
 
-                if (minute < 10) {
+                if (minute < 15) {
                     createPriceData(productInfo, productInfo.getCode());
 
                 }
@@ -106,9 +105,10 @@ public class FoodDataService {
     // 그 시간대의 가격 정보 업데이트
     public void updatePriceData(ProductInfo productInfo) {
 
+        LocalDateTime now = LocalDateTime.now();
         int minute = now.getMinute();
 
-        if (minute < 10) {
+        if (minute < 15) {
 
             // 정렬 기준
             Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
@@ -136,6 +136,7 @@ public class FoodDataService {
 
     public String parseTime() {
 
+        LocalDateTime now = LocalDateTime.now();
         LocalDateTime realTime = now.minusHours(9);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         return realTime.format(formatter);

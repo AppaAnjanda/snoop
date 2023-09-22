@@ -23,15 +23,15 @@ import java.util.Optional;
 @Slf4j
 public class FurnitureDataService {
 
-    // 현재시간
-    private final LocalDateTime now = LocalDateTime.now();
 
     private final FurnitureProductRepository furnitureProductRepository;
     private final FurniturePriceRepository furniturePriceRepository;
 
+
     // 최근 업데이트 확인
     public boolean checkUpdateTime(FurnitureProduct furnitureProduct) {
 
+        LocalDateTime now = LocalDateTime.now();
         LocalDateTime lastUpdateTime = LocalDateTime.parse(furnitureProduct.getTimestamp());
         LocalDateTime realTime = lastUpdateTime.plusHours(9);
         // 업데이트 경과 시간
@@ -53,9 +53,10 @@ public class FurnitureDataService {
             if (checkUpdateTime(originProduct)) {
 
                 // 그 시간대의 첫 데이터인지 확인
+                LocalDateTime now = LocalDateTime.now();
                 int minute = now.getMinute();
 
-                if (minute < 10) {
+                if (minute < 15) {
                     createPriceData(productInfo, productInfo.getCode());
 
                     // 가격이 더 떨어졌으면 업데이트
@@ -105,9 +106,10 @@ public class FurnitureDataService {
     // 그 시간대의 가격 정보 업데이트
     public void updatePriceData(ProductInfo productInfo) {
 
+        LocalDateTime now = LocalDateTime.now();
         int minute = now.getMinute();
 
-        if (minute < 10) {
+        if (minute < 15) {
 
             // 정렬 기준
             Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
@@ -135,6 +137,7 @@ public class FurnitureDataService {
 
     public String parseTime() {
 
+        LocalDateTime now = LocalDateTime.now();
         LocalDateTime realTime = now.minusHours(9);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         return realTime.format(formatter);

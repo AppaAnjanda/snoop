@@ -24,15 +24,13 @@ import java.util.Optional;
 @Slf4j
 public class DigitalDataService {
 
-    // 현재시간
-    private final LocalDateTime now = LocalDateTime.now();
-
     private final DigitalProductRepository digitalProductRepository;
     private final DigitalPriceRepository digitalPriceRepository;
 
     // 최근 업데이트 확인
     public boolean checkUpdateTime(DigitalProduct digitalProduct) {
         log.info("업데이트 체크");
+        LocalDateTime now = LocalDateTime.now();
         log.info("현재 시간 : {}", now);
         LocalDateTime lastUpdateTime = LocalDateTime.parse(digitalProduct.getTimestamp());
         log.info("lastUpdate : {}", lastUpdateTime);
@@ -44,9 +42,7 @@ public class DigitalDataService {
         if (duration.toMinutes() >= 10) {
             log.info("업데이트 진행 !");
             return true;
-        }
-
-        else return false;
+        } else return false;
     }
 
     // 현재 가격과 저장된 가격 비교
@@ -62,9 +58,10 @@ public class DigitalDataService {
             if (checkUpdateTime(originProduct)) {
 
                 // 그 시간대의 첫 데이터인지 확인
+                LocalDateTime now = LocalDateTime.now();
                 int minute = now.getMinute();
 
-                if (minute < 10) {
+                if (minute < 15) {
                     log.info("첫타임 {}", minute);
                     createPriceData(productInfo, productInfo.getCode());
 
@@ -120,9 +117,11 @@ public class DigitalDataService {
     // 그 시간대의 가격 정보 업데이트
     public void updatePriceData(ProductInfo productInfo) {
 
+        LocalDateTime now = LocalDateTime.now();
+        log.info("가격정보 업데이트 {}", now);
         int minute = now.getMinute();
 
-        if (minute < 10) {
+        if (minute < 15) {
 
             // 정렬 기준
             Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
@@ -152,6 +151,8 @@ public class DigitalDataService {
 
     public String parseTime() {
 
+        LocalDateTime now = LocalDateTime.now();
+        log.info("시간 생성 {}", now);
         LocalDateTime realTime = now.minusHours(9);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         return realTime.format(formatter);
