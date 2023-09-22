@@ -89,8 +89,12 @@ dependencies {
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 
 	//mongoDB
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 }
 
 tasks.named('test') {
