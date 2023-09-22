@@ -21,7 +21,7 @@ public class ProductSearchService {
     private final FoodProductRepository foodProductRepository;
 
     // 상품코드 별 상품 엔티티
-    public Class<?> searchProductByIndex(String productCode) {
+    public Class<?> searchEntityById(String productCode) {
         // 123 에서 1(대분류 코드) 추출
         char index = productCode.charAt(0);
 
@@ -33,6 +33,23 @@ public class ProductSearchService {
             case '3':
                 return NecessariesProduct.class;
             case '4':
+                return FoodProduct.class;
+            default:
+                throw new IllegalArgumentException("Invalid index");
+        }
+    }
+
+    // 상품코드 별 상품 엔티티
+    public Class<?> searchEntityByIndex(String index) {
+
+        switch (index) {
+            case "디지털가전":
+                return DigitalProduct.class;
+            case "가구":
+                return FurnitureProduct.class;
+            case "생활용품":
+                return NecessariesProduct.class;
+            case "식품":
                 return FoodProduct.class;
             default:
                 throw new IllegalArgumentException("Invalid index");

@@ -49,6 +49,13 @@ public class SearchController {
         return searchService.searchProductByKeyword(keyword);
     }
 
+    @Operation(summary = "키워드로 검색(게스트)", description = "검색하고 싶은 단어 입력", tags = { "Search Controller" })
+    @GetMapping("/guest/{keyword}")
+    public List<?> getProductByKeywordForGuest(@PathVariable String keyword) {
+
+        return searchService.searchProductByKeyword(keyword);
+    }
+
     // 검색 기록 조회
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "검색기록", description = "검색창 진입시 검색 기록 최근 5개 반환", tags = { "Search Controller" })
@@ -66,7 +73,7 @@ public class SearchController {
 
         searchService.deleteSearchHistory(keyword, membersInfo.getId());
 
-        return ResponseEntity.ok(String.format("검색어 삭제 : %d", keyword));
+        return ResponseEntity.ok(String.format("검색어 삭제 : %s", keyword));
     }
 
 
