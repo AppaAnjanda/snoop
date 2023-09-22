@@ -2,6 +2,7 @@ package appaanjanda.snooping.domain.search.controller;
 
 
 import appaanjanda.snooping.domain.member.service.dto.UserResponse;
+import appaanjanda.snooping.domain.search.dto.SearchResponseDto;
 import appaanjanda.snooping.domain.search.service.SearchService;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,11 +29,11 @@ public class SearchController {
     private final SearchService searchService;
 
     // 카테고리로 상품 검색
-    @Operation(summary = "카테고리로 검색", description = "대분류와 소분류 입력", tags = { "Search Controller" })
-    @GetMapping("/{major}/{minor}")
-    public List<?> getProductByCategory(@PathVariable String major, @PathVariable String minor) {
+    @Operation(summary = "카테고리로 검색", description = "대분류와 소분류 입력, page는 1부터", tags = { "Search Controller" })
+    @GetMapping("/{major}/{minor}/{page}")
+    public SearchResponseDto getProductByCategory(@PathVariable String major, @PathVariable String minor, @PathVariable int page) {
 
-        return searchService.searchProductByCategory(major, minor);
+        return searchService.searchProductByCategory(major, minor, page);
     }
 
     /**
@@ -41,19 +43,19 @@ public class SearchController {
     // 키워드로 상품 검색
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "키워드로 검색", description = "검색하고 싶은 단어 입력", tags = { "Search Controller" })
-    @GetMapping("/{keyword}")
-    public List<?> getProductByKeyword(@PathVariable String keyword, @MemberInfo MembersInfo membersInfo) {
+    @GetMapping("/{keyword}/{page}")
+    public SearchResponseDto getProductByKeyword(@PathVariable String keyword, @PathVariable int page, @MemberInfo MembersInfo membersInfo) {
         // 검색 기록 추가
         searchService.updateSearchHistory(keyword, membersInfo.getId());
 
-        return searchService.searchProductByKeyword(keyword);
+        return searchService.searchProductByKeyword(keyword, page);
     }
 
     @Operation(summary = "키워드로 검색(게스트)", description = "검색하고 싶은 단어 입력", tags = { "Search Controller" })
-    @GetMapping("/guest/{keyword}")
-    public List<?> getProductByKeywordForGuest(@PathVariable String keyword) {
+    @GetMapping("/guest/{keyword}/{page}")
+    public SearchResponseDto getProductByKeywordForGuest(@PathVariable String keyword, @PathVariable int page) {
 
-        return searchService.searchProductByKeyword(keyword);
+        return searchService.searchProductByKeyword(keyword, page);
     }
 
     // 검색 기록 조회
