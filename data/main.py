@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from apscheduler.schedulers.background import BackgroundScheduler
 from coupang import coupang_product, coupang_products_digital, coupang_products_furniture, coupang_products_necessaries, coupang_products_food
 from naver import naver_product, naver_products_digital, naver_products_furniture, naver_products_necessaries, naver_products_food
+from kafka_producer import send_to_kafka
 import pandas as pd
 import requests
 
@@ -72,6 +73,21 @@ def naver_necessaries():
 @app.get("/naver/food")
 def naver_food():
     return naver_products_food()
+
+@app.get("/kafka")
+def kafka_send():
+    product_message = {
+            "code": "11test",
+            "majorCategory": "디지털가전",
+            "minorCategory": "TV",
+            "productName": "test",
+            "price": 1000,
+            "productLink": "https://test",
+            "productImage": "https://test",
+            'provider' : "test"
+    }
+    return send_to_kafka(product_message, "digital")
+
 
 
 # 스케줄러 설정

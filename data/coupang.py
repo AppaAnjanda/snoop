@@ -84,7 +84,7 @@ def coupang_product(query):
 
     url = f'https://www.coupang.com/np/search?q={query[2:]}&channel=user&sorter=scoreDesc&listSize=36&filter=&isPriceRange=false&rating=0&page={1}&rocketAll=true'
     response = requests.get(url, headers=headers)
-    time.sleep(0.3)
+    time.sleep(1)
 
     soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -152,7 +152,7 @@ def coupang_products_digital():
             print('check url ' + url)
 
             response = requests.get(url, headers=headers)
-            time.sleep(0.5)
+            time.sleep(1.5)
 
             print('Check Response', page)
             soup = BeautifulSoup(response.content, 'html.parser')
@@ -222,7 +222,7 @@ def coupang_products_furniture():
             print('check url ' + url)
 
             response = requests.get(url, headers=headers)
-            time.sleep(0.5)
+            time.sleep(1.5)
 
             print('Check Response', page)
             soup = BeautifulSoup(response.content, 'html.parser')
@@ -289,7 +289,7 @@ def coupang_products_necessaries():
             print('check url ' + url)
 
             response = requests.get(url, headers=headers)
-            time.sleep(0.5)
+            time.sleep(1.5)
 
             print('Check Response', page)
             soup = BeautifulSoup(response.content, 'html.parser')
@@ -356,7 +356,7 @@ def coupang_products_food():
             print('check url ' + url)
 
             response = requests.get(url, headers=headers)
-            time.sleep(0.5)
+            time.sleep(1.5)
 
             print('Check Response', page)
             soup = BeautifulSoup(response.content, 'html.parser')
