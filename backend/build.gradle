@@ -1,10 +1,19 @@
-plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.7.15'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
 }
 
-group = 'appaanjanda'
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.14'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+}
+
+
+group = 'com.ssafy'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -16,7 +25,6 @@ configurations {
 		extendsFrom annotationProcessor
 	}
 }
-
 repositories {
 	mavenCentral()
 }
@@ -31,7 +39,15 @@ dependencies {
 
 	// h2 데이터베이스
 	runtimeOnly 'com.h2database:h2'
+
+	// 테스트를 위한 의존성
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mockito:mockito-core:3.12.4'
+	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+
+
+	// postgre
+	implementation 'org.postgresql:postgresql:42.6.0'
 
 	//swagger 의존성
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
@@ -47,6 +63,13 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
+	// elasticsearch
+	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
+	// RestHighLevelClient
+	//implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.15.0'
+
+	// p6spy
 	implementation group: 'p6spy', name: 'p6spy', version: '3.9.1'
 
 	// firebase
@@ -55,9 +78,42 @@ dependencies {
 	// 비밀번호 찾기 위해 이메일 인증
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+    // AwsS3 관련 의존성
+//	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	//querydsl 추가
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	// jasypt
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
+
+	//mongoDB
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+//querydsl 추가 시작
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main.java.srcDir querydslDir
+}
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+//querydsl 추가 끝

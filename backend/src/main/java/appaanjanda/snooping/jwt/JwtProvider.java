@@ -6,8 +6,8 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import appaanjanda.snooping.member.entity.Member;
-import appaanjanda.snooping.member.repository.MemberRepository;
+import appaanjanda.snooping.domain.member.entity.Member;
+import appaanjanda.snooping.domain.member.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.JwtBuilder;

@@ -10,56 +10,56 @@ server:
 
 
 spring:
-  redis:
-    host: localhost
-    port: 6379
+  profiles:
+    active: es,swagger,redis,mongo
+  datasource:
+    url: jdbc:postgresql://52.78.159.20:5432/snoop
+    username: ENC(JIxLlHeC+6u59PjTWidzjw==)
+    password: ENC(uYYlHgHg5hh6vRr84SVLcEm7kq66Dw0A)
+    driver-class-name: org.postgresql.Driver
+#    url : jdbc:h2:tcp://localhost/~/snooping
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username: snooping@gmail.com
-    password: snooping!!123
+    username: ENC(m6MbBpmIJAK2qG+ZRXPWUegfDJw/qRcy7bSqpZgOC7g=)
+    password:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
 
-  datasource:
-#    url: jdbc:h2:tcp://localhost/~/shinhan
-    url : jdbc:h2:./snooping
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
   main:
     allow-circular-references: true
 
-  profiles:
-    include: db
-
   jpa:
     hibernate:
-      ddl-auto: create #create update none
+      ddl-auto: update #create update none
     show-sql: true
     properties:
       hibernate:
         show_sql: false
         format_sql: true
 
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-    groups-order: DESC
-    operationsSorter: method
-    disable-swagger-default-url: true
-    display-request-duration: true
-  api-docs:
-    path: /api-docs
-  show-actuator: true
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-  paths-to-match:
-    - /api/**
-
 jwt:
-  password: appaanjanda!appaanjanda!appaanjanda!appaanjanda!hhwehweertappaanjanda!appaanjanda!appaanjanda!appaanjanda!
+  password: ENC(EkScQq/G1fRkMjzEBuJm2929lWSio0h2SP4muyxM5dLQVAMlFLOV5rst66cGRjLTVo6hgqDDcNmzXMegiy6oWj7j8jF8pPX49p6vsWOmgo281iBPdk6kJnhW+mBZ+GN/wd6Vu8twkvKz5pz/PSnpB7/3FN+Et6tKBwZ4OcmQREIoQ5U0m1cJFB2MF/aZwiMfLeLkF7HBRtmlFnUiNKTc80dsFXwkacE6ZMg2QDktra8FI8XNECFhBKEnIWs4pvta82wtMafWl6k=)
   atk: 86400000 # 24 * 60 * 60 * 1000L; 밀리초로 계산한 값
   rtk: 2592000000 # 30 * 24 * 60 * 60 * 1000L; 밀리초로 계산한 값
+
+
+#cloud:
+#  aws:
+#    s3:
+#      bucket: ENC(f+pRtzHFinJoboi00ELAXPKKSGyPo9WE)
+#    credentials:
+#      access-key: ENC(gM+eVGXbg4N0VTlBAA0thgpCZzsfIk3FhvhO1R4jgkg=)
+#      secret-key: ENC(AgB9NPKiGb0yXaKLJLu9/lQW/UMG8TvUhHC6thBgUQurIlbvUA79rQIiR0vY177ZSpHmGSI1m2M=)
+#    region:
+#      static: ap-northeast-2
+#      auto: false
+#    stack:
+#      auto: false
+#    cloudfront:
+#      url: d3byqpylj7jy1e.cloudfront.net
