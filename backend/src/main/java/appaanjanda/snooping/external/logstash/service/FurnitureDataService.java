@@ -88,10 +88,11 @@ public class FurnitureDataService {
 
         String formatTime = parseTime();
 
-        // 링크, 출처, 가격 업데이트 후 저장
+        // 링크, 출처, 시간, 가격, 이미지 업데이트 후 저장
         furnitureProduct.setProductLink(productInfo.getProductLink());
         furnitureProduct.setProvider(productInfo.getProvider());
         furnitureProduct.setPrice(productInfo.getPrice());
+        furnitureProduct.setProductImage(productInfo.getProductImage());
         furnitureProduct.setTimestamp(formatTime);
 
         furnitureProductRepository.save(furnitureProduct);

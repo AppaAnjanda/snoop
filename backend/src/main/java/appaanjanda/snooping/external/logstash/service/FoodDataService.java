@@ -88,10 +88,11 @@ public class FoodDataService {
 
         String formatTime = parseTime();
 
-        // 링크, 출처, 시간, 가격 업데이트 후 저장
+        // 링크, 출처, 시간, 가격, 이미지 업데이트 후 저장
         foodProduct.setProductLink(productInfo.getProductLink());
         foodProduct.setProvider(productInfo.getProvider());
         foodProduct.setPrice(productInfo.getPrice());
+        foodProduct.setProductImage(productInfo.getProductImage());
         foodProduct.setTimestamp(formatTime);
 
         foodProductRepository.save(foodProduct);

@@ -89,11 +89,13 @@ public class DigitalDataService {
 
         String formatTime = parseTime();
 
-        // 링크, 출처, 시간, 가격 업데이트 후 저장
+        // 링크, 출처, 시간, 가격, 이미지 업데이트 후 저장
         digitalProduct.setProductLink(productInfo.getProductLink());
         digitalProduct.setProvider(productInfo.getProvider());
         digitalProduct.setPrice(productInfo.getPrice());
+        digitalProduct.setProductImage(productInfo.getProductImage());
         digitalProduct.setTimestamp(formatTime);
+
         digitalProductRepository.save(digitalProduct);
 
     }
