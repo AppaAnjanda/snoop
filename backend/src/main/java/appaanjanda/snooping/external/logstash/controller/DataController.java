@@ -30,7 +30,7 @@ public class DataController {
     private final FoodDataService foodDataService;
 
     // 디지털가전 데이터 처리
-    @Operation(summary = "디지털가전", description = "디지털가전 크롤링 데이터 처리", tags = { "Logstash-Data Controller" })
+    @Operation(summary = "디지털/가전", description = "디지털가전 크롤링 데이터 처리", tags = { "Logstash-Data Controller" })
     @PostMapping("/digital")
     public void digitalToElasticsearch(@RequestBody JsonNode requestBody) {
         try {
