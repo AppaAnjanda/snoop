@@ -95,6 +95,11 @@ dependencies {
 	// thymeleaf
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+	// firebase
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.1.1'
+
+	// https://mvnrepository.com/artifact/org.webjars/stomp-websocket
+	implementation 'org.webjars:stomp-websocket:2.3.4'
 }
 
 tasks.named('test') {
