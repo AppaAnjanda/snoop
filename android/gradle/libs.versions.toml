@@ -37,6 +37,7 @@ room = "2.5.2"
 coil = "2.4.0"
 lottie = "6.1.0"
 kakao = "2.16.0"
+plot = "0.1.1"
 
 [libraries]
 
@@ -106,6 +107,9 @@ coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }
 
 #Lottie
 lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+
+#Graph
+plot = { group = "com.github.madrapps", name = "plot", version.ref = "plot" }
 
 #kakao
 kakao = { group = "com.kakao.sdk", name = "v2-all", version.ref = "kakao"}

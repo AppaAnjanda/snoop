@@ -78,4 +78,6 @@ dependencies {
     implementation(libs.lottie)
     // kakao
     implementation(libs.bundles.kakao)
+    // Graph
+    implementation(libs.plot)
 }
