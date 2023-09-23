@@ -10,7 +10,7 @@ import appaanjanda.snooping.domain.search.entity.SearchHistory;
 import appaanjanda.snooping.domain.search.repository.SearchHistoryRepository;
 import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
 import appaanjanda.snooping.global.error.code.ErrorCode;
-import appaanjanda.snooping.global.error.exception.BadRequestException;
+import appaanjanda.snooping.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.common.unit.Fuzziness;
@@ -18,10 +18,8 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
@@ -29,7 +27,6 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -52,7 +49,7 @@ public class SearchService {
         Class<?> productType = productSearchService.searchEntityByIndex(major);
         // 가격 범위 확인
         if (minPrice < 0 || maxPrice < minPrice || maxPrice >= 100000000) {
-            throw new BadRequestException(ErrorCode.INVALID_PRICE);
+            throw new BusinessException(ErrorCode.INVALID_PRICE);
         }
 
         // 쿼리 작성
@@ -71,8 +68,10 @@ public class SearchService {
             // 검색 결과
             SearchHits<?> searchHits = elasticsearchRestTemplate.search(nativeSearchQuery, productType);
             return searchResponseWithPaging(searchHits, page, memberId);
+        } catch (BusinessException e) {
+            throw e;
         } catch (Exception e) {
-            throw new BadRequestException(ErrorCode.ELASTICSEARCH_FAILURE);
+            throw new BusinessException(ErrorCode.ELASTICSEARCH_FAILURE);
         }
     }
 
@@ -83,7 +82,7 @@ public class SearchService {
 
         // 가격 범위 확인
         if (minPrice < 0 || maxPrice < minPrice || maxPrice >= 100000000) {
-            throw new BadRequestException(ErrorCode.INVALID_PRICE);
+            throw new BusinessException(ErrorCode.INVALID_PRICE);
         }
 
         // 각 단어를 or조건으로 상품명과 소분류에 대해서 match 쿼리로 1차 검색
@@ -112,8 +111,10 @@ public class SearchService {
         try {
             SearchHits<?> searchHits = elasticsearchRestTemplate.search(searchQuery, Product.class, IndexCoordinates.of(indices));
             return searchResponseWithPaging(searchHits, page, memberId);
+        } catch (BusinessException e) {
+            throw e;
         } catch (Exception e) {
-            throw new BadRequestException(ErrorCode.ELASTICSEARCH_FAILURE);
+            throw new BusinessException(ErrorCode.ELASTICSEARCH_FAILURE);
         }
 
     }
@@ -125,7 +126,7 @@ public class SearchService {
         int totalPage = (int) Math.ceil((double) total /30); // 총 페이지 수
         // 검색결과 없음
         if (page > totalPage || total <= 0) {
-            throw new BadRequestException(ErrorCode.NOT_EXISTS_RESULT);
+            throw new BusinessException(ErrorCode.NOT_EXISTS_RESULT);
         }
         Set<String> wishProductCode;
         // 회원이면 찜 목록 체크
@@ -207,8 +208,8 @@ public class SearchService {
     public void deleteSearchHistory(String keyword, Long memberId) {
         try{
             searchHistoryRepository.deleteByKeywordAndMemberId(keyword, memberId);
-        } catch (Exception e) {
-            throw new BadRequestException(ErrorCode.NOT_EXISTS_KEYWORD);
+        } catch (BusinessException e) {
+            throw new BusinessException(ErrorCode.NOT_EXISTS_KEYWORD);
         }
     }
 }
