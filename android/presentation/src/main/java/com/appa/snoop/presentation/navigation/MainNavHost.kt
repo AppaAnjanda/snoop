@@ -1,6 +1,8 @@
 package com.appa.snoop.presentation.navigation
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -28,6 +30,7 @@ import com.appa.snoop.presentation.ui.search.SearchScreen
 import com.appa.snoop.presentation.ui.signup.SignupScreen
 
 private const val TAG = "[김희웅] MainNavHost"
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainNavHost(
     innerPaddings: PaddingValues,

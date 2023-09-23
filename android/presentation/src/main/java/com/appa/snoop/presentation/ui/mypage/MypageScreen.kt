@@ -1,5 +1,13 @@
 package com.appa.snoop.presentation.ui.mypage
 
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +24,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -33,6 +43,8 @@ import com.appa.snoop.presentation.ui.theme.BackgroundColor2
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
 
+private const val TAG = "[김진영] MypageScreen"
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MypageScreen(
@@ -45,6 +57,18 @@ fun MypageScreen(
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
     var showDialog by remember { mutableStateOf(false) }
+    val scrollableState = rememberScrollState()
+    val settings = listOf(
+        MyPageLabel.NOTIFICATION,
+        MyPageLabel.MODIFY_PROFILE,
+        MyPageLabel.SELECT_CARD,
+        MyPageLabel.LOGOUT,
+        MyPageLabel.WITHDRAWAL,
+    )
+    val context = LocalContext.current
+    val notificationManager = NotificationManagerCompat.from(context)
+    val notificationPermissionGranted = notificationManager.areNotificationsEnabled()
+    val openNotificationSettings = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     if (sheetState.isVisible) {
         BottomSheet(viewModel = viewModel, sheetState) {
@@ -66,14 +90,6 @@ fun MypageScreen(
             })
     }
 
-    val scrollableState = rememberScrollState()
-    val settings = listOf(
-        MyPageLabel.NOTIFICATION,
-        MyPageLabel.MODIFY_PROFILE,
-        MyPageLabel.SELECT_CARD,
-        MyPageLabel.LOGOUT,
-        MyPageLabel.WITHDRAWAL,
-    )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -87,6 +103,11 @@ fun MypageScreen(
         settings.forEachIndexed { index, title ->
             SettingComponent(index, title) {
                 when (title) {
+                    MyPageLabel.NOTIFICATION -> {
+                        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                        openNotificationSettings.launch(intent)
+                    }
                     MyPageLabel.MODIFY_PROFILE -> navController.navigate(ModifyProfileNav.route)
                     MyPageLabel.SELECT_CARD -> scope.launch {
                         sheetState.partialExpand()
