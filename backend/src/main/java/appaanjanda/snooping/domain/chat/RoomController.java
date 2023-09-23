@@ -21,7 +21,7 @@ public class RoomController {
 
 	private final ChatRoomRepository chatRoomRepository;
 
-	// 채팅방 목록 조회
+//	 채팅방 목록 조회
 	@GetMapping("/rooms")
 	public String rooms(Model model) {
 		log.info("# All Chat Rooms");
@@ -39,7 +39,7 @@ public class RoomController {
 		return "redirect:/chat/rooms";
 	}
 
-	// 채팅방 조회
+//	 채팅방 조회
 	@GetMapping("/room")
 	public String getRoom(String roomId, Model model) {
 		log.info("# get Char Room, roomId = [{}]", roomId);
