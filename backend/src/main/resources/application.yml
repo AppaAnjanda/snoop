@@ -13,14 +13,14 @@ spring:
   profiles:
     active: es,swagger,redis,mongo, rabitmq
   datasource:
-#    url: jdbc:postgresql://52.78.159.20:5432/snoop
-#    username: ENC(JIxLlHeC+6u59PjTWidzjw==)
-#    password: ENC(uYYlHgHg5hh6vRr84SVLcEm7kq66Dw0A)
-#    driver-class-name: org.postgresql.Driver
-    url : jdbc:h2:tcp://localhost/~/snooping
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://52.78.159.20:5432/snoop
+    username: ENC(JIxLlHeC+6u59PjTWidzjw==)
+    password: ENC(uYYlHgHg5hh6vRr84SVLcEm7kq66Dw0A)
+    driver-class-name: org.postgresql.Driver
+#    url : jdbc:h2:tcp://localhost/~/snooping
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
 
 
 
@@ -38,7 +38,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create #create update none
+      ddl-auto: update #create update none
     show-sql: true
     properties:
       hibernate:
