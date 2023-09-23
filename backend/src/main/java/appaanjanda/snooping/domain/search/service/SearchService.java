@@ -41,7 +41,7 @@ public class SearchService {
     private final MemberService memberService;
 
     // 카테고리로 상품 검색
-    public SearchResponseDto searchProductByCategory(String major, String minor, int page) {
+    public SearchResponseDto searchProductByCategory(Long memberId, String major, String minor, int page, int minPrice, int maxPrice) {
         // 반환할 상품 타입
         Class<?> productType = productSearchService.searchEntityByIndex(major);
 
@@ -51,6 +51,8 @@ public class SearchService {
                         // 대분류, 소분류 일치하는 상품
                         .must(QueryBuilders.termQuery("major_category.keyword", major))
                         .must(QueryBuilders.termQuery("minor_category.keyword", minor))
+                        // 가격범위 필터
+                        .filter(QueryBuilders.rangeQuery("price").gte(minPrice).lte(maxPrice))
                 )
                 .withSourceFilter(new FetchSourceFilter(null, null))
                 .withPageable(PageRequest.of(page-1, 30)) // 30개씩
@@ -63,7 +65,7 @@ public class SearchService {
     }
 
     // 키워드로 상품 검색
-    public SearchResponseDto searchProductByKeyword(String keyword, int page) {
+    public SearchResponseDto searchProductByKeyword(String keyword, int page, int minPrice, int maxPrice, Long memberId) {
 
         String[] indices = {"디지털가전", "가구", "생활용품", "식품"}; // 검색할 인덱스들
 
@@ -80,7 +82,9 @@ public class SearchService {
                  * should 쿼리 최소 하나는 일치하는 항목만
                  */
                 .should(QueryBuilders.matchPhraseQuery("product_name", keyword).slop(1))
-                .minimumShouldMatch(1);
+                .minimumShouldMatch(1)
+                // 가격범위 필터
+                .filter(QueryBuilders.rangeQuery("price").gte(minPrice).lte(maxPrice));
 
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(boolQuery)
