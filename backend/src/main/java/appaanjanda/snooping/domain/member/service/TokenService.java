@@ -12,7 +12,7 @@ import appaanjanda.snooping.domain.member.service.dto.AccessTokenResponse;
 import appaanjanda.snooping.domain.member.service.dto.RefreshTokenRequest;
 import appaanjanda.snooping.domain.member.service.dto.RefreshTokenResponse;
 import appaanjanda.snooping.global.error.code.ErrorCode;
-import appaanjanda.snooping.global.error.exception.BadRequestException;
+import appaanjanda.snooping.global.error.exception.BusinessException;
 import appaanjanda.snooping.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,13 +46,13 @@ public class TokenService {
 	public AccessTokenResponse generateAccessToken(AccessTokenRequest request) {
 		RefreshToken refreshToken = refreshTokenRepository.findById(request.getRefreshToken())
 			.orElseThrow(() ->
-				new BadRequestException(ErrorCode.REFRESH_TOKEN_NOT_FOUND)
+				new BusinessException(ErrorCode.REFRESH_TOKEN_NOT_FOUND)
 			);
 
 		Long memberId = refreshToken.getMemberId();
 
 		Member member = memberRepository.findById(memberId).orElseThrow(() ->
-			new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID)
+			new BusinessException(ErrorCode.NOT_EXISTS_USER_ID)
 		);
 
 		String accessToken = jwtProvider.createAccessToken(member);
