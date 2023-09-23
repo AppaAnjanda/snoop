@@ -18,7 +18,4 @@ public class UserSaveRequestDto {
 
 	private String nickname;
 
-	@JsonProperty("cardList")
-	private List<String> cardsList = new ArrayList<>();
-
 }

@@ -25,10 +25,10 @@ public class CardController {
 	private final CardService cardService;
 
 	@SecurityRequirement(name = "Bearer Authentication")
-	@Operation(summary = "카드 하나 삭제", description = "유저 정보를 jwt로 확인하고 request로 넘겨준 cardname을 삭제한다.", tags = { "Card Controller" })
+	@Operation(summary = "카드 추가", description = "유저 정보를 jwt로 확인하고 request로 넘겨준 cardname을 추가한다.", tags = { "Card Controller" })
 	@DeleteMapping("/delete")
-	public void deleteCard(@MemberInfo MembersInfo membersInfo, @RequestBody DeleteCardRequest request){
-		cardService.deleteCard(membersInfo.getId(), request);
+	public void deleteMyCard(@MemberInfo MembersInfo membersInfo, @RequestBody DeleteCardRequest request){
+		cardService.deleteMyCard(membersInfo.getId(), request);
 	}
 
 	@SecurityRequirement(name = "Bearer Authentication")

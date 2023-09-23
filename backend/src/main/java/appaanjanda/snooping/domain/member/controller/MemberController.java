@@ -48,8 +48,8 @@ public class MemberController {
 	})
 	@Operation(summary = "회원가입", description = "회원가입 시 이메일, 패스워드, 내가 가지고 있는 cardlist를 request로 받는다", tags = { "Member Controller" })
 	@PostMapping("/save")
-	public Response<?> save(@RequestBody UserSaveRequestDto userSaveRequestDto){
-		return new Response<>(HttpStatus.CREATED, "회원가입 성공" ,memberService.save(userSaveRequestDto));
+	public String save(@RequestBody UserSaveRequestDto userSaveRequestDto){
+		return memberService.save(userSaveRequestDto);
 	}
 
 	@ApiResponses(value = {
@@ -61,8 +61,8 @@ public class MemberController {
 	})
 	@Operation(summary = "로그인", description = "로그인 시 토큰 발급", tags = { "Member Controller" })
 	@PostMapping("/login")
-	public Response<?> login (@RequestBody LoginRequest loginRequest) {
-		return new Response<>(HttpStatus.IM_USED, "로그인 성공" ,memberService.login(loginRequest));
+	public LoginResponse login (@RequestBody LoginRequest loginRequest) {
+		return memberService.login(loginRequest);
 	}
 
 
@@ -76,8 +76,8 @@ public class MemberController {
 	@SecurityRequirement(name = "Bearer Authentication")
 	@Operation(summary = "멤버 정보", description = "멤버 정보 불러오기", tags = { "Member Controller" })
 	@GetMapping("/info")
-	public Response<?> getUser (@MemberInfo MembersInfo membersInfo) {
-		return new Response<>(HttpStatus.NO_CONTENT, "내 정보 불러오기",memberService.getUserInfo(membersInfo.getId()));
+	public UserResponse getUser (@MemberInfo MembersInfo membersInfo) {
+		return memberService.getUserInfo(membersInfo.getId());
 	}
 
 
@@ -91,8 +91,8 @@ public class MemberController {
 	@SecurityRequirement(name = "Bearer Authentication")
 	@Operation(summary = "닉네임 변경", description = "서비스 내 나의 닉네임 변경", tags = { "Member Controller" })
 	@PutMapping("/change")
-	public Response<?> updateNickname (@MemberInfo MembersInfo membersInfo, @RequestBody UpdateUserRequestDto updateUserRequestDto){
-		return new Response<>(HttpStatus.OK, "내 닉네임 변경" ,memberService.updateNickname(updateUserRequestDto, membersInfo.getId()));
+	public UpdateUserResponseDto updateNickname (@MemberInfo MembersInfo membersInfo, @RequestBody UpdateUserRequestDto updateUserRequestDto){
+		return memberService.updateNickname(updateUserRequestDto, membersInfo.getId());
 	}
 
 	@ApiResponses(value = {
@@ -117,8 +117,8 @@ public class MemberController {
 	})
 	@Operation(summary = "토큰 재발급", description = "refreshToken이 있을 때 AccessToken 재발급한다", tags = { "Member Controller" })
 	@PostMapping("/token")
-	public Response<?> getAccessToken (@RequestBody AccessTokenRequest request){
-		return new Response<>( HttpStatus.CREATED, "토큰 재발급", memberService.getAccessToken(request));
+	public String getAccessToken (@RequestBody AccessTokenRequest request){
+		return memberService.getAccessToken(request);
 	}
 
 
@@ -127,6 +127,7 @@ public class MemberController {
 		@ApiResponse(responseCode = "400", description = "요청 오류"),
 		@ApiResponse(responseCode = "500", description = "서버 내부 오류")
 	})
+	@SecurityRequirement(name = "Bearer Authentication")
 	@Operation(summary = "비밀번호 변경", description = "현재 비밀번호를 입력후 1, 2차 확인 후 변경할 비밀번호로 바꾼다 ", tags = { "Member Controller" })
 	@PutMapping("/changePassword")
 	public void changeMyPassword (@MemberInfo MembersInfo membersInfo,@RequestBody ChangeMyPasswordRequestDto requestDto){
