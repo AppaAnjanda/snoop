@@ -29,6 +29,7 @@ import com.appa.snoop.presentation.navigation.ModifyProfileNav
 import com.appa.snoop.presentation.ui.mypage.common.MyPageLabel
 import com.appa.snoop.presentation.ui.mypage.component.BottomSheet
 import com.appa.snoop.presentation.ui.mypage.component.CurrentProductItemView
+import com.appa.snoop.presentation.ui.mypage.component.LogoutDialog
 import com.appa.snoop.presentation.ui.mypage.component.MyPageInformation
 import com.appa.snoop.presentation.ui.mypage.component.SettingComponent
 import com.appa.snoop.presentation.ui.theme.BackgroundColor2
@@ -45,12 +46,19 @@ fun MypageScreen(
     val viewModel = MyPageViewModel()
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
+    var showDialog by remember { mutableStateOf(false) }
 
     if (sheetState.isVisible) {
         BottomSheet(viewModel = viewModel, sheetState) {
             scope.launch {
                 sheetState.hide()
             }
+        }
+    }
+
+    if (showDialog) {
+        LogoutDialog(visible = showDialog) {
+            showDialog = !showDialog
         }
     }
 
@@ -76,9 +84,10 @@ fun MypageScreen(
             SettingComponent(index, title) {
                 when (title) {
                     MyPageLabel.MODIFY_PROFILE -> navController.navigate(ModifyProfileNav.route)
-                    MyPageLabel.SELECT_CARD ->  scope.launch {
+                    MyPageLabel.SELECT_CARD -> scope.launch {
                         sheetState.partialExpand()
                     }
+                    MyPageLabel.LOGOUT -> showDialog = true
                     else -> {}
                 }
             }
