@@ -33,6 +33,7 @@ import ir.kaaveh.sdpcompose.ssp
 @Composable
 fun LogoutDialog(
     visible: Boolean,
+    onConfirmRequest: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     if (visible) {
@@ -78,7 +79,7 @@ fun LogoutDialog(
                     }
                     Spacer(modifier = Modifier.width(8.sdp))
                     Button(
-                        onClick = { /*TODO 로그아웃 */ },
+                        onClick = { onConfirmRequest() },
                         modifier = Modifier
                             .weight(1f)
                             .height(40.sdp)

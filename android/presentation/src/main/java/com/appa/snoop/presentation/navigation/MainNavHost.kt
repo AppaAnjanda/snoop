@@ -60,12 +60,12 @@ fun MainNavHost(
 //            route = LoginNav.route
         ) {
             Log.d(TAG, "MainNavHost: 중복 스크린입니다...")
-                if (mainViewModel.loginState) {
-                    LikeScreen(navController, mainViewModel)
-                } else {
-                    LoginScreen(
-                        navController = navController,
-                        showSnackBar = showSnackBar
+            if (mainViewModel.loginState) {
+                LikeScreen(navController, mainViewModel)
+            } else {
+                LoginScreen(
+                    navController = navController,
+                    showSnackBar = showSnackBar
                 )
 //                navController.navigate(Router.MAIN_LOGIN_ROUTER_NAME)
             }
@@ -74,7 +74,10 @@ fun MainNavHost(
             route = MainNav.MyPage.route,
         ) {
             if (mainViewModel.loginState) {
-                MypageScreen(navController)
+                MypageScreen(
+                    navController = navController,
+                    showSnackBar = showSnackBar
+                )
             } else {
                 LoginScreen(
                     navController = navController,

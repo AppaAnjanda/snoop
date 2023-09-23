@@ -39,7 +39,7 @@ class RegisterRepositoryImpl @Inject constructor(
     override suspend fun getLoginStatus(): JwtTokens {
         var jwtAccessToken = preferenceDatasource.getString("access_token") ?: "no_token_error"
 //        var jwtRefreshToken = preferenceDatasource.getString("refresh_token")
-
+        Log.d(TAG, "getLoginStatus: $jwtAccessToken")
         return JwtTokens(jwtAccessToken)
     }
     // 로그아웃

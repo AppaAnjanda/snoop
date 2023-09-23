@@ -8,24 +8,21 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.SheetValue
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.appa.snoop.presentation.navigation.ModifyProfileNav
+import com.appa.snoop.presentation.navigation.Router
+import com.appa.snoop.presentation.ui.main.MainViewModel
 import com.appa.snoop.presentation.ui.mypage.common.MyPageLabel
 import com.appa.snoop.presentation.ui.mypage.component.BottomSheet
 import com.appa.snoop.presentation.ui.mypage.component.CurrentProductItemView
@@ -33,14 +30,15 @@ import com.appa.snoop.presentation.ui.mypage.component.LogoutDialog
 import com.appa.snoop.presentation.ui.mypage.component.MyPageInformation
 import com.appa.snoop.presentation.ui.mypage.component.SettingComponent
 import com.appa.snoop.presentation.ui.theme.BackgroundColor2
-import com.appa.snoop.presentation.util.effects.MainLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MypageScreen(
-    navController: NavController
+    navController: NavController,
+    showSnackBar: (String) -> Unit,
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
     // 추후 hiltViewModel로 수정
     val viewModel = MyPageViewModel()
@@ -57,9 +55,15 @@ fun MypageScreen(
     }
 
     if (showDialog) {
-        LogoutDialog(visible = showDialog) {
-            showDialog = !showDialog
-        }
+        LogoutDialog(visible = showDialog,
+            onConfirmRequest = {
+                mainViewModel.logout()
+                navController.popBackStack()
+                showSnackBar("로그아웃하였습니다!")
+            },
+            onDismissRequest = {
+                showDialog = !showDialog
+            })
     }
 
     val scrollableState = rememberScrollState()
@@ -87,18 +91,13 @@ fun MypageScreen(
                     MyPageLabel.SELECT_CARD -> scope.launch {
                         sheetState.partialExpand()
                     }
+
                     MyPageLabel.LOGOUT -> showDialog = true
                     else -> {}
                 }
             }
         }
     }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
-@Composable
-fun MypageScreenPreview() {
-    MypageScreen(navController = rememberNavController())
 }
 
 data class User(
