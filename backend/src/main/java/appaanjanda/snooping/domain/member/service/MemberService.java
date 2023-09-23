@@ -50,11 +50,6 @@ public class MemberService {
 	// 유저 저장
 	public String save(UserSaveRequestDto userSaveRequestDto) {
 
-		List<MyCard> myCardList = new ArrayList<>();
-		List<String> cardsList = userSaveRequestDto.getCardsList();
-
-
-
 		Member member = Member.builder()
 			.email(userSaveRequestDto.getEmail())
 			.password(passwordEncoder.encrypt(userSaveRequestDto.getEmail(), userSaveRequestDto.getPassword()))
@@ -63,17 +58,6 @@ public class MemberService {
 			.build();
 
 		memberRepository.saveAndFlush(member);
-
-		for (String cardName : cardsList) {
-			MyCard myCard = MyCard.builder()
-				.cardType(cardName)
-				.member(member)
-				.build();
-
-			myCardList.add(myCard);
-		}
-
-		member.setCardList(myCardList);
 
 		return userSaveRequestDto.getEmail();
 	}
@@ -88,7 +72,7 @@ public class MemberService {
 
 		List<String> cardName = new ArrayList<>();
 
-		List<MyCard> cardByMemberId = cardRepository.findCardByMemberId(member.getId());
+		List<MyCard> cardByMemberId = cardRepository.findMyCardByMemberId(member.getId());
 
 		for (MyCard myCard : cardByMemberId) {
 			cardName.add(myCard.getCardType());
