@@ -1,5 +1,6 @@
 package appaanjanda.snooping.domain.product.service;
 
+import appaanjanda.snooping.domain.product.entity.price.*;
 import appaanjanda.snooping.domain.product.entity.product.*;
 import appaanjanda.snooping.domain.product.repository.product.DigitalProductRepository;
 import appaanjanda.snooping.domain.product.repository.product.FoodProductRepository;
@@ -42,6 +43,26 @@ public class ProductSearchService {
                 throw new BusinessException(ErrorCode.NOT_EXISTS_CATEGORY);
         }
     }
+
+    // 상품코드 별 가격 엔티티
+    public Class<?> searchPriceById(String productCode) {
+        // 123 에서 1(대분류 코드) 추출
+        char index = productCode.charAt(0);
+
+        switch (index) {
+            case '1':
+                return DigitalPrice.class;
+            case '2':
+                return FurniturePrice.class;
+            case '3':
+                return NecessariesPrice.class;
+            case '4':
+                return FoodPrice.class;
+            default:
+                throw new BusinessException(ErrorCode.NOT_EXISTS_CATEGORY);
+        }
+    }
+
 
     // 상품인덱스 별 상품 엔티티
     public Class<?> searchEntityByIndex(String index) {

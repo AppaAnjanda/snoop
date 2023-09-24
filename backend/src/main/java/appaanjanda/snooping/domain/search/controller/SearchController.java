@@ -18,6 +18,9 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -37,7 +40,6 @@ public class SearchController {
                                                   @RequestParam(value = "minPrice", defaultValue = "0") int minPrice,
                                                   @RequestParam(value = "maxPrice", defaultValue = "99999999") int maxPrice) {
 
-        log.info(String.valueOf(membersInfo.getId()));
         return searchService.searchProductByCategory(membersInfo.getId(), major, minor, page, minPrice, maxPrice);
     }
 
@@ -48,13 +50,16 @@ public class SearchController {
     public SearchResponseDto getProductByKeyword(@PathVariable String keyword, @PathVariable int page,
                                                  @MemberInfo(required = false) MembersInfo membersInfo,
                                                  @RequestParam(value = "minPrice", defaultValue = "0") int minPrice,
-                                                 @RequestParam(value = "maxPrice", defaultValue = "99999999") int maxPrice) {
+                                                 @RequestParam(value = "maxPrice", defaultValue = "99999999") int maxPrice) throws UnsupportedEncodingException {
+
+        //디코딩
+        String decodedKeyword = URLDecoder.decode(keyword, StandardCharsets.UTF_8.toString());
         // 회원이면 검색 기록 추가
         if (membersInfo.getId() != null) {
-            searchService.updateSearchHistory(keyword, membersInfo.getId());
+            searchService.updateSearchHistory(decodedKeyword, membersInfo.getId());
         }
 
-        return searchService.searchProductByKeyword(keyword, page, minPrice, maxPrice, membersInfo.getId());
+        return searchService.searchProductByKeyword(decodedKeyword, page, minPrice, maxPrice, membersInfo.getId());
     }
 
     // 검색 기록 조회

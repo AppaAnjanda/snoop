@@ -43,6 +43,8 @@ public class SearchService {
     private final MemberService memberService;
     private final WishboxRepository wishboxRepository;
 
+    private final String[] indices = {"디지털가전", "가구", "생활용품", "식품"}; // 검색할 인덱스들
+
     // 카테고리로 상품 검색
     public SearchResponseDto searchProductByCategory(Long memberId, String major, String minor, int page, int minPrice, int maxPrice) {
         // 반환할 상품 타입
@@ -53,7 +55,7 @@ public class SearchService {
         }
 
         // 쿼리 작성
-        NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
+        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(QueryBuilders.boolQuery()
                         // 대분류, 소분류 일치하는 상품
                         .must(QueryBuilders.termQuery("major_category.keyword", major))
@@ -66,19 +68,15 @@ public class SearchService {
                 .build();
         try{
             // 검색 결과
-            SearchHits<?> searchHits = elasticsearchRestTemplate.search(nativeSearchQuery, productType);
+            SearchHits<Product> searchHits = elasticsearchRestTemplate.search(searchQuery, Product.class, IndexCoordinates.of(indices));
             return searchResponseWithPaging(searchHits, page, memberId);
-        } catch (BusinessException e) {
-            throw e;
         } catch (Exception e) {
-            throw new BusinessException(ErrorCode.ELASTICSEARCH_FAILURE);
+            throw e;
         }
     }
 
     // 키워드로 상품 검색
     public SearchResponseDto searchProductByKeyword(String keyword, int page, int minPrice, int maxPrice, Long memberId) {
-
-        String[] indices = {"디지털가전", "가구", "생활용품", "식품"}; // 검색할 인덱스들
 
         // 가격 범위 확인
         if (minPrice < 0 || maxPrice < minPrice || maxPrice >= 100000000) {
@@ -109,12 +107,10 @@ public class SearchService {
 
         // 모든 인덱스 통합해서 검색
         try {
-            SearchHits<?> searchHits = elasticsearchRestTemplate.search(searchQuery, Product.class, IndexCoordinates.of(indices));
+            SearchHits<Product> searchHits = elasticsearchRestTemplate.search(searchQuery, Product.class, IndexCoordinates.of(indices));
             return searchResponseWithPaging(searchHits, page, memberId);
-        } catch (BusinessException e) {
+        }  catch (Exception e) {
             throw e;
-        } catch (Exception e) {
-            throw new BusinessException(ErrorCode.ELASTICSEARCH_FAILURE);
         }
 
     }

@@ -5,17 +5,13 @@ import appaanjanda.snooping.domain.member.service.MemberService;
 import appaanjanda.snooping.domain.product.entity.RecentProduct;
 import appaanjanda.snooping.domain.product.repository.*;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
-import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -23,11 +19,9 @@ import java.util.Set;
 @Slf4j
 public class ProductService {
 
-    private final ElasticsearchRestTemplate elasticsearchRestTemplate;
     private final ProductSearchService productSearchService;
     private final MemberService memberService;
     private final RecentProductRepository recentProductRepository;
-    private final WishboxRepository wishboxRepository;
 
 
     // 최근 본 상품 추가
@@ -74,40 +68,17 @@ public class ProductService {
         for (RecentProduct recentProduct : recentProducts) {
             // 상품 코드로 상세정보 가져와서 추가
             String productCode = recentProduct.getProductCode();
-            SearchContentDto product = productSearchService.searchProductById(productCode, memberId);
+            SearchContentDto product;
+            // 조회 안되면 생략
+            try {
+                product = productSearchService.searchProductById(productCode, memberId);
+            } catch (Exception e) {
+                continue;
+            }
 
             products.add(product);
         }
         return products;
     }
-
-    // 시간 상품 가격
-    public List<?> getPriceHistoryByHour(String productId) {
-        // 현재 시간
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime firstTime = now.minusHours(48);
-
-        // 반환타입
-        Class<?> productType = productSearchService.searchEntityById(productId);
-
-        log.info(String.valueOf(now));
-        
-        return null;
-
-
-    }
-
-    // 일간 상품 가격
-    public List<?> getPriceHistoryByDay(String productId) {
-        return null;
-
-    }
-
-    // 주간 상품가격
-    public List<?> getPriceHistoryByWeek(String productId) {
-        return null;
-
-    }
-
 
 }

@@ -32,9 +32,9 @@ public class Wishbox extends BaseTimeEntity {
 	private Boolean alertYn;
 
 	/**
-	Elasticsearch에 연결되는 상품 ID
+	Elasticsearch에 연결되는 상품 code
 	 */
-	private String productId;
+	private String productCode;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "wishboxList")
@@ -42,11 +42,11 @@ public class Wishbox extends BaseTimeEntity {
 	private Member member;
 
 	@Builder
-	public Wishbox(Long id, int alertPrice, Boolean alertYn, String productId, Member member) {
+	public Wishbox(Long id, int alertPrice, Boolean alertYn, String productCode, Member member) {
 		this.id = id;
 		this.alertPrice = alertPrice;
 		this.alertYn = alertYn;
-		this.productId = productId;
+		this.productCode = productCode;
 		this.member = member;
 	}
 }
