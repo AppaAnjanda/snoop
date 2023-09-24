@@ -64,10 +64,12 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	// elasticsearch
-	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+	implementation 'org.springframework.data:spring-data-elasticsearch:4.1.15'
+//	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch:2.5.2'
+
 
 	// RestHighLevelClient
-	//implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.15.0'
+//	implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client'
 
 	// p6spy
 	implementation group: 'p6spy', name: 'p6spy', version: '3.9.1'
