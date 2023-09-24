@@ -78,8 +78,8 @@ dependencies {
 	// 비밀번호 찾기 위해 이메일 인증
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-    // AwsS3 관련 의존성
-//	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	// AwsS3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 	//querydsl 추가
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"

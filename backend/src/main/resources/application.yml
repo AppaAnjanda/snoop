@@ -51,17 +51,17 @@ jwt:
   rtk: 2592000000 # 30 * 24 * 60 * 60 * 1000L; 밀리초로 계산한 값
 
 
-#cloud:
-#  aws:
-#    s3:
-#      bucket: ENC(f+pRtzHFinJoboi00ELAXPKKSGyPo9WE)
-#    credentials:
-#      access-key: ENC(gM+eVGXbg4N0VTlBAA0thgpCZzsfIk3FhvhO1R4jgkg=)
-#      secret-key: ENC(AgB9NPKiGb0yXaKLJLu9/lQW/UMG8TvUhHC6thBgUQurIlbvUA79rQIiR0vY177ZSpHmGSI1m2M=)
-#    region:
-#      static: ap-northeast-2
-#      auto: false
-#    stack:
-#      auto: false
-#    cloudfront:
-#      url: d3byqpylj7jy1e.cloudfront.net
+cloud:
+  aws:
+    s3:
+      bucket: ENC(j2Vberu2AjM0Gwv1yBLsUh5DSPHIM/HL)
+    credentials:
+      accessKey: ENC(kG422CFkeWJAZ67le7L6jFT0gRgdxBrFPAPe5L2pMi4=)
+      secretKey: ENC(nNSf994isGR1HVsPL0fuV8BBWOAmRVN7l7IgJaA6OjKB1qINqUhf/jWuix8UrTkbKFMjkogno+A=)
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    cloud:
+      url: ENC(1p4FwzESBl2nkhJiVMzdvFh72BRH12yUR162l7j8tJ4areYpQVkIRUEkKSJNgwpg)
