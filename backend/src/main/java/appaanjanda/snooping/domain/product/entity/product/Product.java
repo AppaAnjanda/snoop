@@ -16,7 +16,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class Product {
+public class Product implements ProductInterface {
 
     @Id
     private String id;

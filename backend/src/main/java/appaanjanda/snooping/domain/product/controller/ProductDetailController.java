@@ -16,11 +16,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -43,16 +47,16 @@ public class ProductDetailController {
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "상품 상세 조회", description = "상품id로 정보 조회", tags = { "Product Controller" })
     @GetMapping("/{productCode}")
-    public Object getProductDetail(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo){
-
+    public Object getProductDetail(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo) throws UnsupportedEncodingException {
+        //디코딩
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
         Long memberId = membersInfo.getId();
         if (memberId != null) {
             // 최근 본 상품 추가
             productService.updateRecentProduct(membersInfo.getId(), productCode);
         }
 
-        return productSearchService.searchProductById(productCode, memberId);
-
+        return productSearchService.searchProductById(decodedProductCode, memberId);
     }
 
     // 주, 일, 시 가격 추이 조회

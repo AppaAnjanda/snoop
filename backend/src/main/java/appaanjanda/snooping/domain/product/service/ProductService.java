@@ -5,14 +5,11 @@ import appaanjanda.snooping.domain.member.service.MemberService;
 import appaanjanda.snooping.domain.product.entity.RecentProduct;
 import appaanjanda.snooping.domain.product.repository.*;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
-import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -23,11 +20,9 @@ import java.util.Set;
 @Slf4j
 public class ProductService {
 
-    private final ElasticsearchRestTemplate elasticsearchRestTemplate;
     private final ProductSearchService productSearchService;
     private final MemberService memberService;
     private final RecentProductRepository recentProductRepository;
-    private final WishboxRepository wishboxRepository;
 
 
     // 최근 본 상품 추가
