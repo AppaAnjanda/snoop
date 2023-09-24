@@ -2,6 +2,8 @@ package appaanjanda.snooping.domain.product.controller;
 
 
 import appaanjanda.snooping.domain.member.service.dto.UserResponse;
+import appaanjanda.snooping.domain.product.dto.PriceHistoryDto;
+import appaanjanda.snooping.domain.product.service.ProductDetailService;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import appaanjanda.snooping.domain.product.service.ProductSearchService;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +30,7 @@ public class ProductDetailController {
 
     private final ProductService productService;
     private final ProductSearchService productSearchService;
+    private final ProductDetailService productDetailService;
 
     // 상품 상세 조회
     @ApiResponses(value = {
@@ -53,18 +57,30 @@ public class ProductDetailController {
 
     // 주, 일, 시 가격 추이 조회
     @GetMapping("/graph/{productCode}/{period}")
-    public List<?> getPriceHistory(@PathVariable String productCode, @PathVariable String period) {
+    @Operation(summary = "기간별 상품 가격 그래프", description = "'week', 'day', 'hour'을 period에 입력해서 기간별 가격 리스트 조회", tags = { "Product Controller" })
+    public List<PriceHistoryDto> getPriceHistory(@PathVariable String productCode, @PathVariable String period) {
+        // 단위 시간
+        DateHistogramInterval interval;
+        // 기간
+        int cnt;
+
         switch (period) {
             case "week":
-                return productService.getPriceHistoryByWeek(productCode);
+                interval = DateHistogramInterval.WEEK;
+                cnt = 4;
+                break;
             case "day":
-                return productService.getPriceHistoryByDay(productCode);
+                interval = DateHistogramInterval.DAY;
+                cnt = 14;
+                break;
             case "hour":
-                return productService.getPriceHistoryByHour(productCode);
+                interval = DateHistogramInterval.HOUR;
+                cnt = 24;
+                break;
             default:
                 throw new IllegalArgumentException("Invalid index");
         }
-
+        return productDetailService.productGraph(productCode, interval, cnt);
     }
 
 }

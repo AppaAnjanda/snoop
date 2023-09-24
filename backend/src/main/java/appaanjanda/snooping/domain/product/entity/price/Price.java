@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class Price {
+public class Price implements PriceInterface {
 
     @Id
     private String id;

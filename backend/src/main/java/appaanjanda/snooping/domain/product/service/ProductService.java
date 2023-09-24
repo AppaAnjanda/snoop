@@ -81,33 +81,4 @@ public class ProductService {
         return products;
     }
 
-    // 시간 상품 가격
-    public List<?> getPriceHistoryByHour(String productId) {
-        // 현재 시간
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime firstTime = now.minusHours(48);
-
-        // 반환타입
-        Class<?> productType = productSearchService.searchEntityById(productId);
-
-        log.info(String.valueOf(now));
-        
-        return null;
-
-
-    }
-
-    // 일간 상품 가격
-    public List<?> getPriceHistoryByDay(String productId) {
-        return null;
-
-    }
-
-    // 주간 상품가격
-    public List<?> getPriceHistoryByWeek(String productId) {
-        return null;
-
-    }
-
-
 }
