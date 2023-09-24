@@ -70,10 +70,8 @@ public class SearchService {
             // 검색 결과
             SearchHits<Product> searchHits = elasticsearchRestTemplate.search(searchQuery, Product.class, IndexCoordinates.of(indices));
             return searchResponseWithPaging(searchHits, page, memberId);
-        } catch (BusinessException e) {
-            throw e;
         } catch (Exception e) {
-            throw new BusinessException(ErrorCode.ELASTICSEARCH_FAILURE);
+            throw e;
         }
     }
 
@@ -111,10 +109,8 @@ public class SearchService {
         try {
             SearchHits<Product> searchHits = elasticsearchRestTemplate.search(searchQuery, Product.class, IndexCoordinates.of(indices));
             return searchResponseWithPaging(searchHits, page, memberId);
-        } catch (BusinessException e) {
+        }  catch (Exception e) {
             throw e;
-        } catch (Exception e) {
-            throw new BusinessException(ErrorCode.ELASTICSEARCH_FAILURE);
         }
 
     }

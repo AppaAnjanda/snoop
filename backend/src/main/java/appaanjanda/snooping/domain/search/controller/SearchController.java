@@ -37,7 +37,6 @@ public class SearchController {
                                                   @RequestParam(value = "minPrice", defaultValue = "0") int minPrice,
                                                   @RequestParam(value = "maxPrice", defaultValue = "99999999") int maxPrice) {
 
-        log.info(String.valueOf(membersInfo.getId()));
         return searchService.searchProductByCategory(membersInfo.getId(), major, minor, page, minPrice, maxPrice);
     }
 
