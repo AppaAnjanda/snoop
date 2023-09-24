@@ -34,9 +34,8 @@ public class DigitalDataService {
         log.info("현재 시간 : {}", now);
         LocalDateTime lastUpdateTime = LocalDateTime.parse(digitalProduct.getTimestamp());
         log.info("lastUpdate : {}", lastUpdateTime);
-        LocalDateTime realTime = lastUpdateTime.plusHours(9);
         // 업데이트 경과 시간
-        Duration duration = Duration.between(realTime, now);
+        Duration duration = Duration.between(lastUpdateTime, now);
         log.info("경과 시간 : {}", duration);
         // 10분 지났으면 업데이트 진행
         if (duration.toMinutes() >= 10) {
@@ -154,8 +153,7 @@ public class DigitalDataService {
 
         LocalDateTime now = LocalDateTime.now();
         log.info("시간 생성 {}", now);
-        LocalDateTime realTime = now.minusHours(9);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        return realTime.format(formatter);
+        return now.format(formatter);
     }
 }

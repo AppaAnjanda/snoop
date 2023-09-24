@@ -33,9 +33,8 @@ public class NecessariesDataService {
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime lastUpdateTime = LocalDateTime.parse(necessariesProduct.getTimestamp());
-        LocalDateTime realTime = lastUpdateTime.plusHours(9);
         // 업데이트 경과 시간
-        Duration duration = Duration.between(realTime, now);
+        Duration duration = Duration.between(lastUpdateTime, now);
         // 10분 지났으면 업데이트 진행
         if (duration.toMinutes() >= 10) return true;
         else return false;
@@ -138,8 +137,7 @@ public class NecessariesDataService {
     public String parseTime() {
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime realTime = now.minusHours(9);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        return realTime.format(formatter);
+        return now.format(formatter);
     }
 }
