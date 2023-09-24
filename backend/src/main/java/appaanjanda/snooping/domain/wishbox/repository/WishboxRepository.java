@@ -10,6 +10,6 @@ import java.util.Set;
 
 public interface WishboxRepository extends JpaRepository<Wishbox, Long> {
 
-    @Query("SELECT w.productId FROM Wishbox w WHERE w.member.id = :memberId")
+    @Query("SELECT w.productCode FROM Wishbox w WHERE w.member.id = :memberId")
     Set<String> findProductById(Long memberId);
 }

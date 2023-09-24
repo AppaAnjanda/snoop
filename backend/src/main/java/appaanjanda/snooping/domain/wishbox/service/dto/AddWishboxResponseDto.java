@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class AddWishboxResponseDto {
-    private String productId;
+    private String productCode;
     private int alertPrice;
     private Boolean alertYn;
 
     @Builder
-    public AddWishboxResponseDto(String productId, int alertPrice, Boolean alertYn) {
-        this.productId = productId;
+    public AddWishboxResponseDto(String productCode, int alertPrice, Boolean alertYn) {
+        this.productCode = productCode;
         this.alertPrice = alertPrice;
         this.alertYn = alertYn;
     }
