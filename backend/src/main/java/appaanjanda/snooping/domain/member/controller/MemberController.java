@@ -1,25 +1,13 @@
 package appaanjanda.snooping.domain.member.controller;
 
 import appaanjanda.snooping.domain.member.service.MemberService;
-import appaanjanda.snooping.domain.member.service.dto.AccessTokenRequest;
-import appaanjanda.snooping.domain.member.service.dto.ChangeMyPasswordRequestDto;
-import appaanjanda.snooping.domain.member.service.dto.LoginRequest;
-import appaanjanda.snooping.domain.member.service.dto.LoginResponse;
-import appaanjanda.snooping.domain.member.service.dto.UpdateUserRequestDto;
-import appaanjanda.snooping.domain.member.service.dto.UpdateUserResponseDto;
-import appaanjanda.snooping.domain.member.service.dto.UserResponse;
-import appaanjanda.snooping.domain.member.service.dto.UserSaveRequestDto;
+import appaanjanda.snooping.domain.member.service.dto.*;
 import appaanjanda.snooping.global.response.Response;
 import io.swagger.v3.oas.annotations.Operation;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
@@ -30,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @Slf4j
@@ -134,5 +123,13 @@ public class MemberController {
 		memberService.changeMyPassword(membersInfo.getId(), requestDto);
 
 	}
+
+	@SecurityRequirement(name = "Bearer Authentication")
+	@Operation(summary = "프로필 이미지 변경", description = "프로필 이미지 변경 가능 ", tags = { "Member Controller" })
+	@PutMapping(value = "/image",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public UpdateProfilePictureDto create(@RequestPart(value="file", required = false) MultipartFile file,@MemberInfo MembersInfo membersInfo ) throws Exception {
+		return memberService.updateProfilePicture(file, membersInfo.getId());
+	}
+
 
 }
