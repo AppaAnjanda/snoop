@@ -2,6 +2,7 @@ package appaanjanda.snooping.domain.product.controller;
 
 
 import appaanjanda.snooping.domain.member.service.dto.UserResponse;
+import appaanjanda.snooping.domain.product.dto.BuyTimingDto;
 import appaanjanda.snooping.domain.product.dto.PriceHistoryDto;
 import appaanjanda.snooping.domain.product.service.ProductDetailService;
 import appaanjanda.snooping.jwt.MemberInfo;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +63,9 @@ public class ProductDetailController {
     // 주, 일, 시 가격 추이 조회
     @GetMapping("/graph/{productCode}/{period}")
     @Operation(summary = "기간별 상품 가격 그래프", description = "'week', 'day', 'hour'을 period에 입력해서 기간별 가격 리스트 조회", tags = { "Product Controller" })
-    public List<PriceHistoryDto> getPriceHistory(@PathVariable String productCode, @PathVariable String period) {
+    public List<PriceHistoryDto> getPriceHistory(@PathVariable String productCode, @PathVariable String period) throws UnsupportedEncodingException {
+        //디코딩
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
         // 단위 시간
         DateHistogramInterval interval;
         // 기간
@@ -83,7 +87,17 @@ public class ProductDetailController {
             default:
                 throw new IllegalArgumentException("Invalid index");
         }
-        return productDetailService.productGraph(productCode, interval, cnt);
+        return productDetailService.productGraph(decodedProductCode, interval, cnt);
+    }
+
+    // 구매 타이밍
+    @GetMapping("/timing/{productCode}")
+    @Operation(summary = "구매 타이밍", description = "최근 30일간의 평균 가격과 비교 \n 평균가, 현재가, 가격차이 퍼센트, 7단계의 타이밍 제", tags = { "Product Controller" })
+    public BuyTimingDto getButTiming(@PathVariable String productCode) throws UnsupportedEncodingException {
+        //디코딩
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+
+        return productDetailService.buyTiming(decodedProductCode);
     }
 
 }
