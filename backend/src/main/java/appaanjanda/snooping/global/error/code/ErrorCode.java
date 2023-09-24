@@ -46,6 +46,7 @@ public enum ErrorCode {
     NOT_EXISTS_NECESSARIES_PRODUCT(HttpStatus.NOT_FOUND, "P-003", "생활용품 상품이 존재하지 않습니다."),
     NOT_EXISTS_FOOD_PRODUCT(HttpStatus.NOT_FOUND, "P-004", "식품 상품이 존재하지 않습니다."),
     NOT_EXISTS_PRODUCT(HttpStatus.NOT_FOUND, "P-005", "상품이 존재하지 않습니다."),
+    NOT_EXISTS_CATEGORY(HttpStatus.NOT_FOUND, "P-006", "상품 카테고리가 존재하지 않습니다."),
 
     // 찜 상품
     NOT_EXISTS_WISHBOX_ID(HttpStatus.NOT_FOUND, "W-005", "찜 상품이 존재하지 않습니다."),
@@ -57,9 +58,9 @@ public enum ErrorCode {
     NOT_EXISTS_KEYWORD(HttpStatus.NOT_FOUND, "S-004", "해당 검색기록이 존재하지 않습니다.");
 
 
-    private HttpStatus httpStatus;
-    private String errorCode;
-    private String message;
+    private final HttpStatus httpStatus;
+    private final String errorCode;
+    private final String message;
 
     ErrorCode(HttpStatus httpStatus, String errorCode, String message) {
         this.httpStatus = httpStatus;

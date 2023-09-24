@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DigitalProduct {
+public class DigitalProduct implements ProductInterface{
 
     @Id
     private String id;
