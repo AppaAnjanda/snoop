@@ -10,7 +10,7 @@ import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.service.dto.AddWishboxResponseDto;
 import appaanjanda.snooping.domain.wishbox.service.dto.RemoveWishboxResponseDto;
 import appaanjanda.snooping.global.error.code.ErrorCode;
-import appaanjanda.snooping.global.error.exception.BadRequestException;
+import appaanjanda.snooping.global.error.exception.BusinessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +40,7 @@ public class WishboxService {
 	//찜 상품 등록
 	public AddWishboxResponseDto addWishbox(Long memberId, String productId) {
 		Member member = memberRepository.findById(memberId)
-				.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID));
+				.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
 
 		Wishbox wishbox = Wishbox.builder()
 				.alertPrice(0)
@@ -63,14 +63,14 @@ public class WishboxService {
 	@Transactional(readOnly = true)
 	public List<Wishbox> getWishboxList(Long memberId) {
 		Member member = memberRepository.findById(memberId)
-				.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID));
+				.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
 		return member.getWishboxList();
 	}
 
 	// 찜 상품 삭제
 	public RemoveWishboxResponseDto removeWishbox(Long memberId, Long wishboxId) {
 		Wishbox wishbox = wishboxRepository.findById(wishboxId)
-				.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_WISHBOX_ID));
+				.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_WISHBOX_ID));
 		wishboxRepository.delete(wishbox);
 
 		return RemoveWishboxResponseDto
@@ -87,18 +87,18 @@ public class WishboxService {
 		switch (index) {
 			case '1':
 				return digitalProductRepository.findById(productId)
-						.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_DIGITAL_PRODUCT));
+						.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_DIGITAL_PRODUCT));
 			case '2':
 				return furnitureProductRepository.findById(productId)
-						.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_NECESSARIES_PRODUCT));
+						.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_NECESSARIES_PRODUCT));
 			case '3':
 				return necessariesProductRepository.findById(productId)
-						.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_NECESSARIES_PRODUCT));
+						.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_NECESSARIES_PRODUCT));
 			case '4':
 				return foodProductRepository.findById(productId)
-						.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_FOOD_PRODUCT));
+						.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_FOOD_PRODUCT));
 			default:
-				throw new BadRequestException(ErrorCode.NOT_EXISTS_PRODUCT);
+				throw new BusinessException(ErrorCode.NOT_EXISTS_PRODUCT);
 		}
 	}
 

@@ -4,6 +4,8 @@ import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.service.MemberService;
 import appaanjanda.snooping.domain.product.entity.RecentProduct;
 import appaanjanda.snooping.domain.product.repository.*;
+import appaanjanda.snooping.domain.search.dto.SearchContentDto;
+import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ public class ProductService {
     private final ProductSearchService productSearchService;
     private final MemberService memberService;
     private final RecentProductRepository recentProductRepository;
+    private final WishboxRepository wishboxRepository;
 
 
     // 최근 본 상품 추가
@@ -61,20 +65,19 @@ public class ProductService {
 
     // 최근 본 상품 리스트
     public List<Object> getRecentProduct(Long memberId) {
+        // 현재 사용자의 최근 본 상품들
         List<RecentProduct> recentProducts = recentProductRepository.findRecentProductsOrderByCreateTime(memberId);
 
+        // 최근 본 상품의 상세 정보 리스트
         List<Object> products = new ArrayList<>();
 
         for (RecentProduct recentProduct : recentProducts) {
+            // 상품 코드로 상세정보 가져와서 추가
             String productCode = recentProduct.getProductCode();
+            SearchContentDto product = productSearchService.searchProductById(productCode, memberId);
 
-            Object product = productSearchService.searchProductById(productCode);
-
-            if (product != null) {
-                products.add(product);
-            }
+            products.add(product);
         }
-
         return products;
     }
 

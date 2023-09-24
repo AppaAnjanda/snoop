@@ -5,11 +5,11 @@ import appaanjanda.snooping.global.error.code.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class BadRequestException extends RuntimeException {
+public class BusinessException extends RuntimeException {
 
     private ErrorCode errorCode;
 
-    public BadRequestException(ErrorCode errorCode) {
+    public BusinessException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
     }

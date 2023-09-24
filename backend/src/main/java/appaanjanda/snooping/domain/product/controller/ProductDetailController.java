@@ -39,20 +39,15 @@ public class ProductDetailController {
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "상품 상세 조회", description = "상품id로 정보 조회", tags = { "Product Controller" })
     @GetMapping("/{productCode}")
-    public Object getProductDetail(@PathVariable String productCode, @MemberInfo MembersInfo membersInfo){
+    public Object getProductDetail(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo){
 
-        // 최근 본 상품 추가
-        productService.updateRecentProduct(membersInfo.getId(), productCode);
+        Long memberId = membersInfo.getId();
+        if (memberId != null) {
+            // 최근 본 상품 추가
+            productService.updateRecentProduct(membersInfo.getId(), productCode);
+        }
 
-        return productSearchService.searchProductById(productCode);
-
-    }
-
-    @Operation(summary = "상품 상세 조회(게스트)", description = "상품id로 정보 조회", tags = { "Product Controller" })
-    @GetMapping("/guest/{productCode}")
-    public Object getProductDetailForGuest(@PathVariable String productCode){
-
-        return productSearchService.searchProductById(productCode);
+        return productSearchService.searchProductById(productCode, memberId);
 
     }
 
