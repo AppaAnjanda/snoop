@@ -5,6 +5,7 @@ import appaanjanda.snooping.domain.member.service.MemberService;
 import appaanjanda.snooping.domain.product.entity.RecentProduct;
 import appaanjanda.snooping.domain.product.repository.*;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
+import appaanjanda.snooping.domain.search.dto.SearchResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -69,7 +70,13 @@ public class ProductService {
         for (RecentProduct recentProduct : recentProducts) {
             // 상품 코드로 상세정보 가져와서 추가
             String productCode = recentProduct.getProductCode();
-            SearchContentDto product = productSearchService.searchProductById(productCode, memberId);
+            SearchContentDto product;
+            // 조회 안되면 생략
+            try {
+                product = productSearchService.searchProductById(productCode, memberId);
+            } catch (Exception e) {
+                continue;
+            }
 
             products.add(product);
         }

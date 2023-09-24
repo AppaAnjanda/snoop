@@ -53,7 +53,7 @@ public class ProductDetailController {
         Long memberId = membersInfo.getId();
         if (memberId != null) {
             // 최근 본 상품 추가
-            productService.updateRecentProduct(membersInfo.getId(), productCode);
+            productService.updateRecentProduct(membersInfo.getId(), decodedProductCode);
         }
 
         return productSearchService.searchProductById(decodedProductCode, memberId);
