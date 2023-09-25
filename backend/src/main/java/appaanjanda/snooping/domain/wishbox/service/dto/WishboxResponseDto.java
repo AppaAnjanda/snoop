@@ -6,19 +6,23 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class AddWishboxResponseDto {
+public class WishboxResponseDto {
     private Long wishboxId;
     private String productCode;
+    private String productName;
+    private String productImage;
+    private int price;
     private int alertPrice;
-    private Boolean alertYn;
-    private String provider;
+    private boolean alertYn;
 
     @Builder
-    public AddWishboxResponseDto(Long wishboxId, String productCode, int alertPrice, Boolean alertYn, String provider) {
+    public WishboxResponseDto(Long wishboxId, String productCode, String productName, String productImage, int price, int alertPrice, boolean alertYn) {
         this.wishboxId = wishboxId;
         this.productCode = productCode;
+        this.productName = productName;
+        this.productImage = productImage;
+        this.price = price;
         this.alertPrice = alertPrice;
         this.alertYn = alertYn;
-        this.provider = provider;
     }
 }
