@@ -1,12 +1,7 @@
 package com.appa.snoop.presentation.ui.category
 
-import android.util.Log
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,17 +9,15 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.domain.model.category.ProductPaging
 import com.appa.snoop.domain.usecase.category.GetProductListByCategoryUseCase
-import com.appa.snoop.presentation.ui.category.utils.ProductPagingDataSource
+import com.appa.snoop.domain.usecase.category.GetProductListByKeywordUseCase
+import com.appa.snoop.presentation.ui.category.utils.ProductCategoryPagingDataSource
+import com.appa.snoop.presentation.ui.category.utils.ProductKeywordPagingDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -33,7 +26,8 @@ import javax.inject.Inject
 private const val TAG = "[김희웅] CategoryViewModel"
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
-    private val getProductListByCategoryUseCase: GetProductListByCategoryUseCase
+    private val getProductListByCategoryUseCase: GetProductListByCategoryUseCase,
+    private val getProductListByKeywordUseCase: GetProductListByKeywordUseCase
 ) : ViewModel() {
 
     companion object {
@@ -93,51 +87,57 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    private val _productList = MutableStateFlow<List<Product>>(emptyList())
-    val productList = _productList.asStateFlow()
+//    private val _productList = MutableStateFlow<List<Product>>(emptyList())
+//    val productList = _productList.asStateFlow()
 
-    fun getProductListByCategory(majorName: String, minorName: String, pageNum: Int) {
-        viewModelScope.launch {
-            val result = getProductListByCategoryUseCase.invoke(majorName, minorName, pageNum)
-
-            when(result) {
-                is NetworkResult.Success -> {
-                    _productList.emit(result.data.contents)
-                    Log.d(TAG, "getProductListByCategory: ${result.data}")
-                }
-                else -> {
-                    Log.d(TAG, "getProductListByCategory: 리스트를 불러오는데 실패했습니다. 네트워크 활성화를 확인하세요.")
-                    Log.d(TAG, "getProductListByCategory: $result")
-                }
-            }
-        }
-    }
-
-//    lateinit var products: Flow<PagingData<Product>>
-
-//    fun getProductListByCategoryPaging(majorName: String, minorName: String) {
-//        products = getProductListPagingData(majorName, minorName)
+//    fun getProductListByCategory(majorName: String, minorName: String, pageNum: Int) {
+//        viewModelScope.launch {
+//            val result = getProductListByCategoryUseCase.invoke(majorName, minorName, pageNum)
+//
+//            when(result) {
+//                is NetworkResult.Success -> {
+//                    _productList.emit(result.data.contents)
+//                    Log.d(TAG, "getProductListByCategory: ${result.data}")
+//                }
+//                else -> {
+//                    Log.d(TAG, "getProductListByCategory: 리스트를 불러오는데 실패했습니다. 네트워크 활성화를 확인하세요.")
+//                    Log.d(TAG, "getProductListByCategory: $result")
+//                }
+//            }
+//        }
 //    }
 
+    // 페이징
     val _pagingDataFlow = MutableStateFlow<PagingData<Product>>(PagingData.empty())
     val pagingDataFlow = _pagingDataFlow.asStateFlow()
 
-//    val pagingFlow: Flow<PagingData<Product>> = getProductListPagingData("디지털가전", "노트북")
-
-    // Collect the paging data into the StateFlow
     fun getProductListByCategoryPaging(majorName: String, minorName: String) {
         viewModelScope.launch {
-            getProductListPagingData(majorName, minorName)
+            getProductListPagingDataByCategory(majorName, minorName)
                 .collectLatest { pagingData ->
                     _pagingDataFlow.emit(pagingData)
                 }
-//            getProductListByCategoryUseCase.invoke(majorName, minorName, 1)
         }
     }
 
-    fun getProductListPagingData(majorName: String, minorName: String): Flow<PagingData<Product>> {
+    fun getProductListByKeywordPaging(keyword: String) {
+        viewModelScope.launch {
+            getProductListPagingDataByKeyword(keyword)
+                .collectLatest { pagingData ->
+                    _pagingDataFlow.emit(pagingData)
+                }
+        }
+    }
+
+    fun getProductListPagingDataByCategory(majorName: String, minorName: String): Flow<PagingData<Product>> {
         return Pager(config = PagingConfig(pageSize = PAGE_SIZE)) {
-            ProductPagingDataSource(getProductListByCategoryUseCase, majorName, minorName)
+            ProductCategoryPagingDataSource(getProductListByCategoryUseCase, majorName, minorName)
+        }.flow.cachedIn(viewModelScope)
+    }
+
+    fun getProductListPagingDataByKeyword(keyword: String): Flow<PagingData<Product>> {
+        return Pager(config = PagingConfig(pageSize = PAGE_SIZE)) {
+            ProductKeywordPagingDataSource(getProductListByKeywordUseCase, keyoword = keyword)
         }.flow.cachedIn(viewModelScope)
     }
 }

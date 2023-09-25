@@ -11,4 +11,10 @@ interface CategoryService {
         @Path("minor") minorName: String,
         @Path("page") page: Int
     ) : ProductPagingResponse
+
+    @GET("api/search/{keyword}/{page}")
+    suspend fun getProductListByKeyword(
+        @Path("keyword") keyword: String,
+        @Path("page") page: Int
+    ) : ProductPagingResponse
 }

@@ -8,4 +8,7 @@ import com.appa.snoop.domain.model.member.JwtTokens
 interface CategoryRepository {
     // 상품 카테고리로 조회
     suspend fun getProductListByCategory(majorName: String, minorName: String, pageNum: Int): NetworkResult<ProductPaging>
+
+    // 상품 키워드로 조회
+    suspend fun getProductListByKeyword(keyword: String, pageNum: Int): NetworkResult<ProductPaging>
 }

@@ -1,26 +1,29 @@
 package com.appa.snoop.presentation.ui.category.utils
 
 import android.util.Log
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.category.Product
-import com.appa.snoop.domain.usecase.category.GetProductListByCategoryUseCase
+import com.appa.snoop.domain.usecase.category.GetProductListByKeywordUseCase
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
 
-private const val TAG = "[김희웅] ProductPagingDataSource"
-class ProductPagingDataSource @Inject constructor(
-    private val categoryUseCase: GetProductListByCategoryUseCase,
-    private val majorName: String,
-    private val minorName: String
+private const val TAG = "[김희웅] ProductKeywordPagingDat"
+class ProductKeywordPagingDataSource @Inject constructor(
+    private val categoryUseCase: GetProductListByKeywordUseCase,
+    private val keyoword: String
 ) : PagingSource<Int, Product>() {
+    val snackBarHostState = SnackbarHostState()
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
         val page = params.key ?: 1
         Log.d(TAG, "load: 페이징 성공 페이지? ${page}")
         return try {
-            val result = categoryUseCase.invoke(majorName = majorName, minorName = minorName, page)
+            val result = categoryUseCase.invoke(keyoword, page)
 
             when (result) {
                 is NetworkResult.Success -> {
@@ -34,7 +37,12 @@ class ProductPagingDataSource @Inject constructor(
                 }
                 else -> {
                     Log.d(TAG, "load: 페이징 클래스 내부 통신 오류")
-                    LoadResult.Invalid()
+                    snackBarHostState.showSnackbar("검색 결과가 없습니다.")
+                    LoadResult.Page(
+                        data = emptyList(),
+                        prevKey = null,
+                        nextKey = null
+                    )
                 }
             }
         } catch(e: Exception) {
@@ -43,7 +51,6 @@ class ProductPagingDataSource @Inject constructor(
     }
 
     override fun getRefreshKey(state: PagingState<Int, Product>): Int? {
-        Log.d(TAG, "getRefreshKey: ${state}")
         return state.anchorPosition
     }
 }
