@@ -1,6 +1,7 @@
 package com.appa.snoop.presentation.ui.category
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.FiniteAnimationSpec
@@ -12,32 +13,49 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridItemScope
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.IntOffset
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.category.component.CategoryBottomSheet
 import com.appa.snoop.presentation.ui.category.component.CategoryItem
 import com.appa.snoop.presentation.ui.category.component.SnoopSearchBar
+import com.appa.snoop.presentation.ui.home.dumy.itemList
 import com.appa.snoop.presentation.util.effects.CategoryLaunchedEffect
 import com.appa.snoop.presentation.util.extensions.addFocusCleaner
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 
+private const val TAG = "[김희웅] CategoryScreen"
 const val SIZE = 2
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -51,6 +69,7 @@ fun CategoryScreen(
     val scrollableState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+    val pagingData = categoryViewModel.pagingDataFlow.collectAsLazyPagingItems()
 
     CategoryLaunchedEffect(
         navController = navController,
@@ -108,14 +127,15 @@ fun CategoryScreen(
         ) {
             // TODO 페이징 기능 구현하기
             LazyVerticalGrid(
-                columns = GridCells.Fixed(SIZE)
+                columns = GridCells.Fixed(SIZE),
+                state = LazyGridState()
             ) {
-                items(
-                    categoryViewModel.productList.value
-                ) { it ->
+                items (
+                    pagingData.itemSnapshotList
+                ) {
                     CategoryItem(
                         modifier = Modifier,
-                        product = it,
+                        product = it!!,
                         onItemClicked = {
                             navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
                         },

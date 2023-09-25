@@ -30,7 +30,7 @@ fun LottieAnim(
 //    var checked by remember { mutableStateOf(isChecked) }
     var isPlaying by remember { mutableStateOf(false) }
 
-    Log.d(TAG, "LottieAnim: 하트가 체크 되어있는지 $isChecked")
+//    Log.d(TAG, "LottieAnim: 하트가 체크 되어있는지 $isChecked")
 
     val progress by animateLottieCompositionAsState(
         composition = composition,

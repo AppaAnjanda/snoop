@@ -80,4 +80,6 @@ dependencies {
     implementation(libs.bundles.kakao)
     // Graph
     implementation(libs.plot)
+    // paging
+    implementation(libs.androidx.paging)
 }

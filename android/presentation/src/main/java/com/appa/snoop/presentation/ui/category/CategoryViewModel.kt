@@ -10,22 +10,36 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.domain.model.category.ProductPaging
-import com.appa.snoop.domain.usecase.category.GetProductListByCategoryUseCate
+import com.appa.snoop.domain.usecase.category.GetProductListByCategoryUseCase
+import com.appa.snoop.presentation.ui.category.utils.ProductPagingDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val TAG = "[김희웅] CategoryViewModel"
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
-    private val getProductListByCategoryUseCate: GetProductListByCategoryUseCate
+    private val getProductListByCategoryUseCase: GetProductListByCategoryUseCase
 ) : ViewModel() {
+
+    companion object {
+        private const val PAGE_SIZE = 30
+    }
+
     var searchBarState by mutableStateOf(false)
         private set
 
@@ -84,7 +98,7 @@ class CategoryViewModel @Inject constructor(
 
     fun getProductListByCategory(majorName: String, minorName: String, pageNum: Int) {
         viewModelScope.launch {
-            val result = getProductListByCategoryUseCate.invoke(majorName, minorName, pageNum)
+            val result = getProductListByCategoryUseCase.invoke(majorName, minorName, pageNum)
 
             when(result) {
                 is NetworkResult.Success -> {
@@ -97,5 +111,30 @@ class CategoryViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+//    lateinit var products: Flow<PagingData<Product>>
+
+//    fun getProductListByCategoryPaging(majorName: String, minorName: String) {
+//        products = getProductListPagingData(majorName, minorName)
+//    }
+
+    val _pagingDataFlow = MutableStateFlow<PagingData<Product>>(PagingData.empty())
+    val pagingDataFlow = _pagingDataFlow.asStateFlow()
+
+    // Collect the paging data into the StateFlow
+    fun getProductListByCategoryPaging(majorName: String, minorName: String) {
+        viewModelScope.launch {
+            getProductListPagingData(majorName, minorName)
+                .collectLatest { pagingData ->
+                    _pagingDataFlow.emit(pagingData)
+                }
+        }
+    }
+
+    fun getProductListPagingData(majorName: String, minorName: String): Flow<PagingData<Product>> {
+        return Pager(config = PagingConfig(pageSize = PAGE_SIZE)) {
+            ProductPagingDataSource(getProductListByCategoryUseCase, majorName, minorName)
+        }.flow.cachedIn(viewModelScope)
     }
 }

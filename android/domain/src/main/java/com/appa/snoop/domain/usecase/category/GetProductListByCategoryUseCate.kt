@@ -6,7 +6,7 @@ import com.appa.snoop.domain.model.category.ProductPaging
 import com.appa.snoop.domain.repository.CategoryRepository
 import javax.inject.Inject
 
-class GetProductListByCategoryUseCate @Inject constructor(
+class GetProductListByCategoryUseCase @Inject constructor(
     private val categoryRepository: CategoryRepository
 ) {
     suspend operator fun invoke(majorName: String, minorName: String, pageNum: Int): NetworkResult<ProductPaging> {
