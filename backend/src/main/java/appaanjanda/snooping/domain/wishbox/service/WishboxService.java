@@ -13,7 +13,7 @@ import appaanjanda.snooping.domain.product.repository.product.NecessariesProduct
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.service.dto.*;
 import appaanjanda.snooping.global.error.code.ErrorCode;
-import appaanjanda.snooping.global.error.exception.BadRequestException;
+import appaanjanda.snooping.global.error.exception.BusinessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,37 +29,47 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class WishboxService {
-	private final DigitalProductRepository digitalProductRepository;
-	private final FurnitureProductRepository furnitureProductRepository;
-	private final NecessariesProductRepository necessariesProductRepository;
-	private final FoodProductRepository foodProductRepository;
+
 	private final WishboxRepository wishboxRepository;
 	private final MemberRepository memberRepository;
 
-	public void save(Long id, SaveItemRequest request){
-
-	}
 
 	//찜 상품 등록
+<<<<<<< HEAD
 	public AddWishboxResponseDto addWishbox(Long memberId, String productId, AddWishboxRequestDto addWishboxRequestDto) {
+=======
+	public AddWishboxResponseDto addWishbox(Long memberId, String productCode) {
+>>>>>>> 2c3958abe891aaacec106801c9ad2226a7a5d8d5
 		Member member = memberRepository.findById(memberId)
-				.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID));
+				.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
 
 		searchProductById(productId);
 
 		Wishbox wishbox = Wishbox.builder()
+<<<<<<< HEAD
 				.alertPrice(addWishboxRequestDto.getAlertPrice())
 				.alertYn(true)
 				.productId(productId)
+=======
+				.alertPrice(0)
+				.alertYn(false)
+				.productCode(productCode)
+>>>>>>> 2c3958abe891aaacec106801c9ad2226a7a5d8d5
 				.member(member)
 				.build();
 		wishboxRepository.save(wishbox);
 
 		return AddWishboxResponseDto
 				.builder()
+<<<<<<< HEAD
 				.productId(productId)
 				.alertYn(true)
 				.alertPrice(addWishboxRequestDto.getAlertPrice())
+=======
+				.productCode(productCode)
+				.alertYn(false)
+				.alertPrice(0)
+>>>>>>> 2c3958abe891aaacec106801c9ad2226a7a5d8d5
 				.build();
 	}
 
@@ -68,6 +78,7 @@ public class WishboxService {
 	@Transactional(readOnly = true)
 	public List<WishboxResponseDto> getWishboxList(Long memberId) {
 		Member member = memberRepository.findById(memberId)
+<<<<<<< HEAD
 				.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID));
 
 		List<Wishbox> wishboxList = member.getWishboxList();
@@ -81,12 +92,16 @@ public class WishboxService {
 		}
 
 		return wishboxResponseDtoList;
+=======
+				.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
+		return member.getWishboxList();
+>>>>>>> 2c3958abe891aaacec106801c9ad2226a7a5d8d5
 	}
 
 	// 찜 상품 삭제
 	public RemoveWishboxResponseDto removeWishbox(Long memberId, Long wishboxId) {
 		Wishbox wishbox = wishboxRepository.findById(wishboxId)
-				.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_WISHBOX_ID));
+				.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_WISHBOX_ID));
 		wishboxRepository.delete(wishbox);
 
 		return RemoveWishboxResponseDto
@@ -94,6 +109,7 @@ public class WishboxService {
 				.removeId(wishboxId)
 				.build();
 	}
+<<<<<<< HEAD
 
 	// 상품id로 조회
 	public Object searchProductById(String productId) {
@@ -159,4 +175,6 @@ public class WishboxService {
 		}
 	}
 
+=======
+>>>>>>> 2c3958abe891aaacec106801c9ad2226a7a5d8d5
 }

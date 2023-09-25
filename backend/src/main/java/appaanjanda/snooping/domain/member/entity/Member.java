@@ -52,6 +52,7 @@ public class Member extends BaseTimeEntity {
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private List<SearchHistory> searchHistoryList;
 
+	private String firebaseToken;
 	
 	@Builder
 	public Member(Long id, String password, String profileUrl, String email, Role role, String nickname,

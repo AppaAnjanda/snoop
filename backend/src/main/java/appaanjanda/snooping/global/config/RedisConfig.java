@@ -35,6 +35,45 @@ public class RedisConfig {
 		redisTemplate.setConnectionFactory(redisConnectionFactory());
 		return redisTemplate;
 	}
+	//
+	// /**
+	//  * Redis 채팅을 위함.
+	//  * @param connectionFactory
+	//  * @param listenerAdapter
+	//  * @param channelTopic
+	//  * @return
+	//  */
+	// @Bean
+	// public RedisMessageListenerContainer redisMessageListenerContainer( // (1)
+	// 	RedisConnectionFactory connectionFactory,
+	// 	MessageListenerAdapter listenerAdapter,
+	// 	ChannelTopic channelTopic
+	// ) {
+	// 	RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+	// 	container.setConnectionFactory(connectionFactory);
+	// 	container.addMessageListener(listenerAdapter, channelTopic);
+	// 	return container;
+	// }
+	//
+	// @Bean
+	// public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) { // (2)
+	// 	return new MessageListenerAdapter(subscriber, "onMessage");
+	// }
+	//
+	// @Bean
+	// public RedisTemplate<String, Object> redisTemplate
+	// 	(RedisConnectionFactory connectionFactory) { // (3)
+	// 	RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+	// 	redisTemplate.setConnectionFactory(connectionFactory);
+	// 	redisTemplate.setKeySerializer(new StringRedisSerializer());
+	// 	redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
+	// 	return redisTemplate;
+	// }
+	//
+	// @Bean
+	// public ChannelTopic channelTopic() { // (4)
+	// 	return new ChannelTopic("chatroom");
+	// }
 
 	// @Bean
 	// public RedisTemplate<String, Object> redisTemplate() {

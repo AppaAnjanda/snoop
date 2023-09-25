@@ -23,6 +23,7 @@ import java.util.Optional;
 @Slf4j
 public class FoodDataService {
 
+
     private final FoodProductRepository foodProductRepository;
     private final FoodPriceRepository foodPriceRepository;
 
@@ -30,10 +31,11 @@ public class FoodDataService {
     public boolean checkUpdateTime(FoodProduct foodProduct) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime lastUpdateTime = LocalDateTime.parse(foodProduct.getTimestamp());
+        LocalDateTime realTime = lastUpdateTime.plusHours(9);
         // 업데이트 경과 시간
-        Duration duration = Duration.between(lastUpdateTime, now);
-        // 5분 지났으면 업데이트 진행
-        if (duration.toMinutes() >= 5) return true;
+        Duration duration = Duration.between(realTime, now);
+        // 10분 지났으면 업데이트 진행
+        if (duration.toMinutes() >= 10) return true;
         else return false;
     }
 
@@ -52,11 +54,12 @@ public class FoodDataService {
                 LocalDateTime now = LocalDateTime.now();
                 int minute = now.getMinute();
 
-                if (minute < 5) {
+                if (minute < 15) {
                     createPriceData(productInfo, productInfo.getCode());
 
-                    // 가격이 더 떨어졌으면 업데이트
-                } else if (originProduct.getPrice() > productInfo.getPrice()) {
+                }
+                // 가격이 더 떨어졌으면 업데이트
+                if (originProduct.getPrice() > productInfo.getPrice()) {
                     updateData(originProduct, productInfo);
                     updatePriceData(productInfo);
                 }
@@ -88,10 +91,11 @@ public class FoodDataService {
 
         String formatTime = parseTime();
 
-        // 링크, 출처, 시간, 가격 업데이트 후 저장
+        // 링크, 출처, 시간, 가격, 이미지 업데이트 후 저장
         foodProduct.setProductLink(productInfo.getProductLink());
         foodProduct.setProvider(productInfo.getProvider());
         foodProduct.setPrice(productInfo.getPrice());
+        foodProduct.setProductImage(productInfo.getProductImage());
         foodProduct.setTimestamp(formatTime);
 
         foodProductRepository.save(foodProduct);
@@ -101,17 +105,23 @@ public class FoodDataService {
     // 그 시간대의 가격 정보 업데이트
     public void updatePriceData(ProductInfo productInfo) {
 
-        // 정렬 기준
-        Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
+        LocalDateTime now = LocalDateTime.now();
+        int minute = now.getMinute();
 
-        // 가격 정보 최신순
-        List<FoodPrice> priceList = foodPriceRepository.findSortedByCode(productInfo.getCode(), sort);
+        if (minute >= 15) {
 
-        // 마지막 가격 정보의 가격 업데이트
-        FoodPrice lastPrice = priceList.get(0);
-        lastPrice.setPrice(productInfo.getPrice());
+            // 정렬 기준
+            Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
 
-        foodPriceRepository.save(lastPrice);
+            // 가격 정보 최신순
+            List<FoodPrice> priceList = foodPriceRepository.findSortedByCode(productInfo.getCode(), sort);
+
+            // 마지막 가격 정보의 가격 업데이트
+            FoodPrice lastPrice = priceList.get(0);
+            lastPrice.setPrice(productInfo.getPrice());
+
+            foodPriceRepository.save(lastPrice);
+        }
     }
 
     // 가격 정보 생성
@@ -125,8 +135,10 @@ public class FoodDataService {
     }
 
     public String parseTime() {
+
         LocalDateTime now = LocalDateTime.now();
+        LocalDateTime realTime = now.minusHours(9);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        return now.format(formatter);
+        return realTime.format(formatter);
     }
 }

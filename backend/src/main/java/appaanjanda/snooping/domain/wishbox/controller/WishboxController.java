@@ -37,9 +37,15 @@ public class WishboxController {
     })
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "찜 상품 등록", description = "상세 상품 화면에서 찜 버튼을 통해 상품id로 찜 상품 등록", tags = { "Wishbox Controller" })
+<<<<<<< HEAD
     @PostMapping("/add/{productId}")
     public ResponseEntity<AddWishboxResponseDto> addWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable String productId, @RequestBody AddWishboxRequestDto addWishboxRequestDto) {
         return ResponseEntity.ok(wishboxService.addWishbox(membersInfo.getId(), productId, addWishboxRequestDto));
+=======
+    @PostMapping("/add/{productCode}")
+    public ResponseEntity<AddWishboxResponseDto> addWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable String productCode) {
+        return ResponseEntity.ok(wishboxService.addWishbox(membersInfo.getId(), productCode));
+>>>>>>> 2c3958abe891aaacec106801c9ad2226a7a5d8d5
     }
 
     // 찜 상품 목록 조회
