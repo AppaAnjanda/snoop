@@ -2,14 +2,6 @@ package appaanjanda.snooping.domain.wishbox.service;
 
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.repository.MemberRepository;
-import appaanjanda.snooping.domain.product.entity.product.DigitalProduct;
-import appaanjanda.snooping.domain.product.entity.product.FoodProduct;
-import appaanjanda.snooping.domain.product.entity.product.FurnitureProduct;
-import appaanjanda.snooping.domain.product.entity.product.NecessariesProduct;
-import appaanjanda.snooping.domain.product.repository.product.DigitalProductRepository;
-import appaanjanda.snooping.domain.product.repository.product.FoodProductRepository;
-import appaanjanda.snooping.domain.product.repository.product.FurnitureProductRepository;
-import appaanjanda.snooping.domain.product.repository.product.NecessariesProductRepository;
 import appaanjanda.snooping.domain.product.service.ProductSearchService;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
@@ -41,7 +33,6 @@ public class WishboxService {
 	private final MemberRepository memberRepository;
 	private final CoupangCrawlingCaller coupangCrawlingCaller;
 	private final NaverApiCaller naverApiCaller;
-
 	private final ProductSearchService productSearchService;
 
 	//찜 상품 등록
@@ -111,8 +102,7 @@ public class WishboxService {
 				.build();
 	}
 
-//
-//	// 찜 상품 기져와서 업데이트
+	// 찜 상품 기져와서 업데이트
 //	@Scheduled(cron = "*/10 * * * *")
 //	public void wishboxUpdate() {
 //		List<Wishbox> allWishbox = wishboxRepository.findAll();
