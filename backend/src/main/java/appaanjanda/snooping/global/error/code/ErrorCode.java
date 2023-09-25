@@ -23,7 +23,8 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "A-005", "해당 refresh token은 존재하지 않습니다."),
     REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "A-006", "해당 refresh token은 만료됐습니다."),
     NOT_ACCESS_TOKEN_TYPE(HttpStatus.UNAUTHORIZED, "A-007", "해당 토큰은 ACCESS TOKEN이 아닙니다."),
-    FORBIDDEN_ROLE(HttpStatus.FORBIDDEN, "A-008", "해당 Role이 아닙니다."),
+    NO_PERMISSION(HttpStatus.UNAUTHORIZED, "A-008", "권한 없음"),
+    FORBIDDEN_ROLE(HttpStatus.FORBIDDEN, "A-009", "해당 Role이 아닙니다."),
 
     // 유저
     NOT_EXISTS_USER_ID(HttpStatus.NOT_FOUND, "U-001", "존재하지 않는 유저 아이디입니다."),
