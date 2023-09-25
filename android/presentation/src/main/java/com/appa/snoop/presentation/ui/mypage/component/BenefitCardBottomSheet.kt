@@ -40,7 +40,6 @@ fun BottomSheet(viewModel: MyPageViewModel, sheetState: SheetState, onDismiss: (
 
     val cards by viewModel.cardsState.collectAsState()
 
-
     ModalBottomSheet(
         sheetState = sheetState,
         containerColor = WhiteColor,

@@ -6,7 +6,7 @@ import com.appa.snoop.domain.repository.MemberRepository
 import javax.inject.Inject
 
 class GetMemberInfoUseCase @Inject constructor(
-    val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository
 ) {
     suspend operator fun invoke(): NetworkResult<Member> {
         return memberRepository.getMemberInfo()

@@ -90,10 +90,11 @@ fun MypageScreen(
             })
     }
 
-    val memberInfoState by myPageViewModel.memberInfo.collectAsState()
-    LaunchedEffect(Unit) {
-        myPageViewModel.getMemberInfo()
+    val memberInfoState by mainViewModel.memberInfo.collectAsState()
+    LaunchedEffect(key1 = Unit, key2 = memberInfoState) {
+        mainViewModel.getMemberInfo()
     }
+
 
     Column(
         modifier = Modifier

@@ -1,4 +1,4 @@
-package com.appa.snoop.presentation.ui.mypage.profile.component
+package com.appa.snoop.presentation.ui.mypage.modifyprofile.component
 
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -12,12 +12,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,7 +26,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
-import com.appa.snoop.presentation.ui.theme.WhiteColor
 import ir.kaaveh.sdpcompose.sdp
 
 @Composable
