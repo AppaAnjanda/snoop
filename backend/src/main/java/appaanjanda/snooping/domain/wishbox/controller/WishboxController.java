@@ -6,7 +6,6 @@ import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.domain.wishbox.service.dto.AddWishboxRequestDto;
 import appaanjanda.snooping.domain.wishbox.service.dto.AddWishboxResponseDto;
 import appaanjanda.snooping.domain.wishbox.service.dto.RemoveWishboxResponseDto;
-import appaanjanda.snooping.domain.wishbox.service.dto.WishboxResponseDto;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,15 +36,9 @@ public class WishboxController {
     })
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "찜 상품 등록", description = "상세 상품 화면에서 찜 버튼을 통해 상품id로 찜 상품 등록", tags = { "Wishbox Controller" })
-<<<<<<< HEAD
-    @PostMapping("/add/{productId}")
-    public ResponseEntity<AddWishboxResponseDto> addWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable String productId, @RequestBody AddWishboxRequestDto addWishboxRequestDto) {
-        return ResponseEntity.ok(wishboxService.addWishbox(membersInfo.getId(), productId, addWishboxRequestDto));
-=======
     @PostMapping("/add/{productCode}")
-    public ResponseEntity<AddWishboxResponseDto> addWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable String productCode) {
-        return ResponseEntity.ok(wishboxService.addWishbox(membersInfo.getId(), productCode));
->>>>>>> 2c3958abe891aaacec106801c9ad2226a7a5d8d5
+    public ResponseEntity<AddWishboxResponseDto> addWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable String productCode, @RequestBody AddWishboxRequestDto addWishboxRequestDto) {
+        return ResponseEntity.ok(wishboxService.addWishbox(membersInfo.getId(), productCode, addWishboxRequestDto));
     }
 
     // 찜 상품 목록 조회
@@ -59,7 +52,7 @@ public class WishboxController {
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "찜 상품 목록 조회", description = "찜 페이지 이동 시 진행되는 찜 목록 조회", tags = { "Wishbox Controller" })
     @GetMapping("")
-    public ResponseEntity<List<WishboxResponseDto>> getWishboxList(@MemberInfo MembersInfo membersInfo) {
+    public ResponseEntity<List<Wishbox>> getWishboxList(@MemberInfo MembersInfo membersInfo) {
         return ResponseEntity.ok(wishboxService.getWishboxList(membersInfo.getId()));
     }
 
@@ -75,8 +68,7 @@ public class WishboxController {
     @Operation(summary = "찜 상품 삭제", description = "찜 페이지에서 선택항목에 대한 찜 상품 삭제", tags = { "Wishbox Controller" })
     @DeleteMapping("/remove/{wishboxId}")
     public ResponseEntity<RemoveWishboxResponseDto> removeWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable Long wishboxId) {
-        return ResponseEntity.ok(wishboxService.removeWishbox(membersInfo.getId(), wishboxId));
+        return ResponseEntity.ok(wishboxService.removeWishbox(wishboxId));
     }
-
 
 }
