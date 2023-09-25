@@ -122,6 +122,8 @@ class CategoryViewModel @Inject constructor(
     val _pagingDataFlow = MutableStateFlow<PagingData<Product>>(PagingData.empty())
     val pagingDataFlow = _pagingDataFlow.asStateFlow()
 
+//    val pagingFlow: Flow<PagingData<Product>> = getProductListPagingData("디지털가전", "노트북")
+
     // Collect the paging data into the StateFlow
     fun getProductListByCategoryPaging(majorName: String, minorName: String) {
         viewModelScope.launch {
@@ -129,6 +131,7 @@ class CategoryViewModel @Inject constructor(
                 .collectLatest { pagingData ->
                     _pagingDataFlow.emit(pagingData)
                 }
+//            getProductListByCategoryUseCase.invoke(majorName, minorName, 1)
         }
     }
 

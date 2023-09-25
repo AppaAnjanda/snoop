@@ -25,11 +25,7 @@ class ProductPagingDataSource @Inject constructor(
             when (result) {
                 is NetworkResult.Success -> {
                     Log.d(TAG, "load: 토탈 페이지? ${result.data.totalPage}")
-                    Log.d(TAG, "load: ${LoadResult.Page(
-                        data = result.data.contents,
-                        prevKey = null, // only paging forward
-                        nextKey = if (page < result.data.totalPage) page + 1 else null
-                    )}")
+                    Log.d(TAG, "load: 리스트 목록 -> ${result.data.contents}")
                     LoadResult.Page(
                         data = result.data.contents,
                         prevKey = if (page == 1) null else page - 1,

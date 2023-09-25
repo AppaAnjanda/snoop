@@ -1,5 +1,6 @@
 package com.appa.snoop.presentation.ui.category.component
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
@@ -7,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,9 +34,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.LottieAnim
+import com.appa.snoop.presentation.ui.category.utils.LoadingLottieAnimation
 import com.appa.snoop.presentation.ui.category.utils.convertNaverUrl
 import com.appa.snoop.presentation.ui.home.dumy.imageLinksToCoupang
 import com.appa.snoop.presentation.ui.theme.BlackColor
@@ -47,6 +54,7 @@ import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 private const val TAG = "[김희웅] ProductImageView"
+@SuppressLint("ResourceType")
 @Composable
 fun ProductImageView(
     modifier: Modifier = Modifier,
@@ -56,6 +64,14 @@ fun ProductImageView(
 //    var isChecked by remember { mutableStateOf(false) }
     var isChecked by remember { mutableStateOf(product.wishYn) }
     val context = LocalContext.current
+
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lottie_loading))
+
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        speed = 1f,
+        iterations = Int.MAX_VALUE
+    )
 
     Box(
         modifier = modifier
@@ -71,7 +87,8 @@ fun ProductImageView(
                 .data(product.productImage)
                 .build(),
             contentDescription = "제품 이미지",
-            contentScale = ContentScale.FillWidth
+            contentScale = ContentScale.FillWidth,
+            placeholder = painterResource(id = R.drawable.img_logo)
         )
 
         Box(

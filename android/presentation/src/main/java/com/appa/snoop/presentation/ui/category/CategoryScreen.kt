@@ -128,14 +128,16 @@ fun CategoryScreen(
             // TODO 페이징 기능 구현하기
             LazyVerticalGrid(
                 columns = GridCells.Fixed(SIZE),
-                state = LazyGridState()
             ) {
                 items (
-                    pagingData.itemSnapshotList
+                    pagingData.itemCount,
+                    key = {
+                        pagingData[it]!!.id
+                    }
                 ) {
                     CategoryItem(
                         modifier = Modifier,
-                        product = it!!,
+                        product = pagingData[it]!!,
                         onItemClicked = {
                             navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
                         },
