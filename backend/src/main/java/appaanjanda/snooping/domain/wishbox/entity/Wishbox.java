@@ -36,17 +36,20 @@ public class Wishbox extends BaseTimeEntity {
 	 */
 	private String productCode;
 
+	private String provider;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "wishboxList")
 	@JsonIgnore
 	private Member member;
 
 	@Builder
-	public Wishbox(Long id, int alertPrice, Boolean alertYn, String productCode, Member member) {
+	public Wishbox(Long id, int alertPrice, Boolean alertYn, String productCode, Member member, String provider) {
 		this.id = id;
 		this.alertPrice = alertPrice;
 		this.alertYn = alertYn;
 		this.productCode = productCode;
 		this.member = member;
+		this.provider = provider;
 	}
 }
