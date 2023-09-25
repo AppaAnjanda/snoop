@@ -13,14 +13,14 @@ spring:
   profiles:
     active: es,swagger,redis,mongo, rabitmq, s3
   datasource:
-#    url: jdbc:postgresql://52.78.159.20:5432/snoop
-#    username: ENC(JIxLlHeC+6u59PjTWidzjw==)
-#    password: ENC(uYYlHgHg5hh6vRr84SVLcEm7kq66Dw0A)
-#    driver-class-name: org.postgresql.Driver
-    url : jdbc:h2:tcp://localhost/~/snooping
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://52.78.159.20:5432/snoop
+    username: ENC(JIxLlHeC+6u59PjTWidzjw==)
+    password: ENC(uYYlHgHg5hh6vRr84SVLcEm7kq66Dw0A)
+    driver-class-name: org.postgresql.Driver
+#    url : jdbc:h2:tcp://localhost/~/snooping
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
 
 
 
@@ -44,22 +44,6 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-
-cloud:
-  aws:
-    credentials:
-      access-key: ENC(oFy/H6hyvBDdYt0vWz4E5BUVbGnN5nKnKChQF5vnhBg=)
-      secret-key: ENC(8HbtPTAzusl9ek0hoxJs79k6ytCJfCVLp3mFC5Dd45owIa2vqe1hvS0ImuKPaWVZBNwlxD3rn9c=)
-    s3:
-      bucket: appaanjanda
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
-    cloud:
-      url: ENC(1p4FwzESBl2nkhJiVMzdvFh72BRH12yUR162l7j8tJ4areYpQVkIRUEkKSJNgwpg)
-
-
 
 jwt:
   password: ENC(EkScQq/G1fRkMjzEBuJm2929lWSio0h2SP4muyxM5dLQVAMlFLOV5rst66cGRjLTVo6hgqDDcNmzXMegiy6oWj7j8jF8pPX49p6vsWOmgo281iBPdk6kJnhW+mBZ+GN/wd6Vu8twkvKz5pz/PSnpB7/3FN+Et6tKBwZ4OcmQREIoQ5U0m1cJFB2MF/aZwiMfLeLkF7HBRtmlFnUiNKTc80dsFXwkacE6ZMg2QDktra8FI8XNECFhBKEnIWs4pvta82wtMafWl6k=)
