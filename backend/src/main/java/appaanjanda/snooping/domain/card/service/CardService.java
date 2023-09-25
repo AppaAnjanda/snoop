@@ -65,7 +65,7 @@ public class CardService {
 
 	public CardResponse getMyCard(Long id){
 		Member member = memberRepository.findById(id).orElseThrow(()
-				-> new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID));
+				-> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
 
 		List<String> cardName = new ArrayList<>();
 
