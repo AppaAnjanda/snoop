@@ -10,6 +10,8 @@ import appaanjanda.snooping.domain.product.repository.product.DigitalProductRepo
 import appaanjanda.snooping.domain.product.repository.product.FoodProductRepository;
 import appaanjanda.snooping.domain.product.repository.product.FurnitureProductRepository;
 import appaanjanda.snooping.domain.product.repository.product.NecessariesProductRepository;
+import appaanjanda.snooping.domain.product.service.ProductSearchService;
+import appaanjanda.snooping.domain.search.dto.SearchContentDto;
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.service.dto.*;
 import appaanjanda.snooping.global.error.code.ErrorCode;
@@ -32,36 +34,55 @@ public class WishboxService {
 
 	private final WishboxRepository wishboxRepository;
 	private final MemberRepository memberRepository;
+	private final ProductSearchService productSearchService;
 
 	//찜 상품 등록
 	public AddWishboxResponseDto addWishbox(Long memberId, String productCode, AddWishboxRequestDto addWishboxRequestDto) {
 		Member member = memberRepository.findById(memberId)
 				.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
+		SearchContentDto searchContentDto = productSearchService.searchProductById(productCode, memberId);
 
 		Wishbox wishbox = Wishbox.builder()
 				.alertPrice(addWishboxRequestDto.getAlertPrice())
 				.alertYn(true)
 				.productCode(productCode)
 				.member(member)
+				.provider(searchContentDto.getProvider())
 				.build();
 
-		wishboxRepository.save(wishbox);
+		wishboxRepository.saveAndFlush(wishbox);
 
-		return AddWishboxResponseDto
-				.builder()
+		return AddWishboxResponseDto.builder()
+				.wishboxId(wishbox.getId())
 				.productCode(productCode)
 				.alertYn(true)
 				.alertPrice(addWishboxRequestDto.getAlertPrice())
+				.provider(searchContentDto.getProvider())
 				.build();
 	}
 
 	// 찜 상품 목록 조회
-	// TODO : 추가적으로 Response DTO 명확하게 수정
 	@Transactional(readOnly = true)
-	public List<Wishbox> getWishboxList(Long memberId) {
+	public List<WishboxResponseDto> getWishboxList(Long memberId) {
 		Member member = memberRepository.findById(memberId)
 				.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
-		return member.getWishboxList();
+		List<Wishbox> wishboxes = wishboxRepository.findByMember(member);
+
+		List<WishboxResponseDto> wishboxResponseDtoList = new ArrayList<>();
+		for (Wishbox wishbox : wishboxes) {
+			SearchContentDto searchContentDto = productSearchService.searchProductById(wishbox.getProductCode(), memberId);
+			WishboxResponseDto wishboxResponseDto = WishboxResponseDto.builder()
+					.wishboxId(wishbox.getId())
+					.productCode(wishbox.getProductCode())
+					.productName(searchContentDto.getProductName())
+					.productImage(searchContentDto.getProductImage())
+					.price(searchContentDto.getPrice())
+					.alertPrice(wishbox.getAlertPrice())
+					.alertYn(wishbox.getAlertYn())
+					.build();
+			wishboxResponseDtoList.add(wishboxResponseDto);
+		}
+		return wishboxResponseDtoList;
 	}
 
 	// 찜 상품 삭제
@@ -75,68 +96,4 @@ public class WishboxService {
 				.removeId(wishboxId)
 				.build();
 	}
-
-	// 상품id로 조회
-//	public Object searchProductById(String productId) {
-//		// product_123 에서 1(대분류 코드) 추출
-//		char index = productId.split("_")[1].charAt(0);
-//
-//		switch (index) {
-//			case '1':
-//				return digitalProductRepositoBadRequestExceptionry.findById(productId)
-//						.orElseThrow(() -> new (ErrorCode.NOT_EXISTS_DIGITAL_PRODUCT));
-//			case '2':
-//				return furnitureProductRepository.findById(productId)
-//						.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_NECESSARIES_PRODUCT));
-//			case '3':
-//				return necessariesProductRepository.findById(productId)
-//						.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_NECESSARIES_PRODUCT));
-//			case '4':
-//				return foodProductRepository.findById(productId)
-//						.orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTS_FOOD_PRODUCT));
-//			default:
-//				throw new BadRequestException(ErrorCode.NOT_EXISTS_PRODUCT);
-//		}
-//	}
-//
-//	public WishboxResponseDto getObjectToDto(String productId, Object product) {
-//		char index = productId.split("_")[1].charAt(0);
-//
-//		switch (index) {
-//			case '1':
-//				DigitalProduct digitalProduct = (DigitalProduct) product;
-//				return WishboxResponseDto.builder()
-//						.productId(productId)
-//						.productName(digitalProduct.getProductName())
-//						.productImage(digitalProduct.getProductImage())
-//						.price(digitalProduct.getPrice())
-//						.build();
-//			case '2':
-//				FurnitureProduct furnitureProduct = (FurnitureProduct) product;
-//				return WishboxResponseDto.builder()
-//						.productId(productId)
-//						.productName(furnitureProduct.getProductName())
-//						.productImage(furnitureProduct.getProductImage())
-//						.price(furnitureProduct.getPrice())
-//						.build();
-//			case '3':
-//				NecessariesProduct necessariesProduct = (NecessariesProduct) product;
-//				return WishboxResponseDto.builder()
-//						.productId(productId)
-//						.productName(necessariesProduct.getProductName())
-//						.productImage(necessariesProduct.getProductImage())
-//						.price(necessariesProduct.getPrice())
-//						.build();
-//			case '4':
-//				FoodProduct foodProduct = (FoodProduct) product;
-//				return WishboxResponseDto.builder()
-//						.productId(productId)
-//						.productName(foodProduct.getProductName())
-//						.productImage(foodProduct.getProductImage())
-//						.price(foodProduct.getPrice())
-//						.build();
-//			default:
-//				throw new BadRequestException(ErrorCode.NOT_EXISTS_PRODUCT);
-//		}
-//	}
 }

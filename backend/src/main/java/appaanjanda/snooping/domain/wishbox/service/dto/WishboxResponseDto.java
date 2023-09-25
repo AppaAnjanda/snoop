@@ -7,16 +7,22 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class WishboxResponseDto {
-    private String productId;
+    private Long wishboxId;
+    private String productCode;
     private String productName;
     private String productImage;
     private int price;
+    private int alertPrice;
+    private boolean alertYn;
 
     @Builder
-    public WishboxResponseDto(String productId, String productName, String productImage, int price) {
-        this.productId = productId;
+    public WishboxResponseDto(Long wishboxId, String productCode, String productName, String productImage, int price, int alertPrice, boolean alertYn) {
+        this.wishboxId = wishboxId;
+        this.productCode = productCode;
         this.productName = productName;
         this.productImage = productImage;
         this.price = price;
+        this.alertPrice = alertPrice;
+        this.alertYn = alertYn;
     }
 }
