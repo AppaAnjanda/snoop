@@ -11,12 +11,14 @@ import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductSearchService {
 
     private final DigitalProductRepository digitalProductRepository;
@@ -82,28 +84,28 @@ public class ProductSearchService {
     }
 
     //상품id로 조회
-    public SearchContentDto searchProductById(String productCode, Long memberId) {
+    public ProductInterface getProduct(String productCode) {
         // 123 에서 1(대분류 코드) 추출
         char index = productCode.charAt(0);
 
-        ProductInterface product;
         switch (index) {
             case '1':
-                product = digitalProductRepository.findByCode(productCode).orElse(null);
-                break;
+                return digitalProductRepository.findByCode(productCode).orElse(null);
             case '2':
-                product = furnitureProductRepository.findByCode(productCode).orElse(null);
-                break;
+                return furnitureProductRepository.findByCode(productCode).orElse(null);
             case '3':
-                product = necessariesProductRepository.findByCode(productCode).orElse(null);
-                break;
+                return necessariesProductRepository.findByCode(productCode).orElse(null);
             case '4':
-                product = foodProductRepository.findByCode(productCode).orElse(null);
-                break;
+                return foodProductRepository.findByCode(productCode).orElse(null);
             default:
                 throw new BusinessException(ErrorCode.NOT_EXISTS_CATEGORY);
-
         }
+    }
+
+    // 상세 Dto 반환
+    public SearchContentDto searchProductById(String productCode, Long memberId) {
+        ProductInterface product = getProduct(productCode);
+
         if (product != null) {
             Set<String> wishProductCode = wishboxRepository.findProductById(memberId);
             // 찜 여부

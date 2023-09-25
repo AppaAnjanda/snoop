@@ -2,11 +2,13 @@ package appaanjanda.snooping.domain.product.service;
 
 import appaanjanda.snooping.domain.product.dto.BuyTimingDto;
 import appaanjanda.snooping.domain.product.dto.PriceHistoryDto;
-import appaanjanda.snooping.domain.product.entity.price.FoodPrice;
 import appaanjanda.snooping.domain.product.entity.price.Price;
 import appaanjanda.snooping.domain.product.entity.product.Product;
+import appaanjanda.snooping.domain.product.entity.product.ProductInterface;
+import appaanjanda.snooping.domain.search.dto.SearchContentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.*;
@@ -14,7 +16,6 @@ import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramAggre
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
 import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
 import org.elasticsearch.search.aggregations.bucket.histogram.ParsedDateHistogram;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.*;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
@@ -31,6 +32,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +42,8 @@ public class ProductDetailService {
     private final ProductSearchService productSearchService;
     private final ElasticsearchRestTemplate elasticsearchRestTemplate;
 
-    private final String[] indices = {"디지털가전가격", "가구가격", "생활용품가격", "식품가격"}; // 검색할 인덱스들
+    private final String[] PRICE_INDICES = {"디지털가전가격", "가구가격", "생활용품가격", "식품가격"}; // 검색할 인덱스들
+    private final String[] PRODUCT_INDICES = {"디지털가전", "가구", "생활용품", "식품"}; // 검색할 인덱스들
 
     // 시간별 그래프
     public List<PriceHistoryDto> productGraph(String productCode, DateHistogramInterval interval, int cnt) {
@@ -121,7 +124,7 @@ public class ProductDetailService {
                 .withSort(SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC))
                 .build();
 
-        return elasticsearchRestTemplate.search(searchQuery, Price.class, IndexCoordinates.of(indices));
+        return elasticsearchRestTemplate.search(searchQuery, Price.class, IndexCoordinates.of(PRICE_INDICES));
     }
 
     public BuyTimingDto buyTiming(String productCode) {
@@ -163,6 +166,47 @@ public class ProductDetailService {
         else timing = "완전 비싸다";
 
         return new String[]{String.valueOf(roundedPercent), timing};
+    }
+
+    // 유사 제품 쿼리
+    public SearchHits<?> similarProduct(String productCode) {
+
+        ProductInterface curProduct = productSearchService.getProduct(productCode);
+
+        // 현재 상품명으로 match쿼리
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
+                .must(QueryBuilders.matchQuery("product_name", curProduct.getProductName()));
+
+        NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
+                .withQuery(boolQuery)
+                .withPageable(Pageable.ofSize(11))
+                .build();
+
+        return elasticsearchRestTemplate.search(nativeSearchQuery, Product.class, IndexCoordinates.of(PRODUCT_INDICES));
+    }
+
+    // 유사제품 추천
+    public List<SearchContentDto> getSimilarRecommend(String productCode, Long memberId) {
+
+        // 카테고리 유사
+        SearchHits<?> searchHits = similarProduct(productCode);
+
+        // 상품코드 추출
+        List<String> similarProductCode = searchHits.getSearchHits().stream()
+                .map(searchHit -> {
+                    Product product = (Product) searchHit.getContent();
+                    return product.getCode();
+                })
+                .collect(Collectors.toList());
+
+        List<SearchContentDto> result = new ArrayList<>();
+        // 현재 상품은 생략
+        for (String similarCode : similarProductCode) {
+            if (similarCode.equals(productCode)) continue;
+            SearchContentDto searchContentDto = productSearchService.searchProductById(similarCode, memberId);
+            result.add(searchContentDto);
+        }
+        return result;
     }
 
 }
