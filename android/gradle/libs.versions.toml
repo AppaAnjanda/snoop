@@ -38,6 +38,7 @@ coil = "2.4.0"
 lottie = "6.1.0"
 kakao = "2.16.0"
 plot = "0.1.1"
+androidxPaging = "3.2.1"
 
 [libraries]
 
@@ -63,6 +64,7 @@ androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime
 androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "androixPagingCompose" }
+androidx-paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "androidxPaging" }
 
 #OKHTTP
 okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp" }

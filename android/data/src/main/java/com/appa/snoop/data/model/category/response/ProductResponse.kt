@@ -26,5 +26,7 @@ data class ProductResponse(
     @SerializedName("productImage")
     val productImage: String,
     @SerializedName("timestamp")
-    val timestamp: String
+    val timestamp: String,
+    @SerializedName("wishYn")
+    val wishYn: Boolean
 ) : Parcelable

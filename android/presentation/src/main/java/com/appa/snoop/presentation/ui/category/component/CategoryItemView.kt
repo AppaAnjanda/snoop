@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.presentation.R
@@ -60,51 +61,23 @@ fun CategoryItem(
                 fontSize = 11.ssp,
                 fontWeight = FontWeight.Bold,
                 color = BlackColor,
-            )
+            ),
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
         )
         Spacer(modifier = modifier.height(8.sdp))
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-//            Text(
-//                text = product.price.toString(),
-//                style = TextStyle(
-//                    fontSize = 12.ssp,
-//                    color = DarkGrayColor,
-//                    textDecoration = TextDecoration.LineThrough,
-//                )
-//            )
-//            Spacer(modifier = modifier.width(4.sdp))
-//            Text(
-//                text = "10.0%",
-//                style = TextStyle(
-//                    fontSize = 14.ssp,
-//                    fontWeight = FontWeight.SemiBold,
-//                    color = RedColor,
-//                )
-//            )
-//            Image(
-//                painterResource(id = R.drawable.ic_increase),
-//                contentDescription = "가격 하락",
-//                modifier = modifier.size(12.sdp)
-//            )
+
         }
         Text(
             text = PriceUtil.formatPrice(product.price.toString()) + " 원",
             style = TextStyle(
                 fontSize = 16.ssp,
                 fontWeight = FontWeight.ExtraBold,
-            )
+            ),
         )
+        Spacer(modifier = modifier.height(8.sdp))
     }
 }
-
-//@Preview
-//@Composable
-//fun PreviewCategoryItem() {
-//    CategoryItem(
-//        modifier = Modifier,
-//        onItemClicked = {},
-//        onLikeClicked = {}
-//    )
-//}

@@ -32,7 +32,7 @@ fun CategoryLaunchedEffect(
                         categoryViewModel.searchBarToggle()
                     }
                     CategoryTopbar.AppBarIcons.FilterIcon -> {
-//                        focusManager.clearFocus()
+                        focusManager.clearFocus()
                         bottomSheetState.partialExpand()
                     }
                 }

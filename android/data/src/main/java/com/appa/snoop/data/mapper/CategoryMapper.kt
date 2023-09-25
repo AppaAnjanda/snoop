@@ -1,7 +1,9 @@
 package com.appa.snoop.data.mapper
 
+import com.appa.snoop.data.model.category.response.ProductPagingResponse
 import com.appa.snoop.data.model.category.response.ProductResponse
 import com.appa.snoop.domain.model.category.Product
+import com.appa.snoop.domain.model.category.ProductPaging
 
 fun ProductResponse.toDto(): Product {
     return Product (
@@ -14,6 +16,15 @@ fun ProductResponse.toDto(): Product {
         productName = productName,
         productLink = productLink,
         productImage = productImage,
-        timestamp = timestamp
+        timestamp = timestamp,
+        wishYn = wishYn
+    )
+}
+
+fun ProductPagingResponse.toDto(): ProductPaging {
+    return ProductPaging(
+        contents = contents.map{ it.toDto() },
+        currentPage = currentPage,
+        totalPage = totalPage
     )
 }
