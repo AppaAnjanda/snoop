@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import appaanjanda.snooping.jwt.MemberInfo;
@@ -37,7 +38,7 @@ public class MemberController {
 	})
 	@Operation(summary = "회원가입", description = "회원가입 시 이메일, 패스워드, 내가 가지고 있는 cardlist를 request로 받는다", tags = { "Member Controller" })
 	@PostMapping("/save")
-	public String save(@RequestBody UserSaveRequestDto userSaveRequestDto){
+	public String save(@RequestBody @Validated UserSaveRequestDto userSaveRequestDto){
 		return memberService.save(userSaveRequestDto);
 	}
 
