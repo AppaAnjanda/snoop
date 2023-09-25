@@ -10,5 +10,6 @@ data class Product (
     val productName: String,
     val productLink: String,
     val productImage: String,
-    val timestamp: String
+    val timestamp: String,
+    val wishYn: Boolean
 )

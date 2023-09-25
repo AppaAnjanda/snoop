@@ -53,7 +53,8 @@ fun ProductImageView(
     product: Product,
     onLikeClicked: () -> Unit
 ) {
-    var isChecked by remember { mutableStateOf(false) }
+//    var isChecked by remember { mutableStateOf(false) }
+    var isChecked by remember { mutableStateOf(product.wishYn) }
     val context = LocalContext.current
 
     Box(
@@ -120,15 +121,18 @@ fun ProductImageView(
                     .background(color = WhiteColor)
                     .padding(3.sdp)
                     .noRippleClickable {
-                        // TODO("서버에 찜목록 추가")
                         onLikeClicked()
+//                        isChecked = !isChecked
                     }
             ) {
                 LottieAnim(
                     res = R.raw.lottie_like,
                     isChecked = isChecked,
                     startTime = 0.2f,
-                    endTime = 0.7f
+                    endTime = 0.7f,
+                    onClick = {
+                        isChecked = !isChecked
+                    }
                 )
             }
         }

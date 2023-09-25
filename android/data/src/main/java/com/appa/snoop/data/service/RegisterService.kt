@@ -1,9 +1,7 @@
 package com.appa.snoop.data.service
 
 import com.appa.snoop.data.model.registration.request.RefreshTokenRequest
-import com.appa.snoop.data.model.registration.request.RegisterRequest
 import com.appa.snoop.data.model.registration.response.AccessTokenResponse
-import com.appa.snoop.data.model.registration.response.LoginResponse
 import com.appa.snoop.data.model.registration.response.RegisterResponse
 import com.appa.snoop.domain.model.member.LoginInfo
 import com.appa.snoop.domain.model.member.Register

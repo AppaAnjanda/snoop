@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.category.Product
+import com.appa.snoop.domain.model.category.ProductPaging
 import com.appa.snoop.domain.usecase.category.GetProductListByCategoryUseCate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -81,17 +82,18 @@ class CategoryViewModel @Inject constructor(
     private val _productList = MutableStateFlow<List<Product>>(emptyList())
     val productList = _productList.asStateFlow()
 
-    fun getProductListByCategory(majorName: String, minorName: String) {
+    fun getProductListByCategory(majorName: String, minorName: String, pageNum: Int) {
         viewModelScope.launch {
-            val result = getProductListByCategoryUseCate.invoke(majorName, minorName)
-            
+            val result = getProductListByCategoryUseCate.invoke(majorName, minorName, pageNum)
+
             when(result) {
                 is NetworkResult.Success -> {
-                    _productList.emit(result.data)
+                    _productList.emit(result.data.contents)
                     Log.d(TAG, "getProductListByCategory: ${result.data}")
                 }
                 else -> {
-                    Log.d(TAG, "getProductListByCategory: 리스트를 불러오는데 실패했습니다.")
+                    Log.d(TAG, "getProductListByCategory: 리스트를 불러오는데 실패했습니다. 네트워크 활성화를 확인하세요.")
+                    Log.d(TAG, "getProductListByCategory: $result")
                 }
             }
         }
