@@ -1,16 +1,15 @@
 package appaanjanda.snooping.domain.card.service;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
+import appaanjanda.snooping.domain.card.service.dto.CardResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import appaanjanda.snooping.domain.card.entity.MyCard;
 import appaanjanda.snooping.domain.card.repository.CardRepository;
-import appaanjanda.snooping.domain.card.service.dto.AddMyCardRequest;
-import appaanjanda.snooping.domain.card.service.dto.DeleteCardRequest;
+import appaanjanda.snooping.domain.card.service.dto.UpdateMyCardRequest;
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.repository.MemberRepository;
 import appaanjanda.snooping.global.error.code.ErrorCode;
@@ -27,31 +26,58 @@ public class CardService {
 	private final CardRepository cardRepository;
 	private final MemberRepository memberRepository;
 
-	public void deleteMyCard(Long id, DeleteCardRequest request){
-		Member member = memberRepository.findById(id).orElseThrow(()
-				-> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
+//	public void deleteMyCard(Long id, DeleteCardRequest request){
+//		Member member = memberRepository.findById(id).orElseThrow(()
+//				-> new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID));
+//
+//		List<MyCard> myCardList = member.getMyCardList();
+//
+//		Set<String> cardTypes = new HashSet<>(request.getMyCard());
+//
+//		myCardList.stream()
+//				.filter(myCard -> cardTypes.contains(myCard.getCardType()))
+//				.forEach(myCard -> {
+//					log.info("mycardId={}", myCard.getId());
+//					cardRepository.delete(myCard.getId());
+//				});
+//	}
 
-		List<MyCard> myCardList = member.getMyCardList();
 
-		Set<String> cardTypes = new HashSet<>(request.getMyCard());
-
-		myCardList.stream()
-				.filter(myCard -> cardTypes.contains(myCard.getCardType()))
-				.forEach(myCard -> {
-					log.info("mycardId={}", myCard.getId());
-					cardRepository.delete(myCard.getId());
-				});
-	}
-
-	public void updateMyCard(Long id, AddMyCardRequest request) {
+	public void updateMyCard(Long id, UpdateMyCardRequest request) {
 		Member member = memberRepository.findById(id).orElseThrow(()
 			-> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
+
+		cardRepository.deleteAllByMember(member);
+
+		List<MyCard> myCards = new ArrayList<>();
 
 		request.getMyCard().stream()
 				.map(card -> MyCard.builder()
 						.cardType(card)
 						.member(member)
 						.build())
-				.forEach(cardRepository::save);
+				.forEach(myCards::add);
+
+
+		member.setCardList(myCards);
+
+	}
+
+	public CardResponse getMyCard(Long id){
+		Member member = memberRepository.findById(id).orElseThrow(()
+				-> new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID));
+
+		List<String> cardName = new ArrayList<>();
+
+		List<MyCard> cardByMemberId = cardRepository.findMyCardByMemberId(member.getId());
+
+		for (MyCard myCard : cardByMemberId) {
+			cardName.add(myCard.getCardType());
+		}
+
+		return CardResponse.builder()
+				.myCardList(cardName)
+				.build();
+
 	}
 }

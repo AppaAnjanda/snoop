@@ -19,7 +19,5 @@ public class UserResponse {
 
 	private String nickname;
 
-	private List<String> myCardList;
-
-	private Role role;
+	private String profileUrl;
 }
