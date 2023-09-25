@@ -5,6 +5,7 @@ import appaanjanda.snooping.domain.member.service.dto.UserResponse;
 import appaanjanda.snooping.domain.product.dto.BuyTimingDto;
 import appaanjanda.snooping.domain.product.dto.PriceHistoryDto;
 import appaanjanda.snooping.domain.product.service.ProductDetailService;
+import appaanjanda.snooping.domain.search.dto.SearchContentDto;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import appaanjanda.snooping.domain.product.service.ProductSearchService;
@@ -100,4 +101,13 @@ public class ProductDetailController {
         return productDetailService.buyTiming(decodedProductCode);
     }
 
+    // 유사 제품 추천
+    @GetMapping("/recommend/{productCode}")
+    @Operation(summary = "유사 제품 추천", description = "현재 상품과 유사 제품 추천", tags = { "Product Controller" })
+    public List<SearchContentDto> getRecommendProduct(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo) throws UnsupportedEncodingException {
+        //디코딩
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+
+        return productDetailService.getSimilarRecommend(decodedProductCode, membersInfo.getId());
+    }
 }
