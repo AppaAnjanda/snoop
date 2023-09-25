@@ -1,6 +1,8 @@
 package com.appa.snoop.data.service
 
+import com.appa.snoop.data.model.registration.request.RefreshTokenRequest
 import com.appa.snoop.data.model.registration.request.RegisterRequest
+import com.appa.snoop.data.model.registration.response.AccessTokenResponse
 import com.appa.snoop.data.model.registration.response.LoginResponse
 import com.appa.snoop.data.model.registration.response.RegisterResponse
 import com.appa.snoop.domain.model.member.LoginInfo
@@ -17,5 +19,10 @@ interface RegisterService {
     @POST("api/member/login")
     suspend fun login(
         @Body loginInfo: LoginInfo
-    ) : LoginResponse
+    ) : AccessTokenResponse
+
+    @POST("api/member/token")
+    suspend fun poseRefreshToken(
+        @Body refreshTokenRequest: RefreshTokenRequest
+    ) : String
 }

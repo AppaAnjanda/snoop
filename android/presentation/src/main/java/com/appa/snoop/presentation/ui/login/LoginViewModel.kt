@@ -70,7 +70,7 @@ class LoginViewModel @Inject constructor(
         when (result) {
             is NetworkResult.Success -> {
                 // token 값 sharedpreference에 넣어주자
-                Log.d(TAG, "login에 성공하였습니다. ${result.data.accessToken}")
+                Log.d(TAG, "login에 성공하였습니다. ${result.data}")
                 isLoginSuccessState = true
                 loginButtonClickToggle++
                 jwtTokenInputUseCase.invoke(result.data)
