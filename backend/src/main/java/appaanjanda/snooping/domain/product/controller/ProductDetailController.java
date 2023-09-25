@@ -6,11 +6,9 @@ import appaanjanda.snooping.domain.product.dto.BuyTimingDto;
 import appaanjanda.snooping.domain.product.dto.PriceHistoryDto;
 import appaanjanda.snooping.domain.product.service.ProductDetailService;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
-<<<<<<< backend/src/main/java/appaanjanda/snooping/domain/product/controller/ProductDetailController.java
 import appaanjanda.snooping.external.fastApi.CoupangCrawlingCaller;
 import appaanjanda.snooping.external.fastApi.NaverApiCaller;
-=======
->>>>>>> backend/src/main/java/appaanjanda/snooping/domain/product/controller/ProductDetailController.java
+
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import appaanjanda.snooping.domain.product.service.ProductSearchService;
