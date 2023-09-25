@@ -2,6 +2,8 @@ package com.appa.snoop.data.repository
 
 import android.util.Log
 import com.appa.snoop.data.local.PreferenceDataSource
+import com.appa.snoop.data.local.PreferenceDataSource.Companion.ACCESS_TOKEN
+import com.appa.snoop.data.local.PreferenceDataSource.Companion.REFRESH_TOKEN
 import com.appa.snoop.data.mapper.toDomain
 import com.appa.snoop.data.service.RegisterService
 import com.appa.snoop.data.service.handleApi
@@ -28,19 +30,21 @@ class RegisterRepositoryImpl @Inject constructor(
     }
     // 토큰 저장
     override suspend fun putJwtTokens(jwtTokens: JwtTokens) {
-        preferenceDatasource.putString("access_token", jwtTokens.accessToken)
+        preferenceDatasource.putString(ACCESS_TOKEN, jwtTokens.accessToken)
+        preferenceDatasource.putString(REFRESH_TOKEN, jwtTokens.refreshToken)
 //        preferenceDatasource.putString("refresh_token", jwtAccessToken.refreshToken)
 //        preferenceDatasource.putInt("member_id", jwtAccessToken.memberId)
 //        preferenceDatasource.putString("role", loginResult.role[0].role)
 //        Log.d(TAG, "토큰이 잘 저장되는지 로그 -> access_token : ${preferenceDatasource.getString("access_token")} refresh_token : ${preferenceDatasource.getString("refresh_token")} member_id : ${preferenceDatasource.getInt("member_id")}\nrole: ${preferenceDatasource.getString("role")}")
-        Log.d(TAG, "토큰이 잘 저장되는지 로그 -> access_token : ${preferenceDatasource.getString("access_token")}")
+        Log.d(TAG, "토큰이 잘 저장되는지 로그 -> access_token : ${preferenceDatasource.getString(ACCESS_TOKEN)}")
+        Log.d(TAG, "토큰이 잘 저장되는지 로그 -> refresh_token : ${preferenceDatasource.getString(REFRESH_TOKEN)}")
     }
     // 로그인 유무 확인
     override suspend fun getLoginStatus(): JwtTokens {
-        var jwtAccessToken = preferenceDatasource.getString("access_token") ?: "no_token_error"
-//        var jwtRefreshToken = preferenceDatasource.getString("refresh_token")
+        var jwtAccessToken = preferenceDatasource.getString(ACCESS_TOKEN) ?: "no_token_error"
+        var jwtRefreshToken = preferenceDatasource.getString(REFRESH_TOKEN) ?: "no_refresh_error"
 
-        return JwtTokens(jwtAccessToken)
+        return JwtTokens(jwtAccessToken, jwtRefreshToken)
     }
     // 로그아웃
     override suspend fun logout() {

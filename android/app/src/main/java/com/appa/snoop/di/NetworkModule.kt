@@ -1,15 +1,20 @@
 package com.appa.snoop.di
 
+import com.appa.snoop.data.local.PreferenceDataSource
 import com.appa.snoop.data.repository.RegisterRepositoryImpl
 import com.appa.snoop.data.service.BaseService
 import com.appa.snoop.data.service.CategoryService
 import com.appa.snoop.data.service.RegisterService
+import com.appa.snoop.di.NetworkModule_ProvideOkHttpClientFactory.provideOkHttpClient
 import com.appa.snoop.domain.repository.RegisterRepository
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import com.ssafy.likloud.config.RequestInterceptor
+import com.ssafy.likloud.config.ResponseInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -30,13 +35,15 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+    fun provideOkHttpClient(
+        requestInterceptor: RequestInterceptor,
+        responseInterceptor: ResponseInterceptor
+    ): OkHttpClient = OkHttpClient.Builder()
         .readTimeout(5000, TimeUnit.MILLISECONDS)
         .connectTimeout(5000, TimeUnit.MILLISECONDS)
         .addInterceptor(HttpLoggingInterceptor())
-//            .addNetworkInterceptor(XAccessTokenInterceptor()) // JWT 자동 헤더 전송
-//            .addInterceptor(AddCookiesInterceptor())  //쿠키 전송
-//            .addInterceptor(ReceivedCookiesInterceptor()) //쿠키 추출
+        .addInterceptor(requestInterceptor) // 헤더 JWT 통신
+        .addInterceptor(responseInterceptor) // 리퀘스트 코드 invalid check
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         .build()
 //    }
@@ -45,7 +52,9 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideRetrofit(
-        @Named("BASE_URL") baseUrl: String
+        @Named("BASE_URL") baseUrl: String,
+        requestInterceptor: RequestInterceptor,
+        responseInterceptor: ResponseInterceptor
     ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(
@@ -55,7 +64,7 @@ object NetworkModule {
                     .create()
             )
         )
-        .client(provideOkHttpClient())
+        .client(provideOkHttpClient(requestInterceptor, responseInterceptor))
         .build()
 
     @Singleton
