@@ -1,6 +1,9 @@
 package com.appa.snoop.presentation.ui.mypage.modifyprofile
 
+import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,11 +41,16 @@ import com.appa.snoop.presentation.ui.mypage.modifyprofile.component.ModifyProfi
 import com.appa.snoop.presentation.ui.mypage.modifyprofile.component.ModifyProfileImg
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
-import com.appa.snoop.presentation.util.Converter
+import com.appa.snoop.presentation.util.PermissionUtils
 import com.appa.snoop.presentation.util.effects.ModifyProfileLaunchedEffect
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
+private const val TAG = "[김진영] ModifyProfileScreen"
+
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ModifyProfileScreen(
     navController: NavController,
@@ -51,13 +59,26 @@ fun ModifyProfileScreen(
     viewModel: ModifyProfileViewModel = hiltViewModel()
 ) {
     ModifyProfileLaunchedEffect(navController)
+    val galleryPermission =
+        rememberMultiplePermissionsState(permissions = PermissionUtils.GALLERY_PERMISSIONS)
+
     val focusManager = LocalFocusManager.current
     val scrollableState = rememberScrollState()
     val context = LocalContext.current
     val memberInfoState by mainViewModel.memberInfo.collectAsState()
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     var nickName by remember { mutableStateOf(memberInfoState.nickname) }
-
+    val intent = Intent().apply {
+        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        val uri = Uri.fromParts("package", context.packageName, null)
+        data = uri
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+    LaunchedEffect(Unit) {
+        if (!galleryPermission.allPermissionsGranted) {
+            galleryPermission.launchMultiplePermissionRequest()
+        }
+    }
     LaunchedEffect(key1 = memberInfoState) {
         mainViewModel.getMemberInfo()
     }
@@ -74,7 +95,23 @@ fun ModifyProfileScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ModifyProfileImg(imageUri = imageUri, onImageChange = { uri -> imageUri = uri })
+            ModifyProfileImg(
+                img = memberInfoState.profileUrl,
+                imageUri = imageUri,
+                granted = galleryPermission.allPermissionsGranted,
+                /* TODO 권한 설정 화면 */
+                showGranted = {
+                    showSnackBar("권한 설정이 필요합니다!")
+                    if (!galleryPermission.shouldShowRationale && !galleryPermission.allPermissionsGranted) {
+                        context.startActivity(intent)
+                    } else if (galleryPermission.shouldShowRationale) { // 한 번 거절
+                        galleryPermission.launchMultiplePermissionRequest()
+                    }
+                },
+                onImageChange = { uri ->
+                    imageUri = uri
+                    Log.d(TAG, "ModifyProfileScreen: $imageUri")
+                })
             Spacer(modifier = Modifier.size(16.sdp))
             ModifyProfilNickname(focusManager, memberInfoState.nickname) { value ->
                 nickName = value

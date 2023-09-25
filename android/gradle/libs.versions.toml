@@ -38,6 +38,7 @@ coil = "2.4.0"
 lottie = "6.1.0"
 kakao = "2.16.0"
 plot = "0.1.1"
+permissions = "0.28.0"
 
 [libraries]
 
@@ -118,6 +119,9 @@ kakao-talk = { group = "com.kakao.sdk", name = "v2-talk", version.ref = "kakao"}
 kakao-share = { group = "com.kakao.sdk", name = "v2-share", version.ref = "kakao"}
 kakao-friend = { group = "com.kakao.sdk", name = "v2-friend", version.ref = "kakao"}
 kakao-cert = { group = "com.kakao.sdk", name = "v2-cert", version.ref = "kakao"}
+
+#Permission
+permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "permissions" }
 
 [plugins]
 

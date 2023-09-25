@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -19,19 +20,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import ir.kaaveh.sdpcompose.sdp
 
 @Composable
 fun ModifyProfileImg(
+    img: String?,
     imageUri: Uri?,
-    onImageChange: (Uri) -> Unit
+    granted: Boolean,
+    showGranted: () -> Unit,
+    onImageChange: (Uri) -> Unit,
 ) {
     val context = LocalContext.current
     val getContent =
@@ -52,13 +56,14 @@ fun ModifyProfileImg(
 
     Box {
         if (imageUri == null || bitmap == null) {
-            Image(
-                ColorPainter(Color.LightGray),
+            AsyncImage(
+                model = img,
                 contentDescription = "profile image",
                 modifier = Modifier
                     .size(150.dp)
                     .padding(8.dp)
-                    .clip(CircleShape),
+                    .clip(CircleShape)
+                    .background(Color.LightGray),
             )
         } else {
             Image(
@@ -77,7 +82,11 @@ fun ModifyProfileImg(
                 .align(Alignment.BottomEnd)
                 .padding(end = 12.sdp, bottom = 8.sdp)
                 .clickable {
-                    getContent.launch("image/*")
+                    if (granted) {
+                        getContent.launch("image/*")
+                    } else {
+                        showGranted()
+                    }
                 },
             color = PrimaryColor,
             shape = CircleShape
