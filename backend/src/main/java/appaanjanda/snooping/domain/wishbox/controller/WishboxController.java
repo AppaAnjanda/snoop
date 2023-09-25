@@ -3,10 +3,7 @@ package appaanjanda.snooping.domain.wishbox.controller;
 import appaanjanda.snooping.domain.member.service.dto.UserResponse;
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.service.WishboxService;
-import appaanjanda.snooping.domain.wishbox.service.dto.AddWishboxRequestDto;
-import appaanjanda.snooping.domain.wishbox.service.dto.AddWishboxResponseDto;
-import appaanjanda.snooping.domain.wishbox.service.dto.RemoveWishboxResponseDto;
-import appaanjanda.snooping.domain.wishbox.service.dto.WishboxResponseDto;
+import appaanjanda.snooping.domain.wishbox.service.dto.*;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -72,4 +69,18 @@ public class WishboxController {
         return ResponseEntity.ok(wishboxService.removeWishbox(wishboxId));
     }
 
+    // 찜 상품 알림 가격 변경
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "조회 성공",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "400", description = "요청 오류 "),
+            @ApiResponse(responseCode = "500", description = "서버 내부 오류")
+    })
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "찜 상품 알림 가격 변경", description = "찜 페이지에서 선택항목에 대한 알림 가격 변경", tags = { "Wishbox Controller" })
+    @PostMapping("/update/{wishboxId}")
+    public ResponseEntity<WishboxResponseDto> updateAlertPrice(@MemberInfo MembersInfo membersInfo, @PathVariable Long wishboxId, @RequestBody UpdateAlertPriceRequestDto updateAlertPriceRequestDto) {
+        return ResponseEntity.ok(wishboxService.updateAlertPrice(membersInfo.getId(), wishboxId, updateAlertPriceRequestDto));
+    }
 }

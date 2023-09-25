@@ -96,4 +96,26 @@ public class WishboxService {
 				.removeId(wishboxId)
 				.build();
 	}
+
+	// 찜 상품 알림 가격 변경
+	public WishboxResponseDto updateAlertPrice(Long memberId, Long wishboxId, UpdateAlertPriceRequestDto updateAlertPriceRequestDto) {
+		Wishbox wishbox = wishboxRepository.findById(wishboxId)
+				.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_WISHBOX_ID));
+		SearchContentDto searchContentDto = productSearchService.searchProductById(wishbox.getProductCode(), memberId);
+
+		// 가격 변경
+		wishbox.updateAlertPrice(updateAlertPriceRequestDto.getAlertPrice());
+
+		return WishboxResponseDto.builder()
+				.wishboxId(wishboxId)
+				.alertPrice(wishbox.getAlertPrice())
+				.alertYn(wishbox.getAlertYn())
+				.productCode(wishbox.getProductCode())
+				.productName(searchContentDto.getProductName())
+				.productImage(searchContentDto.getProductImage())
+				.price(searchContentDto.getPrice())
+				.build();
+	}
+
+
 }
