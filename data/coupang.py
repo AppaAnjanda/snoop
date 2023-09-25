@@ -124,7 +124,7 @@ def coupang_product(query):
         'provider' : '쿠팡'
     }
 
-    # send_to_kafka(product_message, topic) # Kafka에 전송
+    send_to_kafka(product_message, topic) # Kafka에 전송
 
 
 ################################## 디지털가전 키워드 크롤링 #####################################
@@ -152,7 +152,7 @@ def coupang_products_digital():
             print('check url ' + url)
 
             response = requests.get(url, headers=headers)
-            time.sleep(1.5)
+            time.sleep(3)
 
             print('Check Response', page)
             soup = BeautifulSoup(response.content, 'html.parser')
@@ -222,7 +222,7 @@ def coupang_products_furniture():
             print('check url ' + url)
 
             response = requests.get(url, headers=headers)
-            time.sleep(1.5)
+            time.sleep(3)
 
             print('Check Response', page)
             soup = BeautifulSoup(response.content, 'html.parser')
@@ -289,7 +289,7 @@ def coupang_products_necessaries():
             print('check url ' + url)
 
             response = requests.get(url, headers=headers)
-            time.sleep(1.5)
+            time.sleep(3)
 
             print('Check Response', page)
             soup = BeautifulSoup(response.content, 'html.parser')
@@ -356,7 +356,7 @@ def coupang_products_food():
             print('check url ' + url)
 
             response = requests.get(url, headers=headers)
-            time.sleep(1.5)
+            time.sleep(3)
 
             print('Check Response', page)
             soup = BeautifulSoup(response.content, 'html.parser')
