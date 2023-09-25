@@ -18,6 +18,9 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -29,33 +32,34 @@ public class SearchController {
     private final SearchService searchService;
 
     // 카테고리로 상품 검색
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "카테고리로 검색", description = "대분류와 소분류 입력, page는 1부터", tags = { "Search Controller" })
     @GetMapping("/{major}/{minor}/{page}")
-    public SearchResponseDto getProductByCategory(@PathVariable String major, @PathVariable String minor, @PathVariable int page) {
+    public SearchResponseDto getProductByCategory(@PathVariable String major, @PathVariable String minor, @PathVariable int page,
+                                                  @MemberInfo(required = false) MembersInfo membersInfo,
+                                                  @RequestParam(value = "minPrice", defaultValue = "0") int minPrice,
+                                                  @RequestParam(value = "maxPrice", defaultValue = "99999999") int maxPrice) {
 
-        return searchService.searchProductByCategory(major, minor, page);
+        return searchService.searchProductByCategory(membersInfo.getId(), major, minor, page, minPrice, maxPrice);
     }
 
-    /**
-     * 분기 어떻게 태울지
-     * @return
-     */
     // 키워드로 상품 검색
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "키워드로 검색", description = "검색하고 싶은 단어 입력", tags = { "Search Controller" })
     @GetMapping("/{keyword}/{page}")
-    public SearchResponseDto getProductByKeyword(@PathVariable String keyword, @PathVariable int page, @MemberInfo MembersInfo membersInfo) {
-        // 검색 기록 추가
-        searchService.updateSearchHistory(keyword, membersInfo.getId());
+    public SearchResponseDto getProductByKeyword(@PathVariable String keyword, @PathVariable int page,
+                                                 @MemberInfo(required = false) MembersInfo membersInfo,
+                                                 @RequestParam(value = "minPrice", defaultValue = "0") int minPrice,
+                                                 @RequestParam(value = "maxPrice", defaultValue = "99999999") int maxPrice) throws UnsupportedEncodingException {
 
-        return searchService.searchProductByKeyword(keyword, page);
-    }
+        //디코딩
+        String decodedKeyword = URLDecoder.decode(keyword, StandardCharsets.UTF_8.toString());
+        // 회원이면 검색 기록 추가
+        if (membersInfo.getId() != null) {
+            searchService.updateSearchHistory(decodedKeyword, membersInfo.getId());
+        }
 
-    @Operation(summary = "키워드로 검색(게스트)", description = "검색하고 싶은 단어 입력", tags = { "Search Controller" })
-    @GetMapping("/guest/{keyword}/{page}")
-    public SearchResponseDto getProductByKeywordForGuest(@PathVariable String keyword, @PathVariable int page) {
-
-        return searchService.searchProductByKeyword(keyword, page);
+        return searchService.searchProductByKeyword(decodedKeyword, page, minPrice, maxPrice, membersInfo.getId());
     }
 
     // 검색 기록 조회

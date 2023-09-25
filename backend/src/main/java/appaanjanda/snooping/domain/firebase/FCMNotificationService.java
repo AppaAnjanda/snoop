@@ -3,7 +3,7 @@ package appaanjanda.snooping.domain.firebase;
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.repository.MemberRepository;
 import appaanjanda.snooping.global.error.code.ErrorCode;
-import appaanjanda.snooping.global.error.exception.BadRequestException;
+import appaanjanda.snooping.global.error.exception.BusinessException;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
@@ -22,7 +22,7 @@ public class FCMNotificationService {
     public String sendNotificationByToken(FCMNotificationRequestDto requestDto) {
 
         Member member = memberRepository.findById(requestDto.getTargetUserId()).orElseThrow(()
-                -> new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID));
+                -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
 
         if (member.getFirebaseToken() != null) {
             Notification notification = Notification.builder()

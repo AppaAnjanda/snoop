@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NecessariesPrice {
+public class NecessariesPrice implements PriceInterface {
 
     @Id
     private String id;

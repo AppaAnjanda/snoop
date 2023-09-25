@@ -12,12 +12,12 @@ import java.util.List;
 @NoArgsConstructor
 public class SearchResponseDto {
 
-    private List<?> contents;
+    private List<SearchContentDto> contents;
     private int currentPage;
     private int totalPage;
 
-    public SearchResponseDto(List<?> contents, int currentPage, int totalPage) {
-        this.contents = contents;
+    public SearchResponseDto(List<SearchContentDto> searchContentDto, int currentPage, int totalPage) {
+        this.contents = searchContentDto;
         this.currentPage = currentPage;
         this.totalPage = totalPage;
     }
