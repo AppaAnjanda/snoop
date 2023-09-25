@@ -1,4 +1,4 @@
-package com.ssafy.likloud.config
+package com.appa.snoop.data.interceptor
 
 import android.util.Log
 //import com.ssafy.templateapplication.ApplicationClass.Companion.sharedPreferences
@@ -15,6 +15,7 @@ class RequestInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val builder: Request.Builder = chain.request().newBuilder()
 
+        Log.d(TAG, "intercept: ddd")
 //        Log.d(TAG, "intercept RequestInterceptor: ${sharedPreferences.getString(X_ACCESS_TOKEN)}")
         try {
 //            sharedPreferences.getString(X_ACCESS_TOKEN).let { token ->

@@ -1,15 +1,8 @@
-package com.ssafy.likloud.config
+package com.appa.snoop.data.interceptor
 
 import android.util.Log
-import com.appa.snoop.data.service.BaseService
-import com.google.gson.Gson
-import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
-import okhttp3.ResponseBody
-import okhttp3.internal.http2.ErrorCode
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
 
@@ -17,19 +10,26 @@ import java.io.IOException
  * 서버에 요청할 때 accessToken유효한지 검사
  * 유효하지 않다면 재발급 api 호출
  * refreshToken이 유효하다면 정상적으로 accessToken재발급 후 기존 api 동작 완료
-*/
+ */
 private const val TAG = "ResponseInterceptor_싸피"
-class ResponseInterceptor: Interceptor {
+
+class ResponseInterceptor : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val response = chain.proceed(request)
 
-        var accessToken = ""
+        var accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MywidXNlcm5hbWUiOiI5MTMyMjI1QG5hdmVyLmNvbSIsInRpbWUiOjE2OTgwNjA0Njg2OTgsImV4cCI6MTY5ODA2MDQ2OH0.alsHGa5K7UxYgy8ODbhTIxIV9d1r3p_PnDWXVwshHKc"
         var isRefreshable = false
 
         Log.d(TAG, "intercept: 지금 코드 ${response.code}")
         Log.d(TAG, "intercept: 지금 네트워크 리스폰스 ${response.networkResponse}")
+
+
+        val newRequest =
+            chain.request().newBuilder().addHeader("Authorization", "Bearer $accessToken")
+                .build()
+        return chain.proceed(newRequest)
 
         when (response.code) {
 //            400 -> {
@@ -116,9 +116,11 @@ class ResponseInterceptor: Interceptor {
         }
 
         // 다시 내가 호출했었던 거 호출하는 로직 필요할듯?
-        if(isRefreshable) {
+        if (isRefreshable) {
             Log.d(TAG, "intercept: 리프레시가 알맞게 통신했고, 새 엑세스토큰으로 가능하다는 소리입니다~")
-            val newRequest = chain.request().newBuilder().addHeader("Authorization", "Bearer $accessToken").build()
+            val newRequest =
+                chain.request().newBuilder().addHeader("Authorization", "Bearer $accessToken")
+                    .build()
             return chain.proceed(newRequest)
         }
 

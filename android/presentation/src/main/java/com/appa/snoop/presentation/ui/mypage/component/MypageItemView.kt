@@ -23,26 +23,27 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
+import com.appa.snoop.domain.model.member.Member
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.product.HomeLabel
 import com.appa.snoop.presentation.common.product.ProductItemView
 import com.appa.snoop.presentation.ui.home.dumy.itemList
-import com.appa.snoop.presentation.ui.mypage.User
 import com.appa.snoop.presentation.ui.mypage.common.MyPageLabel
 import com.appa.snoop.presentation.util.extensions.noRippleClickable
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @Composable
-fun MyPageInformation(user: User) {
+fun MyPageInformation(member: Member) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.sdp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        /* TODO 멤버 프로필 이미지로 변경 */
         AsyncImage(
-            model = user.img, contentDescription = "프로필 이미지",
+            model = "https://picsum.photos/200", contentDescription = "프로필 이미지",
             modifier = Modifier
                 .size(64.sdp)
                 .aspectRatio(1f)
@@ -51,12 +52,12 @@ fun MyPageInformation(user: User) {
         Spacer(modifier = Modifier.size(16.sdp))
         Column {
             Text(
-                text = user.name,
+                text = member.nickname,
                 style = TextStyle(fontSize = 16.ssp, fontWeight = FontWeight.Medium)
             )
             Spacer(modifier = Modifier.size(4.sdp))
             Text(
-                text = user.email,
+                text = member.email,
                 style = TextStyle(
                     fontSize = 12.ssp,
                     fontWeight = FontWeight.Normal,

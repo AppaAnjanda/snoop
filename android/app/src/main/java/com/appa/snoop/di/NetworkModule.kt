@@ -3,6 +3,7 @@ package com.appa.snoop.di
 import com.appa.snoop.data.repository.RegisterRepositoryImpl
 import com.appa.snoop.data.service.BaseService
 import com.appa.snoop.data.service.CategoryService
+import com.appa.snoop.data.service.MemberService
 import com.appa.snoop.data.service.RegisterService
 import com.appa.snoop.domain.repository.RegisterRepository
 import com.google.gson.FieldNamingPolicy
@@ -75,4 +76,10 @@ object NetworkModule {
     fun provideCategoryService(
         retrofit: Retrofit
     ): CategoryService = retrofit.create(CategoryService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMemberService(
+        retrofit: Retrofit
+    ): MemberService = retrofit.create(MemberService::class.java)
 }
