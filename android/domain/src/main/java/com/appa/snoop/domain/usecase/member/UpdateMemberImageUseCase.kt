@@ -10,7 +10,7 @@ import javax.inject.Inject
 class UpdateMemberImageUseCase @Inject constructor(
     private val memberRepository: MemberRepository
 ) {
-    suspend operator fun invoke(img: String): NetworkResult<ChangedImage> {
-        return memberRepository.changeImage(img = img)
+    suspend operator fun invoke(file: String): NetworkResult<ChangedImage> {
+        return memberRepository.changeImage(file = file)
     }
 }

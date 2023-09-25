@@ -16,7 +16,7 @@ interface MemberRepository {
     ): NetworkResult<ChangedNickname>
 
     suspend fun changeImage(
-        img: String
+        file: String
     ): NetworkResult<ChangedImage>
 
     suspend fun getMyCard(): NetworkResult<MyCardList>

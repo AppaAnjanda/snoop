@@ -43,7 +43,7 @@ fun MyPageInformation(member: Member) {
     ) {
         /* TODO 멤버 프로필 이미지로 변경 */
         AsyncImage(
-            model = "https://picsum.photos/200", contentDescription = "프로필 이미지",
+            model = member.profileUrl, contentDescription = "프로필 이미지",
             modifier = Modifier
                 .size(64.sdp)
                 .aspectRatio(1f)

@@ -30,10 +30,10 @@ class MemberRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun changeImage(img: String): NetworkResult<ChangedImage> {
-        val file = Converter.createMultipartBodyPartOnePhoto(img)
+    override suspend fun changeImage(file: String): NetworkResult<ChangedImage> {
+        val stringToMultipartBody = Converter.createMultipartBodyPartOnePhoto(file)
         return handleApi {
-            memberService.changeImage(file).toDomain()
+            memberService.changeImage(stringToMultipartBody).toDomain()
         }
     }
 

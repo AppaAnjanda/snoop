@@ -55,7 +55,7 @@ class ModifyProfileViewModel @Inject constructor(
         val imagePath = Converter.getRealPathFromUri(context, uri)
         if (imagePath != null) {
             viewModelScope.launch {
-                val result = updateMemberImageUseCase.invoke(img = imagePath)
+                val result = updateMemberImageUseCase.invoke(file = imagePath)
 
                 when (result) {
                     is NetworkResult.Success -> {
