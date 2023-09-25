@@ -9,8 +9,11 @@ import appaanjanda.snooping.domain.product.repository.product.NecessariesProduct
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.service.dto.AddWishboxResponseDto;
 import appaanjanda.snooping.domain.wishbox.service.dto.RemoveWishboxResponseDto;
+import appaanjanda.snooping.external.fastApi.CoupangCrawlingCaller;
+import appaanjanda.snooping.external.fastApi.NaverApiCaller;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +32,8 @@ public class WishboxService {
 
 	private final WishboxRepository wishboxRepository;
 	private final MemberRepository memberRepository;
+	private final CoupangCrawlingCaller coupangCrawlingCaller;
+	private final NaverApiCaller naverApiCaller;
 
 
 	//찜 상품 등록
@@ -72,4 +77,21 @@ public class WishboxService {
 				.removeId(wishboxId)
 				.build();
 	}
+
+
+//
+//	// 찜 상품 기져와서 업데이트
+//	@Scheduled(cron = "*/10 * * * *")
+//	public void wishboxUpdate() {
+//		List<Wishbox> allWishbox = wishboxRepository.findAll();
+//
+//		for (Wishbox wishbox : allWishbox) {
+//			String productCode = wishbox.getProductCode();
+//			if (wishbox.getProvider().equals("쿠팡")){
+//				coupangCrawlingCaller.oneProductSearch(productCode);
+//			} else {
+//				naverApiCaller.oneProductSearch(productCode);
+//			}
+//		}
+//	}
 }

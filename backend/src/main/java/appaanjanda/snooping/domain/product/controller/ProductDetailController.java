@@ -5,6 +5,9 @@ import appaanjanda.snooping.domain.member.service.dto.UserResponse;
 import appaanjanda.snooping.domain.product.dto.BuyTimingDto;
 import appaanjanda.snooping.domain.product.dto.PriceHistoryDto;
 import appaanjanda.snooping.domain.product.service.ProductDetailService;
+import appaanjanda.snooping.domain.search.dto.SearchContentDto;
+import appaanjanda.snooping.external.fastApi.CoupangCrawlingCaller;
+import appaanjanda.snooping.external.fastApi.NaverApiCaller;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import appaanjanda.snooping.domain.product.service.ProductSearchService;
@@ -18,6 +21,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +40,8 @@ public class ProductDetailController {
     private final ProductService productService;
     private final ProductSearchService productSearchService;
     private final ProductDetailService productDetailService;
+    private final NaverApiCaller naverApiCaller;
+    private final CoupangCrawlingCaller coupangCrawlingCaller;
 
     // 상품 상세 조회
     @ApiResponses(value = {
@@ -92,12 +98,26 @@ public class ProductDetailController {
 
     // 구매 타이밍
     @GetMapping("/timing/{productCode}")
-    @Operation(summary = "구매 타이밍", description = "최근 30일간의 평균 가격과 비교 \n 평균가, 현재가, 가격차이 퍼센트, 7단계의 타이밍 제", tags = { "Product Controller" })
+    @Operation(summary = "구매 타이밍", description = "최근 30일간의 평균 가격과 비교 \n 평균가, 현재가, 가격차이 퍼센트, 7단계의 타이밍 제공", tags = { "Product Controller" })
     public BuyTimingDto getButTiming(@PathVariable String productCode) throws UnsupportedEncodingException {
         //디코딩
         String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
 
         return productDetailService.buyTiming(decodedProductCode);
+    }
+
+    // 상품 새로고침
+
+    @GetMapping("/refresh/{productCode}")
+    @Operation(summary = "상품 새로고침", description = "단일 상품 업데이트 직접 호출로 정보 업데이트", tags = { "Product Controller" })
+    public ResponseEntity<String> refreshProduct(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo) {
+        SearchContentDto searchContentDto = productSearchService.searchProductById(productCode, membersInfo.getId());
+        if (searchContentDto.getProvider().equals("쿠팡")) {
+            coupangCrawlingCaller.oneProductSearch(productCode);
+        } else {
+            naverApiCaller.oneProductSearch(productCode);
+        }
+        return ResponseEntity.ok("업데이트 호출");
     }
 
 }
