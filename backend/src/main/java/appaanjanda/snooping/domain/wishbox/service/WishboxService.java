@@ -41,6 +41,7 @@ public class WishboxService {
 		Member member = memberRepository.findById(memberId)
 				.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
 		SearchContentDto searchContentDto = productSearchService.searchProductById(productCode, memberId);
+		List<Wishbox> wishboxes = wishboxRepository.findByMember(member);
 
 		Wishbox wishbox = Wishbox.builder()
 				.alertPrice(addWishboxRequestDto.getAlertPrice())
@@ -49,6 +50,11 @@ public class WishboxService {
 				.member(member)
 				.provider(searchContentDto.getProvider())
 				.build();
+
+		boolean exists = wishboxes.stream().anyMatch(existingWishbox -> existingWishbox.getProductCode().equals(wishbox.getProductCode()));
+		if (exists) {
+			throw new BusinessException(ErrorCode.ALREADY_REGISTERED_WISHBOX);
+		}
 
 		wishboxRepository.saveAndFlush(wishbox);
 
@@ -116,6 +122,5 @@ public class WishboxService {
 				.price(searchContentDto.getPrice())
 				.build();
 	}
-
 
 }

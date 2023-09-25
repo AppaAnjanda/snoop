@@ -49,7 +49,8 @@ public enum ErrorCode {
     NOT_EXISTS_CATEGORY(HttpStatus.NOT_FOUND, "P-006", "상품 카테고리가 존재하지 않습니다."),
 
     // 찜 상품
-    NOT_EXISTS_WISHBOX_ID(HttpStatus.NOT_FOUND, "W-005", "찜 상품이 존재하지 않습니다."),
+    NOT_EXISTS_WISHBOX_ID(HttpStatus.NOT_FOUND, "W-001", "찜 상품이 존재하지 않습니다."),
+    ALREADY_REGISTERED_WISHBOX(HttpStatus.BAD_REQUEST, "W-002", "이미 존재하는 찜 상품입니다."),
 
     // 검색
     ELASTICSEARCH_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "S-001", "Elasticsearch 검색 실패"),
