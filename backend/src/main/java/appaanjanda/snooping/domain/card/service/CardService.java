@@ -13,7 +13,7 @@ import appaanjanda.snooping.domain.card.service.dto.UpdateMyCardRequest;
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.repository.MemberRepository;
 import appaanjanda.snooping.global.error.code.ErrorCode;
-import appaanjanda.snooping.global.error.exception.BadRequestException;
+import appaanjanda.snooping.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,9 +42,10 @@ public class CardService {
 //				});
 //	}
 
+
 	public void updateMyCard(Long id, UpdateMyCardRequest request) {
 		Member member = memberRepository.findById(id).orElseThrow(()
-			-> new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID));
+			-> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
 
 		cardRepository.deleteAllByMember(member);
 

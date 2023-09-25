@@ -38,7 +38,7 @@ public class DigitalDataService {
         // 업데이트 경과 시간
         Duration duration = Duration.between(realTime, now);
         log.info("경과 시간 : {}", duration);
-        // 5분 지났으면 업데이트 진행
+        // 10분 지났으면 업데이트 진행
         if (duration.toMinutes() >= 10) {
             log.info("업데이트 진행 !");
             return true;
@@ -121,7 +121,7 @@ public class DigitalDataService {
         log.info("가격정보 업데이트 {}", now);
         int minute = now.getMinute();
 
-        if (minute < 15) {
+        if (minute >= 15) {
 
             // 정렬 기준
             Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
@@ -144,6 +144,7 @@ public class DigitalDataService {
 
         DigitalPrice digitalPrice = new DigitalPrice(productCode, productInfo.getPrice(), formatTime);
 
+        log.info("새 가격 상품 {}", productInfo.getProductName());
         log.info("새 가격 생성 {}", formatTime);
         log.info("새 가격 {}", productInfo.getPrice());
         digitalPriceRepository.save(digitalPrice);

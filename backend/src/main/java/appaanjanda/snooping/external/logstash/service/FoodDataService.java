@@ -34,7 +34,7 @@ public class FoodDataService {
         LocalDateTime realTime = lastUpdateTime.plusHours(9);
         // 업데이트 경과 시간
         Duration duration = Duration.between(realTime, now);
-        // 5분 지났으면 업데이트 진행
+        // 10분 지났으면 업데이트 진행
         if (duration.toMinutes() >= 10) return true;
         else return false;
     }
@@ -108,7 +108,7 @@ public class FoodDataService {
         LocalDateTime now = LocalDateTime.now();
         int minute = now.getMinute();
 
-        if (minute < 15) {
+        if (minute >= 15) {
 
             // 정렬 기준
             Sort sort = Sort.by(Sort.Order.desc("@timestamp"));

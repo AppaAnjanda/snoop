@@ -1,7 +1,5 @@
 package appaanjanda.snooping.global.config;
 
-import org.apache.http.HttpHost;
-import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +9,7 @@ import org.springframework.data.elasticsearch.client.RestClients;
 import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 
+
 @Configuration
 public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
 
@@ -19,9 +18,10 @@ public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
 
     @Value("${elasticsearch.port}")
     private int port;
-    // RestHighLevelClient 설정
-//    @Bean
-//    public RestHighLevelClient createClient() {
+
+//    @Bean(name = "restHighLevelClientForManual")
+//    @Primary
+//    public RestHighLevelClient elasticsearchClient() {
 //        return new RestHighLevelClient(
 //                RestClient.builder(
 //                        // elasticsearch 연결
@@ -29,17 +29,16 @@ public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
 //        );
 //    }
 
-    // NativesearchQuery
+    // RestHighLevelClient 설정
     @Override
-    @Bean
     public RestHighLevelClient elasticsearchClient() {
-        final ClientConfiguration clientConfiguration = ClientConfiguration.builder()
+        ClientConfiguration clientConfiguration = ClientConfiguration.builder()
                 .connectedTo(host+ ":"+port)
                 .build();
         return RestClients.create(clientConfiguration).rest();
     }
 
-    @Bean
+    @Bean(name = "elasticsearchRestTemplate")
     public ElasticsearchRestTemplate elasticsearchRestTemplate() {
         return new ElasticsearchRestTemplate(elasticsearchClient());
     }

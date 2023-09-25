@@ -6,6 +6,7 @@ import java.util.List;
 
 
 import appaanjanda.snooping.domain.member.service.dto.*;
+import appaanjanda.snooping.global.error.exception.BusinessException;
 import appaanjanda.snooping.global.s3.S3Uploader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,6 @@ import appaanjanda.snooping.domain.member.entity.enumType.Role;
 import appaanjanda.snooping.domain.member.repository.RefreshTokenRepository;
 import appaanjanda.snooping.global.config.PasswordEncoder;
 import appaanjanda.snooping.global.error.code.ErrorCode;
-import appaanjanda.snooping.global.error.exception.BadRequestException;
 import appaanjanda.snooping.jwt.JwtProvider;
 import appaanjanda.snooping.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +67,7 @@ public class MemberService {
     // 유저 정보 조회
     public UserResponse getUserInfo(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() ->
-                new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID)
+                new BusinessException(ErrorCode.NOT_EXISTS_USER_ID)
         );
 
         return UserResponse.builder()
@@ -80,7 +80,7 @@ public class MemberService {
     // 로그인
     public LoginResponse login(LoginRequest loginRequest) {
         Member member = memberRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() ->
-                new BadRequestException(ErrorCode.INVALID_USER_DATA)
+                new BusinessException(ErrorCode.INVALID_USER_DATA)
         );
 
         log.info("loginRequest.getPassword()={}", loginRequest.getPassword());
@@ -112,7 +112,7 @@ public class MemberService {
     // 닉네임 변경
     public UpdateUserResponseDto updateNickname(UpdateUserRequestDto updateUserRequestDto, Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() ->
-                new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID)
+                new BusinessException(ErrorCode.NOT_EXISTS_USER_ID)
         );
 
         member.setNickname(updateUserRequestDto.getNickName());
@@ -126,7 +126,7 @@ public class MemberService {
     // 유저 삭제
     public void deleteUser(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() ->
-                new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID)
+                new BusinessException(ErrorCode.NOT_EXISTS_USER_ID)
         );
         memberRepository.delete(member);
     }
@@ -144,7 +144,7 @@ public class MemberService {
     // 비밀번호 변경
     public void changeMyPassword(Long id, ChangeMyPasswordRequestDto requestDto) {
         Member member = memberRepository.findById(id).orElseThrow(() ->
-                new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID)
+                new BusinessException(ErrorCode.NOT_EXISTS_USER_ID)
         );
         if (passwordEncoder.encrypt(member.getEmail(), requestDto.getNowPassword()).equals(member.getPassword()) &&
                 requestDto.getPasswordOne().equals(requestDto.getPasswordTwo())) {
@@ -156,7 +156,7 @@ public class MemberService {
     public UpdateProfilePictureDto updateProfilePicture(MultipartFile multipartFile, Long id) throws IOException {
 
         Member member = memberRepository.findById(id).orElseThrow(
-                () -> new BadRequestException(ErrorCode.NOT_EXISTS_USER_ID)
+                () -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID)
         );
 
         String upload = s3Uploader.upload(multipartFile, "Profile");
