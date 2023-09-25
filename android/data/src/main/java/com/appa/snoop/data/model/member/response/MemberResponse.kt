@@ -6,10 +6,15 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class MemberResponse(
-    @SerializedName("data")
-    val data: MemberDataResponse,
-    @SerializedName("message")
-    val message: String,
-    @SerializedName("status")
-    val status: String
+    @SerializedName("email")
+    val email: String,
+
+    @SerializedName("nickname")
+    val nickname: String,
+
+    @SerializedName("myCardList")
+    val myCardList: List<String?>,
+
+    @SerializedName("role")
+    val role: String
 ) : Parcelable

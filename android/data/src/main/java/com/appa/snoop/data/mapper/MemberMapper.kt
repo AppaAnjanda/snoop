@@ -5,9 +5,9 @@ import com.appa.snoop.domain.model.member.Member
 
 fun MemberResponse.toDomain(): Member {
     return Member(
-        email = data.email,
-        nickname = data.nickname,
-        cardList = data.cardList,
-        role = data.role
+        email = email,
+        nickname = nickname,
+        myCardList = myCardList,
+        role = role
     )
 }
