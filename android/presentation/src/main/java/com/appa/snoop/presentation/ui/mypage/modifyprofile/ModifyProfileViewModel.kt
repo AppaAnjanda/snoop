@@ -1,5 +1,7 @@
 package com.appa.snoop.presentation.ui.mypage.modifyprofile
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +11,7 @@ import com.appa.snoop.domain.model.member.ChangedNickname
 import com.appa.snoop.domain.model.member.Nickname
 import com.appa.snoop.domain.usecase.member.UpdateMemberImageUseCase
 import com.appa.snoop.domain.usecase.member.UpdateMemberNicknameUseCase
+import com.appa.snoop.presentation.util.Converter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -48,20 +51,25 @@ class ModifyProfileViewModel @Inject constructor(
         }
     }
 
-    fun changeImage(img: String) {
-        viewModelScope.launch {
-            val result = updateMemberImageUseCase.invoke(img)
+    fun changeImage(context: Context, uri: Uri) {
+        val imagePath = Converter.getRealPathFromUri(context, uri)
+        if (imagePath != null) {
+            viewModelScope.launch {
+                val result = updateMemberImageUseCase.invoke(img = imagePath)
 
-            when (result) {
-                is NetworkResult.Success -> {
-                    _changedImageState.emit(result.data)
-                    Log.d(TAG, "changeImage: ${result.data}")
-                }
+                when (result) {
+                    is NetworkResult.Success -> {
+                        _changedImageState.emit(result.data)
+                        Log.d(TAG, "changeImage: ${result.data}")
+                    }
 
-                else -> {
-                    Log.d(TAG, "changeImage: 이미지 변경 실패")
+                    else -> {
+                        Log.d(TAG, "changeImage: 이미지 변경 실패")
+                    }
                 }
             }
+        } else {
+            Log.d(TAG, "changeImage: 이미지 경로를 얻을 수 없습니다.")
         }
     }
 }

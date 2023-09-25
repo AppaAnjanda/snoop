@@ -6,21 +6,19 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import java.io.File
+import java.io.FileOutputStream
 
 object Converter {
-    fun getRealPathFromUriOrNull(context: Context, uri: Uri): String? {
-        val contentResolver: ContentResolver = context.contentResolver
-        val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
-        return if (cursor == null) {
-            uri.path
-        } else {
-            cursor.moveToFirst()
-            val index: Int = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-            val realPath: String = cursor.getString(index)
-            cursor.close()
-            Log.d("TEST", "getRealPathFromUriOrNull: $realPath")
-            realPath
+    fun getRealPathFromUri(context: Context, contentUri: Uri): String? {
+        var result: String? = null
+        context.contentResolver.openInputStream(contentUri)?.use { stream ->
+            val tempFile = File(context.cacheDir, "temp_${System.currentTimeMillis()}.jpg")
+            val outputStream = FileOutputStream(tempFile)
+            stream.copyTo(outputStream)
+            result = tempFile.absolutePath
         }
+        return result
     }
 
 }

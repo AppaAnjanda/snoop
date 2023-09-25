@@ -83,9 +83,9 @@ fun ModifyProfileScreen(
 
         Button(
             onClick = {
-                val img = imageUri?.let { Converter.getRealPathFromUriOrNull(context, it) }
-                if (img != null) {
-                    viewModel.changeImage(img)
+                if (imageUri != null) {
+                    Log.d(TAG, "ModifyProfileScreen: $imageUri")
+                    viewModel.changeImage(context, imageUri!!)
                 }
                 viewModel.changeNickname(Nickname(nickName))
                 showSnackBar("프로필이 변경되었습니다!")

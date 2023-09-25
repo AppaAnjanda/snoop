@@ -12,9 +12,6 @@ data class MemberResponse(
     @SerializedName("nickname")
     val nickname: String,
 
-    @SerializedName("myCardList")
-    val myCardList: List<String?>,
-
-    @SerializedName("role")
-    val role: String
+    @SerializedName("profileUrl")
+    val profileUrl: String?,
 ) : Parcelable

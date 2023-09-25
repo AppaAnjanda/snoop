@@ -30,7 +30,7 @@ class MainViewModel @Inject constructor(
         private set
 
 
-    private val _memberInfo = MutableStateFlow<Member>(Member("", "", listOf(), ""))
+    private val _memberInfo = MutableStateFlow<Member>(Member("", "", ""))
     val memberInfo = _memberInfo.asStateFlow()
 
     fun getLoginStatus() {
