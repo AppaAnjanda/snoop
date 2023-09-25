@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
 
 import appaanjanda.snooping.domain.card.entity.MyCard;
 import appaanjanda.snooping.domain.search.entity.SearchHistory;
@@ -20,6 +21,7 @@ import appaanjanda.snooping.domain.member.entity.enumType.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.checkerframework.common.aliasing.qual.Unique;
 
 @Entity
 @Getter
@@ -31,11 +33,12 @@ public class Member extends BaseTimeEntity {
 	@Column(name = "member_id")
 	private Long id;
 
+	@NotBlank
 	private String password;
 
 	private String profileUrl;
 
-	@Column(length = 20)
+	@Column(length = 30, unique=true)
 	private String email;
 
 	@Enumerated(EnumType.STRING)
@@ -53,10 +56,9 @@ public class Member extends BaseTimeEntity {
 	private List<SearchHistory> searchHistoryList;
 
 	private String firebaseToken;
-	
+
 	@Builder
-	public Member(Long id, String password, String profileUrl, String email, Role role, String nickname,
-		List<MyCard> myCardList, List<Wishbox> wishboxList) {
+	public Member(Long id, String password, String profileUrl, String email, Role role, String nickname, List<MyCard> myCardList, List<Wishbox> wishboxList, List<SearchHistory> searchHistoryList, String firebaseToken) {
 		this.id = id;
 		this.password = password;
 		this.profileUrl = profileUrl;
@@ -65,7 +67,11 @@ public class Member extends BaseTimeEntity {
 		this.nickname = nickname;
 		this.myCardList = myCardList;
 		this.wishboxList = wishboxList;
+		this.searchHistoryList = searchHistoryList;
+		this.firebaseToken = firebaseToken;
 	}
+
+
 
 	public void setNickname(String nickName) {
 		this.nickname = nickName;
