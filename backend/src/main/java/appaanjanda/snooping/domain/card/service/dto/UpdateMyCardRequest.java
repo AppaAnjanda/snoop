@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class AddMyCardRequest {
+public class UpdateMyCardRequest {
 
 	private final List<String> myCard = new ArrayList<>();
 }

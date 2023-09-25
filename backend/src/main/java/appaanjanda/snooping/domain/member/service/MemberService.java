@@ -25,6 +25,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
+import org.springframework.beans.factory.annotation.Value;
+
 
 @Service
 @Slf4j
@@ -40,13 +42,19 @@ public class MemberService {
     private final S3Uploader s3Uploader;
     private final PasswordEncoder passwordEncoder;
 
+    @Value("${cloud.aws.cloud.url}")
+    private String basicProfile;
+
     // 유저 저장
     public String save(UserSaveRequestDto userSaveRequestDto) {
+
+        String profileImage = basicProfile + "/%E1%84%86%E1%85%B5%E1%84%8B%E1%85%A5%E1%84%8F%E1%85%A2%E1%86%BA.jpeg";
 
         Member member = Member.builder()
                 .email(userSaveRequestDto.getEmail())
                 .password(passwordEncoder.encrypt(userSaveRequestDto.getEmail(), userSaveRequestDto.getPassword()))
                 .nickname(userSaveRequestDto.getNickname())
+                .profileUrl(profileImage)
                 .role(Role.USER)
                 .build();
 
@@ -62,19 +70,10 @@ public class MemberService {
                 new BusinessException(ErrorCode.NOT_EXISTS_USER_ID)
         );
 
-        List<String> cardName = new ArrayList<>();
-
-        List<MyCard> cardByMemberId = cardRepository.findMyCardByMemberId(member.getId());
-
-        for (MyCard myCard : cardByMemberId) {
-            cardName.add(myCard.getCardType());
-        }
-
         return UserResponse.builder()
                 .email(member.getEmail())
                 .nickname(member.getNickname())
-                .myCardList(cardName)
-                .role(member.getRole())
+                .profileUrl(member.getProfileUrl())
                 .build();
     }
 
