@@ -1,6 +1,7 @@
 package com.appa.snoop.data.service
 
 import com.appa.snoop.data.model.member.request.ChangedNicknameRequest
+import com.appa.snoop.data.model.member.response.CardListResponse
 import com.appa.snoop.data.model.member.response.ChangedImageResponse
 import com.appa.snoop.data.model.member.response.ChangedNicknameResponse
 import com.appa.snoop.data.model.member.response.MemberResponse
@@ -26,4 +27,7 @@ interface MemberService {
     suspend fun changeImage(
         @Part file: MultipartBody.Part
     ): ChangedImageResponse
+
+    @GET("/api/card/myCard")
+    suspend fun getMyCard(): CardListResponse
 }

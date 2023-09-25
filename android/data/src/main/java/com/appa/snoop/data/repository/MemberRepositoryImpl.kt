@@ -9,6 +9,7 @@ import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.member.ChangedImage
 import com.appa.snoop.domain.model.member.ChangedNickname
 import com.appa.snoop.domain.model.member.Member
+import com.appa.snoop.domain.model.member.MyCardList
 import com.appa.snoop.domain.model.member.Nickname
 import com.appa.snoop.domain.repository.MemberRepository
 import javax.inject.Inject
@@ -33,6 +34,12 @@ class MemberRepositoryImpl @Inject constructor(
         val file = Converter.createMultipartBodyPartOnePhoto(img)
         return handleApi {
             memberService.changeImage(file).toDomain()
+        }
+    }
+
+    override suspend fun getMyCard(): NetworkResult<MyCardList> {
+        return handleApi {
+            memberService.getMyCard().toDomain()
         }
     }
 
