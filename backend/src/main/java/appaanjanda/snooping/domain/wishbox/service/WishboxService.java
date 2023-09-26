@@ -68,7 +68,7 @@ public class WishboxService {
 				.wishboxId(wishbox.getId())
 				.productCode(productCode)
 				.alertYn(wishbox.getAlertYn())
-				.alertPrice(addAlertRequestDto.getAlertPrice())
+				.alertPrice(wishbox.getAlertPrice())
 				.provider(searchContentDto.getProvider())
 				.build();
 	}
