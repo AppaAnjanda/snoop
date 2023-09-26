@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FCMNotificationRequestDto {
 
-    private Long targetUserId;
+    private Long memberId;
     private String title;
     private String body;
 }

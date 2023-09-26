@@ -6,8 +6,6 @@ import java.util.List;
 
 
 import appaanjanda.snooping.domain.member.service.dto.*;
-import appaanjanda.snooping.firebase.FCMNotificationRequestDto;
-import appaanjanda.snooping.firebase.FCMNotificationService;
 import appaanjanda.snooping.global.error.exception.BusinessException;
 import appaanjanda.snooping.global.s3.S3Uploader;
 import org.springframework.stereotype.Service;
@@ -44,7 +42,6 @@ public class MemberService {
     private final S3Uploader s3Uploader;
     private final PasswordEncoder passwordEncoder;
 
-    private final FCMNotificationService notificationService;
 
     @Value("${cloud.aws.cloud.url}")
     private String basicProfile;
