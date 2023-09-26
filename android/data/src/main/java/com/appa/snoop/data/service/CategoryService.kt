@@ -1,7 +1,9 @@
 package com.appa.snoop.data.service
 
 import com.appa.snoop.data.model.category.response.ProductPagingResponse
+import com.appa.snoop.data.model.category.response.WishToggleResponse
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface CategoryService {
@@ -17,4 +19,9 @@ interface CategoryService {
         @Path("keyword") keyword: String,
         @Path("page") page: Int
     ) : ProductPagingResponse
+
+    @POST("api/wishbox/add/{productCode}")
+    suspend fun postWishToggle(
+        @Path("productCode") productCode: String
+    ) : WishToggleResponse
 }

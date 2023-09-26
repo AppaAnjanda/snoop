@@ -1,10 +1,12 @@
 package com.appa.snoop.data.repository
 
+import com.appa.snoop.data.mapper.toDomain
 import com.appa.snoop.data.mapper.toDto
 import com.appa.snoop.data.service.CategoryService
 import com.appa.snoop.data.service.handleApi
 import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.category.ProductPaging
+import com.appa.snoop.domain.model.category.Wish
 import com.appa.snoop.domain.repository.CategoryRepository
 import javax.inject.Inject
 
@@ -25,5 +27,11 @@ class CategoryRepositoryImpl @Inject constructor(
         pageNum: Int
     ): NetworkResult<ProductPaging> {
         return handleApi { categoryService.getProductListByKeyword(keyword, pageNum).toDto() }
+    }
+
+    override suspend fun postWishToggle(
+        productCode: String
+    ): NetworkResult<Wish> {
+        return handleApi { categoryService.postWishToggle(productCode).toDomain() }
     }
 }

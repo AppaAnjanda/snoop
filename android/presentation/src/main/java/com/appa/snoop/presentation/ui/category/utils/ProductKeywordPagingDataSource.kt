@@ -15,7 +15,8 @@ import javax.inject.Inject
 private const val TAG = "[김희웅] ProductKeywordPagingDat"
 class ProductKeywordPagingDataSource @Inject constructor(
     private val categoryUseCase: GetProductListByKeywordUseCase,
-    private val keyoword: String
+    private val keyoword: String,
+//    private val onFail: () -> Unit
 ) : PagingSource<Int, Product>() {
     val snackBarHostState = SnackbarHostState()
 
@@ -38,6 +39,7 @@ class ProductKeywordPagingDataSource @Inject constructor(
                 else -> {
                     Log.d(TAG, "load: 페이징 클래스 내부 통신 오류")
                     snackBarHostState.showSnackbar("검색 결과가 없습니다.")
+//                    onFail()
                     LoadResult.Page(
                         data = emptyList(),
                         prevKey = null,

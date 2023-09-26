@@ -5,6 +5,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.paging.PagingData
@@ -26,7 +28,8 @@ fun SnoopSearchBar(
     modifier: Modifier = Modifier,
     focusManager: FocusManager,
     categoryViewModel: CategoryViewModel,
-    showSnackBar: (String) -> Unit
+    showSnackBar: (String) -> Unit,
+    onSearching: () -> Unit
 ) {
     Surface(
         modifier = modifier
@@ -37,18 +40,16 @@ fun SnoopSearchBar(
             onValueChange = {
                 categoryViewModel.setTextSearch(it)
             },
-            focusManager = focusManager,
             modifier = Modifier
                 .padding(start = 16.sdp, end = 16.sdp),
             title = "검색어를 입력해주세요.",
             text = categoryViewModel.textSearchState,
             keyboardActions = KeyboardActions(onDone = {
-                focusManager.clearFocus()
-//                showSnackBar(categoryViewModel.textSearchState)
-                categoryViewModel.getProductListByKeywordPaging(categoryViewModel.textSearchState)
-                categoryViewModel.searchBarToggle()
-                categoryViewModel.keywordSearchClick()
-            })
+                onSearching()
+            }),
+            onIconClick = {
+                onSearching()
+            }
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.appa.snoop.presentation.ui.category
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,10 +10,13 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.domain.model.category.ProductPaging
 import com.appa.snoop.domain.usecase.category.GetProductListByCategoryUseCase
 import com.appa.snoop.domain.usecase.category.GetProductListByKeywordUseCase
+import com.appa.snoop.domain.usecase.category.PostWishToggleUseCase
+import com.appa.snoop.domain.usecase.register.GetLoginStatusUseCase
 import com.appa.snoop.presentation.ui.category.utils.ProductCategoryPagingDataSource
 import com.appa.snoop.presentation.ui.category.utils.ProductKeywordPagingDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,21 +32,15 @@ private const val TAG = "[김희웅] CategoryViewModel"
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
     private val getProductListByCategoryUseCase: GetProductListByCategoryUseCase,
-    private val getProductListByKeywordUseCase: GetProductListByKeywordUseCase
+    private val getProductListByKeywordUseCase: GetProductListByKeywordUseCase,
+    private val getLoginStatusUseCase: GetLoginStatusUseCase,
+    private val postWishToggleUseCase: PostWishToggleUseCase
 ) : ViewModel() {
 
     companion object {
         private const val PAGE_SIZE = 30
         private const val MIN_PRICE = 0
         private const val MAX_PRICE = 99999999
-    }
-
-    var searchBarState by mutableStateOf(false)
-        private set
-
-    // 검색창을 여닫기 위함
-    fun searchBarToggle() {
-        searchBarState = !searchBarState
     }
 
     var textSearchState by mutableStateOf("")
@@ -118,16 +117,12 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    var categorySearchState by mutableStateOf(0)
-        private set
     var keywordSearchState by mutableStateOf(0)
         private set
 
-    fun categorySearchClick() {
-        categorySearchState++
-    }
     fun keywordSearchClick() {
         keywordSearchState++
+        Log.d(TAG, "keywordSearchClick: $keywordSearchState")
     }
 
     // 페이징
@@ -161,6 +156,7 @@ class CategoryViewModel @Inject constructor(
     fun getProductListPagingDataByKeyword(keyword: String): Flow<PagingData<Product>> {
         return Pager(config = PagingConfig(pageSize = PAGE_SIZE)) {
             ProductKeywordPagingDataSource(getProductListByKeywordUseCase, keyoword = keyword)
+//            { keywordSearchClick() }
         }.flow.cachedIn(viewModelScope)
     }
 
@@ -180,4 +176,30 @@ class CategoryViewModel @Inject constructor(
     fun priceRangeStateToggle() {
         priceRangeState = !priceRangeState
     }
+
+    suspend fun isLogined() = getLoginStatusUseCase.invoke()
+
+    // 위시리스트 담기 기능
+    private val _wishToggleState = MutableStateFlow<Int>(0)
+    val wishToggleState = _wishToggleState.asStateFlow()
+
+    fun postWishToggle(productCode: String) {
+        viewModelScope.launch {
+            val result = postWishToggleUseCase.invoke(productCode)
+
+            when(result) {
+                is NetworkResult.Success -> {
+                    if (result.data.wishYn) {
+                        _wishToggleState.value++
+                    }
+                    Log.d(TAG, "postWishToggle: 위시리스트 토글 api통신 정상 처리 입니다. 현재 토글 값? -> ${result.data.wishYn}")
+                }
+                else -> {
+                    Log.d(TAG, "postWishToggle: 위시리스트 토글 api통신 오류입니다.")
+                }
+            }
+        }
+    }
+
+    suspend fun toggled(productCode: String) = postWishToggleUseCase.invoke(productCode)
 }

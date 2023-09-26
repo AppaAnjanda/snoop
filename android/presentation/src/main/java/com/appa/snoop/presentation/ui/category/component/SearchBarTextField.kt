@@ -1,15 +1,24 @@
 package com.appa.snoop.presentation.ui.category.component
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.ui.theme.BlueColor
 import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.RedColor
@@ -22,10 +31,9 @@ fun SearchBarTextField(
     title: String = "입력",
     text: String = "",
     onValueChange: (String) -> Unit,
-    focusManager: FocusManager,
     enabled: Boolean = true,
-    isCerted: Boolean = false,
-    keyboardActions: KeyboardActions
+    keyboardActions: KeyboardActions,
+    onIconClick: () -> Unit
 ) {
     OutlinedTextField(
         value = text,
@@ -39,11 +47,24 @@ fun SearchBarTextField(
             cursorColor = DarkGrayColor,
             focusedLabelColor = DarkGrayColor,
             unfocusedLabelColor = DarkGrayColor,
-            disabledBorderColor = if (isCerted) BlueColor else RedColor,
-            disabledLabelColor = if (isCerted) BlueColor else DarkGrayColor
         ),
         modifier = modifier,
         keyboardActions = keyboardActions,
-        enabled = enabled
+        enabled = enabled,
+        trailingIcon = {
+            Surface(
+                shape = RoundedCornerShape(20.sdp),
+                onClick = {
+                    onIconClick()
+                },
+                modifier = Modifier
+                    .padding(2.sdp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription = "검색버튼",
+                )
+            }
+        }
     )
 }

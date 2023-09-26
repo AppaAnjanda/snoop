@@ -29,7 +29,6 @@ fun CategoryLaunchedEffect(
                         navController.navigate(Router.CATEGORY_CHATTING_ROUTER_NAME)
                     }
                     CategoryTopbar.AppBarIcons.MenuIcon -> {
-                        categoryViewModel.searchBarToggle()
                     }
                 }
             }.launchIn(this)
