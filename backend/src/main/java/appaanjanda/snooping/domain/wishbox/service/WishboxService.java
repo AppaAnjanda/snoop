@@ -39,27 +39,35 @@ public class WishboxService {
 		Member member = memberRepository.findById(memberId)
 				.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
 		SearchContentDto searchContentDto = productSearchService.searchProductById(productCode, memberId);
-		List<Wishbox> wishboxes = wishboxRepository.findByMember(member);
 
-		Wishbox wishbox = Wishbox.builder()
-				.alertPrice(addAlertRequestDto.getAlertPrice())
-				.alertYn(true)
-				.productCode(productCode)
-				.member(member)
-				.provider(searchContentDto.getProvider())
-				.build();
-
-		boolean exists = wishboxes.stream().anyMatch(existingWishbox -> existingWishbox.getProductCode().equals(wishbox.getProductCode()));
-		if (exists) {
-			throw new BusinessException(ErrorCode.ALREADY_REGISTERED_WISHBOX);
+		Wishbox wishbox;
+		// 찜이 없는 경우 -> 찜 목록에 등록 및 알림가격 설정
+		if (!searchContentDto.isWishYn()) {
+			wishbox = Wishbox.builder()
+					.alertPrice(addAlertRequestDto.getAlertPrice())
+					.alertYn(true)
+					.productCode(productCode)
+					.member(member)
+					.provider(searchContentDto.getProvider())
+					.build();
+			wishboxRepository.saveAndFlush(wishbox);
+		} else {
+			wishbox = wishboxRepository.findByProductCodeAndMember(productCode, member)
+					.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_PRODUCT));
+			// 찜이 있고 기존 알림도 있는 경우 -> 알림 취소
+			if (wishbox.getAlertYn()) {
+				wishbox.updateAlertPrice(0);
+			}
+			// 찜이 있고 기존 알림은 없는 경우 -> 알림 설정
+			else {
+				wishbox.updateAlertPrice(addAlertRequestDto.getAlertPrice());
+			}
 		}
-
-		wishboxRepository.saveAndFlush(wishbox);
 
 		return AddAlertResponseDto.builder()
 				.wishboxId(wishbox.getId())
 				.productCode(productCode)
-				.alertYn(true)
+				.alertYn(wishbox.getAlertYn())
 				.alertPrice(addAlertRequestDto.getAlertPrice())
 				.provider(searchContentDto.getProvider())
 				.build();
@@ -115,6 +123,7 @@ public class WishboxService {
 //			}
 //		}
 //	}
+
 	// 찜 상품 알림 가격 변경
 	public WishboxResponseDto updateAlertPrice(Long memberId, Long wishboxId, UpdateAlertPriceRequestDto updateAlertPriceRequestDto) {
 		Wishbox wishbox = wishboxRepository.findById(wishboxId)
