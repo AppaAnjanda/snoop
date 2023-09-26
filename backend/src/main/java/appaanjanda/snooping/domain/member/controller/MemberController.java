@@ -21,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -38,7 +40,7 @@ public class MemberController {
 	})
 	@Operation(summary = "회원가입", description = "회원가입 시 이메일, 패스워드, 내가 가지고 있는 cardlist를 request로 받는다", tags = { "Member Controller" })
 	@PostMapping("/save")
-	public String save(@RequestBody @Validated UserSaveRequestDto userSaveRequestDto){
+	public String save(@RequestBody @Valid UserSaveRequestDto userSaveRequestDto){
 		return memberService.save(userSaveRequestDto);
 	}
 

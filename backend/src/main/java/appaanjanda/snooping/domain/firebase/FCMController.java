@@ -15,6 +15,6 @@ public class FCMController {
 
     @PostMapping("/send")
     public String sendMessaging(@RequestBody FCMNotificationRequestDto requestDto){
-        return fcmNotificationService.sendNotificationByToken(requestDto);
+        return fcmNotificationService.sendNotification(requestDto);
     }
 }

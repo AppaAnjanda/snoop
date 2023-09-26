@@ -88,4 +88,8 @@ public class Member extends BaseTimeEntity {
 	public void setCardList(List<MyCard> myCardList) {
 		this.myCardList = myCardList;
 	}
+
+	public void setFCMToken(String fcmToken) {
+		this.firebaseToken = fcmToken;
+	}
 }

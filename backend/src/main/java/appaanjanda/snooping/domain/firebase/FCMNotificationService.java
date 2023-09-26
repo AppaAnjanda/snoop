@@ -1,15 +1,17 @@
 package appaanjanda.snooping.domain.firebase;
 
-import appaanjanda.snooping.domain.member.entity.Member;
-import appaanjanda.snooping.domain.member.repository.MemberRepository;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
+import org.springframework.stereotype.Service;
+
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+
+import appaanjanda.snooping.domain.member.entity.Member;
+import appaanjanda.snooping.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 
 @RequiredArgsConstructor
@@ -19,10 +21,11 @@ public class FCMNotificationService {
     private final FirebaseMessaging firebaseMessaging;
     private final MemberRepository memberRepository;
 
-    public String sendNotificationByToken(FCMNotificationRequestDto requestDto) {
+    public String sendNotification(FCMNotificationRequestDto requestDto) {
 
-        Member member = memberRepository.findById(requestDto.getTargetUserId()).orElseThrow(()
-                -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
+        Member member = memberRepository.findById(requestDto.getMemberId()).orElseThrow(()
+                -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID)
+        );
 
         if (member.getFirebaseToken() != null) {
             Notification notification = Notification.builder()
@@ -37,12 +40,14 @@ public class FCMNotificationService {
 
             try {
                 firebaseMessaging.send(message);
+                return "send 성공";
+
             } catch (FirebaseMessagingException e) {
                 throw new RuntimeException(e);
             }
-        } else {
-            return "Token 없머";
         }
-        return "뭐";
+        else {
+            return "FCMToken 없습니다";
+        }
     }
 }

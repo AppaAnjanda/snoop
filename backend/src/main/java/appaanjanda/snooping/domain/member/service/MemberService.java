@@ -42,6 +42,7 @@ public class MemberService {
     private final S3Uploader s3Uploader;
     private final PasswordEncoder passwordEncoder;
 
+
     @Value("${cloud.aws.cloud.url}")
     private String basicProfile;
 
@@ -57,6 +58,7 @@ public class MemberService {
                 .profileUrl(profileImage)
                 .role(Role.USER)
                 .build();
+
 
         memberRepository.saveAndFlush(member);
 
@@ -86,6 +88,7 @@ public class MemberService {
         log.info("loginRequest.getPassword()={}", loginRequest.getPassword());
         log.info("passwordEncoder.encrypt(member.getEmail(), member.getPassword())={}", passwordEncoder.encrypt(member.getEmail(), member.getPassword()));
 
+        member.setFCMToken(loginRequest.getFcmToken());
 
         if (!member.getPassword().equals(passwordEncoder.encrypt(loginRequest.getEmail(), loginRequest.getPassword()))) {
             throw new RuntimeException();
