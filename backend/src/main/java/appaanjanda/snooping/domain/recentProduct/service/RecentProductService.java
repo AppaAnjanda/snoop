@@ -1,9 +1,10 @@
-package appaanjanda.snooping.domain.product.service;
+package appaanjanda.snooping.domain.recentProduct.service;
 
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.service.MemberService;
-import appaanjanda.snooping.domain.product.entity.RecentProduct;
-import appaanjanda.snooping.domain.product.repository.*;
+import appaanjanda.snooping.domain.product.service.ProductSearchService;
+import appaanjanda.snooping.domain.recentProduct.entity.RecentProduct;
+import appaanjanda.snooping.domain.recentProduct.repository.RecentProductRepository;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class ProductService {
+public class RecentProductService {
 
     private final ProductSearchService productSearchService;
     private final MemberService memberService;
