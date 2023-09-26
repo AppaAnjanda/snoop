@@ -1,5 +1,6 @@
 package appaanjanda.snooping.domain.product.service;
 
+import appaanjanda.snooping.domain.hotProduct.service.HotProductService;
 import appaanjanda.snooping.domain.product.entity.price.*;
 import appaanjanda.snooping.domain.product.entity.product.*;
 import appaanjanda.snooping.domain.product.repository.product.DigitalProductRepository;
@@ -107,6 +108,7 @@ public class ProductSearchService {
         ProductInterface product = getProduct(productCode);
 
         if (product != null) {
+            // 현재 멤버 찜 목록
             Set<String> wishProductCode = wishboxRepository.findProductById(memberId);
             // 찜 여부
             boolean wishYn = (wishProductCode != null) && wishProductCode.contains(product.getCode());

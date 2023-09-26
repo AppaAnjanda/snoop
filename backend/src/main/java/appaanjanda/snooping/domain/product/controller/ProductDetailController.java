@@ -1,6 +1,7 @@
 package appaanjanda.snooping.domain.product.controller;
 
 
+import appaanjanda.snooping.domain.hotProduct.service.HotProductService;
 import appaanjanda.snooping.domain.member.service.dto.UserResponse;
 import appaanjanda.snooping.domain.product.dto.BuyTimingDto;
 import appaanjanda.snooping.domain.product.dto.PriceHistoryDto;
@@ -42,6 +43,7 @@ public class ProductDetailController {
     private final ProductDetailService productDetailService;
     private final NaverApiCaller naverApiCaller;
     private final CoupangCrawlingCaller coupangCrawlingCaller;
+    private final HotProductService hotProductService;
 
     // 상품 상세 조회
     @ApiResponses(value = {
@@ -52,7 +54,7 @@ public class ProductDetailController {
             @ApiResponse(responseCode = "500", description = "서버 내부 오류")
     })
     @SecurityRequirement(name = "Bearer Authentication")
-    @Operation(summary = "상품 상세 조회", description = "상품id로 정보 조회", tags = { "Product Controller" })
+    @Operation(summary = "상품 상세 조회", description = "상품code로 정보 조회", tags = { "Product Controller" })
     @GetMapping("/{productCode}")
     public Object getProductDetail(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo) throws UnsupportedEncodingException {
         //디코딩
@@ -62,6 +64,9 @@ public class ProductDetailController {
             // 최근 본 상품 추가
             productService.updateRecentProduct(membersInfo.getId(), decodedProductCode);
         }
+
+        // 조회수 추가
+        hotProductService.updateHotProduct(decodedProductCode);
 
         return productSearchService.searchProductById(decodedProductCode, memberId);
     }
@@ -107,16 +112,19 @@ public class ProductDetailController {
     }
 
     // 상품 새로고침
-
     @GetMapping("/refresh/{productCode}")
     @Operation(summary = "상품 새로고침", description = "단일 상품 업데이트 직접 호출로 정보 업데이트", tags = { "Product Controller" })
-    public ResponseEntity<String> refreshProduct(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo) {
-        SearchContentDto searchContentDto = productSearchService.searchProductById(productCode, membersInfo.getId());
+    public ResponseEntity<String> refreshProduct(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo) throws UnsupportedEncodingException {
+        //디코딩
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+
+        SearchContentDto searchContentDto = productSearchService.searchProductById(decodedProductCode, membersInfo.getId());
         if (searchContentDto.getProvider().equals("쿠팡")) {
-            coupangCrawlingCaller.oneProductSearch(productCode);
+            coupangCrawlingCaller.oneProductSearch(decodedProductCode);
         } else {
-            naverApiCaller.oneProductSearch(productCode);
+            naverApiCaller.oneProductSearch(decodedProductCode);
         }
+        hotProductService.updateHotProduct(decodedProductCode);
         return ResponseEntity.ok("업데이트 호출");
     }
 
