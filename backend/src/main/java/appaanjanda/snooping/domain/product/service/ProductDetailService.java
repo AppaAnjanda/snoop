@@ -157,12 +157,12 @@ public class ProductDetailService {
 
         String timing;
         // 타이밍
-        if (roundedPercent <= -30) timing = "완전 싸다";
-        else if (roundedPercent <= -15) timing = "싸다";
-        else if (roundedPercent <= -5) timing = "약간 싸다";
-        else if (roundedPercent < 5) timing = "보통";
-        else if (roundedPercent < 15) timing = "약간 비싸다";
-        else if (roundedPercent < 30) timing = "비싸다";
+        if (roundedPercent <= -20) timing = "완전 싸다";
+        else if (roundedPercent <= -10) timing = "싸다";
+        else if (roundedPercent <= -3) timing = "약간 싸다";
+        else if (roundedPercent < 3) timing = "보통";
+        else if (roundedPercent < 10) timing = "약간 비싸다";
+        else if (roundedPercent < 20) timing = "비싸다";
         else timing = "완전 비싸다";
 
         return new String[]{String.valueOf(roundedPercent), timing};
