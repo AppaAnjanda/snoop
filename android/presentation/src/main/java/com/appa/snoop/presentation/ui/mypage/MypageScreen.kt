@@ -3,6 +3,7 @@ package com.appa.snoop.presentation.ui.mypage
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -92,6 +93,7 @@ fun MypageScreen(
 
     val memberInfoState by mainViewModel.memberInfo.collectAsState()
     LaunchedEffect(key1 = Unit, key2 = memberInfoState) {
+        Log.d(TAG, "MypageScreen 확인!!: $memberInfoState")
         mainViewModel.getMemberInfo()
     }
 

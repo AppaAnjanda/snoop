@@ -1,7 +1,8 @@
-package com.appa.snoop.presentation.common
+package com.appa.snoop.presentation.ui.category.utils
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,41 +19,23 @@ import com.appa.snoop.presentation.util.extensions.noRippleClickable
 private const val TAG = "[김희웅] LottieAnim"
 @SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
-fun LottieAnim(
+fun LoadingLottieAnimation(
     modifier: Modifier = Modifier,
-    isChecked: Boolean = false,
     res: Int,
-    startTime: Float = 0f,
-    endTime: Float = 1f,
-    onClick: () -> Unit
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(res))
-//    var checked by remember { mutableStateOf(isChecked) }
-    var isPlaying by remember { mutableStateOf(false) }
-
-//    Log.d(TAG, "LottieAnim: 하트가 체크 되어있는지 $isChecked")
 
     val progress by animateLottieCompositionAsState(
         composition = composition,
-        restartOnPlay = false,
-        isPlaying = isPlaying,
-//        speed = if (checked) 1f else -1f,
         speed = 1f,
-        clipSpec = LottieClipSpec.Progress(startTime, endTime)
+        iterations = Int.MAX_VALUE
     )
 
     LottieAnimation(
-        composition,
+        modifier = modifier,
+        composition = composition,
         progress = {
-            isPlaying = isChecked
-            if (isChecked) progress else 0.0f
+            progress
         },
-        modifier = modifier
-            .noRippleClickable{
-                isPlaying = isChecked
-//                checked = !checked
-//                isChecked = !isChecked
-                onClick()
-            }
     )
 }

@@ -82,4 +82,6 @@ dependencies {
     implementation(libs.plot)
     // permissions
     implementation(libs.permissions)
+    // paging
+    implementation(libs.androidx.paging)
 }

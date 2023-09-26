@@ -18,11 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.appa.snoop.domain.model.member.Member
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.product.HomeLabel
@@ -41,9 +43,12 @@ fun MyPageInformation(member: Member) {
             .padding(16.sdp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        /* TODO 멤버 프로필 이미지로 변경 */
         AsyncImage(
-            model = member.profileUrl, contentDescription = "프로필 이미지",
+//            model = ImageRequest.Builder(LocalContext.current)
+//                .data(member.profileUrl)
+//                .build(),
+            model = member.profileUrl,
+            contentDescription = "프로필 이미지",
             modifier = Modifier
                 .size(64.sdp)
                 .aspectRatio(1f)

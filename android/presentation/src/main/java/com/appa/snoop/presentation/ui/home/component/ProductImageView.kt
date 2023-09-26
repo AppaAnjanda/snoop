@@ -43,7 +43,7 @@ fun ProductImageView(
     onLikeClicked: () -> Unit
 ) {
     var liked by remember { mutableStateOf(false) }
-    var isClicked by remember { mutableStateOf(false) }
+    var isChecked by remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier
@@ -107,10 +107,13 @@ fun ProductImageView(
 //                    tint = if (liked) RedColor else BlackColor
 //                )
                 LottieAnim(
-                    isChecked = isClicked,
+                    isChecked = isChecked,
                     res = R.raw.lottie_like,
                     startTime = 0.2f,
-                    endTime = 0.7f
+                    endTime = 0.7f,
+                    onClick = {
+                        isChecked = !isChecked
+                    }
                 )
             }
         }

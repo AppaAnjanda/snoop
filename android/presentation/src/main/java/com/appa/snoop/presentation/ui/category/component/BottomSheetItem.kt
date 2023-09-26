@@ -80,7 +80,8 @@ fun BottomSheetItem(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable{
-                                categoryViewModel.getProductListByCategory(majorName, minorName)
+                                categoryViewModel.getProductListByCategoryPaging(majorName, minorName)
+//                                categoryViewModel.getProductListByCategory(majorName, minorName, 1)
                                 onDismiss()
                             },
                     ) {

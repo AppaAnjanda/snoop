@@ -40,7 +40,9 @@ fun SnoopSearchBar(
             text = categoryViewModel.textSearchState,
             keyboardActions = KeyboardActions(onDone = {
                 focusManager.clearFocus()
-                showSnackBar(categoryViewModel.textSearchState)
+//                showSnackBar(categoryViewModel.textSearchState)
+                categoryViewModel.getProductListByKeywordPaging(categoryViewModel.textSearchState)
+                categoryViewModel.searchBarToggle()
             })
         )
     }
