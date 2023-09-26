@@ -1,12 +1,15 @@
 package com.appa.snoop.presentation.util
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.Date
+import java.util.Locale
 
 object DateUtil {
     private const val MINUTE = 60L
@@ -38,5 +41,39 @@ object DateUtil {
         val dateFormat = SimpleDateFormat("yy.MM.dd")
         val date = Date(millis)
         return dateFormat.format(date)
+    }
+
+    @SuppressLint("ConstantLocale")
+    private val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
+    fun stringToDate(dateString: String): Date? {
+        if (dateString.isBlank()) return null
+        return try {
+            format.parse(dateString)
+        } catch (e: ParseException) {
+            null
+        }
+    }
+
+    fun dateToFloat(date: Date): Float {
+        return date.time.toFloat()
+    }
+
+    fun floatToDate(timeAsFloat: Float): Date {
+        return Date(timeAsFloat.toLong())
+    }
+
+    fun dateToString(date: Date): String {
+        return format.format(date)
+    }
+
+    fun stringToFloat(dateString: String): Float {
+        val date = stringToDate(dateString) ?: Date()
+        return dateToFloat(date)
+    }
+
+    fun floatToString(timeAsFloat: Float): String {
+        val date = floatToDate(timeAsFloat)
+        return dateToString(date)
     }
 }

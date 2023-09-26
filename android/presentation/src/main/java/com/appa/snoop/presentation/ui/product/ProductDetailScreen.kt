@@ -2,6 +2,7 @@ package com.appa.snoop.presentation.ui.product
 
 import android.content.Intent
 import android.net.Uri
+import android.text.format.DateUtils
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,7 +37,10 @@ import com.appa.snoop.presentation.ui.product.component.DataPoints
 import com.appa.snoop.presentation.ui.product.component.PriceGraph
 import com.appa.snoop.presentation.ui.product.component.ProductDetailView
 import com.appa.snoop.presentation.ui.product.component.RecommendListView
+import com.appa.snoop.presentation.ui.product.component.graph.DataPoint
+import com.appa.snoop.presentation.ui.product.data.Period
 import com.appa.snoop.presentation.ui.theme.WhiteColor
+import com.appa.snoop.presentation.util.DateUtil
 import com.appa.snoop.presentation.util.effects.ProductLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.delay
@@ -53,20 +57,51 @@ fun ProductDetailScreen(
     val productCode = navController.currentBackStackEntry?.arguments?.getString("productCode")
     val product by productViewModel.productState.collectAsState()
     val timing by productViewModel.timingState.collectAsState()
+    val recommendProduct by productViewModel.recommendProductState.collectAsState()
+    val productGraph by productViewModel.productGraphState.collectAsState()
+    var selectChip by remember { mutableStateOf(Period.WEEK.label) }
+    var graphData by remember {
+        mutableStateOf(
+            listOf(
+                DataPoint(0f, 3500f),
+                DataPoint(1f, 3800f),
+                DataPoint(2f, 4000f),
+                DataPoint(3f, 5000f),
+                DataPoint(4f, 5000f),
+                DataPoint(5f, 4900f),
+                DataPoint(6f, 4700f),
+            )
+        )
+    }
+
     ProductLaunchedEffect(navController = navController)
     LaunchedEffect(productCode) {
         Log.d(TAG, "ProductDetailScreen: $productCode")
         if (productCode != null) {
             productViewModel.getProductDetail(productCode)
             productViewModel.getProductTiming(productCode)
+            productViewModel.getRecommendProduct(productCode)
+            productViewModel.getProductGraph(productCode, Period.WEEK.label)
         }
+    }
+
+    LaunchedEffect(selectChip) {
+        if (productCode != null) {
+            productViewModel.getProductGraph(productCode, selectChip)
+        }
+    }
+
+    LaunchedEffect(productGraph) {
+
+        graphData = productGraph.mapIndexed { index, graphItem ->
+            DataPoint(index.toFloat(), graphItem.price.toFloat())
+        }
+        Log.d(TAG, "ProductDetailScreen: $graphData")
     }
 
     val scrollState = rememberScrollState()
     val context = LocalContext.current
-
     var alarmChecked by remember { mutableStateOf(false) }
-
     val snackState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     // TODO(Domain model 가져오면 추후에 교체)
@@ -90,7 +125,12 @@ fun ProductDetailScreen(
                 }
             )
             BuyTimingView(modifier = Modifier, timing = timing.timing)
-            PriceGraph(lines = listOf(DataPoints.dataPoints1), Modifier)
+            PriceGraph(modifier = Modifier,
+                lines = listOf(graphData),
+                productGraph = productGraph,
+                selectChips = {
+                    selectChip = it.label
+                })
             RecommendListView()
         }
         AlarmSnackBar(
