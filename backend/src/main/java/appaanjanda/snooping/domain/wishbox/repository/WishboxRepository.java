@@ -7,6 +7,7 @@ import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface WishboxRepository extends JpaRepository<Wishbox, Long> {
@@ -15,4 +16,6 @@ public interface WishboxRepository extends JpaRepository<Wishbox, Long> {
     Set<String> findProductById(Long memberId);
 
     List<Wishbox> findByMember(Member member);
+
+    Optional<Wishbox> findByProductCodeAndMember(String productCode, Member member);
 }

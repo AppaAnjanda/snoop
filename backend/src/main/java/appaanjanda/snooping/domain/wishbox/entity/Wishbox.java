@@ -56,6 +56,8 @@ public class Wishbox extends BaseTimeEntity {
 	public void updateAlertPrice(int alertPrice) {
 		if (alertPrice == 0) {
 			this.alertYn = false;
+		} else {
+			this.alertYn = true;
 		}
 		this.alertPrice = alertPrice;
 	}
