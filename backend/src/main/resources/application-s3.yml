@@ -1,0 +1,14 @@
+cloud:
+  aws:
+    credentials:
+      access-key: ENC(oFy/H6hyvBDdYt0vWz4E5BUVbGnN5nKnKChQF5vnhBg=)
+      secret-key: ENC(8HbtPTAzusl9ek0hoxJs79k6ytCJfCVLp3mFC5Dd45owIa2vqe1hvS0ImuKPaWVZBNwlxD3rn9c=)
+    s3:
+      bucket: appaanjanda
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    cloud:
+      url: ENC(1p4FwzESBl2nkhJiVMzdvFh72BRH12yUR162l7j8tJ4areYpQVkIRUEkKSJNgwpg)
+
