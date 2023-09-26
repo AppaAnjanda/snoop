@@ -1,5 +1,8 @@
 package com.appa.snoop.presentation.ui.product
 
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,15 +15,20 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.appa.snoop.presentation.ui.category.utils.convertNaverUrl
 import com.appa.snoop.presentation.ui.product.component.AlarmSnackBar
 import com.appa.snoop.presentation.ui.product.component.ButtonView
 import com.appa.snoop.presentation.ui.product.component.BuyTimingView
@@ -34,14 +42,28 @@ import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+private const val TAG = "[김진영] ProductDetailScreen"
+
 @Composable
 fun ProductDetailScreen(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    productViewModel: ProductViewModel = hiltViewModel()
 ) {
+    val productCode = navController.currentBackStackEntry?.arguments?.getString("productCode")
+    val product by productViewModel.productState.collectAsState()
+    val timing by productViewModel.timingState.collectAsState()
     ProductLaunchedEffect(navController = navController)
+    LaunchedEffect(productCode) {
+        Log.d(TAG, "ProductDetailScreen: $productCode")
+        if (productCode != null) {
+            productViewModel.getProductDetail(productCode)
+            productViewModel.getProductTiming(productCode)
+        }
+    }
 
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
 
     var alarmChecked by remember { mutableStateOf(false) }
 
@@ -61,11 +83,13 @@ fun ProductDetailScreen(
             verticalArrangement = Arrangement.spacedBy(16.sdp)
         ) {
             ProductDetailView(
+                Modifier,
+                product,
                 onSharedClicked = { url ->
-                    // TODO(URL로 공유하기)
+
                 }
             )
-            BuyTimingView()
+            BuyTimingView(modifier = Modifier, timing = timing.timing)
             PriceGraph(lines = listOf(DataPoints.dataPoints1), Modifier)
             RecommendListView()
         }
@@ -77,7 +101,18 @@ fun ProductDetailScreen(
         Spacer(modifier = Modifier.height(16.sdp))
         ButtonView(
             alarmChecked = alarmChecked,
-            onBuyClicked = { /*TODO*/ },
+            onBuyClicked = {
+                val url =
+                    if (product.provider == "네이버")
+                        convertNaverUrl(
+                            product.productLink
+                        )
+                    else
+                        product.productLink
+
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                context.startActivity(intent)
+            },
             onAlarmClicked = {
                 if (snackState.currentSnackbarData == null) {
                     alarmChecked = !alarmChecked

@@ -57,6 +57,7 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "[김희웅] CategoryScreen"
 const val SIZE = 2
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CategoryScreen(
@@ -98,13 +99,13 @@ fun CategoryScreen(
             AnimatedContent(
                 targetState = categoryViewModel.searchBarState,
                 transitionSpec = {
-                     slideInVertically(
-                         initialOffsetY = { -200 },
-                         animationSpec = tween(200)
-                     ) togetherWith slideOutVertically (
-                         targetOffsetY = { -200 },
-                         animationSpec = tween(200)
-                     ) using SizeTransform(false)
+                    slideInVertically(
+                        initialOffsetY = { -200 },
+                        animationSpec = tween(200)
+                    ) togetherWith slideOutVertically(
+                        targetOffsetY = { -200 },
+                        animationSpec = tween(200)
+                    ) using SizeTransform(false)
                 },
                 label = ""
             ) { searchBarVisible ->
@@ -129,7 +130,7 @@ fun CategoryScreen(
             LazyVerticalGrid(
                 columns = GridCells.Fixed(SIZE),
             ) {
-                items (
+                items(
                     pagingData.itemCount,
                     key = {
                         pagingData[it]!!.id
@@ -139,7 +140,11 @@ fun CategoryScreen(
                         modifier = Modifier,
                         product = pagingData[it]!!,
                         onItemClicked = {
-                            navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
+                            val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
+                                "{productCode}",
+                                pagingData[it]!!.code
+                            )
+                            navController.navigate(route)
                         },
                         onLikeClicked = {
                             // TODO 구현 찜 토글
