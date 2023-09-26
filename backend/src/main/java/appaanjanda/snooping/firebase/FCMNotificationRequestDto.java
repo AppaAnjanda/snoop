@@ -1,21 +1,18 @@
-// package appaanjanda.snooping.firebase;
-//
-// import lombok.Builder;
-// import lombok.Getter;
-// import lombok.NoArgsConstructor;
-//
-// @Getter
-// @NoArgsConstructor
-// public class FCMNotificationRequestDto {
-//
-//     private Long targetUserId;
-//     private String title;
-//     private String body;
-//
-//     @Builder
-//     public FCMNotificationRequestDto(Long targetUserId, String title, String body) {
-//         this.targetUserId = targetUserId;
-//         this.title = title;
-//         this.body = body;
-//     }
-// }
+ package appaanjanda.snooping.firebase;
+
+ import lombok.AllArgsConstructor;
+ import lombok.Builder;
+ import lombok.Getter;
+ import lombok.NoArgsConstructor;
+
+ @Getter
+ @NoArgsConstructor
+ @AllArgsConstructor
+ @Builder
+ public class FCMNotificationRequestDto {
+
+     private Long memberId;
+     private String title;
+     private String body;
+
+ }
