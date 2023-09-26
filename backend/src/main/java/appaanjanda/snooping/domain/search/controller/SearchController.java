@@ -1,6 +1,7 @@
 package appaanjanda.snooping.domain.search.controller;
 
 
+import appaanjanda.snooping.domain.hotKeyword.service.HotKeywordService;
 import appaanjanda.snooping.domain.member.service.dto.UserResponse;
 import appaanjanda.snooping.domain.search.dto.SearchResponseDto;
 import appaanjanda.snooping.domain.search.service.SearchService;
@@ -30,6 +31,7 @@ import java.util.List;
 public class SearchController {
 
     private final SearchService searchService;
+    private final HotKeywordService hotKeywordService;
 
     // 카테고리로 상품 검색
     @SecurityRequirement(name = "Bearer Authentication")
@@ -58,6 +60,9 @@ public class SearchController {
         if (membersInfo.getId() != null) {
             searchService.updateSearchHistory(decodedKeyword, membersInfo.getId());
         }
+
+        // 검색 횟수 증가
+        hotKeywordService.updateHotKeyword(decodedKeyword);
 
         return searchService.searchProductByKeyword(decodedKeyword, page, minPrice, maxPrice, membersInfo.getId());
     }
