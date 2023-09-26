@@ -18,7 +18,7 @@ public class HotKeywordController {
 
     // 인기 검색어
     @GetMapping("/hotKeyword")
-    @Operation(summary = "인기 검색어 조회", description = "최근 7일간의 인기 검색어", tags = { "Home Controller" })
+    @Operation(summary = "인기 검색어 조회", description = "최근 7일간의 검색횟수 인기 검색어", tags = { "Home Controller" })
     public List<String> getHotKeyword() {
         return hotKeywordService.getHotKeyword();
     }
