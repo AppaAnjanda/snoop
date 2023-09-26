@@ -8,7 +8,7 @@ import com.appa.snoop.domain.model.member.RegisterDone
 
 interface RegisterRepository {
     // 회원가입
-    suspend fun registerMember(register: Register): NetworkResult<RegisterDone>
+    suspend fun registerMember(register: Register): NetworkResult<String>
 
     // 로그인
     suspend fun login(loginInfo: LoginInfo): NetworkResult<JwtTokens>

@@ -52,7 +52,7 @@ fun MyPageInformation(member: Member) {
             modifier = Modifier
                 .size(64.sdp)
                 .aspectRatio(1f)
-                .clip(CircleShape)
+                .clip(CircleShape),
         )
         Spacer(modifier = Modifier.size(16.sdp))
         Column {

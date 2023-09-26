@@ -22,8 +22,8 @@ class RegisterRepositoryImpl @Inject constructor(
     private val registerService: RegisterService
 ) : RegisterRepository {
     // 회원가입
-    override suspend fun registerMember(register: Register): NetworkResult<RegisterDone> {
-        return handleApi { registerService.registerMember(register).toDomain() }
+    override suspend fun registerMember(register: Register): NetworkResult<String> {
+        return handleApi { registerService.registerMember(register) }
     }
 
     // 로그인

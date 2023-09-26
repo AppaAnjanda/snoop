@@ -49,10 +49,10 @@ fun BottomSheetItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = if (categoryState) painterResource(id = R.drawable.ic_arrow_down) else painterResource(id = R.drawable.ic_arrow_right), // 벡터 이미지 리소스
-            contentDescription = null, // 이미지 설명 (접근성을 위해 필요)
+            painter = if (categoryState) painterResource(id = R.drawable.ic_arrow_down) else painterResource(id = R.drawable.ic_arrow_right),
+            contentDescription = null,
             modifier = Modifier
-                .size(16.sdp), // 이미지 크기 설정
+                .size(16.sdp),
         )
         Text(
             text = majorName,
@@ -91,12 +91,12 @@ fun BottomSheetItem(
                             fontSize = 12.ssp,
                         )
                     }
-                    Spacer(modifier = Modifier.height(3.sdp))
+                    Spacer(modifier = Modifier.height(5.sdp))
                     HorizontalDivider(
                         thickness = 1.sdp,
                         color = BackgroundColor2
                     )
-                    Spacer(modifier = Modifier.height(3.sdp))
+                    Spacer(modifier = Modifier.height(5.sdp))
                 }
             }
         }

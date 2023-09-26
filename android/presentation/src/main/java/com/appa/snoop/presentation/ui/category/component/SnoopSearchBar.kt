@@ -9,9 +9,13 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
+import androidx.paging.PagingData
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.appa.snoop.presentation.ui.category.CategoryViewModel
 import com.appa.snoop.presentation.ui.signup.component.SignupTextField
 import ir.kaaveh.sdpcompose.sdp
@@ -35,7 +39,7 @@ fun SnoopSearchBar(
             },
             focusManager = focusManager,
             modifier = Modifier
-                .padding(bottom = 16.sdp, start = 16.sdp, end = 16.sdp),
+                .padding(start = 16.sdp, end = 16.sdp),
             title = "검색어를 입력해주세요.",
             text = categoryViewModel.textSearchState,
             keyboardActions = KeyboardActions(onDone = {
@@ -43,6 +47,7 @@ fun SnoopSearchBar(
 //                showSnackBar(categoryViewModel.textSearchState)
                 categoryViewModel.getProductListByKeywordPaging(categoryViewModel.textSearchState)
                 categoryViewModel.searchBarToggle()
+                categoryViewModel.keywordSearchClick()
             })
         )
     }

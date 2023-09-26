@@ -34,7 +34,11 @@ class ProductCategoryPagingDataSource @Inject constructor(
                 }
                 else -> {
                     Log.d(TAG, "load: 페이징 클래스 내부 통신 오류")
-                    LoadResult.Invalid()
+                    LoadResult.Page(
+                        data = emptyList(),
+                        prevKey = null,
+                        nextKey = null
+                    )
                 }
             }
         } catch(e: Exception) {

@@ -11,8 +11,7 @@ fun RegisterRequest.toDomain(): Register {
     return Register(
         email = email,
         nickname = nickname,
-        password = password,
-        cardList = cardList
+        password = password
     )
 }
 

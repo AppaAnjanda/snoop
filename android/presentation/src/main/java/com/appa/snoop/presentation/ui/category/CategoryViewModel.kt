@@ -32,6 +32,8 @@ class CategoryViewModel @Inject constructor(
 
     companion object {
         private const val PAGE_SIZE = 30
+        private const val MIN_PRICE = 0
+        private const val MAX_PRICE = 99999999
     }
 
     var searchBarState by mutableStateOf(false)
@@ -87,25 +89,46 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-//    private val _productList = MutableStateFlow<List<Product>>(emptyList())
-//    val productList = _productList.asStateFlow()
+    fun sheetSelect(categoryName: String) {
+        when(categoryName) {
+            "디지털가전" -> {
+                digitalCategoryToggle()
+                furnitureCategoryState = false
+                necessariesCategoryState = false
+                foodCategoryState = false
+            }
+            "가구" -> {
+                furnitureCategoryToggle()
+                digitalCategoryState = false
+                necessariesCategoryState = false
+                foodCategoryState = false
+            }
+            "생활용품" -> {
+                necessariesCategoryToggle()
+                digitalCategoryState = false
+                furnitureCategoryState = false
+                foodCategoryState = false
+            }
+            "식품" -> {
+                foodCategoryToggle()
+                digitalCategoryState = false
+                furnitureCategoryState = false
+                necessariesCategoryState = false
+            }
+        }
+    }
 
-//    fun getProductListByCategory(majorName: String, minorName: String, pageNum: Int) {
-//        viewModelScope.launch {
-//            val result = getProductListByCategoryUseCase.invoke(majorName, minorName, pageNum)
-//
-//            when(result) {
-//                is NetworkResult.Success -> {
-//                    _productList.emit(result.data.contents)
-//                    Log.d(TAG, "getProductListByCategory: ${result.data}")
-//                }
-//                else -> {
-//                    Log.d(TAG, "getProductListByCategory: 리스트를 불러오는데 실패했습니다. 네트워크 활성화를 확인하세요.")
-//                    Log.d(TAG, "getProductListByCategory: $result")
-//                }
-//            }
-//        }
-//    }
+    var categorySearchState by mutableStateOf(0)
+        private set
+    var keywordSearchState by mutableStateOf(0)
+        private set
+
+    fun categorySearchClick() {
+        categorySearchState++
+    }
+    fun keywordSearchClick() {
+        keywordSearchState++
+    }
 
     // 페이징
     val _pagingDataFlow = MutableStateFlow<PagingData<Product>>(PagingData.empty())
@@ -139,5 +162,22 @@ class CategoryViewModel @Inject constructor(
         return Pager(config = PagingConfig(pageSize = PAGE_SIZE)) {
             ProductKeywordPagingDataSource(getProductListByKeywordUseCase, keyoword = keyword)
         }.flow.cachedIn(viewModelScope)
+    }
+
+    // 가격 범위
+    var minPrice by mutableStateOf(MIN_PRICE)
+        private set
+    var maxPrice by mutableStateOf(MAX_PRICE)
+        private set
+    fun setPriceRange(min: Int, max: Int) {
+        minPrice = min
+        maxPrice = max
+    }
+
+    // 가격 범위 정하기 visible toggle
+    var priceRangeState by mutableStateOf(false)
+        private set
+    fun priceRangeStateToggle() {
+        priceRangeState = !priceRangeState
     }
 }
