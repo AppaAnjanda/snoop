@@ -1,10 +1,8 @@
-package com.ssafy.likloud.config
+package com.appa.snoop.data.interceptor
 
-import android.content.Context
 import android.util.Log
 import com.appa.snoop.data.local.PreferenceDataSource
 import com.appa.snoop.data.local.PreferenceDataSource.Companion.ACCESS_TOKEN
-import dagger.hilt.android.qualifiers.ApplicationContext
 //import com.ssafy.templateapplication.ApplicationClass.Companion.sharedPreferences
 import okhttp3.Interceptor
 import okhttp3.Request

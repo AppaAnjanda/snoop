@@ -48,4 +48,10 @@ object RepositoryModule {
     fun provideCategoryRepository(categoryService: CategoryService): CategoryRepository {
         return CategoryRepositoryImpl(categoryService = categoryService)
     }
+
+    @Provides
+    @Singleton
+    fun provideMemberRepository(memberService: MemberService): MemberRepository {
+        return MemberRepositoryImpl(memberService = memberService)
+    }
 }

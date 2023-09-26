@@ -1,6 +1,8 @@
 package com.appa.snoop.presentation.ui.main
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,11 +24,13 @@ import com.appa.snoop.presentation.common.topbar.SharedTopAppBar
 import com.appa.snoop.presentation.common.topbar.utils.rememberAppBarState
 import com.appa.snoop.presentation.navigation.MainNav
 import com.appa.snoop.presentation.navigation.MainNavHost
+import com.appa.snoop.presentation.ui.mypage.MyPageViewModel
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
 
 private const val TAG = "[김희웅] MainScreen"
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(
     type: String? = null,

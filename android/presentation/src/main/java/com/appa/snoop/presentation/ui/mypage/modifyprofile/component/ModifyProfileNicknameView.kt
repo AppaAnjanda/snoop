@@ -1,4 +1,4 @@
-package com.appa.snoop.presentation.ui.mypage.profile.component
+package com.appa.snoop.presentation.ui.mypage.modifyprofile.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +19,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
@@ -29,7 +31,11 @@ import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @Composable
-fun ModifyProfilNickname(onNicknameChange: (String) -> Unit) {
+fun ModifyProfilNickname(
+    focusManager: FocusManager,
+    nickname: String,
+    onNicknameChange: (String) -> Unit
+) {
     Text(
         modifier = Modifier
             .fillMaxWidth()
@@ -45,17 +51,21 @@ fun ModifyProfilNickname(onNicknameChange: (String) -> Unit) {
     Spacer(modifier = Modifier.size(8.sdp))
 
     val keyboardController = LocalSoftwareKeyboardController.current
-    var nickName by remember { mutableStateOf("기웃기웃") }
+    var text by remember { mutableStateOf(nickname) }
     TextField(
-        value = nickName,
-        onValueChange = { nickName = it },
+        value = text,
+        onValueChange = {
+            text = it
+            onNicknameChange(text)
+        },
         textStyle = TextStyle(
             fontSize = 12.ssp,
             fontWeight = FontWeight.Normal
         ),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         keyboardActions = KeyboardActions(onSearch = {
-            onNicknameChange(nickName)
+            focusManager.moveFocus(FocusDirection.Down)
+            onNicknameChange(text)
             keyboardController?.hide()
         }),
         singleLine = true,

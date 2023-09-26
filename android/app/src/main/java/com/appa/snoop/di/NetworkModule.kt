@@ -1,20 +1,16 @@
 package com.appa.snoop.di
 
-import com.appa.snoop.data.local.PreferenceDataSource
-import com.appa.snoop.data.repository.RegisterRepositoryImpl
 import com.appa.snoop.data.service.BaseService
 import com.appa.snoop.data.service.CategoryService
+import com.appa.snoop.data.service.MemberService
 import com.appa.snoop.data.service.RegisterService
-import com.appa.snoop.di.NetworkModule_ProvideOkHttpClientFactory.provideOkHttpClient
-import com.appa.snoop.domain.repository.RegisterRepository
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import com.ssafy.likloud.config.RequestInterceptor
-import com.ssafy.likloud.config.ResponseInterceptor
+import com.appa.snoop.data.interceptor.RequestInterceptor
+import com.appa.snoop.data.interceptor.ResponseInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -84,4 +80,10 @@ object NetworkModule {
     fun provideCategoryService(
         retrofit: Retrofit
     ): CategoryService = retrofit.create(CategoryService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMemberService(
+        retrofit: Retrofit
+    ): MemberService = retrofit.create(MemberService::class.java)
 }

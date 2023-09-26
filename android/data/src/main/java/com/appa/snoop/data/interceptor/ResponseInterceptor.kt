@@ -1,4 +1,4 @@
-package com.ssafy.likloud.config
+package com.appa.snoop.data.interceptor
 
 import android.util.Log
 import com.appa.snoop.data.local.PreferenceDataSource
@@ -7,14 +7,12 @@ import com.appa.snoop.data.local.PreferenceDataSource.Companion.BASE_URL
 import com.appa.snoop.data.local.PreferenceDataSource.Companion.REFRESH_TOKEN
 import com.appa.snoop.data.model.error.response.ErrorResponse
 import com.appa.snoop.data.model.registration.request.RefreshTokenRequest
-import com.appa.snoop.data.service.BaseService
 import com.appa.snoop.data.service.RegisterService
 import com.google.gson.Gson
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import okhttp3.ResponseBody
-import okhttp3.internal.http2.ErrorCode
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
@@ -25,7 +23,7 @@ import javax.inject.Inject
  * 서버에 요청할 때 accessToken유효한지 검사
  * 유효하지 않다면 재발급 api 호출
  * refreshToken이 유효하다면 정상적으로 accessToken재발급 후 기존 api 동작 완료
-*/
+ */
 private const val TAG = "ResponseInterceptor_싸피"
 class ResponseInterceptor @Inject constructor(
     private val prefs: PreferenceDataSource

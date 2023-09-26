@@ -16,6 +16,7 @@ import com.appa.snoop.domain.repository.RegisterRepository
 import javax.inject.Inject
 
 private const val TAG = "[김희웅] RegisterRepositoryImpl"
+
 class RegisterRepositoryImpl @Inject constructor(
     private val preferenceDatasource: PreferenceDataSource,
     private val registerService: RegisterService
@@ -24,10 +25,12 @@ class RegisterRepositoryImpl @Inject constructor(
     override suspend fun registerMember(register: Register): NetworkResult<RegisterDone> {
         return handleApi { registerService.registerMember(register).toDomain() }
     }
+
     // 로그인
     override suspend fun login(loginInfo: LoginInfo): NetworkResult<JwtTokens> {
         return handleApi { registerService.login(loginInfo).toDomain() }
     }
+
     // 토큰 저장
     override suspend fun putJwtTokens(jwtTokens: JwtTokens) {
         preferenceDatasource.putString(ACCESS_TOKEN, jwtTokens.accessToken)
@@ -36,9 +39,16 @@ class RegisterRepositoryImpl @Inject constructor(
 //        preferenceDatasource.putInt("member_id", jwtAccessToken.memberId)
 //        preferenceDatasource.putString("role", loginResult.role[0].role)
 //        Log.d(TAG, "토큰이 잘 저장되는지 로그 -> access_token : ${preferenceDatasource.getString("access_token")} refresh_token : ${preferenceDatasource.getString("refresh_token")} member_id : ${preferenceDatasource.getInt("member_id")}\nrole: ${preferenceDatasource.getString("role")}")
-        Log.d(TAG, "토큰이 잘 저장되는지 로그 -> access_token : ${preferenceDatasource.getString(ACCESS_TOKEN)}")
-        Log.d(TAG, "토큰이 잘 저장되는지 로그 -> refresh_token : ${preferenceDatasource.getString(REFRESH_TOKEN)}")
+        Log.d(
+            TAG,
+            "토큰이 잘 저장되는지 로그 -> access_token : ${preferenceDatasource.getString(ACCESS_TOKEN)}"
+        )
+        Log.d(
+            TAG,
+            "토큰이 잘 저장되는지 로그 -> refresh_token : ${preferenceDatasource.getString(REFRESH_TOKEN)}"
+        )
     }
+
     // 로그인 유무 확인
     override suspend fun getLoginStatus(): JwtTokens {
         var jwtAccessToken = preferenceDatasource.getString(ACCESS_TOKEN) ?: "no_token_error"
@@ -46,6 +56,7 @@ class RegisterRepositoryImpl @Inject constructor(
 
         return JwtTokens(jwtAccessToken, jwtRefreshToken)
     }
+
     // 로그아웃
     override suspend fun logout() {
         preferenceDatasource.remove("access_token")
