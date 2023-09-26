@@ -89,6 +89,7 @@ public class SearchService {
 
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
                 .must(productNameQuery)
+                .should(QueryBuilders.matchQuery("product_name", keyword))
                 .should(minorCategoryQuery)
                 /*
                  * match_phrase로 검색어의 각 단어들을 순서까지 고려하여 완전히 포함하는 상품에 대해 should로 가중치를 줌
