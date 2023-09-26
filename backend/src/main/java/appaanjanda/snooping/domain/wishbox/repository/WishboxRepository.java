@@ -17,5 +17,5 @@ public interface WishboxRepository extends JpaRepository<Wishbox, Long> {
 
     List<Wishbox> findByMember(Member member);
 
-    Optional<Wishbox> findByProductCode(String productCode);
+    Optional<Wishbox> findByProductCodeAndMember(String productCode, Member member);
 }

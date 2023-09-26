@@ -154,7 +154,7 @@ public class WishboxService {
 			wishboxRepository.save(wishbox);
 			wishYn = true;
 		} else {
-			Wishbox wishbox = wishboxRepository.findByProductCode(productCode)
+			Wishbox wishbox = wishboxRepository.findByProductCodeAndMember(productCode, member)
 					.orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_PRODUCT));
 			wishboxRepository.delete(wishbox);
 		}
