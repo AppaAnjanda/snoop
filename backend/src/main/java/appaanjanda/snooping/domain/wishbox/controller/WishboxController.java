@@ -93,7 +93,7 @@ public class WishboxController {
     })
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "찜 상품 등록(상품 목록)", description = "상품 목록 화면에서 찜 버튼을 통한 찜 토글 API", tags = { "Wishbox Controller" })
-    @PostMapping("/add/wishbox/{productCode}")
+    @PostMapping("/add/{productCode}")
     public ResponseEntity<AddWishboxResponseDto> addWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable String productCode) {
         return ResponseEntity.ok(wishboxService.addWishbox(membersInfo.getId(), productCode));
     }
