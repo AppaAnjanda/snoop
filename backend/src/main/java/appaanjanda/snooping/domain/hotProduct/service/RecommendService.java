@@ -1,5 +1,6 @@
 package appaanjanda.snooping.domain.hotProduct.service;
 
+import appaanjanda.snooping.domain.product.service.ProductDetailService;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
@@ -9,6 +10,7 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.AnalyzeRequest;
 import org.elasticsearch.client.indices.AnalyzeResponse;
+import org.elasticsearch.client.indices.DetailAnalyzeResponse;
 import org.elasticsearch.xcontent.ToXContent;
 import org.elasticsearch.xcontent.XContentBuilder;
 import org.elasticsearch.xcontent.XContentFactory;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,13 +31,7 @@ public class RecommendService {
 
     private final WishboxRepository wishboxRepository;
     private final RestHighLevelClient restHighLevelClient;
-    private final ElasticsearchRestTemplate elasticsearchRestTemplate;
-
-    @Value("${elasticsearch.host}")
-    private String host;
-
-    @Value("${elasticsearch.port}")
-    private int port;
+    private final ProductDetailService productDetailService;
 
     // 찜 기반 추천
     public List<SearchContentDto> recommendByWishbox(Long memberId) throws IOException {
@@ -45,17 +42,68 @@ public class RecommendService {
         } else {
             wishProductCode = wishboxRepository.findAllProductCode();
         }
-//        analyzeProductCode(wishProductCode);
-        return null;
+        // 토큰 추출
+        List<String> tokenStrings = analyzeProductCode(wishProductCode);
+        // 상위 5개 정렬
+        StringBuilder sb = sortKeyword(tokenStrings);
+        // 상품 반환
+        return productDetailService.getSimilarRecommend(String.valueOf(sb), memberId);
     }
 
-//    // 상품명 분석
-//    public void analyzeProductCode(Set<String> wishProductCode) throws IOException {
-//
-//
-//        AnalyzeRequest analyzeRequest = AnalyzeRequest.withGlobalAnalyzer("snoop",
-//                "11LG전자 2023 LED QNED 4K 189cm (75QNED80KRA)", "12초미니냉장고/소형냉장고/미니냉장고/화장품냉장고/차량용 화장품 냉장고, 10L실버");
-//
-//        XContentBuilder builder = XContentFactory.jsonBuilder();
-//    }
+    // 상품명 분석
+    public List<String> analyzeProductCode(Set<String> wishProductCode) throws IOException {
+
+        // 찜 상품명들을 토크나이저로 분석
+        AnalyzeRequest analyzeRequest = AnalyzeRequest.withIndexAnalyzer("snoop", "custom_analyzer",
+                wishProductCode.toString());
+
+        AnalyzeResponse response = restHighLevelClient.indices().analyze(analyzeRequest, RequestOptions.DEFAULT);
+
+        List<AnalyzeResponse.AnalyzeToken> analyzeResponse = response.getTokens();
+
+        // token 추출
+        List<String> tokenStrings = new ArrayList<>();
+        for (AnalyzeResponse.AnalyzeToken token : analyzeResponse) {
+            tokenStrings.add(token.getTerm());
+        }
+        return tokenStrings;
+    }
+
+    // 정렬 후 키워드 추출
+    public StringBuilder sortKeyword(List<String> tokenStrings) {
+
+        log.info(tokenStrings.toString());
+        // 단어 개수 카운트
+        HashMap<String, Integer> tokenCounter = new HashMap<>();
+        for (String value : tokenStrings) {
+            // 있으면 +1, 없으면 만들고 + 1
+            tokenCounter.put(value, tokenCounter.getOrDefault(value, 0) + 1);
+        }
+
+        // HashMap을 값(value)을 기준으로 상위 4개 추출
+        Map<String, Integer> top4 = tokenCounter.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .limit(6)
+                .collect(Collectors.collectingAndThen(
+                        Collectors.toMap(
+                                Map.Entry::getKey,
+                                Map.Entry::getValue,
+                                (e1, e2) -> e1,
+                                LinkedHashMap::new),
+                        Collections::unmodifiableMap));
+
+        // 결과 출력
+        log.info(top4.toString());
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("11");
+        for (String string : top4.keySet()) {
+            if (string.equals("")) continue;
+            sb.append(" ").append(string);
+        }
+
+        log.info(String.valueOf(sb));
+        return sb;
+    }
 }
