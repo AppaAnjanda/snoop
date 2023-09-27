@@ -1,6 +1,5 @@
 package appaanjanda.snooping.domain.product.service;
 
-import appaanjanda.snooping.domain.hotProduct.service.HotProductService;
 import appaanjanda.snooping.domain.product.entity.price.*;
 import appaanjanda.snooping.domain.product.entity.product.*;
 import appaanjanda.snooping.domain.product.repository.product.DigitalProductRepository;
@@ -8,14 +7,13 @@ import appaanjanda.snooping.domain.product.repository.product.FoodProductReposit
 import appaanjanda.snooping.domain.product.repository.product.FurnitureProductRepository;
 import appaanjanda.snooping.domain.product.repository.product.NecessariesProductRepository;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
-import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
+import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class ProductSearchService {
     private final FurnitureProductRepository furnitureProductRepository;
     private final NecessariesProductRepository necessariesProductRepository;
     private final FoodProductRepository foodProductRepository;
-    private final WishboxRepository wishboxRepository;
+    private final WishboxService wishboxService;
 
     // 상품코드 별 상품 엔티티
     public Class<?> searchEntityById(String productCode) {
@@ -108,10 +106,8 @@ public class ProductSearchService {
         ProductInterface product = getProduct(productCode);
 
         if (product != null) {
-            // 현재 멤버 찜 목록
-            Set<String> wishProductCode = wishboxRepository.findProductById(memberId);
             // 찜 여부
-            boolean wishYn = (wishProductCode != null) && wishProductCode.contains(product.getCode());
+            boolean wishYn = wishboxService.checkMemberWishbox(product.getCode(), memberId);
             // Dto 생성
             return SearchContentDto.builder()
                     .id(product.getId())

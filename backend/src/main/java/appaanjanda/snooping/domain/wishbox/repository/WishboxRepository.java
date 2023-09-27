@@ -15,6 +15,12 @@ public interface WishboxRepository extends JpaRepository<Wishbox, Long> {
     @Query("SELECT w.productCode FROM Wishbox w WHERE w.member.id = :memberId")
     Set<String> findProductById(Long memberId);
 
+    @Query("SELECT w.productCode FROM Wishbox w")
+    Set<String> findAllProductCode();
+
+    @Query("SELECT w FROM Wishbox w WHERE w.productCode = :productCode")
+    List<Wishbox> findWishboxByProductCode(String productCode);
+
     List<Wishbox> findByMember(Member member);
 
     Optional<Wishbox> findByProductCodeAndMember(String productCode, Member member);
