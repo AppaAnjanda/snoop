@@ -7,12 +7,15 @@ import appaanjanda.snooping.domain.product.repository.product.FoodProductReposit
 import appaanjanda.snooping.domain.product.repository.product.FurnitureProductRepository;
 import appaanjanda.snooping.domain.product.repository.product.NecessariesProductRepository;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
+import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
 import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 
 @Service
@@ -24,7 +27,7 @@ public class ProductSearchService {
     private final FurnitureProductRepository furnitureProductRepository;
     private final NecessariesProductRepository necessariesProductRepository;
     private final FoodProductRepository foodProductRepository;
-    private final WishboxService wishboxService;
+    private final WishboxRepository wishboxRepository;
 
     // 상품코드 별 상품 엔티티
     public Class<?> searchEntityById(String productCode) {
@@ -106,8 +109,10 @@ public class ProductSearchService {
         ProductInterface product = getProduct(productCode);
 
         if (product != null) {
+            // 현재 멤버 찜 목록
+            Set<String> wishProductCode = wishboxRepository.findProductById(memberId);
             // 찜 여부
-            boolean wishYn = wishboxService.checkMemberWishbox(product.getCode(), memberId);
+            boolean wishYn = (wishProductCode != null) && wishProductCode.contains(productCode);
             // Dto 생성
             return SearchContentDto.builder()
                     .id(product.getId())
