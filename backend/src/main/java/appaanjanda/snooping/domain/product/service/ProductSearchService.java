@@ -7,6 +7,7 @@ import appaanjanda.snooping.domain.product.repository.product.FoodProductReposit
 import appaanjanda.snooping.domain.product.repository.product.FurnitureProductRepository;
 import appaanjanda.snooping.domain.product.repository.product.NecessariesProductRepository;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
+import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
 import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.global.error.code.ErrorCode;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -108,6 +110,8 @@ public class ProductSearchService {
     public SearchContentDto searchProductById(String productCode, Long memberId) {
         ProductInterface product = getProduct(productCode);
 
+        boolean wishYn = false;
+        boolean alertYn = false;
         if (product != null) {
             // 현재 멤버 찜 목록
             Set<String> wishProductCode = wishboxRepository.findProductById(memberId);
@@ -126,6 +130,7 @@ public class ProductSearchService {
                     .productLink(product.getProductLink())
                     .timestamp(product.getTimestamp())
                     .wishYn(wishYn)
+                    .alertYn(alertYn)
                     .build();
         } else {
             throw new BusinessException(ErrorCode.NOT_EXISTS_PRODUCT);

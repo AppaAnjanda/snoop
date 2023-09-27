@@ -1,6 +1,6 @@
-package appaanjanda.snooping.domain.product.controller;
+package appaanjanda.snooping.domain.recentProduct.controller;
 
-import appaanjanda.snooping.domain.product.service.ProductService;
+import appaanjanda.snooping.domain.recentProduct.service.RecentProductService;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,9 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/mypage")
 @RequiredArgsConstructor
-public class ProductController {
+public class RecentProductController {
 
-    private final ProductService productService;
+    private final RecentProductService recentProductService;
 
     // 최근 본 상품 조회
     @SecurityRequirement(name = "Bearer Authentication")
@@ -25,6 +25,6 @@ public class ProductController {
     @GetMapping("/recent")
     public List<Object> getRecentProduct(@MemberInfo MembersInfo membersInfo) {
 
-        return productService.getRecentProduct(membersInfo.getId());
+        return recentProductService.getRecentProduct(membersInfo.getId());
     }
 }

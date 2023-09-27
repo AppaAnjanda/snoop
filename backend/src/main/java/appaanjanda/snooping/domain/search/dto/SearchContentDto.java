@@ -12,5 +12,6 @@ import lombok.experimental.SuperBuilder;
 public class SearchContentDto extends Product { // 검색 결과 상품
 
     private boolean wishYn;
+    private boolean alertYn;
 
 }

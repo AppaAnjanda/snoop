@@ -35,9 +35,9 @@ public class HotProductService {
             LocalDateTime now = LocalDateTime.now();
             Duration duration = Duration.between(createTime, now);
 
-            // 일주일 지난 검색어 삭제
+            // 일주일 지난 상품 삭제
             if (duration.toDays() > 7) deleteHotProduct(hotProduct);
-            // 검색어 추출
+            // 상품코드 추출
             SearchContentDto searchContentDto = productSearchService.searchProductById(hotProduct.getProductCode(), memberId);
             resultProduct.add(searchContentDto);
         }
@@ -55,7 +55,7 @@ public class HotProductService {
     public void updateHotProduct(String productCode) {
 
         Optional<HotProduct> hotProduct = hotProductRepository.findByProductCode(productCode);
-        // 검색어 있으면 count +1
+        // 상품 있으면 count +1
         if (hotProduct.isPresent()) {
             HotProduct existHotProduct = hotProduct.get();
             existHotProduct.setCount(existHotProduct.getCount() + 1);

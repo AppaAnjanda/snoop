@@ -12,7 +12,7 @@ import appaanjanda.snooping.external.fastApi.NaverApiCaller;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import appaanjanda.snooping.domain.product.service.ProductSearchService;
-import appaanjanda.snooping.domain.product.service.ProductService;
+import appaanjanda.snooping.domain.recentProduct.service.RecentProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +21,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
-import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +37,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductDetailController {
 
-    private final ProductService productService;
+    private final RecentProductService recentProductService;
     private final ProductSearchService productSearchService;
     private final ProductDetailService productDetailService;
     private final NaverApiCaller naverApiCaller;
@@ -62,7 +61,7 @@ public class ProductDetailController {
         Long memberId = membersInfo.getId();
         if (memberId != null) {
             // 최근 본 상품 추가
-            productService.updateRecentProduct(membersInfo.getId(), decodedProductCode);
+            recentProductService.updateRecentProduct(membersInfo.getId(), decodedProductCode);
         }
 
         // 조회수 추가
