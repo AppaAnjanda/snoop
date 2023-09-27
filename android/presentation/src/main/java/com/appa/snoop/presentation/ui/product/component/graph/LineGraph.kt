@@ -1,5 +1,6 @@
 package com.appa.snoop.presentation.ui.product.component.graph
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
@@ -85,6 +86,8 @@ fun LineGraph(
             val points = lines.flatMap { it.dataPoints }
             val (xMin, xMax, xAxisScale) = getXAxisScale(points, plot)
             val (yMin, yMax, yAxisScale) = getYAxisScale(points, plot)
+            Log.d("김진영TAG", "LineGraph X: $xMin, $xMax, $xAxisScale")
+            Log.d("김진영TAG", "LineGraph Y: $yMin, $yMax, $yAxisScale")
 
             Canvas(modifier = Modifier
                 .align(Alignment.Center)
@@ -319,6 +322,10 @@ private fun getYAxisScale(
     val steps = plot.yAxis.steps
     val yMin = points.minOf { it.y }
     val yMax = points.maxOf { it.y }
+
+    if (yMin == yMax) {
+        return Triple(yMin - 1f, yMax + 1f, 1f)
+    }
 
     val totalSteps = (yMax - yMin)
     val temp = totalSteps / if (steps > 1) (steps - 1) else 1

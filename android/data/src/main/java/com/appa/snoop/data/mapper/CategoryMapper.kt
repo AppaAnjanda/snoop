@@ -7,7 +7,7 @@ import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.domain.model.category.ProductPaging
 import com.appa.snoop.domain.model.category.Wish
 
-fun ProductResponse.toDto(): Product {
+fun ProductResponse.toDomain(): Product {
     return Product (
         id = id,
         code = code,
@@ -25,7 +25,7 @@ fun ProductResponse.toDto(): Product {
 
 fun ProductPagingResponse.toDto(): ProductPaging {
     return ProductPaging(
-        contents = contents.map{ it.toDto() },
+        contents = contents.map{ it.toDomain() },
         currentPage = currentPage,
         totalPage = totalPage
     )

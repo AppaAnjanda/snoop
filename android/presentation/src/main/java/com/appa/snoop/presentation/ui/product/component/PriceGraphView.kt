@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,14 +25,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.appa.snoop.domain.model.product.GraphItem
 import com.appa.snoop.presentation.ui.product.component.graph.DataPoint
 import com.appa.snoop.presentation.ui.product.component.graph.LineGraph
 import com.appa.snoop.presentation.ui.product.component.graph.LinePlot
+import com.appa.snoop.presentation.ui.product.data.Period
 import com.appa.snoop.presentation.ui.theme.InvalidRedColor_60
 import com.appa.snoop.presentation.ui.theme.LightGreyColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor_30
-import com.appa.snoop.presentation.ui.theme.PrimaryColor_70
+import com.appa.snoop.presentation.util.DateUtil
 import com.appa.snoop.presentation.util.extensions.RoundRectangle
 import com.appa.snoop.presentation.util.extensions.toPx
 import ir.kaaveh.sdpcompose.sdp
@@ -42,7 +43,13 @@ import java.text.DecimalFormat
 
 
 @Composable
-internal fun PriceGraph(lines: List<List<DataPoint>>, modifier: Modifier = Modifier) {
+internal fun PriceGraph(
+    modifier: Modifier = Modifier,
+    lines: List<List<DataPoint>>,
+    productGraph: List<GraphItem>,
+    selectChipLabel: String,
+    selectChips: (Period) -> Unit,
+) {
     val totalWidth = remember { mutableStateOf(0) }
     Column(
         modifier =
@@ -58,10 +65,15 @@ internal fun PriceGraph(lines: List<List<DataPoint>>, modifier: Modifier = Modif
 
         /* TODO 가격 기웃기웃 */
 
-        Box(Modifier.wrapContentHeight().fillMaxWidth()) {
-            val list = listOf("주", "일", "시")
+        Box(
+            Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+        ) {
             Surface(modifier = Modifier.align(Alignment.TopEnd)) {
-                ChipsSelectable(chips = list) {}
+                ChipsSelectable(chips = Period.values().map { it.chip }) {
+                    selectChips(Period.values()[it])
+                }
             }
             Box(Modifier.height(30.sdp)) {
                 if (visibility.value) {
@@ -85,9 +97,11 @@ internal fun PriceGraph(lines: List<List<DataPoint>>, modifier: Modifier = Modif
                         ) {
                             val value = points.value
                             if (value.isNotEmpty()) {
-                                val x = DecimalFormat("#.#").format(value[0].x)
+                                val time = productGraph[(value[0].x).toInt()].timestamp
+//                                val x = DecimalFormat("#.#").format(value[0].x)
                                 Text(
-                                    text = "$x:00 가격",
+//                                    text = "$x:00 가격",
+                                    text = DateUtil.formatDate(time, selectChipLabel),
                                     style = TextStyle(
                                         fontWeight = FontWeight.Normal,
                                         fontSize = 12.ssp,
@@ -108,10 +122,10 @@ internal fun PriceGraph(lines: List<List<DataPoint>>, modifier: Modifier = Modif
             plot = LinePlot(
                 listOf(
                     LinePlot.Line(
-                        lines[0],
-                        LinePlot.Connection(PrimaryColor),
-                        LinePlot.Intersection(PrimaryColor),
-                        LinePlot.Highlight { center ->
+                        dataPoints = lines[0],
+                        connection = LinePlot.Connection(PrimaryColor),
+                        intersection = LinePlot.Intersection(PrimaryColor),
+                        highlight = LinePlot.Highlight { center ->
                             val color = PrimaryColor
                             drawCircle(color, 9.dp.toPx(), center, alpha = 0.3f)
                             drawCircle(color, 6.dp.toPx(), center)
@@ -169,7 +183,12 @@ fun SelectChip() {
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 fun GraphComponentPreview() {
-    PriceGraph(lines = listOf(DataPoints.dataPoints1))
+    PriceGraph(
+        lines = listOf(DataPoints.dataPoints1),
+        productGraph = listOf(GraphItem("", 0)),
+        selectChipLabel = "week",
+        selectChips = {},
+    )
 }
 
 object DataPoints {

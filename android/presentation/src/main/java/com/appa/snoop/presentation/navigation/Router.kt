@@ -24,7 +24,7 @@ object Router {
     const val MY_PAGE_MODIFY_PROFILE_ROUTER_NAME = "mypage_modify_profile"
 
     // 제품 상세화면
-    const val CATEGORY_PRODUCT_ROUTER_NAME = "category_product"
+    const val CATEGORY_PRODUCT_ROUTER_NAME = "category_product/{productCode}"
 
     // 채팅 화면
     const val CATEGORY_CHATTING_ROUTER_NAME = "category_chatting"
