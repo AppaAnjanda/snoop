@@ -1,7 +1,9 @@
 package com.appa.snoop.presentation.ui.category
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Icon
 import android.util.Log
+import android.widget.ImageButton
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -25,8 +27,11 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
@@ -67,6 +72,7 @@ import com.appa.snoop.presentation.ui.category.component.SnoopSearchBar
 import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
+import com.appa.snoop.presentation.util.extensions.RoundRectangle
 import com.appa.snoop.presentation.util.extensions.addFocusCleaner
 import com.kakao.sdk.friend.m.s
 import ir.kaaveh.sdpcompose.sdp
@@ -80,6 +86,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import okhttp3.internal.wait
 import org.jetbrains.annotations.Async
+import java.io.IOError
+import java.io.IOException
 
 private const val TAG = "[김희웅] CategoryScreen"
 const val SIZE = 2
@@ -195,13 +203,15 @@ fun CategoryScreen(
                         categoryViewModel = categoryViewModel,
                         showSnackBar = showSnackBar,
                         onSearching = {
+                            categoryViewModel.getProductListByKeywordPaging(categoryViewModel.textSearchState)
+                            focusManager.clearFocus()
                             scope.launch {
-                                focusManager.clearFocus()
-//                                categoryViewModel.keywordSearchClick()
-                                categoryViewModel.getProductListByKeywordPaging(categoryViewModel.textSearchState)
-
-
                                 drawerState.close()
+                            }
+                            scope.launch {
+                                if (categoryViewModel.priceRangeState && categoryViewModel.minPriceTextState > categoryViewModel.maxPriceTextState) {
+                                    snackState.showSnackbar("유효하지 않은 가격 범위입니다. 다시 설정해주세요!")
+                                }
                             }
                         }
                     )
@@ -266,6 +276,11 @@ fun CategoryScreen(
                                     scope.launch {
                                         drawerState.close()
                                     }
+                                },
+                                showSnackbar = {
+                                    scope.launch {
+                                        snackState.showSnackbar(it)
+                                    }
                                 }
                             )
                         }
@@ -280,13 +295,31 @@ fun CategoryScreen(
                 .addFocusCleaner(focusManager),
             snackbarHost = {
                 SnackbarHost(snackState)
+            },
+            floatingActionButton = {
+                if (pagingData.itemCount > 6) {
+                    FloatingActionButton(
+                        onClick = {
+                            scope.launch {
+                                lazyState.scrollToItem(0)
+                            }
+                        },
+                        shape = CircleShape,
+                        containerColor = PrimaryColor,
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_double_arrow_up),
+                            contentDescription = "맨 위로 버튼"
+                        )
+                    }
+                }
             }
         ) { paddingValue ->
             paddingValue
             Column(
                 modifier = modifier
                     .fillMaxSize(),
-//                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (pagingData.itemCount == 0) {
@@ -308,6 +341,8 @@ fun CategoryScreen(
                     )
                 } else {
                     LazyVerticalGrid(
+                        modifier = Modifier
+                            .fillMaxSize(),
                         columns = GridCells.Fixed(SIZE),
                         state = lazyState
                     ) {
@@ -342,7 +377,6 @@ fun CategoryScreen(
                                                 job.cancel()
                                             }
                                             else -> { // 로그인 시
-//                                                categoryViewModel.postWishToggle(pagingData[it]!!.code)
                                                 val result = categoryViewModel.toggled(pagingData[it]!!.code)
 
                                                 when(result) {
@@ -388,8 +422,6 @@ fun CategoryScreen(
                                             }
                                         }
                                     }
-//                                    heart
-//                                    false
                                 }
                             )
                         }
@@ -398,85 +430,4 @@ fun CategoryScreen(
             }
         }
     }
-
-//    Scaffold(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .addFocusCleaner(focusManager),
-//        topBar = {
-//            AnimatedContent(
-//                targetState = categoryViewModel.searchBarState,
-//                transitionSpec = {
-//                     slideInVertically(
-//                         initialOffsetY = { -200 },
-//                         animationSpec = tween(200)
-//                     ) togetherWith slideOutVertically (
-//                         targetOffsetY = { -200 },
-//                         animationSpec = tween(200)
-//                     ) using SizeTransform(false)
-//                },
-//                label = ""
-//            ) { searchBarVisible ->
-//                if (searchBarVisible) {
-//                    SnoopSearchBar(
-//                        modifier = Modifier
-//                            .wrapContentHeight(),
-//                        focusManager = focusManager,
-//                        categoryViewModel = categoryViewModel,
-//                        showSnackBar = showSnackBar
-//                    )
-//                }
-//            }
-//        },
-//    ) { paddingValue ->
-//        paddingValue
-//        Column(
-//            modifier = modifier
-//                .fillMaxSize(),
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//            if (pagingData.itemCount == 0) {
-////                DrawerView()
-//                Text(
-//                    text = "기웃기웃의 둘러보기 기능입니다.",
-//                    fontSize = 18.ssp
-//                )
-//                Spacer(modifier = Modifier.height(12.sdp))
-//                Text(
-//                    text = "카테고리 & 검색 기능을 이용해주세요.",
-//                    fontSize = 14.ssp
-//                )
-//                Spacer(modifier = Modifier.height(12.sdp))
-//                Image(
-//                    modifier = Modifier
-//                        .size(200.sdp),
-//                    painter = painterResource(id = R.drawable.img_meerkat_face),
-//                    contentDescription = null
-//                )
-//            } else {
-//                LazyVerticalGrid(
-//                    columns = GridCells.Fixed(SIZE),
-//                ) {
-//                    items(
-//                        pagingData.itemCount,
-//                        key = {
-//                            pagingData[it]!!.id
-//                        }
-//                    ) {
-//                        CategoryItem(
-//                            modifier = Modifier,
-//                            product = pagingData[it]!!,
-//                            onItemClicked = {
-//                                navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
-//                            },
-//                            onLikeClicked = {
-//                                // TODO 구현 찜 토글
-//                            }
-//                        )
-//                    }
-//                }
-//            }
-//        }
-//    }
 }

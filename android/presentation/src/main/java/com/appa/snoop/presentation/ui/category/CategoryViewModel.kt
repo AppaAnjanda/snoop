@@ -133,8 +133,8 @@ class CategoryViewModel @Inject constructor(
     fun getProductListByCategoryPaging(
         majorName: String,
         minorName: String,
-        minPrice: Int = if (!priceRangeState) MIN_PRICE else minPriceTextState.toInt(),
-        maxPrice: Int = if (!priceRangeState) MAX_PRICE else maxPriceTextState.toInt()
+        minPrice: Int = if (!priceRangeState) MIN_PRICE else PriceUtil.parseFormattedPrice(minPriceTextState),
+        maxPrice: Int = if (!priceRangeState) MAX_PRICE else PriceUtil.parseFormattedPrice(maxPriceTextState)
     ) {
         viewModelScope.launch {
             getProductListPagingDataByCategory(
