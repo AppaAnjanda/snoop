@@ -41,7 +41,7 @@ import com.appa.snoop.presentation.ui.mypage.modifyprofile.component.ModifyProfi
 import com.appa.snoop.presentation.ui.mypage.modifyprofile.component.ModifyProfileImg
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
-import com.appa.snoop.presentation.util.PermissionUtil
+import com.appa.snoop.presentation.util.PermissionUtils
 import com.appa.snoop.presentation.util.effects.ModifyProfileLaunchedEffect
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -60,7 +60,7 @@ fun ModifyProfileScreen(
 ) {
     ModifyProfileLaunchedEffect(navController)
     val galleryPermission =
-        rememberMultiplePermissionsState(permissions = PermissionUtil.GALLERY_PERMISSIONS)
+        rememberMultiplePermissionsState(permissions = PermissionUtils.GALLERY_PERMISSIONS)
 
     val focusManager = LocalFocusManager.current
     val scrollableState = rememberScrollState()
