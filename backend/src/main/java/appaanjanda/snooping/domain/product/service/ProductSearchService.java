@@ -113,10 +113,19 @@ public class ProductSearchService {
         boolean wishYn = false;
         boolean alertYn = false;
         if (product != null) {
-            // 현재 멤버 찜 목록
-            Set<String> wishProductCode = wishboxRepository.findProductById(memberId);
-            // 찜 여부
-            boolean wishYn = (wishProductCode != null) && wishProductCode.contains(productCode);
+            // 회원인경우 찜, 알림 여부 판단
+            if (memberId != null) {
+                // 현재 멤버 찜 목록
+                Set<String> wishProductCode = wishboxRepository.findProductById(memberId);
+                // 찜 여부
+                if ((wishProductCode != null) && wishProductCode.contains(product.getCode())) wishYn = true;
+                // 알림 여부
+                if (wishYn) {
+                    Wishbox findWishbox = wishboxRepository.findByProductCodeAndMemberId(productCode, memberId)
+                            .orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_WISHBOX_ID));
+                    if (findWishbox.getAlertYn()) alertYn = true;
+                }
+            }
             // Dto 생성
             return SearchContentDto.builder()
                     .id(product.getId())

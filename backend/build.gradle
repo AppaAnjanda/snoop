@@ -70,7 +70,7 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch:2.5.2'
 
 	// RestHighLevelClient
-	implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.15.2'
+//	implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.15.2'
 
 	// p6spy
 	implementation group: 'p6spy', name: 'p6spy', version: '3.9.1'

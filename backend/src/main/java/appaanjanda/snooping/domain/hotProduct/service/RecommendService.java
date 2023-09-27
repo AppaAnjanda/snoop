@@ -45,17 +45,17 @@ public class RecommendService {
         } else {
             wishProductCode = wishboxRepository.findAllProductCode();
         }
-        analyzeProductCode(wishProductCode);
+//        analyzeProductCode(wishProductCode);
         return null;
     }
 
-    // 상품명 분석
-    public void analyzeProductCode(Set<String> wishProductCode) throws IOException {
-
-
-        AnalyzeRequest analyzeRequest = AnalyzeRequest.withGlobalAnalyzer("snoop",
-                "11LG전자 2023 LED QNED 4K 189cm (75QNED80KRA)", "12초미니냉장고/소형냉장고/미니냉장고/화장품냉장고/차량용 화장품 냉장고, 10L실버");
-
-        XContentBuilder builder = XContentFactory.jsonBuilder();
-    }
+//    // 상품명 분석
+//    public void analyzeProductCode(Set<String> wishProductCode) throws IOException {
+//
+//
+//        AnalyzeRequest analyzeRequest = AnalyzeRequest.withGlobalAnalyzer("snoop",
+//                "11LG전자 2023 LED QNED 4K 189cm (75QNED80KRA)", "12초미니냉장고/소형냉장고/미니냉장고/화장품냉장고/차량용 화장품 냉장고, 10L실버");
+//
+//        XContentBuilder builder = XContentFactory.jsonBuilder();
+//    }
 }

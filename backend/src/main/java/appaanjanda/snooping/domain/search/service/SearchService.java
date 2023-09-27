@@ -42,7 +42,6 @@ public class SearchService {
     private final ProductSearchService productSearchService;
     private final SearchHistoryRepository searchHistoryRepository;
     private final MemberService memberService;
-    private final WishboxRepository wishboxRepository;
     private final WishboxService wishboxService;
 
     private final String[] indices = {"디지털가전", "가구", "생활용품", "식품"}; // 검색할 인덱스들
