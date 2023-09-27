@@ -4,6 +4,7 @@ import appaanjanda.snooping.domain.product.entity.price.FurniturePrice;
 import appaanjanda.snooping.domain.product.entity.product.FurnitureProduct;
 import appaanjanda.snooping.domain.product.repository.price.FurniturePriceRepository;
 import appaanjanda.snooping.domain.product.repository.product.FurnitureProductRepository;
+import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.external.logstash.entity.ProductInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ public class FurnitureDataService {
 
     private final FurnitureProductRepository furnitureProductRepository;
     private final FurniturePriceRepository furniturePriceRepository;
+    private final WishboxService wishboxService;
 
 
     // 최근 업데이트 확인
@@ -33,9 +35,8 @@ public class FurnitureDataService {
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime lastUpdateTime = LocalDateTime.parse(furnitureProduct.getTimestamp());
-        LocalDateTime realTime = lastUpdateTime.plusHours(9);
         // 업데이트 경과 시간
-        Duration duration = Duration.between(realTime, now);
+        Duration duration = Duration.between(lastUpdateTime, now);
         // 10분 지났으면 업데이트 진행
         if (duration.toMinutes() >= 10) return true;
         else return false;
@@ -56,7 +57,7 @@ public class FurnitureDataService {
                 LocalDateTime now = LocalDateTime.now();
                 int minute = now.getMinute();
 
-                if (minute < 15) {
+                if (minute < 10) {
                     createPriceData(productInfo, productInfo.getCode());
 
                     // 가격이 더 떨어졌으면 업데이트
@@ -101,6 +102,13 @@ public class FurnitureDataService {
 
         furnitureProductRepository.save(furnitureProduct);
 
+        String productCode = furnitureProduct.getCode();
+        // 찜 여부 판단
+        if (wishboxService.checkWishbox(productCode)) {
+            // 알림여부 판단 후 가격 비교하고 알림보내기
+            wishboxService.checkAlertPrice(productCode, furnitureProduct.getPrice());
+        }
+
     }
 
     // 그 시간대의 가격 정보 업데이트
@@ -109,7 +117,7 @@ public class FurnitureDataService {
         LocalDateTime now = LocalDateTime.now();
         int minute = now.getMinute();
 
-        if (minute >= 15) {
+        if (minute >= 10) {
 
             // 정렬 기준
             Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
@@ -138,8 +146,7 @@ public class FurnitureDataService {
     public String parseTime() {
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime realTime = now.minusHours(9);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        return realTime.format(formatter);
+        return now.format(formatter);
     }
 }

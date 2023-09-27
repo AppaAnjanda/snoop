@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class AddWishboxRequestDto {
+public class AddAlertRequestDto {
     private int alertPrice;
 
     @Builder
-    public AddWishboxRequestDto(int alertPrice) {
+    public AddAlertRequestDto(int alertPrice) {
         this.alertPrice = alertPrice;
     }
 }
