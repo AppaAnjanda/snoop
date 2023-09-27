@@ -8,6 +8,7 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import com.appa.snoop.data.interceptor.RequestInterceptor
 import com.appa.snoop.data.interceptor.ResponseInterceptor
+import com.appa.snoop.data.service.ProductService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -86,4 +87,10 @@ object NetworkModule {
     fun provideMemberService(
         retrofit: Retrofit
     ): MemberService = retrofit.create(MemberService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideProductService(
+        retrofit: Retrofit
+    ): ProductService = retrofit.create(ProductService::class.java)
 }

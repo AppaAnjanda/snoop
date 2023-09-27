@@ -13,7 +13,10 @@ import com.appa.snoop.domain.model.member.LoginInfo
 import com.appa.snoop.domain.model.member.Register
 import com.appa.snoop.domain.model.member.RegisterDone
 import com.appa.snoop.domain.repository.RegisterRepository
+import com.google.firebase.messaging.FirebaseMessaging
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "[김희웅] RegisterRepositoryImpl"
 
@@ -60,5 +63,19 @@ class RegisterRepositoryImpl @Inject constructor(
     // 로그아웃
     override suspend fun logout() {
         preferenceDatasource.remove("access_token")
+    }
+
+    override suspend fun getFcmToken(): String = suspendCoroutine { continuation ->
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.d(TAG, "getFcmToken: Fetching FCM token failed", task.exception)
+                    continuation.resume("")
+                } else {
+                    val token = task.result
+                    Log.d(TAG, "getFcmToken: FCM token is $token")
+                    continuation.resume(token ?: "")
+                }
+            }
     }
 }

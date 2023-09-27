@@ -17,6 +17,7 @@ import com.appa.snoop.presentation.common.product.HomeLabel
 import com.appa.snoop.presentation.common.product.ProductItemView
 import com.appa.snoop.presentation.ui.theme.BlackColor
 import ir.kaaveh.sdpcompose.sdp
+import ir.kaaveh.sdpcompose.ssp
 
 @Composable
 fun RecommendListView(
@@ -30,7 +31,7 @@ fun RecommendListView(
         Text(
             text = "이런 제품은 어때요?",
             style = TextStyle(
-                fontSize = 14.sp,
+                fontSize = 14.ssp,
                 fontWeight = FontWeight.Bold,
                 color = BlackColor,
             )

@@ -9,9 +9,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.member.LoginInfo
+import com.appa.snoop.domain.usecase.register.GetFCMTokenUseCase
 import com.appa.snoop.domain.usecase.register.JwtTokenInputUseCase
 import com.appa.snoop.domain.usecase.register.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -22,7 +24,8 @@ private const val TAG = "[김희웅] LoginViewModel"
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val jwtTokenInputUseCase: JwtTokenInputUseCase
+    private val jwtTokenInputUseCase: JwtTokenInputUseCase,
+    private val getFCMTokenUseCase: GetFCMTokenUseCase
 ): ViewModel() {
     var textIdState by mutableStateOf("")
         private set
@@ -56,13 +59,21 @@ class LoginViewModel @Inject constructor(
             textPasswordState.isEmpty() -> passwordFilledState = false
         }
     }
+
+    private var fcmToken by mutableStateOf("")
+        private set
+    fun getFcmToken() = viewModelScope.launch {
+        fcmToken = getFCMTokenUseCase.invoke()
+        Log.d(TAG, "getFcmToken: $fcmToken")
+    }
+
     // 로그인
     fun login() = viewModelScope.launch {
-//        val getFcmTokenJob = viewModelScope.async {
-//            getFcmToken()
-//        }
-        // fcmToken 가져오기를 기다림
-//        getFcmTokenJob.await()
+        val getFcmTokenJob = viewModelScope.async {
+            getFcmToken()
+        }
+//         fcmToken 가져오기를 기다림
+        getFcmTokenJob.await()
 
         val loginInfo = LoginInfo(textIdState, textPasswordState)
         val result = loginUseCase.invoke(loginInfo)

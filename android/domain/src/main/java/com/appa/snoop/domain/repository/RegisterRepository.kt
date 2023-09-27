@@ -21,4 +21,7 @@ interface RegisterRepository {
 
     // 로그아웃
     suspend fun logout()
+
+    // firebase fcm token 발급
+    suspend fun getFcmToken() : String
 }
