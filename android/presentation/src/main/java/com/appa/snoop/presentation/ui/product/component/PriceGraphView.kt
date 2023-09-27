@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +34,7 @@ import com.appa.snoop.presentation.ui.theme.InvalidRedColor_60
 import com.appa.snoop.presentation.ui.theme.LightGreyColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor_30
-import com.appa.snoop.presentation.ui.theme.PrimaryColor_70
+import com.appa.snoop.presentation.util.DateUtil
 import com.appa.snoop.presentation.util.extensions.RoundRectangle
 import com.appa.snoop.presentation.util.extensions.toPx
 import ir.kaaveh.sdpcompose.sdp
@@ -48,7 +47,8 @@ internal fun PriceGraph(
     modifier: Modifier = Modifier,
     lines: List<List<DataPoint>>,
     productGraph: List<GraphItem>,
-    selectChips: (Period) -> Unit
+    selectChipLabel: String,
+    selectChips: (Period) -> Unit,
 ) {
     val totalWidth = remember { mutableStateOf(0) }
     Column(
@@ -97,11 +97,11 @@ internal fun PriceGraph(
                         ) {
                             val value = points.value
                             if (value.isNotEmpty()) {
-//                                val time = productGraph[(value[0].x).toInt()].timestamp
-                                val x = DecimalFormat("#.#").format(value[0].x)
+                                val time = productGraph[(value[0].x).toInt()].timestamp
+//                                val x = DecimalFormat("#.#").format(value[0].x)
                                 Text(
-                                    text = "$x:00 가격",
-//                                    text = "$time",
+//                                    text = "$x:00 가격",
+                                    text = DateUtil.formatDate(time, selectChipLabel),
                                     style = TextStyle(
                                         fontWeight = FontWeight.Normal,
                                         fontSize = 12.ssp,
@@ -122,10 +122,10 @@ internal fun PriceGraph(
             plot = LinePlot(
                 listOf(
                     LinePlot.Line(
-                        lines[0],
-                        LinePlot.Connection(PrimaryColor),
-                        LinePlot.Intersection(PrimaryColor),
-                        LinePlot.Highlight { center ->
+                        dataPoints = lines[0],
+                        connection = LinePlot.Connection(PrimaryColor),
+                        intersection = LinePlot.Intersection(PrimaryColor),
+                        highlight = LinePlot.Highlight { center ->
                             val color = PrimaryColor
                             drawCircle(color, 9.dp.toPx(), center, alpha = 0.3f)
                             drawCircle(color, 6.dp.toPx(), center)
@@ -186,7 +186,9 @@ fun GraphComponentPreview() {
     PriceGraph(
         lines = listOf(DataPoints.dataPoints1),
         productGraph = listOf(GraphItem("", 0)),
-        selectChips = {})
+        selectChipLabel = "week",
+        selectChips = {},
+    )
 }
 
 object DataPoints {

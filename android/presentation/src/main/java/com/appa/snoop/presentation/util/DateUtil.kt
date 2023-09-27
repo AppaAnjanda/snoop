@@ -37,43 +37,27 @@ object DateUtil {
         }
     }
 
+    fun formatDate(input: String, formatType: String): String {
+        // 원래 날짜 형식 정의
+        val originalFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
+        // formatType에 따른 대상 날짜 형식 정의
+        val targetFormat = when (formatType) {
+            "day", "week" -> SimpleDateFormat("MM-dd", Locale.getDefault())
+            "hour" -> SimpleDateFormat("MM-dd HH:mm", Locale.getDefault())
+            else -> throw IllegalArgumentException("Unsupported formatType: $formatType")
+        }
+
+        // 원래 형식으로 날짜를 파싱
+        val date = originalFormat.parse(input)
+        // 원하는 형식으로 날짜를 포맷팅
+        return date.let { targetFormat.format(it) }
+    }
+
     fun convertMillisToYymmdd(millis: Long): String {
         val dateFormat = SimpleDateFormat("yy.MM.dd")
         val date = Date(millis)
         return dateFormat.format(date)
     }
 
-    @SuppressLint("ConstantLocale")
-    private val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-
-    fun stringToDate(dateString: String): Date? {
-        if (dateString.isBlank()) return null
-        return try {
-            format.parse(dateString)
-        } catch (e: ParseException) {
-            null
-        }
-    }
-
-    fun dateToFloat(date: Date): Float {
-        return date.time.toFloat()
-    }
-
-    fun floatToDate(timeAsFloat: Float): Date {
-        return Date(timeAsFloat.toLong())
-    }
-
-    fun dateToString(date: Date): String {
-        return format.format(date)
-    }
-
-    fun stringToFloat(dateString: String): Float {
-        val date = stringToDate(dateString) ?: Date()
-        return dateToFloat(date)
-    }
-
-    fun floatToString(timeAsFloat: Float): String {
-        val date = floatToDate(timeAsFloat)
-        return dateToString(date)
-    }
 }

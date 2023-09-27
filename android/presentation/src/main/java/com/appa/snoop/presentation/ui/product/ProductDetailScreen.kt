@@ -2,7 +2,6 @@ package com.appa.snoop.presentation.ui.product
 
 import android.content.Intent
 import android.net.Uri
-import android.text.format.DateUtils
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,14 +32,12 @@ import com.appa.snoop.presentation.ui.category.utils.convertNaverUrl
 import com.appa.snoop.presentation.ui.product.component.AlarmSnackBar
 import com.appa.snoop.presentation.ui.product.component.ButtonView
 import com.appa.snoop.presentation.ui.product.component.BuyTimingView
-import com.appa.snoop.presentation.ui.product.component.DataPoints
 import com.appa.snoop.presentation.ui.product.component.PriceGraph
 import com.appa.snoop.presentation.ui.product.component.ProductDetailView
 import com.appa.snoop.presentation.ui.product.component.RecommendListView
 import com.appa.snoop.presentation.ui.product.component.graph.DataPoint
 import com.appa.snoop.presentation.ui.product.data.Period
 import com.appa.snoop.presentation.ui.theme.WhiteColor
-import com.appa.snoop.presentation.util.DateUtil
 import com.appa.snoop.presentation.util.effects.ProductLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.delay
@@ -128,6 +125,7 @@ fun ProductDetailScreen(
             PriceGraph(modifier = Modifier,
                 lines = listOf(graphData),
                 productGraph = productGraph,
+                selectChipLabel = selectChip,
                 selectChips = {
                     selectChip = it.label
                 })
