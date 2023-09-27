@@ -3,6 +3,7 @@ package appaanjanda.snooping.domain.firebase.entity;
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.global.common.BaseTimeEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,4 +26,11 @@ public class AlertHistory extends BaseTimeEntity {
     @JsonIgnore
     private Member member;
 
+    @Builder
+    public AlertHistory(Long id, String title, String body, Member member) {
+        this.id = id;
+        this.title = title;
+        this.body = body;
+        this.member = member;
+    }
 }
