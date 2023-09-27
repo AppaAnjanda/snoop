@@ -19,6 +19,7 @@ import com.appa.snoop.domain.usecase.category.PostWishToggleUseCase
 import com.appa.snoop.domain.usecase.register.GetLoginStatusUseCase
 import com.appa.snoop.presentation.ui.category.utils.ProductCategoryPagingDataSource
 import com.appa.snoop.presentation.ui.category.utils.ProductKeywordPagingDataSource
+import com.appa.snoop.presentation.util.PriceUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -129,45 +130,83 @@ class CategoryViewModel @Inject constructor(
     val _pagingDataFlow = MutableStateFlow<PagingData<Product>>(PagingData.empty())
     val pagingDataFlow = _pagingDataFlow.asStateFlow()
 
-    fun getProductListByCategoryPaging(majorName: String, minorName: String) {
+    fun getProductListByCategoryPaging(
+        majorName: String,
+        minorName: String,
+        minPrice: Int = if (!priceRangeState) MIN_PRICE else minPriceTextState.toInt(),
+        maxPrice: Int = if (!priceRangeState) MAX_PRICE else maxPriceTextState.toInt()
+    ) {
         viewModelScope.launch {
-            getProductListPagingDataByCategory(majorName, minorName)
-                .collectLatest { pagingData ->
-                    _pagingDataFlow.emit(pagingData)
-                }
+            getProductListPagingDataByCategory(
+                majorName,
+                minorName,
+                minPrice,
+                maxPrice
+            ).collectLatest { pagingData ->
+                _pagingDataFlow.emit(pagingData)
+            }
         }
     }
 
-    fun getProductListByKeywordPaging(keyword: String) {
+    fun getProductListByKeywordPaging(
+        keyword: String,
+        minPrice: Int = if (!priceRangeState) MIN_PRICE else PriceUtil.parseFormattedPrice(minPriceTextState),
+        maxPrice: Int = if (!priceRangeState) MAX_PRICE else PriceUtil.parseFormattedPrice(maxPriceTextState)
+    ) {
         viewModelScope.launch {
-            getProductListPagingDataByKeyword(keyword)
-                .collectLatest { pagingData ->
-                    _pagingDataFlow.emit(pagingData)
-                }
+            getProductListPagingDataByKeyword(
+                keyword,
+                minPrice,
+                maxPrice
+            ).collectLatest { pagingData ->
+                _pagingDataFlow.emit(pagingData)
+            }
         }
     }
 
-    fun getProductListPagingDataByCategory(majorName: String, minorName: String): Flow<PagingData<Product>> {
+    fun getProductListPagingDataByCategory(
+        majorName: String,
+        minorName: String,
+        minPrice: Int,
+        maxPrice: Int
+    ): Flow<PagingData<Product>> {
         return Pager(config = PagingConfig(pageSize = PAGE_SIZE)) {
-            ProductCategoryPagingDataSource(getProductListByCategoryUseCase, majorName, minorName)
+            ProductCategoryPagingDataSource(
+                getProductListByCategoryUseCase,
+                majorName = majorName,
+                minorName = minorName,
+                minPrice = minPrice,
+                maxPrice = maxPrice
+            )
         }.flow.cachedIn(viewModelScope)
     }
 
-    fun getProductListPagingDataByKeyword(keyword: String): Flow<PagingData<Product>> {
+    fun getProductListPagingDataByKeyword(
+        keyword: String,
+        minPrice: Int,
+        maxPrice: Int
+    ): Flow<PagingData<Product>> {
         return Pager(config = PagingConfig(pageSize = PAGE_SIZE)) {
-            ProductKeywordPagingDataSource(getProductListByKeywordUseCase, keyoword = keyword)
+            ProductKeywordPagingDataSource(
+                getProductListByKeywordUseCase,
+                keyoword = keyword,
+                minPrice = minPrice,
+                maxPrice = maxPrice
+            )
 //            { keywordSearchClick() }
         }.flow.cachedIn(viewModelScope)
     }
 
     // 가격 범위
-    var minPrice by mutableStateOf(MIN_PRICE)
+    var minPriceTextState by mutableStateOf("$MIN_PRICE")
         private set
-    var maxPrice by mutableStateOf(MAX_PRICE)
+    var maxPriceTextState by mutableStateOf("$MAX_PRICE")
         private set
-    fun setPriceRange(min: Int, max: Int) {
-        minPrice = min
-        maxPrice = max
+    fun setMinPriceText(price: String) {
+        minPriceTextState = price
+    }
+    fun setMaxPriceText(price: String) {
+        maxPriceTextState = price
     }
 
     // 가격 범위 정하기 visible toggle
@@ -177,29 +216,30 @@ class CategoryViewModel @Inject constructor(
         priceRangeState = !priceRangeState
     }
 
+    // 로그인 유뮤 판단
     suspend fun isLogined() = getLoginStatusUseCase.invoke()
 
     // 위시리스트 담기 기능
     private val _wishToggleState = MutableStateFlow<Int>(0)
     val wishToggleState = _wishToggleState.asStateFlow()
 
-    fun postWishToggle(productCode: String) {
-        viewModelScope.launch {
-            val result = postWishToggleUseCase.invoke(productCode)
-
-            when(result) {
-                is NetworkResult.Success -> {
-                    if (result.data.wishYn) {
-                        _wishToggleState.value++
-                    }
-                    Log.d(TAG, "postWishToggle: 위시리스트 토글 api통신 정상 처리 입니다. 현재 토글 값? -> ${result.data.wishYn}")
-                }
-                else -> {
-                    Log.d(TAG, "postWishToggle: 위시리스트 토글 api통신 오류입니다.")
-                }
-            }
-        }
-    }
+//    fun postWishToggle(productCode: String) {
+//        viewModelScope.launch {
+//            val result = postWishToggleUseCase.invoke(productCode)
+//
+//            when(result) {
+//                is NetworkResult.Success -> {
+//                    if (result.data.wishYn) {
+//                        _wishToggleState.value++
+//                    }
+//                    Log.d(TAG, "postWishToggle: 위시리스트 토글 api통신 정상 처리 입니다. 현재 토글 값? -> ${result.data.wishYn}")
+//                }
+//                else -> {
+//                    Log.d(TAG, "postWishToggle: 위시리스트 토글 api통신 오류입니다.")
+//                }
+//            }
+//        }
+//    }
 
     suspend fun toggled(productCode: String) = postWishToggleUseCase.invoke(productCode)
 }

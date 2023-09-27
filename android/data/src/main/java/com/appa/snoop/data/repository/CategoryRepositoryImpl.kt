@@ -17,16 +17,20 @@ class CategoryRepositoryImpl @Inject constructor(
     override suspend fun getProductListByCategory(
         majorName: String,
         minorName: String,
-        pageNum: Int
+        pageNum: Int,
+        minPrice: Int,
+        maxPrice: Int
     ): NetworkResult<ProductPaging> {
-        return handleApi { categoryService.getProductListByCategory(majorName, minorName, pageNum).toDto() }
+        return handleApi { categoryService.getProductListByCategory(majorName, minorName, pageNum, minPrice, maxPrice).toDto() }
     }
 
     override suspend fun getProductListByKeyword(
         keyword: String,
-        pageNum: Int
+        pageNum: Int,
+        minPrice: Int,
+        maxPrice: Int
     ): NetworkResult<ProductPaging> {
-        return handleApi { categoryService.getProductListByKeyword(keyword, pageNum).toDto() }
+        return handleApi { categoryService.getProductListByKeyword(keyword, pageNum, minPrice, maxPrice).toDto() }
     }
 
     override suspend fun postWishToggle(

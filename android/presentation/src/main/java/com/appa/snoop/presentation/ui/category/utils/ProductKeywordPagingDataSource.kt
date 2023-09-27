@@ -16,6 +16,8 @@ private const val TAG = "[김희웅] ProductKeywordPagingDat"
 class ProductKeywordPagingDataSource @Inject constructor(
     private val categoryUseCase: GetProductListByKeywordUseCase,
     private val keyoword: String,
+    private val minPrice: Int,
+    private val maxPrice: Int
 //    private val onFail: () -> Unit
 ) : PagingSource<Int, Product>() {
     val snackBarHostState = SnackbarHostState()
@@ -23,8 +25,9 @@ class ProductKeywordPagingDataSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
         val page = params.key ?: 1
         Log.d(TAG, "load: 페이징 성공 페이지? ${page}")
+        Log.d(TAG, "load: 최대 최소 가격 설정? min -> ${minPrice}, max -> ${maxPrice}")
         return try {
-            val result = categoryUseCase.invoke(keyoword, page)
+            val result = categoryUseCase.invoke(keyoword, page, minPrice, maxPrice)
 
             when (result) {
                 is NetworkResult.Success -> {

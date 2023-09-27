@@ -8,4 +8,9 @@ object PriceUtil {
         val parsedNumber = rawInput.replace(",", "").toLongOrNull() ?: 0L
         return NumberFormat.getNumberInstance(Locale.US).format(parsedNumber)
     }
+
+    fun parseFormattedPrice(formattedPrice: String): Int {
+        val parsedNumber = formattedPrice.replace(",", "").toLongOrNull() ?: 0L
+        return parsedNumber.toInt()
+    }
 }

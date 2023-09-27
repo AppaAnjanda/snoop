@@ -1,5 +1,6 @@
 package com.appa.snoop.presentation.ui.category.component
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import com.appa.snoop.presentation.util.extensions.noRippleClickable
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
+private const val TAG = "[김희웅] CategoryItemView"
 @Composable
 fun CategoryItem(
     modifier: Modifier = Modifier,
@@ -50,6 +52,7 @@ fun CategoryItem(
         ProductImageView(
             product = product
         ) {
+//            Log.d(TAG, "CategoryItem: 아이템 좋아요 클릭 됐는지? ${onLikeClicked()}")
             onLikeClicked()
         }
         Spacer(modifier = modifier.height(8.sdp))

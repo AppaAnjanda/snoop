@@ -39,8 +39,11 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
@@ -48,6 +51,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.appa.snoop.domain.model.NetworkResult
@@ -68,12 +72,14 @@ import com.kakao.sdk.friend.m.s
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import okhttp3.internal.wait
+import org.jetbrains.annotations.Async
 
 private const val TAG = "[김희웅] CategoryScreen"
 const val SIZE = 2
@@ -82,7 +88,7 @@ const val SIZE = 2
 @Composable
 fun CategoryScreen(
     modifier: Modifier = Modifier,
-    navController: NavController = rememberNavController(),
+    navController: NavController,
     categoryViewModel: CategoryViewModel = hiltViewModel(),
     showSnackBar: (String) -> Unit
 ) {
@@ -191,8 +197,10 @@ fun CategoryScreen(
                         onSearching = {
                             scope.launch {
                                 focusManager.clearFocus()
+//                                categoryViewModel.keywordSearchClick()
                                 categoryViewModel.getProductListByKeywordPaging(categoryViewModel.textSearchState)
-                                categoryViewModel.keywordSearchClick()
+
+
                                 drawerState.close()
                             }
                         }
@@ -278,7 +286,7 @@ fun CategoryScreen(
             Column(
                 modifier = modifier
                     .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
+//                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (pagingData.itemCount == 0) {
@@ -305,6 +313,9 @@ fun CategoryScreen(
                     ) {
                         items(
                             pagingData.itemCount,
+                            key = {
+                                pagingData[it]!!.code
+                            }
                         ) {
                             CategoryItem(
                                 modifier = Modifier,
@@ -313,10 +324,14 @@ fun CategoryScreen(
                                     navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
                                 },
                                 onLikeClicked = {
+//                                    var heart = !pagingData[it]!!.wishYn
+//                                    var heart by remember { mutableStateOf(pagingData[it]!!.wishYn) }
+
                                     // TODO 구현 찜 토글
                                     scope.launch {
                                         when (categoryViewModel.isLogined().accessToken) {
                                             "no_token_error" -> { // 미 로그인 시
+//                                                heart = false // 하트는 그냥 꺼져있어야 함
                                                 val job = scope.launch {
                                                     snackState.showSnackbar(
                                                         message = "로그인이 필요한 기능입니다.",
@@ -328,29 +343,53 @@ fun CategoryScreen(
                                             }
                                             else -> { // 로그인 시
 //                                                categoryViewModel.postWishToggle(pagingData[it]!!.code)
-                                                when(categoryViewModel.toggled(pagingData[it]!!.code)) {
-                                                    is NetworkResult.Success-> {
-                                                            when(snackState.showSnackbar(
-                                                                message = "위시리스트에 추가되었습니다.",
-                                                                actionLabel = "확인하러 가기 ->"
-                                                            )) {
-                                                                // TODO 다시 바텀네비게이션 바 눌렀을 때 안돌아옴
-                                                                // TODO 다시 돌아와도 하트가 눌려있지 않음
-                                                                SnackbarResult.ActionPerformed -> {
-                                                                    navController.navigate(Router.MAIN_LIKE_ITEM_ROUTER_NAME)
-                                                                }
-                                                                else -> {
+                                                val result = categoryViewModel.toggled(pagingData[it]!!.code)
 
+                                                when(result) {
+                                                    is NetworkResult.Success-> {
+//                                                        heart = result.data.wishYn // 하트 반응
+                                                        if (result.data.wishYn) { // true로 바꾸는 거에만 동작
+                                                            val job = scope.launch {
+                                                                when (
+                                                                    snackState.showSnackbar(
+                                                                        message = "위시리스트에 추가되었습니다.",
+                                                                        actionLabel = "확인하러 가기 ->"
+                                                                    )
+                                                                ) {
+                                                                    // TODO 다시 돌아와도 하트가 눌려있지 않음
+                                                                    SnackbarResult.ActionPerformed -> {
+                                                                        NavUtil.navigate(
+                                                                            navController as NavHostController,
+                                                                            Router.MAIN_LIKE_ITEM_ROUTER_NAME,
+                                                                            navController.graph.startDestinationRoute
+                                                                        )
+                                                                    }
+
+                                                                    else -> {
+
+                                                                    }
                                                                 }
                                                             }
+                                                            delay(2000L)
+                                                            job.cancel()
+                                                        }
                                                     }
                                                     else -> {
-
+                                                        val job = scope.launch {
+                                                            snackState.showSnackbar(
+                                                                message = "추가에 실패했습니다. 네트워크 연결을 확인해주세요.",
+                                                                duration = SnackbarDuration.Indefinite
+                                                            )
+                                                        }
+                                                        delay(1500L)
+                                                        job.cancel()
                                                     }
                                                 }
                                             }
                                         }
                                     }
+//                                    heart
+//                                    false
                                 }
                             )
                         }
