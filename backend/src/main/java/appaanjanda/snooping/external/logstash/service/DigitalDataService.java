@@ -5,6 +5,7 @@ import appaanjanda.snooping.domain.product.entity.price.DigitalPrice;
 import appaanjanda.snooping.domain.product.entity.product.DigitalProduct;
 import appaanjanda.snooping.domain.product.repository.price.DigitalPriceRepository;
 import appaanjanda.snooping.domain.product.repository.product.DigitalProductRepository;
+import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.external.logstash.entity.ProductInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ public class DigitalDataService {
 
     private final DigitalProductRepository digitalProductRepository;
     private final DigitalPriceRepository digitalPriceRepository;
+    private final WishboxService wishboxService;
 
     // 최근 업데이트 확인
     public boolean checkUpdateTime(DigitalProduct digitalProduct) {
@@ -60,7 +62,7 @@ public class DigitalDataService {
                 LocalDateTime now = LocalDateTime.now();
                 int minute = now.getMinute();
 
-                if (minute < 15) {
+                if (minute < 10) {
                     log.info("첫타임 {}", minute);
                     createPriceData(productInfo, productInfo.getCode());
 
@@ -111,6 +113,13 @@ public class DigitalDataService {
 
         digitalProductRepository.save(digitalProduct);
 
+        String productCode = digitalProduct.getCode();
+        // 찜 여부 판단
+        if (wishboxService.checkWishbox(productCode)) {
+            // 알림여부 판단 후 가격 비교하고 알림보내기
+            wishboxService.checkAlertPrice(productCode, digitalProduct.getPrice());
+        }
+
     }
 
     // 그 시간대의 가격 정보 업데이트
@@ -120,7 +129,7 @@ public class DigitalDataService {
         log.info("가격정보 업데이트 {}", now);
         int minute = now.getMinute();
 
-        if (minute >= 15) {
+        if (minute >= 10) {
 
             // 정렬 기준
             Sort sort = Sort.by(Sort.Order.desc("@timestamp"));

@@ -4,6 +4,7 @@ import appaanjanda.snooping.domain.product.entity.price.FoodPrice;
 import appaanjanda.snooping.domain.product.entity.product.FoodProduct;
 import appaanjanda.snooping.domain.product.repository.price.FoodPriceRepository;
 import appaanjanda.snooping.domain.product.repository.product.FoodProductRepository;
+import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.external.logstash.entity.ProductInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ public class FoodDataService {
 
     private final FoodProductRepository foodProductRepository;
     private final FoodPriceRepository foodPriceRepository;
+    private final WishboxService wishboxService;
 
     // 최근 업데이트 확인
     public boolean checkUpdateTime(FoodProduct foodProduct) {
@@ -53,7 +55,7 @@ public class FoodDataService {
                 LocalDateTime now = LocalDateTime.now();
                 int minute = now.getMinute();
 
-                if (minute < 15) {
+                if (minute < 10) {
                     createPriceData(productInfo, productInfo.getCode());
 
                 }
@@ -99,6 +101,12 @@ public class FoodDataService {
 
         foodProductRepository.save(foodProduct);
 
+        String productCode = foodProduct.getCode();
+        // 찜 여부 판단
+        if (wishboxService.checkWishbox(productCode)) {
+            // 알림여부 판단 후 가격 비교하고 알림보내기
+            wishboxService.checkAlertPrice(productCode, foodProduct.getPrice());
+        }
     }
 
     // 그 시간대의 가격 정보 업데이트
@@ -107,7 +115,7 @@ public class FoodDataService {
         LocalDateTime now = LocalDateTime.now();
         int minute = now.getMinute();
 
-        if (minute >= 15) {
+        if (minute >= 10) {
 
             // 정렬 기준
             Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
