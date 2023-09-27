@@ -171,11 +171,13 @@ public class ProductDetailService {
     // 유사 제품 쿼리
     public SearchHits<?> similarProduct(String productCode) {
 
-        ProductInterface curProduct = productSearchService.getProduct(productCode);
+        // 코드제거
+        int length = productCode.length();
+        String productName = productCode.substring(2, length);
 
         // 현재 상품명으로 match쿼리
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
-                .must(QueryBuilders.matchQuery("product_name", curProduct.getProductName()));
+                .must(QueryBuilders.matchQuery("product_name", productName));
 
         NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
                 .withQuery(boolQuery)
