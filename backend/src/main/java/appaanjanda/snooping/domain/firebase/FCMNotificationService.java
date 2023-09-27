@@ -1,5 +1,7 @@
 package appaanjanda.snooping.domain.firebase;
 
+import appaanjanda.snooping.domain.firebase.entity.AlertHistory;
+import appaanjanda.snooping.domain.firebase.repository.AlertHistoryRepository;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ public class FCMNotificationService {
 
     private final FirebaseMessaging firebaseMessaging;
     private final MemberRepository memberRepository;
+    private final AlertHistoryRepository alertHistoryRepository;
 
     public String sendNotification(FCMNotificationRequestDto requestDto) {
 
@@ -40,6 +43,14 @@ public class FCMNotificationService {
 
             try {
                 firebaseMessaging.send(message);
+
+                // 알림 내역 저장
+                AlertHistory alertHistory = AlertHistory.builder()
+                        .title(requestDto.getTitle())
+                        .body(requestDto.getBody())
+                        .member(member).build();
+                alertHistoryRepository.save(alertHistory);
+
                 return "send 성공";
 
             } catch (FirebaseMessagingException e) {
