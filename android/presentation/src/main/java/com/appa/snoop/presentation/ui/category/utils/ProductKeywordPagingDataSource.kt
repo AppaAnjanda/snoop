@@ -15,15 +15,19 @@ import javax.inject.Inject
 private const val TAG = "[김희웅] ProductKeywordPagingDat"
 class ProductKeywordPagingDataSource @Inject constructor(
     private val categoryUseCase: GetProductListByKeywordUseCase,
-    private val keyoword: String
+    private val keyoword: String,
+    private val minPrice: Int,
+    private val maxPrice: Int
+//    private val onFail: () -> Unit
 ) : PagingSource<Int, Product>() {
     val snackBarHostState = SnackbarHostState()
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
         val page = params.key ?: 1
         Log.d(TAG, "load: 페이징 성공 페이지? ${page}")
+        Log.d(TAG, "load: 최대 최소 가격 설정? min -> ${minPrice}, max -> ${maxPrice}")
         return try {
-            val result = categoryUseCase.invoke(keyoword, page)
+            val result = categoryUseCase.invoke(keyoword, page, minPrice, maxPrice)
 
             when (result) {
                 is NetworkResult.Success -> {
@@ -38,6 +42,7 @@ class ProductKeywordPagingDataSource @Inject constructor(
                 else -> {
                     Log.d(TAG, "load: 페이징 클래스 내부 통신 오류")
                     snackBarHostState.showSnackbar("검색 결과가 없습니다.")
+//                    onFail()
                     LoadResult.Page(
                         data = emptyList(),
                         prevKey = null,

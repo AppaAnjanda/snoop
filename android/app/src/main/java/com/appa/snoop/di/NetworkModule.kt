@@ -8,6 +8,7 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import com.appa.snoop.data.interceptor.RequestInterceptor
 import com.appa.snoop.data.interceptor.ResponseInterceptor
+import com.appa.snoop.data.service.HomeService
 import com.appa.snoop.data.service.ProductService
 import dagger.Module
 import dagger.Provides
@@ -17,6 +18,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -87,6 +89,12 @@ object NetworkModule {
     fun provideMemberService(
         retrofit: Retrofit
     ): MemberService = retrofit.create(MemberService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideHomeService(
+        retrofit: Retrofit
+    ): HomeService = retrofit.create(HomeService::class.java)
 
     @Provides
     @Singleton

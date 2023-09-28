@@ -90,8 +90,8 @@ class SignupViewModel @Inject constructor(
         }
     }
 
-    private val _signUpState = MutableStateFlow<NetworkResult<RegisterDone>>(NetworkResult.Loading)
-    val signUpState : StateFlow<NetworkResult<RegisterDone>> = _signUpState
+    private val _signUpState = MutableStateFlow<NetworkResult<String>>(NetworkResult.Loading)
+    val signUpState : StateFlow<NetworkResult<String>> = _signUpState
 
     var isSignupSuccess by mutableStateOf(false)
         private set
@@ -105,11 +105,10 @@ class SignupViewModel @Inject constructor(
             email = email,
             password = password,
             nickname = nickname,
-            cardList = cardList
         )
         _signUpState.emit(signUpUseCase.invoke(register))
 
-        if (signUpState.value is NetworkResult.Success) {
+        if (_signUpState.value is NetworkResult.Success) {
             Log.d(TAG, "signUp 서버통신 성공적")
             isSignupSuccess = true
         } else {

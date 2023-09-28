@@ -46,7 +46,13 @@ fun MainNavHost(
         mainSlideTransitions(
             route = MainNav.Home.route
         ) {
-            HomeScreen(navController)
+            val parentEntry = remember(it) {
+                navController.getBackStackEntry(Router.MAIN_HOME_ROUTER_NAME)
+            }
+            HomeScreen(
+                navController,
+                homeViewModel = hiltViewModel(parentEntry)
+            )
         }
         mainSlideTransitions(
             route = MainNav.Category.route,

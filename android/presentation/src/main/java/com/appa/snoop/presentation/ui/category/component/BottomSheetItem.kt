@@ -18,6 +18,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
@@ -30,6 +31,7 @@ import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedContentLambdaTargetStateParameter")
 @Composable
@@ -39,8 +41,10 @@ fun BottomSheetItem(
     categoryViewModel: CategoryViewModel,
     categoryState: Boolean,
     onDismiss: () -> Unit,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    showSnackbar: (String) -> Unit
 ) {
+    val scope = rememberCoroutineScope()
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,10 +53,10 @@ fun BottomSheetItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = if (categoryState) painterResource(id = R.drawable.ic_arrow_down) else painterResource(id = R.drawable.ic_arrow_right), // 벡터 이미지 리소스
-            contentDescription = null, // 이미지 설명 (접근성을 위해 필요)
+            painter = if (categoryState) painterResource(id = R.drawable.ic_arrow_down) else painterResource(id = R.drawable.ic_arrow_right),
+            contentDescription = null,
             modifier = Modifier
-                .size(16.sdp), // 이미지 크기 설정
+                .size(16.sdp),
         )
         Text(
             text = majorName,
@@ -79,10 +83,20 @@ fun BottomSheetItem(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable{
-                                categoryViewModel.getProductListByCategoryPaging(majorName, minorName)
+                            .clickable {
+                                categoryViewModel.getProductListByCategoryPaging(
+                                    majorName,
+                                    minorName
+                                )
 //                                categoryViewModel.getProductListByCategory(majorName, minorName, 1)
-                                onDismiss()
+                                if (categoryViewModel.priceRangeState && categoryViewModel.minPriceTextState > categoryViewModel.maxPriceTextState) {
+                                    scope.launch {
+                                        showSnackbar("유효하지 않은 가격 범위입니다. 다시 설정해주세요!")
+                                    }
+                                }
+                                scope.launch {
+                                    onDismiss()
+                                }
                             },
                     ) {
                         Text(
@@ -91,12 +105,12 @@ fun BottomSheetItem(
                             fontSize = 12.ssp,
                         )
                     }
-                    Spacer(modifier = Modifier.height(3.sdp))
+                    Spacer(modifier = Modifier.height(5.sdp))
                     HorizontalDivider(
                         thickness = 1.sdp,
                         color = BackgroundColor2
                     )
-                    Spacer(modifier = Modifier.height(3.sdp))
+                    Spacer(modifier = Modifier.height(5.sdp))
                 }
             }
         }

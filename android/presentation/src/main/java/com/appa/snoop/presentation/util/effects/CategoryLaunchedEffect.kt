@@ -28,12 +28,7 @@ fun CategoryLaunchedEffect(
                     CategoryTopbar.AppBarIcons.ChatIcon -> {
                         navController.navigate(Router.CATEGORY_CHATTING_ROUTER_NAME)
                     }
-                    CategoryTopbar.AppBarIcons.SearchIcon -> {
-                        categoryViewModel.searchBarToggle()
-                    }
-                    CategoryTopbar.AppBarIcons.FilterIcon -> {
-                        focusManager.clearFocus()
-                        bottomSheetState.partialExpand()
+                    CategoryTopbar.AppBarIcons.MenuIcon -> {
                     }
                 }
             }.launchIn(this)

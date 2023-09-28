@@ -47,14 +47,14 @@ fun HomeItemListTitleView(
                 .padding(start = 2.sdp),
             text = titleName,
             fontWeight = FontWeight.ExtraBold,
-            fontSize = 12.ssp,
+            fontSize = 14.ssp,
         )
         Text(
             modifier = Modifier
                 .padding(start = 2.sdp),
-            text = "가격 기웃기웃",
+            text = "기웃기웃",
             fontWeight = FontWeight.Bold,
-            fontSize = 12.ssp,
+            fontSize = 14.ssp,
         )
     }
 }

@@ -3,6 +3,7 @@ package com.appa.snoop.di
 import android.content.Context
 import com.appa.snoop.data.local.PreferenceDataSource
 import com.appa.snoop.data.repository.CategoryRepositoryImpl
+import com.appa.snoop.data.repository.HomeRepositoryImpl
 import com.appa.snoop.data.repository.MemberRepositoryImpl
 import com.appa.snoop.data.repository.ProductRepositoryImpl
 import com.appa.snoop.data.repository.RegisterRepositoryImpl
@@ -10,10 +11,12 @@ import com.appa.snoop.data.repository.datasource.BaseRemoteDataSource
 import com.appa.snoop.data.repository.datasourceImpl.BaseRemoteDataSourceImpl
 import com.appa.snoop.data.service.BaseService
 import com.appa.snoop.data.service.CategoryService
+import com.appa.snoop.data.service.HomeService
 import com.appa.snoop.data.service.MemberService
 import com.appa.snoop.data.service.ProductService
 import com.appa.snoop.data.service.RegisterService
 import com.appa.snoop.domain.repository.CategoryRepository
+import com.appa.snoop.domain.repository.HomeRepository
 import com.appa.snoop.domain.repository.MemberRepository
 import com.appa.snoop.domain.repository.ProductRepository
 import com.appa.snoop.domain.repository.RegisterRepository
@@ -66,7 +69,14 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    fun provideHomeRepository(homeService: HomeService): HomeRepository {
+        return HomeRepositoryImpl(homeService = homeService)
+    }
+
+    @Provides
+    @Singleton
     fun provideProdcutRepository(productService: ProductService): ProductRepository {
         return ProductRepositoryImpl(productService = productService)
+
     }
 }

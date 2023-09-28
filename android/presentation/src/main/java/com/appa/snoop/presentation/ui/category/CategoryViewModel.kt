@@ -1,5 +1,6 @@
 package com.appa.snoop.presentation.ui.category
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,17 +10,22 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.domain.model.category.ProductPaging
 import com.appa.snoop.domain.usecase.category.GetProductListByCategoryUseCase
 import com.appa.snoop.domain.usecase.category.GetProductListByKeywordUseCase
+import com.appa.snoop.domain.usecase.category.PostWishToggleUseCase
+import com.appa.snoop.domain.usecase.register.GetLoginStatusUseCase
 import com.appa.snoop.presentation.ui.category.utils.ProductCategoryPagingDataSource
 import com.appa.snoop.presentation.ui.category.utils.ProductKeywordPagingDataSource
+import com.appa.snoop.presentation.util.PriceUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,19 +33,15 @@ private const val TAG = "[김희웅] CategoryViewModel"
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
     private val getProductListByCategoryUseCase: GetProductListByCategoryUseCase,
-    private val getProductListByKeywordUseCase: GetProductListByKeywordUseCase
+    private val getProductListByKeywordUseCase: GetProductListByKeywordUseCase,
+    private val getLoginStatusUseCase: GetLoginStatusUseCase,
+    private val postWishToggleUseCase: PostWishToggleUseCase
 ) : ViewModel() {
 
     companion object {
         private const val PAGE_SIZE = 30
-    }
-
-    var searchBarState by mutableStateOf(false)
-        private set
-
-    // 검색창을 여닫기 위함
-    fun searchBarToggle() {
-        searchBarState = !searchBarState
+        private const val MIN_PRICE = 0
+        private const val MAX_PRICE = 99999999
     }
 
     var textSearchState by mutableStateOf("")
@@ -87,57 +89,157 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-//    private val _productList = MutableStateFlow<List<Product>>(emptyList())
-//    val productList = _productList.asStateFlow()
+    fun sheetSelect(categoryName: String) {
+        when(categoryName) {
+            "디지털가전" -> {
+                digitalCategoryToggle()
+                furnitureCategoryState = false
+                necessariesCategoryState = false
+                foodCategoryState = false
+            }
+            "가구" -> {
+                furnitureCategoryToggle()
+                digitalCategoryState = false
+                necessariesCategoryState = false
+                foodCategoryState = false
+            }
+            "생활용품" -> {
+                necessariesCategoryToggle()
+                digitalCategoryState = false
+                furnitureCategoryState = false
+                foodCategoryState = false
+            }
+            "식품" -> {
+                foodCategoryToggle()
+                digitalCategoryState = false
+                furnitureCategoryState = false
+                necessariesCategoryState = false
+            }
+        }
+    }
 
-//    fun getProductListByCategory(majorName: String, minorName: String, pageNum: Int) {
-//        viewModelScope.launch {
-//            val result = getProductListByCategoryUseCase.invoke(majorName, minorName, pageNum)
-//
-//            when(result) {
-//                is NetworkResult.Success -> {
-//                    _productList.emit(result.data.contents)
-//                    Log.d(TAG, "getProductListByCategory: ${result.data}")
-//                }
-//                else -> {
-//                    Log.d(TAG, "getProductListByCategory: 리스트를 불러오는데 실패했습니다. 네트워크 활성화를 확인하세요.")
-//                    Log.d(TAG, "getProductListByCategory: $result")
-//                }
-//            }
-//        }
-//    }
+    var keywordSearchState by mutableStateOf(0)
+        private set
+
+    fun keywordSearchClick() {
+        keywordSearchState++
+        Log.d(TAG, "keywordSearchClick: $keywordSearchState")
+    }
 
     // 페이징
     val _pagingDataFlow = MutableStateFlow<PagingData<Product>>(PagingData.empty())
     val pagingDataFlow = _pagingDataFlow.asStateFlow()
 
-    fun getProductListByCategoryPaging(majorName: String, minorName: String) {
+    fun getProductListByCategoryPaging(
+        majorName: String,
+        minorName: String,
+        minPrice: Int = if (!priceRangeState) MIN_PRICE else PriceUtil.parseFormattedPrice(minPriceTextState),
+        maxPrice: Int = if (!priceRangeState) MAX_PRICE else PriceUtil.parseFormattedPrice(maxPriceTextState)
+    ) {
         viewModelScope.launch {
-            getProductListPagingDataByCategory(majorName, minorName)
-                .collectLatest { pagingData ->
-                    _pagingDataFlow.emit(pagingData)
-                }
+            getProductListPagingDataByCategory(
+                majorName,
+                minorName,
+                minPrice,
+                maxPrice
+            ).collectLatest { pagingData ->
+                _pagingDataFlow.emit(pagingData)
+            }
         }
     }
 
-    fun getProductListByKeywordPaging(keyword: String) {
+    fun getProductListByKeywordPaging(
+        keyword: String,
+        minPrice: Int = if (!priceRangeState) MIN_PRICE else PriceUtil.parseFormattedPrice(minPriceTextState),
+        maxPrice: Int = if (!priceRangeState) MAX_PRICE else PriceUtil.parseFormattedPrice(maxPriceTextState)
+    ) {
         viewModelScope.launch {
-            getProductListPagingDataByKeyword(keyword)
-                .collectLatest { pagingData ->
-                    _pagingDataFlow.emit(pagingData)
-                }
+            getProductListPagingDataByKeyword(
+                keyword,
+                minPrice,
+                maxPrice
+            ).collectLatest { pagingData ->
+                _pagingDataFlow.emit(pagingData)
+            }
         }
     }
 
-    fun getProductListPagingDataByCategory(majorName: String, minorName: String): Flow<PagingData<Product>> {
+    fun getProductListPagingDataByCategory(
+        majorName: String,
+        minorName: String,
+        minPrice: Int,
+        maxPrice: Int
+    ): Flow<PagingData<Product>> {
         return Pager(config = PagingConfig(pageSize = PAGE_SIZE)) {
-            ProductCategoryPagingDataSource(getProductListByCategoryUseCase, majorName, minorName)
+            ProductCategoryPagingDataSource(
+                getProductListByCategoryUseCase,
+                majorName = majorName,
+                minorName = minorName,
+                minPrice = minPrice,
+                maxPrice = maxPrice
+            )
         }.flow.cachedIn(viewModelScope)
     }
 
-    fun getProductListPagingDataByKeyword(keyword: String): Flow<PagingData<Product>> {
+    fun getProductListPagingDataByKeyword(
+        keyword: String,
+        minPrice: Int,
+        maxPrice: Int
+    ): Flow<PagingData<Product>> {
         return Pager(config = PagingConfig(pageSize = PAGE_SIZE)) {
-            ProductKeywordPagingDataSource(getProductListByKeywordUseCase, keyoword = keyword)
+            ProductKeywordPagingDataSource(
+                getProductListByKeywordUseCase,
+                keyoword = keyword,
+                minPrice = minPrice,
+                maxPrice = maxPrice
+            )
+//            { keywordSearchClick() }
         }.flow.cachedIn(viewModelScope)
     }
+
+    // 가격 범위
+    var minPriceTextState by mutableStateOf("$MIN_PRICE")
+        private set
+    var maxPriceTextState by mutableStateOf("$MAX_PRICE")
+        private set
+    fun setMinPriceText(price: String) {
+        minPriceTextState = price
+    }
+    fun setMaxPriceText(price: String) {
+        maxPriceTextState = price
+    }
+
+    // 가격 범위 정하기 visible toggle
+    var priceRangeState by mutableStateOf(false)
+        private set
+    fun priceRangeStateToggle() {
+        priceRangeState = !priceRangeState
+    }
+
+    // 로그인 유뮤 판단
+    suspend fun isLogined() = getLoginStatusUseCase.invoke()
+
+    // 위시리스트 담기 기능
+    private val _wishToggleState = MutableStateFlow<Int>(0)
+    val wishToggleState = _wishToggleState.asStateFlow()
+
+//    fun postWishToggle(productCode: String) {
+//        viewModelScope.launch {
+//            val result = postWishToggleUseCase.invoke(productCode)
+//
+//            when(result) {
+//                is NetworkResult.Success -> {
+//                    if (result.data.wishYn) {
+//                        _wishToggleState.value++
+//                    }
+//                    Log.d(TAG, "postWishToggle: 위시리스트 토글 api통신 정상 처리 입니다. 현재 토글 값? -> ${result.data.wishYn}")
+//                }
+//                else -> {
+//                    Log.d(TAG, "postWishToggle: 위시리스트 토글 api통신 오류입니다.")
+//                }
+//            }
+//        }
+//    }
+
+    suspend fun toggled(productCode: String) = postWishToggleUseCase.invoke(productCode)
 }

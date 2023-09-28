@@ -12,7 +12,7 @@ interface RegisterService {
     @POST("api/member/save")
     suspend fun registerMember(
         @Body register: Register
-    ) : RegisterResponse
+    ) : String
 
     @POST("api/member/login")
     suspend fun login(

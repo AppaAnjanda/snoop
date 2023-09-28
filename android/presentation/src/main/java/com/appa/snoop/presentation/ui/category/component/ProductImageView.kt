@@ -138,7 +138,7 @@ fun ProductImageView(
                     .background(color = WhiteColor)
                     .padding(3.sdp)
                     .noRippleClickable {
-                        onLikeClicked()
+//                        onLikeClicked()
 //                        isChecked = !isChecked
                     }
             ) {
@@ -149,6 +149,7 @@ fun ProductImageView(
                     endTime = 0.7f,
                     onClick = {
                         isChecked = !isChecked
+                        onLikeClicked()
                     }
                 )
             }

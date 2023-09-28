@@ -13,14 +13,17 @@ private const val TAG = "[김희웅] ProductPagingDataSource"
 class ProductCategoryPagingDataSource @Inject constructor(
     private val categoryUseCase: GetProductListByCategoryUseCase,
     private val majorName: String,
-    private val minorName: String
+    private val minorName: String,
+    private val minPrice: Int,
+    private val maxPrice: Int
 ) : PagingSource<Int, Product>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
         val page = params.key ?: 1
         Log.d(TAG, "load: 페이징 성공 페이지? ${page}")
+        Log.d(TAG, "load: 최대 최소 가격 설정? min -> ${minPrice}, max -> ${maxPrice}")
         return try {
-            val result = categoryUseCase.invoke(majorName = majorName, minorName = minorName, page)
+            val result = categoryUseCase.invoke(majorName = majorName, minorName = minorName, page, minPrice, maxPrice)
 
             when (result) {
                 is NetworkResult.Success -> {
@@ -28,13 +31,17 @@ class ProductCategoryPagingDataSource @Inject constructor(
                     Log.d(TAG, "load: 리스트 목록 -> ${result.data.contents}")
                     LoadResult.Page(
                         data = result.data.contents,
-                        prevKey = if (page == 1) null else page - 1,
+                        prevKey = null,
                         nextKey = if (page < result.data.totalPage) page + 1 else null
                     )
                 }
                 else -> {
                     Log.d(TAG, "load: 페이징 클래스 내부 통신 오류")
-                    LoadResult.Invalid()
+                    LoadResult.Page(
+                        data = emptyList(),
+                        prevKey = null,
+                        nextKey = null
+                    )
                 }
             }
         } catch(e: Exception) {
