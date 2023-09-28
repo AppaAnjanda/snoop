@@ -1,6 +1,6 @@
 data:
   mongodb:
-    host: localhost
+    host: 52.78.159.20
     port: 27017
     authentication-database: admin
     username: username
