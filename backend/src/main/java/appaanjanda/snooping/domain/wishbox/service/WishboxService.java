@@ -115,7 +115,7 @@ public class WishboxService {
     }
 
     // 찜 상품 기져와서 업데이트
-	@Scheduled(cron = "* */10 * * * *")
+	@Scheduled(cron = "0 */10 * * * *")
 	public void wishboxUpdate() {
 		List<Wishbox> allWishbox = wishboxRepository.findAll();
 
