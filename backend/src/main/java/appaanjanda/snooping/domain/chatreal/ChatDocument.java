@@ -26,6 +26,9 @@ public class ChatDocument {
     @Field("room_idx")
     private Long roomIdx;
 
+    @Field("email")
+    private String email;
+
     @Field("sender_name")
     private String senderName;
 
@@ -33,12 +36,13 @@ public class ChatDocument {
     private String msg;
 
     @Field("created_at")
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     @Builder
-    public ChatDocument(String id, Long roomIdx, String senderName, String msg, LocalDateTime createdAt) {
+    public ChatDocument(String id, Long roomIdx, String email, String senderName, String msg, String createdAt) {
         this.id = id;
         this.roomIdx = roomIdx;
+        this.email = email;
         this.senderName = senderName;
         this.msg = msg;
         this.createdAt = createdAt;
