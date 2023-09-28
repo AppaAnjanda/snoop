@@ -11,7 +11,7 @@ server:
 
 spring:
   profiles:
-    active: es,swagger,redis,mongo, rabitmq, s3
+    active: es,swagger,redis, s3
   datasource:
     url: jdbc:postgresql://52.78.159.20:5432/snoop
     username: ENC(JIxLlHeC+6u59PjTWidzjw==)

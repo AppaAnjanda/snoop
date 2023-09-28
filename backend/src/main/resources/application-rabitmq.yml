@@ -1,6 +1,0 @@
-#RabbitMQ
-rabbitmq:
-  username: guest
-  password: guest
-  host: 52.78.159.20
-  port: 5672
