@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ChatMessageDto {
-	private String roomId;
+	private Long roomidx;
 	private String writer;
 	private String message;
 }
