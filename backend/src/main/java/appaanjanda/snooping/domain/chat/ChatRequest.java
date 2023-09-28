@@ -10,6 +10,7 @@ import lombok.*;
 public class ChatRequest {
 
     private Long roomidx;
+    private String email;
     private String sender;
     private String msg;
 }
