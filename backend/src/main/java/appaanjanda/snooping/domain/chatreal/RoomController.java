@@ -24,15 +24,20 @@ public class RoomController {
 
 	// 채팅방 목록 조회
 	@GetMapping("/rooms")
-	public List<String> rooms() {
+	public List<RoomsResponseDto> rooms() {
 		log.info("# All Chat Rooms");
 
 		List<ChatRoom> allRooms = chatRoomRepository.findAllRooms();
 
-		List<String> names = new ArrayList<>();
+		List<RoomsResponseDto> names = new ArrayList<>();
 
 		for (ChatRoom room : allRooms) {
-			names.add(room.getRoomName());
+			RoomsResponseDto dto = RoomsResponseDto.builder()
+					.roomName(room.getRoomName())
+					.roomNumber(room.getId())
+					.build();
+
+			names.add(dto);
 		}
 
 		return names;
@@ -40,7 +45,7 @@ public class RoomController {
 
 	// 채팅방 개설
 	@PostMapping(value = "/room")
-	public void create(@RequestBody String name) {
+	public Long create(@RequestBody String name) {
 		log.info("# Create Chat Room, name: [{}]", name);
 
 		ChatRoom chatRoom = ChatRoom.builder()
@@ -48,6 +53,8 @@ public class RoomController {
 				.build();
 
 		chatRoomRepository.save(chatRoom);
+
+		return chatRoom.getId();
 	}
 
 	// 채팅방 조회

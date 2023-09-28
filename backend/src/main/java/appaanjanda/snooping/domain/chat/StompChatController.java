@@ -24,6 +24,7 @@ public class StompChatController {
 	public void enter(ChatMessageDto dto) {
 		ChatRequest request = ChatRequest.builder()
 				.roomidx(dto.getRoomidx())
+				.email(dto.getEmail())
 				.sender(dto.getWriter())
 				.msg(dto.getWriter() + "님이 채팅방에 참여하였습니다.")
 				.build();
@@ -41,6 +42,7 @@ public class StompChatController {
 
 		ChatRequest request = ChatRequest.builder()
 				.roomidx(dto.getRoomidx())
+				.email(dto.getEmail())
 				.sender(dto.getWriter())
 				.msg(dto.getMessage())
 				.build();
