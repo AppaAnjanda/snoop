@@ -111,6 +111,9 @@ dependencies {
 	implementation 'org.webjars:sockjs-client:1.5.1'
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-amqp
 	implementation 'org.springframework.boot:spring-boot-starter-amqp:2.6.4'
+
+	// json object
+	implementation 'org.json:json:20200518'
 }
 
 //tasks.named('test') {
