@@ -14,6 +14,7 @@ import appaanjanda.snooping.external.fastApi.NaverApiCaller;
 import appaanjanda.snooping.domain.wishbox.service.dto.*;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -114,19 +115,20 @@ public class WishboxService {
     }
 
     // 찜 상품 기져와서 업데이트
-//	@Scheduled(cron = "*/10 * * * *")
-//	public void wishboxUpdate() {
-//		List<Wishbox> allWishbox = wishboxRepository.findAll();
-//
-//		for (Wishbox wishbox : allWishbox) {
-//			String productCode = wishbox.getProductCode();
-//			if (wishbox.getProvider().equals("쿠팡")){
+	@Scheduled(cron = "*/10 * * * *")
+	public void wishboxUpdate() {
+		List<Wishbox> allWishbox = wishboxRepository.findAll();
+
+		for (Wishbox wishbox : allWishbox) {
+			String productCode = wishbox.getProductCode();
+			if (wishbox.getProvider().equals("쿠팡")){ continue;
 //				coupangCrawlingCaller.oneProductSearch(productCode);
-//			} else {
-//				naverApiCaller.oneProductSearch(productCode);
-//			}
-//		}
-//	}
+
+			} else {
+				naverApiCaller.oneProductSearch(productCode);
+			}
+		}
+	}
 
     // 찜 상품 알림 가격 변경
     public WishboxResponseDto updateAlertPrice(Long memberId, Long wishboxId, UpdateAlertPriceRequestDto updateAlertPriceRequestDto) {

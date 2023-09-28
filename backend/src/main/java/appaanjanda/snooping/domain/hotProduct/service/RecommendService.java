@@ -80,11 +80,11 @@ public class RecommendService {
             tokenCounter.put(value, tokenCounter.getOrDefault(value, 0) + 1);
         }
 
-        // HashMap을 값(value)을 기준으로 상위 4개 추출
-        Map<String, Integer> top4 = tokenCounter.entrySet()
+        // HashMap을 값(value)을 기준으로 상위 10개 추출
+        Map<String, Integer> top10 = tokenCounter.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .limit(6)
+                .limit(11)
                 .collect(Collectors.collectingAndThen(
                         Collectors.toMap(
                                 Map.Entry::getKey,
@@ -93,15 +93,19 @@ public class RecommendService {
                                 LinkedHashMap::new),
                         Collections::unmodifiableMap));
 
-        // 결과 출력
-        log.info(top4.toString());
+//         결과 출력
+        log.info(top10.toString());
 
         StringBuilder sb = new StringBuilder();
         sb.append("11");
-        for (String string : top4.keySet()) {
+        for (String string : top10.keySet()) {
             if (string.equals("")) continue;
             sb.append(" ").append(string);
         }
+//        for (String string : tokenStrings) {
+//            if (string.equals("")) continue;
+//            sb.append(" ").append(string);
+//        }
 
         log.info(String.valueOf(sb));
         return sb;
