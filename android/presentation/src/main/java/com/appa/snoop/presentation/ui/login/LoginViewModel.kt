@@ -75,7 +75,7 @@ class LoginViewModel @Inject constructor(
 //         fcmToken 가져오기를 기다림
         getFcmTokenJob.await()
 
-        val loginInfo = LoginInfo(textIdState, textPasswordState)
+        val loginInfo = LoginInfo(textIdState, textPasswordState, fcmToken)
         val result = loginUseCase.invoke(loginInfo)
 
         when (result) {
