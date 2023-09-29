@@ -67,11 +67,12 @@ dependencies {
 
 	// elasticsearch
 	implementation 'org.springframework.data:spring-data-elasticsearch:4.1.15'
+	implementation 'org.elasticsearch.client:transport:7.14.0'
+	implementation 'org.elasticsearch:elasticsearch:7.14.0'
 //	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch:2.5.2'
 
-
 	// RestHighLevelClient
-//	implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client'
+	implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.14.0'
 
 	// p6spy
 	implementation group: 'p6spy', name: 'p6spy', version: '3.9.1'
@@ -113,10 +114,17 @@ dependencies {
 	implementation 'org.webjars:sockjs-client:1.5.1'
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-amqp
 	implementation 'org.springframework.boot:spring-boot-starter-amqp:2.6.4'
+
+	// json object
+	implementation 'org.json:json:20200518'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+//tasks.named('test') {
+//	useJUnitPlatform()
+//}
+
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs << "-Xlint:deprecation"
 }
 
 //querydsl 추가 시작

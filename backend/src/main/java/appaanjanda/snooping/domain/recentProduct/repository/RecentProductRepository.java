@@ -1,7 +1,6 @@
-package appaanjanda.snooping.domain.product.repository;
+package appaanjanda.snooping.domain.recentProduct.repository;
 
-import appaanjanda.snooping.domain.product.entity.RecentProduct;
-import appaanjanda.snooping.domain.search.entity.SearchHistory;
+import appaanjanda.snooping.domain.recentProduct.entity.RecentProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

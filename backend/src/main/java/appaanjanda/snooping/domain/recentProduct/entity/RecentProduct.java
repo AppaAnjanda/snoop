@@ -1,4 +1,4 @@
-package appaanjanda.snooping.domain.product.entity;
+package appaanjanda.snooping.domain.recentProduct.entity;
 
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.global.common.BaseTimeEntity;

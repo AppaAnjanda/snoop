@@ -2,7 +2,8 @@ package appaanjanda.snooping.external.fastApi;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpMethod;
+import org.json.JSONObject;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -19,15 +20,18 @@ public class NaverApiCaller {
     public void oneProductSearch(String productCode) {
 
         //  요청 url
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(NAVER_URL)
-                .queryParam("query", productCode);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String builderUrl = builder.toUriString();
+        JSONObject body = new JSONObject();
+        body.put("keyword", productCode);
 
-        log.info(builderUrl);
+        HttpEntity<String> entity = new HttpEntity<>(body.toString(), headers);
+
         // 호출
         try {
-            restTemplate.execute(builderUrl, HttpMethod.GET, null, null);
+            ResponseEntity<Object> response = restTemplate.exchange(NAVER_URL, HttpMethod.POST, entity, Object.class);
+            log.info(response.getStatusCode().toString());
         } catch (Exception e) {
             throw e;
         }

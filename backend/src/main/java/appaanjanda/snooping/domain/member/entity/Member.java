@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
 import appaanjanda.snooping.domain.card.entity.MyCard;
+import appaanjanda.snooping.domain.firebase.entity.AlertHistory;
 import appaanjanda.snooping.domain.search.entity.SearchHistory;
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.global.common.BaseTimeEntity;
@@ -54,6 +55,9 @@ public class Member extends BaseTimeEntity {
 
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private List<SearchHistory> searchHistoryList;
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	private List<AlertHistory> alertHistoryList;
 
 	private String firebaseToken;
 

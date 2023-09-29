@@ -1,6 +1,5 @@
 package appaanjanda.snooping.domain.product.service;
 
-import appaanjanda.snooping.domain.hotProduct.service.HotProductService;
 import appaanjanda.snooping.domain.product.entity.price.*;
 import appaanjanda.snooping.domain.product.entity.product.*;
 import appaanjanda.snooping.domain.product.repository.product.DigitalProductRepository;
@@ -8,14 +7,18 @@ import appaanjanda.snooping.domain.product.repository.product.FoodProductReposit
 import appaanjanda.snooping.domain.product.repository.product.FurnitureProductRepository;
 import appaanjanda.snooping.domain.product.repository.product.NecessariesProductRepository;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
+import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
+import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
+
 
 @Service
 @RequiredArgsConstructor
@@ -107,11 +110,22 @@ public class ProductSearchService {
     public SearchContentDto searchProductById(String productCode, Long memberId) {
         ProductInterface product = getProduct(productCode);
 
+        boolean wishYn = false;
+        boolean alertYn = false;
         if (product != null) {
-            // 현재 멤버 찜 목록
-            Set<String> wishProductCode = wishboxRepository.findProductById(memberId);
-            // 찜 여부
-            boolean wishYn = (wishProductCode != null) && wishProductCode.contains(product.getCode());
+            // 회원인경우 찜, 알림 여부 판단
+            if (memberId != null) {
+                // 현재 멤버 찜 목록
+                Set<String> wishProductCode = wishboxRepository.findProductById(memberId);
+                // 찜 여부
+                if ((wishProductCode != null) && wishProductCode.contains(product.getCode())) wishYn = true;
+                // 알림 여부
+                if (wishYn) {
+                    Wishbox findWishbox = wishboxRepository.findByProductCodeAndMemberId(productCode, memberId)
+                            .orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_WISHBOX_ID));
+                    if (findWishbox.getAlertYn()) alertYn = true;
+                }
+            }
             // Dto 생성
             return SearchContentDto.builder()
                     .id(product.getId())
@@ -125,6 +139,7 @@ public class ProductSearchService {
                     .productLink(product.getProductLink())
                     .timestamp(product.getTimestamp())
                     .wishYn(wishYn)
+                    .alertYn(alertYn)
                     .build();
         } else {
             throw new BusinessException(ErrorCode.NOT_EXISTS_PRODUCT);

@@ -1,14 +1,12 @@
 package appaanjanda.snooping.domain.firebase;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
 public class FCMNotificationRequestDto {
 
     private Long memberId;

@@ -9,6 +9,7 @@ import appaanjanda.snooping.domain.search.dto.SearchResponseDto;
 import appaanjanda.snooping.domain.search.entity.SearchHistory;
 import appaanjanda.snooping.domain.search.repository.SearchHistoryRepository;
 import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
+import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,7 @@ public class SearchService {
     private final ProductSearchService productSearchService;
     private final SearchHistoryRepository searchHistoryRepository;
     private final MemberService memberService;
-    private final WishboxRepository wishboxRepository;
+    private final WishboxService wishboxService;
 
     private final String[] indices = {"디지털가전", "가구", "생활용품", "식품"}; // 검색할 인덱스들
 
@@ -125,14 +126,6 @@ public class SearchService {
         if (page > totalPage || total <= 0) {
             throw new BusinessException(ErrorCode.NOT_EXISTS_RESULT);
         }
-        Set<String> wishProductCode;
-        // 회원이면 찜 목록 체크
-        if (memberId != null) {
-            // 찜 목록의 상품들
-            wishProductCode = wishboxRepository.findProductById(memberId);
-        } else {
-            wishProductCode = null;
-        }
 
         // content만 추출해서 전체 결과에 추가
         List<SearchContentDto> contents = searchHits.getSearchHits().stream()
@@ -140,7 +133,7 @@ public class SearchService {
                     // 기존 content
                     Product product = (Product) searchHit.getContent();
                     // 찜 여부
-                    boolean wishYn = (wishProductCode != null) && wishProductCode.contains(product.getCode());
+                    boolean wishYn = wishboxService.checkMemberWishbox(product.getCode(), memberId);
                     // Dto 생성
                     return SearchContentDto.builder()
                             .id(product.getId())
