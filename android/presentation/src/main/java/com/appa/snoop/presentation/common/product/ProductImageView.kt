@@ -40,6 +40,7 @@ fun ProductImageView(
     modifier: Modifier = Modifier,
     ratio: Float,
     productState: String,
+    img: String,
     onLikeClicked: () -> Unit
 ) {
     var liked by remember { mutableStateOf(false) }
@@ -55,7 +56,7 @@ fun ProductImageView(
                 .aspectRatio(1f)
                 .align(Alignment.Center),
             model = ImageRequest.Builder(LocalContext.current)
-                .data("https://media.istockphoto.com/id/1358386001/photo/apple-macbook-pro.jpg?s=612x612&w=0&k=20&c=d14HA-i0EHpdvNvccdJQ5pAkQt8bahxjjb6fO6hs4E8=")
+                .data(img)
                 .build(),
             contentDescription = "제품 이미지",
             contentScale = ContentScale.FillWidth
@@ -129,6 +130,7 @@ fun ProductImageView(
 fun Preview() {
     ProductImageView(
         ratio = 0.7f,
+        img = "",
         productState = "지금 최저가"
     ) {}
 }

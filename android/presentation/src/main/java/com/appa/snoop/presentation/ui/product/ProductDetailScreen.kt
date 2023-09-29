@@ -129,7 +129,7 @@ fun ProductDetailScreen(
                 selectChips = {
                     selectChip = it.label
                 })
-            RecommendListView()
+            RecommendListView(modifier = Modifier, recommendProduct)
         }
         AlarmSnackBar(
             hostState = snackState,

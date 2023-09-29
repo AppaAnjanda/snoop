@@ -356,7 +356,13 @@ fun CategoryScreen(
                                 modifier = Modifier,
                                 product = pagingData[it]!!,
                                 onItemClicked = {
-                                    navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
+//                                    navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
+
+                                    val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
+                                        "{productCode}",
+                                        pagingData[it]!!.code
+                                    )
+                                    navController.navigate(route)
                                 },
                                 onLikeClicked = {
 //                                    var heart = !pagingData[it]!!.wishYn

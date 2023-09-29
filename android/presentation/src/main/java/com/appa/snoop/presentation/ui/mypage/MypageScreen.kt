@@ -92,9 +92,11 @@ fun MypageScreen(
     }
 
     val memberInfoState by mainViewModel.memberInfo.collectAsState()
+    val recentProduct by myPageViewModel.recentProductState.collectAsState()
     LaunchedEffect(key1 = Unit, key2 = memberInfoState) {
         Log.d(TAG, "MypageScreen 확인!!: $memberInfoState")
         mainViewModel.getMemberInfo()
+        myPageViewModel.getRecentProduct()
     }
 
 
@@ -105,7 +107,7 @@ fun MypageScreen(
     ) {
         MyPageInformation(memberInfoState)
         Spacer(modifier = Modifier.size(16.sdp))
-        CurrentProductItemView()
+        CurrentProductItemView(products = recentProduct)
         Spacer(modifier = Modifier.size(8.sdp))
         HorizontalDivider(thickness = 6.sdp, color = BackgroundColor2)
         settings.forEachIndexed { index, title ->

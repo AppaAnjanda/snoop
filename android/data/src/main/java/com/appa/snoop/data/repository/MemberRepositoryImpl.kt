@@ -6,6 +6,7 @@ import com.appa.snoop.data.mapper.toDto
 import com.appa.snoop.data.service.MemberService
 import com.appa.snoop.data.service.handleApi
 import com.appa.snoop.domain.model.NetworkResult
+import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.domain.model.member.ChangedImage
 import com.appa.snoop.domain.model.member.ChangedNickname
 import com.appa.snoop.domain.model.member.Member
@@ -40,6 +41,14 @@ class MemberRepositoryImpl @Inject constructor(
     override suspend fun getMyCard(): NetworkResult<MyCardList> {
         return handleApi {
             memberService.getMyCard().toDomain()
+        }
+    }
+
+    override suspend fun getRecentProduct(): NetworkResult<List<Product>> {
+        return handleApi {
+            memberService.getRecentProduct().map {
+                it.toDomain()
+            }
         }
     }
 
