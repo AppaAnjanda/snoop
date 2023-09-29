@@ -93,21 +93,39 @@ dependencies {
 	// jasypt
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 
+	//mongoDB
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 	// thymeleaf
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 	// firebase
 	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.1.1'
 
+	// https://mvnrepository.com/artifact/org.webjars/stomp-websocket
+	implementation 'org.webjars:stomp-websocket:2.3.4'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-reactor-netty
+	implementation 'org.springframework.boot:spring-boot-starter-reactor-netty:2.6.4'
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4.1'
+	// https://mvnrepository.com/artifact/org.webjars/sockjs-client
+	implementation 'org.webjars:sockjs-client:1.5.1'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-amqp
+	implementation 'org.springframework.boot:spring-boot-starter-amqp:2.6.4'
+
+	// json object
+	implementation 'org.json:json:20200518'
 }
 
 //tasks.named('test') {
 //	useJUnitPlatform()
 //}
 
-//tasks.withType(JavaCompile).configureEach {
-//	options.compilerArgs << "-Xlint:deprecation"
-//}
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs << "-Xlint:deprecation"
+}
 
 //querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"
