@@ -48,9 +48,15 @@ public class WishboxService {
         Wishbox wishbox;
         // 찜이 없는 경우 -> 찜 목록에 등록 및 알림가격 설정
         if (!searchContentDto.isWishYn()) {
+            boolean yn = true;
+            
+            if (addAlertRequestDto.getAlertPrice() == 0) {
+                yn = false;
+            }
+
             wishbox = Wishbox.builder()
                     .alertPrice(addAlertRequestDto.getAlertPrice())
-                    .alertYn(true)
+                    .alertYn(yn)
                     .productCode(productCode)
                     .member(member)
                     .provider(searchContentDto.getProvider())
