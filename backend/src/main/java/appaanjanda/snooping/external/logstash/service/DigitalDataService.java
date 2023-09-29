@@ -67,16 +67,18 @@ public class DigitalDataService {
                     createPriceData(productInfo, productInfo.getCode());
 
                 }
-                // 가격이 더 떨어졌으면 업데이트
-                if (originProduct.getPrice() > productInfo.getPrice()) {
-                    log.info("가격 하락 {}", productInfo.getPrice());
+                // 가격이 바뀌면 업데이트
+                if (originProduct.getPrice() != productInfo.getPrice()) {
+                    log.info("가격 변동 {}", productInfo.getPrice());
                     updateData(originProduct, productInfo);
                     updatePriceData(productInfo);
                 }
                 String productCode = productInfo.getCode();
                 // 찜 여부 판단
+                log.info("찜");
                 if (wishboxService.checkWishbox(productCode)) {
                     // 알림여부 판단 후 가격 비교하고 알림보내기
+                    log.info("알림전송 {}", productCode);
                     wishboxService.checkAlertPrice(productCode, productInfo.getPrice());
                 }
             }

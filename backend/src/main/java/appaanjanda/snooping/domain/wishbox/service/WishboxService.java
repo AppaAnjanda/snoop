@@ -9,8 +9,6 @@ import appaanjanda.snooping.domain.search.dto.SearchContentDto;
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.service.dto.AddAlertResponseDto;
 import appaanjanda.snooping.domain.wishbox.service.dto.RemoveWishboxResponseDto;
-import appaanjanda.snooping.external.fastApi.CoupangCrawlingCaller;
-import appaanjanda.snooping.external.fastApi.NaverApiCaller;
 import appaanjanda.snooping.domain.wishbox.service.dto.*;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
@@ -34,8 +32,6 @@ public class WishboxService {
 
     private final WishboxRepository wishboxRepository;
     private final MemberRepository memberRepository;
-    private final CoupangCrawlingCaller coupangCrawlingCaller;
-    private final NaverApiCaller naverApiCaller;
     private final ProductSearchService productSearchService;
     private final FCMNotificationService fcmNotificationService;
 
@@ -115,20 +111,20 @@ public class WishboxService {
     }
 
     // 찜 상품 기져와서 업데이트
-	@Scheduled(cron = "*/10 * * * *")
-	public void wishboxUpdate() {
-		List<Wishbox> allWishbox = wishboxRepository.findAll();
-
-		for (Wishbox wishbox : allWishbox) {
-			String productCode = wishbox.getProductCode();
-			if (wishbox.getProvider().equals("쿠팡")){ continue;
-//				coupangCrawlingCaller.oneProductSearch(productCode);
-
-			} else {
-				naverApiCaller.oneProductSearch(productCode);
-			}
-		}
-	}
+//	@Scheduled(cron = "*/10 * * * *")
+//	public void wishboxUpdate() {
+//		List<Wishbox> allWishbox = wishboxRepository.findAll();
+//
+//		for (Wishbox wishbox : allWishbox) {
+//			String productCode = wishbox.getProductCode();
+//			if (wishbox.getProvider().equals("쿠팡")){ continue;
+////				coupangCrawlingCaller.oneProductSearch(productCode);
+//
+//			} else {
+//				naverApiCaller.oneProductSearch(productCode);
+//			}
+//		}
+//	}
 
     // 찜 상품 알림 가격 변경
     public WishboxResponseDto updateAlertPrice(Long memberId, Long wishboxId, UpdateAlertPriceRequestDto updateAlertPriceRequestDto) {
@@ -208,6 +204,7 @@ public class WishboxService {
         List<Wishbox> wishboxList = wishboxRepository.findWishboxByProductCode(productCode);
 
         for (Wishbox wishbox : wishboxList) {
+            log.info("알림가격체크 {}", price);
 			if (wishbox.getAlertYn() && wishbox.getAlertPrice() >= price) {
 				sendAlert(wishbox, price);
 			}
@@ -220,6 +217,7 @@ public class WishboxService {
 		int length = wishbox.getProductCode().length();
 		String productName = wishbox.getProductCode().substring(2, length);
 
+        log.info("메시지 전송");
 		FCMNotificationRequestDto requestDto = FCMNotificationRequestDto.builder()
 				.memberId(wishbox.getMember().getId())
 				.title("지정가 알림")

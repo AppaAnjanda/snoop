@@ -60,9 +60,10 @@ public class FurnitureDataService {
                 if (minute < 10) {
                     createPriceData(productInfo, productInfo.getCode());
 
-                    // 가격이 더 떨어졌으면 업데이트
                 }
-                if (originProduct.getPrice() > productInfo.getPrice()) {
+                // 가격이 바뀌면 업데이트
+                if (originProduct.getPrice() != productInfo.getPrice()) {
+                    log.info("가격 변동 {}", productInfo.getPrice());
                     updateData(originProduct, productInfo);
                     updatePriceData(productInfo);
                 }
