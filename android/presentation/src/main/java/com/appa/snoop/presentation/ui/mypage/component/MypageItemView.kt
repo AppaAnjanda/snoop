@@ -28,6 +28,7 @@ import com.appa.snoop.domain.model.member.Member
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.product.HomeLabel
 import com.appa.snoop.presentation.common.product.ProductItemView
+import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.home.dumy.itemList
 import com.appa.snoop.presentation.ui.mypage.common.MyPageLabel
 import com.appa.snoop.presentation.util.extensions.noRippleClickable
@@ -73,7 +74,7 @@ fun MyPageInformation(member: Member) {
 }
 
 @Composable
-fun CurrentProductItemView(products : List<Product>) {
+fun CurrentProductItemView(products : List<Product>, onItemClicked: (String) -> Unit) {
     Text(
         text = "최근 본 상품", style = TextStyle(
             fontSize = 14.ssp,
@@ -88,7 +89,9 @@ fun CurrentProductItemView(products : List<Product>) {
                 product = product,
                 label = HomeLabel,
                 ratio = 0.85f,
-                onItemClicked = { /*TODO*/ }) {
+                onItemClicked = {
+                    onItemClicked(it)
+                }) {
             }
         }
     }

@@ -66,8 +66,11 @@ fun HomeScreen(
             imageLinks = imageLinks,
             imageLinksToCoupang = imageLinksToCoupang
         )
-        HomeItemListTitleView(titleName = HomeTitle.DIGITAL.titleName, titleImg = HomeTitle.DIGITAL.res)
-        LazyRow (
+        HomeItemListTitleView(
+            titleName = HomeTitle.DIGITAL.titleName,
+            titleImg = HomeTitle.DIGITAL.res
+        )
+        LazyRow(
             modifier = Modifier
                 .padding(horizontal = 16.sdp)
         ) {
@@ -77,7 +80,11 @@ fun HomeScreen(
                     product = it,
                     onItemClicked = {
                         // TODO 상세화면으로 넘어가기 추가
-                        navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
+                        val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
+                            "{productCode}",
+                            it.code
+                        )
+                        navController.navigate(route)
                     },
                 )
             }
@@ -87,8 +94,11 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .height(30.sdp)
         )
-        HomeItemListTitleView(titleName = HomeTitle.NECESSARIES.titleName, titleImg = HomeTitle.NECESSARIES.res)
-        LazyRow (
+        HomeItemListTitleView(
+            titleName = HomeTitle.NECESSARIES.titleName,
+            titleImg = HomeTitle.NECESSARIES.res
+        )
+        LazyRow(
             modifier = Modifier
                 .padding(horizontal = 16.sdp)
         ) {
@@ -108,8 +118,11 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .height(30.sdp)
         )
-        HomeItemListTitleView(titleName = HomeTitle.FURNITURE.titleName, titleImg = HomeTitle.FURNITURE.res)
-        LazyRow (
+        HomeItemListTitleView(
+            titleName = HomeTitle.FURNITURE.titleName,
+            titleImg = HomeTitle.FURNITURE.res
+        )
+        LazyRow(
             modifier = Modifier
                 .padding(horizontal = 16.sdp)
         ) {
@@ -130,7 +143,7 @@ fun HomeScreen(
                 .height(30.sdp)
         )
         HomeItemListTitleView(titleName = HomeTitle.FOOD.titleName, titleImg = HomeTitle.FOOD.res)
-        LazyRow (
+        LazyRow(
             modifier = Modifier
                 .padding(horizontal = 16.sdp)
         ) {

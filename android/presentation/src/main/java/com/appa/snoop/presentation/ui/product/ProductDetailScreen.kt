@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.category.utils.convertNaverUrl
 import com.appa.snoop.presentation.ui.product.component.AlarmSnackBar
 import com.appa.snoop.presentation.ui.product.component.ButtonView
@@ -129,7 +130,13 @@ fun ProductDetailScreen(
                 selectChips = {
                     selectChip = it.label
                 })
-            RecommendListView(modifier = Modifier, recommendProduct)
+            RecommendListView(modifier = Modifier, recommendProduct, onItemClicked = { code ->
+                val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
+                    "{productCode}",
+                    code
+                )
+                navController.navigate(route)
+            })
         }
         AlarmSnackBar(
             hostState = snackState,

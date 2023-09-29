@@ -1,6 +1,9 @@
 package com.appa.snoop.presentation.common.product
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
@@ -26,9 +29,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.LottieAnim
+import com.appa.snoop.presentation.ui.category.utils.convertNaverUrl
 import com.appa.snoop.presentation.ui.theme.BlueColor
+import com.appa.snoop.presentation.ui.theme.GreenColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.extensions.calculateSize
 import com.appa.snoop.presentation.util.extensions.noRippleClickable
@@ -39,16 +45,20 @@ import ir.kaaveh.sdpcompose.ssp
 fun ProductImageView(
     modifier: Modifier = Modifier,
     ratio: Float,
-    productState: String,
+    product: Product,
     img: String,
+    onItemClicked:() -> Unit,
     onLikeClicked: () -> Unit
 ) {
+    val context = LocalContext.current
     var liked by remember { mutableStateOf(false) }
     var isChecked by remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(ratio.calculateSize(10).sdp))
+            .clip(RoundedCornerShape(ratio.calculateSize(10).sdp)).noRippleClickable {
+                onItemClicked()
+            }
     ) {
         AsyncImage(
             modifier = modifier
@@ -68,18 +78,28 @@ fun ProductImageView(
             Box(
                 modifier = modifier
                     .wrapContentSize()
-                    .clip(RoundedCornerShape(ratio.calculateSize(10).sdp))
-                    .background(color = BlueColor)
+                    .clip(RoundedCornerShape(10.sdp))
+                    .background(
+                        color = if (product.provider == "쿠팡") BlueColor else GreenColor
+                    )
+                    .clickable {
+                        val url =
+                            if (product.provider == "네이버")
+                                convertNaverUrl(
+                                    product.productLink
+                                )
+                            else
+                                product.productLink
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        context.startActivity(intent)
+                    }
             ) {
                 Text(
                     modifier = modifier
-                        .padding(
-                            horizontal = ratio.calculateSize(12).sdp,
-                            vertical = ratio.calculateSize(4).sdp
-                        ),
-                    text = productState,
+                        .padding(horizontal = 12.sdp, vertical = 4.sdp),
+                    text = if (product.provider == "쿠팡") product.provider else "네이버",
                     style = TextStyle(
-                        fontSize = ratio.calculateSize(8).ssp,
+                        fontSize = 8.ssp,
                         fontWeight = FontWeight.ExtraBold,
                         color = WhiteColor,
                     )
@@ -128,9 +148,9 @@ fun ProductImageView(
 @Composable
 @Preview
 fun Preview() {
-    ProductImageView(
-        ratio = 0.7f,
-        img = "",
-        productState = "지금 최저가"
-    ) {}
+//    ProductImageView(
+//        ratio = 0.7f,
+//        img = "",
+//        productState = "지금 최저가"
+//    ) {}
 }

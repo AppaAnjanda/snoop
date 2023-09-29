@@ -23,7 +23,8 @@ import ir.kaaveh.sdpcompose.ssp
 @Composable
 fun RecommendListView(
     modifier: Modifier = Modifier,
-    products: List<Product>
+    products: List<Product>,
+    onItemClicked: (String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -43,10 +44,10 @@ fun RecommendListView(
             items(products) { product ->
                 ProductItemView(
                     modifier = Modifier,
-                    product,
+                    product = product,
                     label = HomeLabel,
                     ratio = 0.85f,
-                    onItemClicked = { /*TODO*/ }) {
+                    onItemClicked = { onItemClicked(it) }) {
                 }
             }
         }

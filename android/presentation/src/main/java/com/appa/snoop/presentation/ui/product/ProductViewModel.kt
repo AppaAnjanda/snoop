@@ -84,23 +84,23 @@ class ProductViewModel @Inject constructor(
         }
     }
 
-    fun getRecommendProduct(productCode: String) {
-        viewModelScope.launch {
-            val encoder = UrlUtil.encodeProductCode(productCode = productCode)
-            val result = getRecommendProductUseCase.invoke(encoder)
+        fun getRecommendProduct(productCode: String) {
+            viewModelScope.launch {
+                val encoder = UrlUtil.encodeProductCode(productCode = productCode)
+                val result = getRecommendProductUseCase.invoke(encoder)
 
-            when (result) {
-                is NetworkResult.Success -> {
-                    _recommendProductState.emit(result.data)
-                    Log.d(TAG, "getRecommendProduct: ${result.data}")
-                }
+                when (result) {
+                    is NetworkResult.Success -> {
+                        _recommendProductState.emit(result.data)
+                        Log.d(TAG, "getRecommendProduct: ${result.data}")
+                    }
 
-                else -> {
-                    Log.d(TAG, "getRecommendProduct: 추천 상품 조회 실패")
+                    else -> {
+                        Log.d(TAG, "getRecommendProduct: 추천 상품 조회 실패")
+                    }
                 }
             }
         }
-    }
 
     fun getProductGraph(productCode: String, period: String) {
         viewModelScope.launch {

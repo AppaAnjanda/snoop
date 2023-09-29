@@ -37,7 +37,7 @@ fun ProductItemView(
     product: Product,
     label: Label,
     ratio: Float,
-    onItemClicked: () -> Unit,
+    onItemClicked: (String) -> Unit,
     onLikeClicked: () -> Unit
 ) {
     Column(
@@ -51,8 +51,9 @@ fun ProductItemView(
     ) {
         ProductImageView(
             ratio = ratio,
-            productState = product.provider,
-            img = product.productImage
+            product = product,
+            img = product.productImage,
+            onItemClicked = { onItemClicked(product.code) }
         ) {
             onLikeClicked()
         }
