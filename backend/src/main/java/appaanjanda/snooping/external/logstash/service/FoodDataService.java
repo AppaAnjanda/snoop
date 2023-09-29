@@ -64,6 +64,12 @@ public class FoodDataService {
                     updateData(originProduct, productInfo);
                     updatePriceData(productInfo);
                 }
+                String productCode = productInfo.getCode();
+                // 찜 여부 판단
+                if (wishboxService.checkWishbox(productCode)) {
+                    // 알림여부 판단 후 가격 비교하고 알림보내기
+                    wishboxService.checkAlertPrice(productCode, productInfo.getPrice());
+                }
             }
         } else {
             // 일치상품 없으면 상품, 가격 둘 다 새로 생성
@@ -100,13 +106,6 @@ public class FoodDataService {
         foodProduct.setTimestamp(formatTime);
 
         foodProductRepository.save(foodProduct);
-
-        String productCode = foodProduct.getCode();
-        // 찜 여부 판단
-        if (wishboxService.checkWishbox(productCode)) {
-            // 알림여부 판단 후 가격 비교하고 알림보내기
-            wishboxService.checkAlertPrice(productCode, foodProduct.getPrice());
-        }
     }
 
     // 그 시간대의 가격 정보 업데이트

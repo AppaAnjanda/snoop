@@ -61,9 +61,16 @@ public class FurnitureDataService {
                     createPriceData(productInfo, productInfo.getCode());
 
                     // 가격이 더 떨어졌으면 업데이트
-                } else if (originProduct.getPrice() > productInfo.getPrice()) {
+                }
+                if (originProduct.getPrice() > productInfo.getPrice()) {
                     updateData(originProduct, productInfo);
                     updatePriceData(productInfo);
+                }
+                String productCode = productInfo.getCode();
+                // 찜 여부 판단
+                if (wishboxService.checkWishbox(productCode)) {
+                    // 알림여부 판단 후 가격 비교하고 알림보내기
+                    wishboxService.checkAlertPrice(productCode, productInfo.getPrice());
                 }
             }
         } else {
@@ -101,13 +108,6 @@ public class FurnitureDataService {
         furnitureProduct.setTimestamp(formatTime);
 
         furnitureProductRepository.save(furnitureProduct);
-
-        String productCode = furnitureProduct.getCode();
-        // 찜 여부 판단
-        if (wishboxService.checkWishbox(productCode)) {
-            // 알림여부 판단 후 가격 비교하고 알림보내기
-            wishboxService.checkAlertPrice(productCode, furnitureProduct.getPrice());
-        }
 
     }
 

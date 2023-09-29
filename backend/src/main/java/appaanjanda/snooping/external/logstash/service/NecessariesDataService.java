@@ -61,9 +61,16 @@ public class NecessariesDataService {
                     createPriceData(productInfo, productInfo.getCode());
 
                     // 가격이 더 떨어졌으면 업데이트
-                } else if (originProduct.getPrice() > productInfo.getPrice()) {
+                }
+                if (originProduct.getPrice() > productInfo.getPrice()) {
                     updateData(originProduct, productInfo);
                     updatePriceData(productInfo);
+                }
+                String productCode = productInfo.getCode();
+                // 찜 여부 판단
+                if (wishboxService.checkWishbox(productCode)) {
+                    // 알림여부 판단 후 가격 비교하고 알림보내기
+                    wishboxService.checkAlertPrice(productCode, productInfo.getPrice());
                 }
             }
         } else {
@@ -101,14 +108,6 @@ public class NecessariesDataService {
         necessariesProduct.setTimestamp(formatTime);
 
         necessariesProductRepository.save(necessariesProduct);
-
-        String productCode = necessariesProduct.getCode();
-        // 찜 여부 판단
-        if (wishboxService.checkWishbox(productCode)) {
-            // 알림여부 판단 후 가격 비교하고 알림보내기
-            wishboxService.checkAlertPrice(productCode, necessariesProduct.getPrice());
-        }
-
     }
 
     // 그 시간대의 가격 정보 업데이트
