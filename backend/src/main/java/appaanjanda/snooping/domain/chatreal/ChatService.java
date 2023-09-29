@@ -30,6 +30,7 @@ public class ChatService {
                 .senderName(request.getSender())
                 .msg(request.getMsg())
                 .createdAt(formattedDate)
+                .localDateTime(LocalDateTime.now())
                 .build();
         chatRepository.save(chatDocument);
     }
