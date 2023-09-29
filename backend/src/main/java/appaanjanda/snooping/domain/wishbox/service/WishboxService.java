@@ -208,6 +208,7 @@ public class WishboxService {
         List<Wishbox> wishboxList = wishboxRepository.findWishboxByProductCode(productCode);
 
         for (Wishbox wishbox : wishboxList) {
+            log.info("알림가격체크 {}", price);
 			if (wishbox.getAlertYn() && wishbox.getAlertPrice() >= price) {
 				sendAlert(wishbox, price);
 			}
@@ -220,6 +221,7 @@ public class WishboxService {
 		int length = wishbox.getProductCode().length();
 		String productName = wishbox.getProductCode().substring(2, length);
 
+        log.info("메시지 전송");
 		FCMNotificationRequestDto requestDto = FCMNotificationRequestDto.builder()
 				.memberId(wishbox.getMember().getId())
 				.title("지정가 알림")
