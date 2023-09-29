@@ -28,12 +28,14 @@ import kotlin.math.log
 fun LoginButton(
     modifier : Modifier = Modifier,
     loginViewModel: LoginViewModel,
-    focusManager: FocusManager
+    focusManager: FocusManager,
+    onClick: () -> Unit
 ) {
     ClickableButton(
         onClick = {
-            loginViewModel.login()
-            focusManager.clearFocus()
+                  onClick()
+//            loginViewModel.login()
+//            focusManager.clearFocus()
 //            loginViewModel.loginButtonClickToggle++
         },
         modifier = Modifier
