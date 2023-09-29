@@ -9,6 +9,8 @@ import appaanjanda.snooping.domain.search.dto.SearchContentDto;
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.service.dto.AddAlertResponseDto;
 import appaanjanda.snooping.domain.wishbox.service.dto.RemoveWishboxResponseDto;
+import appaanjanda.snooping.external.fastApi.CoupangCrawlingCaller;
+import appaanjanda.snooping.external.fastApi.NaverApiCaller;
 import appaanjanda.snooping.domain.wishbox.service.dto.*;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
@@ -32,6 +34,8 @@ public class WishboxService {
 
     private final WishboxRepository wishboxRepository;
     private final MemberRepository memberRepository;
+    private final CoupangCrawlingCaller coupangCrawlingCaller;
+    private final NaverApiCaller naverApiCaller;
     private final ProductSearchService productSearchService;
     private final FCMNotificationService fcmNotificationService;
 
