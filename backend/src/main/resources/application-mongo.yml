@@ -1,8 +1,8 @@
 data:
   mongodb:
-    host: 52.78.159.20
+    host: j9d104a.p.ssafy.io
     port: 27017
     authentication-database: admin
-    username: username
-    password: password
+    username: root
+    password: 1234
     database: snooping
