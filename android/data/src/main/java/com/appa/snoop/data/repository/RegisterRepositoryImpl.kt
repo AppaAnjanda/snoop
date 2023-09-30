@@ -5,6 +5,7 @@ import com.appa.snoop.data.local.PreferenceDataSource
 import com.appa.snoop.data.local.PreferenceDataSource.Companion.ACCESS_TOKEN
 import com.appa.snoop.data.local.PreferenceDataSource.Companion.REFRESH_TOKEN
 import com.appa.snoop.data.mapper.toDomain
+import com.appa.snoop.data.mapper.toDto
 import com.appa.snoop.data.service.RegisterService
 import com.appa.snoop.data.service.handleApi
 import com.appa.snoop.domain.model.NetworkResult
@@ -31,7 +32,7 @@ class RegisterRepositoryImpl @Inject constructor(
 
     // 로그인
     override suspend fun login(loginInfo: LoginInfo): NetworkResult<JwtTokens> {
-        return handleApi { registerService.login(loginInfo).toDomain() }
+        return handleApi { registerService.login(loginInfo.toDto()).toDomain() }
     }
 
     // 토큰 저장
@@ -56,7 +57,7 @@ class RegisterRepositoryImpl @Inject constructor(
     override suspend fun getLoginStatus(): JwtTokens {
         var jwtAccessToken = preferenceDatasource.getString(ACCESS_TOKEN) ?: "no_token_error"
         var jwtRefreshToken = preferenceDatasource.getString(REFRESH_TOKEN) ?: "no_refresh_error"
-
+        Log.d(TAG, "getLoginStatus: $jwtAccessToken")
         return JwtTokens(jwtAccessToken, jwtRefreshToken)
     }
 

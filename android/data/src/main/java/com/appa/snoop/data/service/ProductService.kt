@@ -1,13 +1,13 @@
 package com.appa.snoop.data.service
 
-import com.appa.snoop.data.model.category.response.ProductPagingResponse
 import com.appa.snoop.data.model.category.response.ProductResponse
+import com.appa.snoop.data.model.product.request.AlertPriceRequest
 import com.appa.snoop.data.model.product.response.GraphItemResponse
-import com.appa.snoop.data.model.product.response.GraphResponse
-import com.appa.snoop.data.model.product.response.RecommendProductResponse
 import com.appa.snoop.data.model.product.response.TimingResponse
-import com.appa.snoop.domain.model.product.GraphItem
+import com.appa.snoop.data.model.product.response.WishProductResponse
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ProductService {
@@ -37,4 +37,9 @@ interface ProductService {
         @Path("period") period: String,
     ): List<GraphItemResponse>
 
+    @POST("api/wishbox/add/alert/{productCode}")
+    suspend fun registWishProduct(
+        @Path("productCode") productCode: String,
+        @Body alertPrice: AlertPriceRequest
+    ): WishProductResponse
 }

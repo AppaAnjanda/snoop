@@ -10,6 +10,7 @@ import com.appa.snoop.data.interceptor.RequestInterceptor
 import com.appa.snoop.data.interceptor.ResponseInterceptor
 import com.appa.snoop.data.service.HomeService
 import com.appa.snoop.data.service.ProductService
+import com.appa.snoop.data.service.WishBoxService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -101,4 +102,10 @@ object NetworkModule {
     fun provideProductService(
         retrofit: Retrofit
     ): ProductService = retrofit.create(ProductService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideWishBoxService(
+        retrofit: Retrofit
+    ): WishBoxService = retrofit.create(WishBoxService::class.java)
 }

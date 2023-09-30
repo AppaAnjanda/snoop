@@ -19,7 +19,8 @@ fun ProductResponse.toDomain(): Product {
         productLink = productLink,
         productImage = productImage,
         timestamp = timestamp,
-        wishYn = wishYn
+        wishYn = wishYn,
+        alertYn = alertYn
     )
 }
 

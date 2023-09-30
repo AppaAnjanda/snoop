@@ -1,6 +1,7 @@
 package com.appa.snoop.domain.repository
 
 import com.appa.snoop.domain.model.NetworkResult
+import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.domain.model.member.ChangedImage
 import com.appa.snoop.domain.model.member.ChangedNickname
 import com.appa.snoop.domain.model.member.Member
@@ -20,4 +21,6 @@ interface MemberRepository {
     ): NetworkResult<ChangedImage>
 
     suspend fun getMyCard(): NetworkResult<MyCardList>
+
+    suspend fun getRecentProduct(): NetworkResult<List<Product>>
 }

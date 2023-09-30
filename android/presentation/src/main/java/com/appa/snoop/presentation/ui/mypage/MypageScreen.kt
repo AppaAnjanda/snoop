@@ -30,6 +30,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.appa.snoop.presentation.navigation.ModifyProfileNav
+import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.main.MainViewModel
 import com.appa.snoop.presentation.ui.mypage.common.MyPageLabel
 import com.appa.snoop.presentation.ui.mypage.component.BottomSheet
@@ -92,9 +93,11 @@ fun MypageScreen(
     }
 
     val memberInfoState by mainViewModel.memberInfo.collectAsState()
+    val recentProduct by myPageViewModel.recentProductState.collectAsState()
     LaunchedEffect(key1 = Unit, key2 = memberInfoState) {
         Log.d(TAG, "MypageScreen 확인!!: $memberInfoState")
         mainViewModel.getMemberInfo()
+        myPageViewModel.getRecentProduct()
     }
 
 
@@ -105,7 +108,13 @@ fun MypageScreen(
     ) {
         MyPageInformation(memberInfoState)
         Spacer(modifier = Modifier.size(16.sdp))
-        CurrentProductItemView()
+        CurrentProductItemView(products = recentProduct, onItemClicked = { code ->
+            val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
+                "{productCode}",
+                code
+            )
+            navController.navigate(route)
+        })
         Spacer(modifier = Modifier.size(8.sdp))
         HorizontalDivider(thickness = 6.sdp, color = BackgroundColor2)
         settings.forEachIndexed { index, title ->
