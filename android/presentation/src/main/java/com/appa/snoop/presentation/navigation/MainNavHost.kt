@@ -13,7 +13,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.appa.snoop.presentation.ui.category.CategoryScreen
 import com.appa.snoop.presentation.ui.chatting.ChattingScreen
-import com.appa.snoop.presentation.ui.chatting.chatList
 import com.appa.snoop.presentation.ui.home.HomeScreen
 import com.appa.snoop.presentation.ui.like.LikeScreen
 import com.appa.snoop.presentation.ui.login.LoginScreen
@@ -142,10 +141,13 @@ fun MainNavHost(
         defaultSlideTransitions(
             route = Router.CATEGORY_CHATTING_ROUTER_NAME
         ) {
-            // 더미 데이터 넣어놓음
+            val parentEntry = remember(it) {
+                navController.getBackStackEntry(Router.CATEGORY_CHATTING_ROUTER_NAME)
+            }
             ChattingScreen(
-                chatList = chatList,
-                navController = navController
+                navController = navController,
+                roomNumber = 4,
+                chattingViewModel = hiltViewModel(parentEntry)
             )
         }
     }

@@ -43,6 +43,9 @@ androidxPaging = "3.2.1"
 googleServices = "4.3.15"
 firebaseBom = "32.3.1"
 firebaseMessaging = "21.1.0"
+stomp = "1.6.6"
+rxjava = "2.2.5"
+rxandroid = "2.1.0"
 
 [libraries]
 
@@ -133,6 +136,12 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 
+#Stomp
+stomp = { group = "com.github.NaikSoftware", name = "StompProtocolAndroid", version.ref = "stomp" }
+
+#rx
+rxjava = { group = "io.reactivex.rxjava2", name = "rxjava", version.ref = "rxjava" }
+rxandroid = { group = "io.reactivex.rxjava2", name = "rxjava", version.ref = "rxandroid" }
 
 [plugins]
 
@@ -153,3 +162,4 @@ retrofit = ["retrofit", "retrofit-converter-gson"]
 coil = ["coil", "coil-gif"]
 kakao = ["kakao", "kakao-friend", "kakao-share", "kakao-talk", "kakao-user", "kakao-cert"]
 firebase = ["firebase-bom", "firebase-analytics-ktx", "firebase-messaging"]
+rx = ["rxjava", "rxandroid"]
