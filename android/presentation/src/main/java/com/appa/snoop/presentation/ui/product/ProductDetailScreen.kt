@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -24,13 +26,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.category.utils.convertNaverUrl
+import com.appa.snoop.presentation.ui.mypage.component.BottomSheet
 import com.appa.snoop.presentation.ui.product.component.AlarmSnackBar
+import com.appa.snoop.presentation.ui.product.component.AlertBottomSheet
 import com.appa.snoop.presentation.ui.product.component.ButtonView
 import com.appa.snoop.presentation.ui.product.component.BuyTimingView
 import com.appa.snoop.presentation.ui.product.component.PriceGraph
@@ -46,6 +51,7 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "[김진영] ProductDetailScreen"
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailScreen(
     modifier: Modifier = Modifier,
@@ -57,21 +63,17 @@ fun ProductDetailScreen(
     val timing by productViewModel.timingState.collectAsState()
     val recommendProduct by productViewModel.recommendProductState.collectAsState()
     val productGraph by productViewModel.productGraphState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState()
+    val focusManager = LocalFocusManager.current
     var selectChip by remember { mutableStateOf(Period.WEEK.label) }
     var graphData by remember {
         mutableStateOf(
             listOf(
-                DataPoint(0f, 3500f),
-                DataPoint(1f, 3800f),
-                DataPoint(2f, 4000f),
-                DataPoint(3f, 5000f),
-                DataPoint(4f, 5000f),
-                DataPoint(5f, 4900f),
-                DataPoint(6f, 4700f),
+                DataPoint(0f, 1000f)
             )
         )
     }
-
     ProductLaunchedEffect(navController = navController)
     LaunchedEffect(productCode) {
         Log.d(TAG, "ProductDetailScreen: $productCode")
@@ -90,18 +92,33 @@ fun ProductDetailScreen(
     }
 
     LaunchedEffect(productGraph) {
-
         graphData = productGraph.mapIndexed { index, graphItem ->
             DataPoint(index.toFloat(), graphItem.price.toFloat())
         }
         Log.d(TAG, "ProductDetailScreen: $graphData")
     }
 
+    var alarmChecked by remember { mutableStateOf(product.alertYn) }
+
+    if (sheetState.isVisible) {
+        AlertBottomSheet(
+            viewModel = productViewModel,
+            sheetState = sheetState,
+            focusManager = focusManager,
+            onValueChanged = {
+
+            },
+            onDismiss = {
+                coroutineScope.launch {
+                    sheetState.hide()
+                }
+            }
+        )
+    }
+
     val scrollState = rememberScrollState()
     val context = LocalContext.current
-    var alarmChecked by remember { mutableStateOf(false) }
     val snackState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
     // TODO(Domain model 가져오면 추후에 교체)
     Column(
         modifier = modifier
@@ -145,7 +162,7 @@ fun ProductDetailScreen(
         )
         Spacer(modifier = Modifier.height(16.sdp))
         ButtonView(
-            alarmChecked = alarmChecked,
+            alarmChecked = product.alertYn,
             onBuyClicked = {
                 val url =
                     if (product.provider == "네이버")
@@ -160,10 +177,11 @@ fun ProductDetailScreen(
             },
             onAlarmClicked = {
                 if (snackState.currentSnackbarData == null) {
-                    alarmChecked = !alarmChecked
+
                     // 알람을 클릭이 되었을때 SnackBar Show
-                    if (alarmChecked) {
+                    if (!alarmChecked) {
                         coroutineScope.launch {
+                            sheetState.partialExpand()
                             val job = coroutineScope.launch {
                                 snackState.showSnackbar(
                                     "",
@@ -173,7 +191,10 @@ fun ProductDetailScreen(
                             delay(1500L)
                             job.cancel()
                         }
+                    } else {
+                        productViewModel
                     }
+                    alarmChecked = !alarmChecked
                 }
             }
         )

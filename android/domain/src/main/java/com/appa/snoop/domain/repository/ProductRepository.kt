@@ -2,8 +2,10 @@ package com.appa.snoop.domain.repository
 
 import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.category.Product
+import com.appa.snoop.domain.model.product.AlertPrice
 import com.appa.snoop.domain.model.product.GraphItem
 import com.appa.snoop.domain.model.product.Timing
+import com.appa.snoop.domain.model.product.WishProduct
 
 interface ProductRepository {
     suspend fun getProductDetail(
@@ -26,5 +28,10 @@ interface ProductRepository {
         productCode: String,
         period: String,
     ): NetworkResult<List<GraphItem>>
+
+    suspend fun registWishProduct(
+        productCode: String,
+        alertPrice: AlertPrice
+    ): NetworkResult<WishProduct>
 
 }

@@ -86,9 +86,6 @@ fun LineGraph(
             val points = lines.flatMap { it.dataPoints }
             val (xMin, xMax, xAxisScale) = getXAxisScale(points, plot)
             val (yMin, yMax, yAxisScale) = getYAxisScale(points, plot)
-            Log.d("김진영TAG", "LineGraph X: $xMin, $xMax, $xAxisScale")
-            Log.d("김진영TAG", "LineGraph Y: $yMin, $yMax, $yAxisScale")
-
             Canvas(modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxHeight()

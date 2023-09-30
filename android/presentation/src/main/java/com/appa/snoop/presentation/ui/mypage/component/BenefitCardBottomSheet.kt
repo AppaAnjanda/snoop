@@ -1,7 +1,6 @@
 package com.appa.snoop.presentation.ui.mypage.component
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import com.appa.snoop.presentation.ui.mypage.MyPageViewModel
+import com.appa.snoop.presentation.ui.product.ProductViewModel
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import ir.kaaveh.sdpcompose.sdp

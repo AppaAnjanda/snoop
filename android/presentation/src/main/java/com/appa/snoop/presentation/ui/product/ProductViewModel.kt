@@ -5,8 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.category.Product
+import com.appa.snoop.domain.model.product.AlertPrice
 import com.appa.snoop.domain.model.product.GraphItem
 import com.appa.snoop.domain.model.product.Timing
+import com.appa.snoop.domain.model.product.WishProduct
+import com.appa.snoop.domain.model.wishbox.WishBox
 import com.appa.snoop.domain.usecase.product.GetProductDetailUseCase
 import com.appa.snoop.domain.usecase.product.GetProductGraphUseCase
 import com.appa.snoop.domain.usecase.product.GetProductTimingUseCase
@@ -48,6 +51,10 @@ class ProductViewModel @Inject constructor(
     private val _productGraphState =
         MutableStateFlow(listOf(GraphItem("", 0)))
     var productGraphState: StateFlow<List<GraphItem>> = _productGraphState.asStateFlow()
+
+    private val _wishState =
+        MutableStateFlow(WishProduct(0, false, "", "", 0))
+    var wishState: StateFlow<WishProduct> = _wishState.asStateFlow()
 
     fun getProductDetail(productCode: String) {
         viewModelScope.launch {
@@ -117,6 +124,24 @@ class ProductViewModel @Inject constructor(
 
                 else -> {
                     Log.d(TAG, "getProductGraph: 상품 그래프 조회 실패")
+                }
+            }
+        }
+    }
+
+    fun registWishProduct(productCode: String, price: Int) {
+        viewModelScope.launch {
+            val encoder = UrlUtil.encodeProductCode(productCode = productCode)
+            val result = registWishProductUseCase.invoke(encoder, AlertPrice(price))
+
+            when (result) {
+                is NetworkResult.Success -> {
+                    _wishState.emit(result.data)
+                    Log.d(TAG, "registWishProduct: ${result.data}")
+                }
+
+                else -> {
+                    Log.d(TAG, "registWishProduct: 상품 찜 등록 실패")
                 }
             }
         }
