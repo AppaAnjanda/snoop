@@ -41,6 +41,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -66,9 +67,12 @@ import com.appa.snoop.presentation.common.topbar.component.CategoryTopbar
 import com.appa.snoop.presentation.navigation.NavUtil
 import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.category.component.BottomSheetItem
+import com.appa.snoop.presentation.ui.category.component.CategoryBottomSheet
 import com.appa.snoop.presentation.ui.category.component.CategoryItem
+import com.appa.snoop.presentation.ui.category.component.DrawerSheetItem
 import com.appa.snoop.presentation.ui.category.component.PriceRangeView
 import com.appa.snoop.presentation.ui.category.component.SnoopSearchBar
+import com.appa.snoop.presentation.ui.main.MainViewModel
 import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
@@ -98,10 +102,9 @@ fun CategoryScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     categoryViewModel: CategoryViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel,
     showSnackBar: (String) -> Unit
 ) {
-    val scrollState = rememberScrollState()
-    val scrollableState = rememberScrollableState{ 1f }
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
     val pagingData = categoryViewModel.pagingDataFlow.collectAsLazyPagingItems()
@@ -111,6 +114,20 @@ fun CategoryScreen(
 
     val snackState = remember { SnackbarHostState() }
 
+    val sheetState = rememberModalBottomSheetState()
+    if (sheetState.isVisible) {
+        CategoryBottomSheet(
+            categoryViewModel = categoryViewModel,
+            mainViewModel = mainViewModel,
+            navController = navController,
+            sheetState = sheetState,
+            snackState = snackState
+        ) {
+            scope.launch {
+                sheetState.hide()
+            }
+        }
+    }
     val wishToggleState = categoryViewModel.wishToggleState.collectAsState()
 
 //    scope.launch {
@@ -127,7 +144,8 @@ fun CategoryScreen(
             .onEach { button ->
                 when (button) {
                     CategoryTopbar.AppBarIcons.ChatIcon -> {
-                        navController.navigate(Router.CATEGORY_CHATTING_ROUTER_NAME)
+                        sheetState.partialExpand()
+                        drawerState.close()
                     }
                     CategoryTopbar.AppBarIcons.MenuIcon -> {
                         if (drawerState.isOpen)
@@ -258,7 +276,7 @@ fun CategoryScreen(
                             .padding(16.sdp)
                     ) {
                         for (it in CategoryList.list) {
-                            BottomSheetItem(
+                            DrawerSheetItem(
                                 majorName = it.majorName,
                                 categoryViewModel = categoryViewModel,
                                 categoryState = when(it.majorName) {

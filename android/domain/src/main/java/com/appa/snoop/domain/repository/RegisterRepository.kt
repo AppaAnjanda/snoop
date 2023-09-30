@@ -24,4 +24,10 @@ interface RegisterRepository {
 
     // firebase fcm token 발급
     suspend fun getFcmToken() : String
+
+    // 유저 이메일 저장
+    suspend fun putEmail(email: String)
+
+    // 유저 이메일 get
+    suspend fun getEmail(): String
 }

@@ -3,6 +3,7 @@ package com.appa.snoop.data.repository
 import android.util.Log
 import com.appa.snoop.data.local.PreferenceDataSource
 import com.appa.snoop.data.local.PreferenceDataSource.Companion.ACCESS_TOKEN
+import com.appa.snoop.data.local.PreferenceDataSource.Companion.EMAIL
 import com.appa.snoop.data.local.PreferenceDataSource.Companion.REFRESH_TOKEN
 import com.appa.snoop.data.mapper.toDomain
 import com.appa.snoop.data.mapper.toDto
@@ -63,7 +64,8 @@ class RegisterRepositoryImpl @Inject constructor(
 
     // 로그아웃
     override suspend fun logout() {
-        preferenceDatasource.remove("access_token")
+        preferenceDatasource.remove(ACCESS_TOKEN)
+        preferenceDatasource.remove(EMAIL)
     }
 
     override suspend fun getFcmToken(): String = suspendCoroutine { continuation ->
@@ -78,5 +80,15 @@ class RegisterRepositoryImpl @Inject constructor(
                     continuation.resume(token ?: "")
                 }
             }
+    }
+
+    // 이메일 정보 저장
+    override suspend fun putEmail(email: String) {
+        preferenceDatasource.putString(EMAIL, email)
+    }
+
+    // 이메일 불러오기
+    override suspend fun getEmail(): String {
+        return preferenceDatasource.getString(EMAIL) ?: "no_email_error"
     }
 }

@@ -8,7 +8,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.appa.snoop.domain.model.chat.ChatItem
+import com.appa.snoop.domain.usecase.register.EmailInputUseCase
+import com.appa.snoop.domain.usecase.register.GetEmailUseCase
 import com.appa.snoop.domain.usecase.register.GetLoginStatusUseCase
 import com.google.gson.GsonBuilder
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +20,7 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import okhttp3.internal.notifyAll
 import org.json.JSONObject
 import ua.naiksoftware.stomp.Stomp
@@ -28,7 +32,8 @@ private const val TAG = "[김희웅] ChattingViewModel"
 @SuppressLint("MutableCollectionMutableState")
 @HiltViewModel
 class ChattingViewModel @Inject constructor(
-    private val getLoginStatusUseCase: GetLoginStatusUseCase
+    private val getLoginStatusUseCase: GetLoginStatusUseCase,
+    private val getEmailUseCase: GetEmailUseCase
 ) : ViewModel() {
 //    private val _chatListState = MutableStateFlow(chatList)
 //    val chatListState = _chatListState.asStateFlow()
@@ -40,6 +45,12 @@ class ChattingViewModel @Inject constructor(
         private set
     fun recieveChat() {
         chatRecieveState++
+    }
+
+    var email by mutableStateOf("")
+        private set
+    suspend fun getEmailInfo() {
+        email = getEmailUseCase.invoke()
     }
 
     /*
@@ -142,7 +153,7 @@ class ChattingViewModel @Inject constructor(
         val data = JSONObject()
         data.put("roomidx", roomNumber.value)
         //TODO 바꿔야됨
-        data.put("email", "skdi550@nate.com")
+        data.put("email", email)
         data.put("message", msg)
 
         // 메시지를 보낼 엔드포인트 URL

@@ -73,4 +73,18 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    // 채팅방 번호 저장
+    var chatRoomId by mutableStateOf(0)
+        private set
+
+    fun chatRoomIdSetting(roomNumber: Int) {
+        chatRoomId = roomNumber
+    }
+
+    var chatRoomName by mutableStateOf("")
+        private set
+    fun chatRoomNameSetting(roomName: String) {
+        chatRoomName = roomName
+    }
 }

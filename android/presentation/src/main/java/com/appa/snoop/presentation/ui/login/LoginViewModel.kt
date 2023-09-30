@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.member.LoginInfo
+import com.appa.snoop.domain.usecase.register.EmailInputUseCase
 import com.appa.snoop.domain.usecase.register.GetFCMTokenUseCase
 import com.appa.snoop.domain.usecase.register.JwtTokenInputUseCase
 import com.appa.snoop.domain.usecase.register.LoginUseCase
@@ -21,7 +22,8 @@ private const val TAG = "[김희웅] LoginViewModel"
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val jwtTokenInputUseCase: JwtTokenInputUseCase,
-    private val getFCMTokenUseCase: GetFCMTokenUseCase
+    private val getFCMTokenUseCase: GetFCMTokenUseCase,
+    private val emailInputUseCase: EmailInputUseCase
 ) : ViewModel() {
     var textIdState by mutableStateOf("")
         private set
@@ -86,6 +88,7 @@ class LoginViewModel @Inject constructor(
                     isLoginSuccessState = true
                     loginButtonClickToggle++
                     jwtTokenInputUseCase.invoke(result.data)
+                    emailInputUseCase.invoke(textIdState)
                 }
 
                 else -> {

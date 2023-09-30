@@ -19,22 +19,28 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.appa.snoop.presentation.ui.chatting.component.BottomChatFieldView
 import com.appa.snoop.presentation.ui.chatting.component.MyChatView
 import com.appa.snoop.presentation.ui.chatting.component.OtherChatView
+import com.appa.snoop.presentation.ui.main.MainViewModel
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.effects.ChattingLaunchedEffect
 import com.appa.snoop.presentation.util.extensions.addFocusCleaner
@@ -50,8 +56,8 @@ private const val TAG = "[김희] ChattingScreen_싸피"
 fun ChattingScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    roomNumber: Int,
-    chattingViewModel: ChattingViewModel = hiltViewModel()
+    chattingViewModel: ChattingViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel
 ) {
     val imeState = rememberImeState()
     val scrollState = rememberScrollState()
@@ -59,11 +65,18 @@ fun ChattingScreen(
     val chatList = chattingViewModel.chatList.value
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+    val snackState = remember { SnackbarHostState() }
 
     //TODO 구현
     LaunchedEffect(Unit) {
-        chattingViewModel.setRoomNumber(roomNumber)
+        chattingViewModel.getEmailInfo()
+        chattingViewModel.setRoomNumber(mainViewModel.chatRoomId)
+        Log.d(TAG, "ChattingScreen: 방 번호는? ${mainViewModel.chatRoomId}")
+        Log.d(TAG, "ChattingScreen: ${chattingViewModel.email}")
         chattingViewModel.runStomp()
+        snackState.showSnackbar(
+            message = mainViewModel.chatRoomName + " 채팅방에 입장하셨습니다. 자유롭게 정보를 나눠보세요!"
+        )
     }
 //    chattingViewModel.setRoomNumber(4)
 //    chattingViewModel.runStomp()
@@ -84,6 +97,9 @@ fun ChattingScreen(
         modifier = Modifier
             .addFocusCleaner(focusManager)
             .imePadding(),
+        snackbarHost = {
+            SnackbarHost(snackState)
+        },
         bottomBar = {
             BottomChatFieldView(
                 modifier = Modifier,
@@ -109,7 +125,8 @@ fun ChattingScreen(
             modifier = modifier
                 .fillMaxSize()
                 .background(color = WhiteColor)
-                .padding(paddingValues),
+//                .padding(paddingValues)
+                .padding(top = 0.sdp, bottom = paddingValues.calculateBottomPadding(), start = paddingValues.calculateLeftPadding(LayoutDirection.Ltr), end = paddingValues.calculateRightPadding(LayoutDirection.Rtl)),
             verticalArrangement = Arrangement.spacedBy(16.sdp),
             contentPadding = PaddingValues(16.sdp),
             state = lazyState,
@@ -120,7 +137,7 @@ fun ChattingScreen(
 //                chattingViewModel.chatListState.value
             ) { chat ->
                 //TODO 이메일 Shared에서 가져와서 변경
-                if (chat.email == "skdi550@nate.com") {
+                if (chat.email == chattingViewModel.email) {
                     MyChatView(user = chat)
                 } else {
                     OtherChatView(user = chat)
