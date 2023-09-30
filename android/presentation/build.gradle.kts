@@ -84,4 +84,8 @@ dependencies {
     implementation(libs.permissions)
     // paging
     implementation(libs.androidx.paging)
+    //stomp
+    implementation(libs.stomp)
+    //rx
+    implementation(libs.bundles.rx)
 }
