@@ -25,6 +25,7 @@ public enum ErrorCode {
     NOT_ACCESS_TOKEN_TYPE(HttpStatus.UNAUTHORIZED, "A-007", "해당 토큰은 ACCESS TOKEN이 아닙니다."),
     NO_PERMISSION(HttpStatus.UNAUTHORIZED, "A-008", "권한 없음"),
     FORBIDDEN_ROLE(HttpStatus.FORBIDDEN, "A-009", "해당 Role이 아닙니다."),
+    UNAUTHORIZED_MEMBER(HttpStatus.UNAUTHORIZED, "A-001", "회원 정보가 일치하지 않습니다."),
 
     // 유저
     NOT_EXISTS_USER_ID(HttpStatus.NOT_FOUND, "U-001", "존재하지 않는 유저 아이디입니다."),
@@ -48,6 +49,9 @@ public enum ErrorCode {
     NOT_EXISTS_FOOD_PRODUCT(HttpStatus.NOT_FOUND, "P-004", "식품 상품이 존재하지 않습니다."),
     NOT_EXISTS_PRODUCT(HttpStatus.NOT_FOUND, "P-005", "상품이 존재하지 않습니다."),
     NOT_EXISTS_CATEGORY(HttpStatus.NOT_FOUND, "P-006", "상품 카테고리가 존재하지 않습니다."),
+
+    // 알림
+    NOT_EXISTS_ALERT_HISTORY(HttpStatus.NOT_FOUND, "H-001", "알림기록이 존재하지 않습니다."),
 
     // 찜 상품
     NOT_EXISTS_WISHBOX_ID(HttpStatus.NOT_FOUND, "W-001", "찜 상품이 존재하지 않습니다."),
