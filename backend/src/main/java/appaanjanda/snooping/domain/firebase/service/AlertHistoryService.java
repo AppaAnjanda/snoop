@@ -28,6 +28,7 @@ public class AlertHistoryService {
         List<AlertHistoryDto> alertHistoryDtos = new ArrayList<>();
         for (AlertHistory alertHistory : alertHistories) {
             AlertHistoryDto alertHistoryDto = AlertHistoryDto.builder()
+                    .alertId(alertHistory.getId())
                     .title(alertHistory.getTitle())
                     .body(alertHistory.getBody())
                     .build();
@@ -35,5 +36,17 @@ public class AlertHistoryService {
         }
 
         return alertHistoryDtos;
+    }
+
+    public void deleteAlertHistory(Long alertId, Long memberId) {
+        // 알림 기록 가져오기
+        AlertHistory alertHistory = alertHistoryRepository.findById(alertId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_ALERT_HISTORY));
+        // 본인 아닌경우
+        if (!alertHistory.getMember().getId().equals(memberId)) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED_MEMBER);
+        }
+        // 삭제
+        alertHistoryRepository.delete(alertHistory);
     }
 }
