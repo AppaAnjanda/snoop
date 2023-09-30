@@ -4,6 +4,7 @@ import appaanjanda.snooping.domain.firebase.entity.AlertHistory;
 import appaanjanda.snooping.domain.firebase.repository.AlertHistoryRepository;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class FCMNotificationService {
 
     private final FirebaseMessaging firebaseMessaging;
@@ -42,6 +44,10 @@ public class FCMNotificationService {
                     .build();
 
             try {
+                log.info("메시지 진짜 전송");
+                log.info("title {}", requestDto.getTitle());
+                log.info("body {}", requestDto.getBody());
+                log.info("token {}", member.getFirebaseToken());
                 firebaseMessaging.send(message);
 
                 // 알림 내역 저장

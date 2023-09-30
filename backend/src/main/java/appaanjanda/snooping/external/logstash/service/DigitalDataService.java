@@ -62,7 +62,21 @@ public class DigitalDataService {
                 LocalDateTime now = LocalDateTime.now();
                 int minute = now.getMinute();
 
-                if (minute < 10) {
+                // 정렬 기준
+                Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
+
+                // 가격 정보 최신순
+                List<DigitalPrice> priceList = digitalPriceRepository.findSortedByCode(productInfo.getCode(), sort);
+
+                // 마지막 가격 정보의 시간
+                DigitalPrice lastPrice = priceList.get(0);
+                LocalDateTime lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
+
+                log.info("업뎃시간 {}", lastUpdate);
+                Duration duration = Duration.between(lastUpdate, now);
+                log.info("경과시간 {}", duration);
+                // 첫타임 데이터 중복 예방
+                if (duration.toMinutes() >= 50 && minute < 10) {
                     log.info("첫타임 {}", minute);
                     createPriceData(productInfo, productInfo.getCode());
 
@@ -71,7 +85,9 @@ public class DigitalDataService {
                 if (originProduct.getPrice() != productInfo.getPrice()) {
                     log.info("가격 변동 {}", productInfo.getPrice());
                     updateData(originProduct, productInfo);
-                    updatePriceData(productInfo);
+                    if (minute >= 10) {
+                        updatePriceData(lastPrice, productInfo);
+                    }
                 }
                 String productCode = productInfo.getCode();
                 // 찜 여부 판단
@@ -124,27 +140,15 @@ public class DigitalDataService {
     }
 
     // 그 시간대의 가격 정보 업데이트
-    public void updatePriceData(ProductInfo productInfo) {
+    public void updatePriceData(DigitalPrice lastPrice, ProductInfo productInfo) {
 
-        LocalDateTime now = LocalDateTime.now();
-        log.info("가격정보 업데이트 {}", now);
-        int minute = now.getMinute();
+        log.info("가격정보 업데이트");
 
-        if (minute >= 10) {
+        // 마지막 가격 정보의 가격 업데이트
+        lastPrice.setPrice(productInfo.getPrice());
+        log.info("그 시간대 가격 업데이트 {}", productInfo.getPrice());
 
-            // 정렬 기준
-            Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
-
-            // 가격 정보 최신순
-            List<DigitalPrice> priceList = digitalPriceRepository.findSortedByCode(productInfo.getCode(), sort);
-
-            // 마지막 가격 정보의 가격 업데이트
-            DigitalPrice lastPrice = priceList.get(0);
-            lastPrice.setPrice(productInfo.getPrice());
-            log.info("그 시간대 가격 업데이트 {}", productInfo.getPrice());
-
-            digitalPriceRepository.save(lastPrice);
-        }
+        digitalPriceRepository.save(lastPrice);
     }
 
     // 가격 정보 생성

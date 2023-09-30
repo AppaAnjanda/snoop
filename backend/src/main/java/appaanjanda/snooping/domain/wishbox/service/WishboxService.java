@@ -117,20 +117,20 @@ public class WishboxService {
     }
 
     // 찜 상품 기져와서 업데이트
-	@Scheduled(cron = "0 */10 * * * *")
-	public void wishboxUpdate() {
-		List<Wishbox> allWishbox = wishboxRepository.findAll();
-
-		for (Wishbox wishbox : allWishbox) {
-			String productCode = wishbox.getProductCode();
-			if (wishbox.getProvider().equals("쿠팡")){ continue;
-//				coupangCrawlingCaller.oneProductSearch(productCode);
-
-			} else {
-				naverApiCaller.oneProductSearch(productCode);
-			}
-		}
-	}
+//	@Scheduled(cron = "0 */10 * * * *")
+//	public void wishboxUpdate() {
+//		List<Wishbox> allWishbox = wishboxRepository.findAll();
+//
+//		for (Wishbox wishbox : allWishbox) {
+//			String productCode = wishbox.getProductCode();
+//			if (wishbox.getProvider().equals("쿠팡")){ continue;
+////				coupangCrawlingCaller.oneProductSearch(productCode);
+//
+//			} else {
+//				naverApiCaller.oneProductSearch(productCode);
+//			}
+//		}
+//	}
 
     // 찜 상품 알림 가격 변경
     public WishboxResponseDto updateAlertPrice(Long memberId, Long wishboxId, UpdateAlertPriceRequestDto updateAlertPriceRequestDto) {

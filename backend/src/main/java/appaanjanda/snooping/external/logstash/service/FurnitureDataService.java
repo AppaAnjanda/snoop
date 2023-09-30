@@ -1,5 +1,6 @@
 package appaanjanda.snooping.external.logstash.service;
 
+import appaanjanda.snooping.domain.product.entity.price.FoodPrice;
 import appaanjanda.snooping.domain.product.entity.price.FurniturePrice;
 import appaanjanda.snooping.domain.product.entity.product.FurnitureProduct;
 import appaanjanda.snooping.domain.product.repository.price.FurniturePriceRepository;
@@ -57,15 +58,28 @@ public class FurnitureDataService {
                 LocalDateTime now = LocalDateTime.now();
                 int minute = now.getMinute();
 
-                if (minute < 10) {
-                    createPriceData(productInfo, productInfo.getCode());
+                // 정렬 기준
+                Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
 
+                // 가격 정보 최신순
+                List<FurniturePrice> priceList = furniturePriceRepository.findSortedByCode(productInfo.getCode(), sort);
+
+                // 마지막 가격 정보의 시간
+                FurniturePrice lastPrice = priceList.get(0);
+                LocalDateTime lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
+
+                Duration duration = Duration.between(lastUpdate, now);
+                // 첫타임 데이터 중복 예방
+                if (duration.toMinutes() >= 50 && minute < 10) {
+                    createPriceData(productInfo, productInfo.getCode());
                 }
                 // 가격이 바뀌면 업데이트
                 if (originProduct.getPrice() != productInfo.getPrice()) {
                     log.info("가격 변동 {}", productInfo.getPrice());
                     updateData(originProduct, productInfo);
-                    updatePriceData(productInfo);
+                    if (minute >= 10) {
+                        updatePriceData(lastPrice, productInfo);
+                    }
                 }
                 String productCode = productInfo.getCode();
                 // 찜 여부 판단
@@ -113,25 +127,13 @@ public class FurnitureDataService {
     }
 
     // 그 시간대의 가격 정보 업데이트
-    public void updatePriceData(ProductInfo productInfo) {
+    public void updatePriceData(FurniturePrice lastPrice, ProductInfo productInfo) {
 
-        LocalDateTime now = LocalDateTime.now();
-        int minute = now.getMinute();
+        // 마지막 가격 정보의 가격 업데이트
+        lastPrice.setPrice(productInfo.getPrice());
 
-        if (minute >= 10) {
+        furniturePriceRepository.save(lastPrice);
 
-            // 정렬 기준
-            Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
-
-            // 가격 정보 최신순
-            List<FurniturePrice> priceList = furniturePriceRepository.findSortedByCode(productInfo.getCode(), sort);
-
-            // 마지막 가격 정보의 가격 업데이트
-            FurniturePrice lastPrice = priceList.get(0);
-            lastPrice.setPrice(productInfo.getPrice());
-
-            furniturePriceRepository.save(lastPrice);
-        }
     }
 
     // 가격 정보 생성

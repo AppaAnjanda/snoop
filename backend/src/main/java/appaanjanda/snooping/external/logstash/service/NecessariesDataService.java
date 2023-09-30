@@ -1,5 +1,6 @@
 package appaanjanda.snooping.external.logstash.service;
 
+import appaanjanda.snooping.domain.product.entity.price.FoodPrice;
 import appaanjanda.snooping.domain.product.entity.price.NecessariesPrice;
 import appaanjanda.snooping.domain.product.entity.product.NecessariesProduct;
 import appaanjanda.snooping.domain.product.repository.price.NecessariesPriceRepository;
@@ -57,15 +58,28 @@ public class NecessariesDataService {
                 LocalDateTime now = LocalDateTime.now();
                 int minute = now.getMinute();
 
+                // 정렬 기준
+                Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
+
+                // 가격 정보 최신순
+                List<NecessariesPrice> priceList = necessariesPriceRepository.findSortedByCode(productInfo.getCode(), sort);
+
+                // 마지막 가격 정보의 시간
+                NecessariesPrice lastPrice = priceList.get(0);
+                LocalDateTime lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
+
+                Duration duration = Duration.between(lastUpdate, now);
+                // 첫타임 데이터 중복 예방
                 if (minute < 10) {
                     createPriceData(productInfo, productInfo.getCode());
-
                 }
                 // 가격이 바뀌면 업데이트
                 if (originProduct.getPrice() != productInfo.getPrice()) {
                     log.info("가격 변동 {}", productInfo.getPrice());
                     updateData(originProduct, productInfo);
-                    updatePriceData(productInfo);
+                    if (minute >= 10) {
+                        updatePriceData(lastPrice, productInfo);
+                    }
                 }
                 String productCode = productInfo.getCode();
                 // 찜 여부 판단
@@ -112,25 +126,13 @@ public class NecessariesDataService {
     }
 
     // 그 시간대의 가격 정보 업데이트
-    public void updatePriceData(ProductInfo productInfo) {
+    public void updatePriceData(NecessariesPrice lastPrice, ProductInfo productInfo) {
 
-        LocalDateTime now = LocalDateTime.now();
-        int minute = now.getMinute();
+        // 마지막 가격 정보의 가격 업데이트
+        lastPrice.setPrice(productInfo.getPrice());
 
-        if (minute >= 10) {
+        necessariesPriceRepository.save(lastPrice);
 
-            // 정렬 기준
-            Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
-
-            // 가격 정보 최신순
-            List<NecessariesPrice> priceList = necessariesPriceRepository.findSortedByCode(productInfo.getCode(), sort);
-
-            // 마지막 가격 정보의 가격 업데이트
-            NecessariesPrice lastPrice = priceList.get(0);
-            lastPrice.setPrice(productInfo.getPrice());
-
-            necessariesPriceRepository.save(lastPrice);
-        }
     }
 
     // 가격 정보 생성
