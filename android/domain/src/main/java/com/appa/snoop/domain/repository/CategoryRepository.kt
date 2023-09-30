@@ -31,4 +31,13 @@ interface CategoryRepository {
 
     // 위시리스트 토글
     suspend fun postWishToggle(productCode: String): NetworkResult<Wish>
+
+    // 검색기록 조회
+    suspend fun getSearchHistory(
+    ): NetworkResult<List<String>>
+
+    // 검색기록 삭제
+    suspend fun deleteSearchHistory(
+        keyword: String
+    ): NetworkResult<String>
 }

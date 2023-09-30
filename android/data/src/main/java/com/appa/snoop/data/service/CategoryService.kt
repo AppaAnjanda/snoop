@@ -2,6 +2,7 @@ package com.appa.snoop.data.service
 
 import com.appa.snoop.data.model.category.response.ProductPagingResponse
 import com.appa.snoop.data.model.category.response.WishToggleResponse
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -29,4 +30,13 @@ interface CategoryService {
     suspend fun postWishToggle(
         @Path("productCode") productCode: String
     ) : WishToggleResponse
+
+    @GET("api/search/history")
+    suspend fun getSearchHistory(
+    ) : List<String>
+
+    @DELETE("api/search/history/{keyword}")
+    suspend fun deleteSearchHistory(
+        @Path("keyword") keyword: String
+    ): String
 }

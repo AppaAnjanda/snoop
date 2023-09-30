@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -39,6 +40,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -108,13 +110,11 @@ fun CategoryScreen(
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
     val pagingData = categoryViewModel.pagingDataFlow.collectAsLazyPagingItems()
-
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val sheetState = rememberModalBottomSheetState()
     val lazyState = rememberLazyGridState()
-
     val snackState = remember { SnackbarHostState() }
 
-    val sheetState = rememberModalBottomSheetState()
     if (sheetState.isVisible) {
         CategoryBottomSheet(
             categoryViewModel = categoryViewModel,
@@ -128,16 +128,6 @@ fun CategoryScreen(
             }
         }
     }
-    val wishToggleState = categoryViewModel.wishToggleState.collectAsState()
-
-//    scope.launch {
-//        categoryViewModel.wishToggleState.collectLatest {
-//            snackState.showSnackbar(
-//                message = "위시리스트에 추가되었습니다.",
-//                actionLabel = "확인하러 가기 ->"
-//            )
-//        }
-//    }
 
     LaunchedEffect(key1 = Unit) {
         CategoryTopbar.buttons
@@ -170,35 +160,6 @@ fun CategoryScreen(
         }
     }
 
-    // TODO 끝까지 내리면 다시 처음으로 돌아가는 버그가 있음
-    LaunchedEffect(pagingData.itemCount) {
-//        lazyState.scrollToItem(0)
-//        showSnackBar("끝")
-    }
-
-//    LaunchedEffect(wishToggleState.value) {
-//        if (wishToggleState.value > 0) {
-//            val job = scope.launch {
-////                when(
-//                snackState.showSnackbar(
-//                    message = "위시리스트에 담겼습니다.",
-//                    duration = SnackbarDuration.Indefinite,
-//                    actionLabel = "찜 목록 보러가기 ->"
-//                )
-////                )) {
-////                    SnackbarResult.ActionPerformed -> {
-////                        navController.navigate(Router.MAIN_LIKE_ITEM_ROUTER_NAME)
-////                    }
-////                    else -> {
-////
-////                    }
-////                }
-//            }
-//            delay(1500L)
-//            job.cancel()
-//        }
-//    }
-
     ModalNavigationDrawer(
         modifier = Modifier
             .addFocusCleaner(focusManager),
@@ -219,6 +180,7 @@ fun CategoryScreen(
                             .wrapContentHeight(),
                         focusManager = focusManager,
                         categoryViewModel = categoryViewModel,
+                        mainViewModel = mainViewModel,
                         showSnackBar = showSnackBar,
                         onSearching = {
                             categoryViewModel.getProductListByKeywordPaging(categoryViewModel.textSearchState)
@@ -368,14 +330,13 @@ fun CategoryScreen(
                             pagingData.itemCount,
                             key = {
                                 pagingData[it]!!.code
-                            }
+                            },
                         ) {
                             CategoryItem(
                                 modifier = Modifier,
-                                product = pagingData[it]!!,
+                                product = if (pagingData[it]!!.wishYn) pagingData[it]!! else pagingData[it]!!,
                                 onItemClicked = {
 //                                    navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
-
                                     val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
                                         "{productCode}",
                                         pagingData[it]!!.code
@@ -383,8 +344,7 @@ fun CategoryScreen(
                                     navController.navigate(route)
                                 },
                                 onLikeClicked = {
-//                                    var heart = !pagingData[it]!!.wishYn
-//                                    var heart by remember { mutableStateOf(pagingData[it]!!.wishYn) }
+                                    pagingData[it]!!.wishYn = !pagingData[it]!!.wishYn
 
                                     // TODO 구현 찜 토글
                                     scope.launch {

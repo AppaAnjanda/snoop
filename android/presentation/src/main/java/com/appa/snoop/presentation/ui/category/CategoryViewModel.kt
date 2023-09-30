@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -13,14 +14,17 @@ import androidx.paging.cachedIn
 import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.domain.model.category.ProductPaging
+import com.appa.snoop.domain.usecase.category.DeleteSearchHistoryUseCase
 import com.appa.snoop.domain.usecase.category.GetProductListByCategoryUseCase
 import com.appa.snoop.domain.usecase.category.GetProductListByKeywordUseCase
+import com.appa.snoop.domain.usecase.category.GetSearchHistoryUseCase
 import com.appa.snoop.domain.usecase.category.PostWishToggleUseCase
 import com.appa.snoop.domain.usecase.register.GetLoginStatusUseCase
 import com.appa.snoop.presentation.ui.category.utils.ProductCategoryPagingDataSource
 import com.appa.snoop.presentation.ui.category.utils.ProductKeywordPagingDataSource
 import com.appa.snoop.presentation.util.PriceUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,7 +39,9 @@ class CategoryViewModel @Inject constructor(
     private val getProductListByCategoryUseCase: GetProductListByCategoryUseCase,
     private val getProductListByKeywordUseCase: GetProductListByKeywordUseCase,
     private val getLoginStatusUseCase: GetLoginStatusUseCase,
-    private val postWishToggleUseCase: PostWishToggleUseCase
+    private val postWishToggleUseCase: PostWishToggleUseCase,
+    private val getSearchHistoryUseCase: GetSearchHistoryUseCase,
+    private val deleteSearchHistoryUseCase: DeleteSearchHistoryUseCase
 ) : ViewModel() {
 
     companion object {
@@ -49,9 +55,6 @@ class CategoryViewModel @Inject constructor(
 
     fun setTextSearch(str: String) {
         textSearchState = str
-        when {
-
-        }
     }
 
     var digitalCategoryState by mutableStateOf(false)
@@ -242,4 +245,44 @@ class CategoryViewModel @Inject constructor(
 //    }
 
     suspend fun toggled(productCode: String) = postWishToggleUseCase.invoke(productCode)
+
+    // 검색기록
+    var searchHistoryList by mutableStateOf(listOf<String>())
+        private set
+    fun getSearchHistory() {
+        viewModelScope.launch() {
+            val result = getSearchHistoryUseCase.invoke()
+
+            when (result) {
+                is NetworkResult.Success -> {
+                    searchHistoryList = result.data
+                }
+                else -> {
+                    Log.e(TAG, "getSearchHistory: 검색기록 가져오기 통신 오류입니다.")
+                }
+            }
+        }
+    }
+
+    fun deleteHistory(keyword: String) {
+        viewModelScope.launch {
+            val result = deleteSearchHistoryUseCase.invoke(keyword)
+
+            when (result) {
+                is NetworkResult.Success -> {
+//                    getSearchHistory()
+//                    delete()
+                }
+                else -> {
+                    Log.e(TAG, "deleteHistory: 검색기록 삭제 통신 오류입니다.")
+                }
+            }
+        }
+    }
+
+    var deleteState by mutableStateOf(0)
+        private set
+    fun delete() {
+        deleteState++
+    }
 }

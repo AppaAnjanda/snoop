@@ -38,4 +38,15 @@ class CategoryRepositoryImpl @Inject constructor(
     ): NetworkResult<Wish> {
         return handleApi { categoryService.postWishToggle(productCode).toDomain() }
     }
+
+    override suspend fun getSearchHistory(
+    ): NetworkResult<List<String>> {
+        return handleApi { categoryService.getSearchHistory() }
+    }
+
+    override suspend fun deleteSearchHistory(
+        keyword: String
+    ): NetworkResult<String> {
+        return handleApi { categoryService.deleteSearchHistory(keyword) }
+    }
 }
