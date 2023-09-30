@@ -29,7 +29,7 @@ class MyPageViewModel @Inject constructor(
     val cardsState: StateFlow<List<BenefitCard>> = _cardsState.asStateFlow()
 
     private val _recentProductState =
-        MutableStateFlow(listOf(Product("", "", "", "", "", 0, "", "", "", "", false)))
+        MutableStateFlow(listOf(Product("", "", "", "", "", 0, "", "", "", "", false, false)))
     var recentProductState: StateFlow<List<Product>> = _recentProductState.asStateFlow()
 
     init {

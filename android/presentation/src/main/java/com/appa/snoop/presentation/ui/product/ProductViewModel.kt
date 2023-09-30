@@ -12,6 +12,7 @@ import com.appa.snoop.domain.usecase.product.GetProductGraphUseCase
 import com.appa.snoop.domain.usecase.product.GetProductTimingUseCase
 import com.appa.snoop.domain.usecase.product.GetRecommendProductUseCase
 import com.appa.snoop.domain.usecase.product.RefreshProductUseCase
+import com.appa.snoop.domain.usecase.product.RegistWishProductUseCase
 import com.appa.snoop.presentation.util.UrlUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,11 +29,12 @@ class ProductViewModel @Inject constructor(
     private val getProductTimingUseCase: GetProductTimingUseCase,
     private val refreshProductUseCase: RefreshProductUseCase,
     private val getRecommendProductUseCase: GetRecommendProductUseCase,
-    private val getProductGraphUseCase: GetProductGraphUseCase
+    private val getProductGraphUseCase: GetProductGraphUseCase,
+    private val registWishProductUseCase: RegistWishProductUseCase
 ) : ViewModel() {
 
     private val _productState =
-        MutableStateFlow(Product("", "", "", "", "", 0, "", "", "", "", false))
+        MutableStateFlow(Product("", "", "", "", "", 0, "", "", "", "", false, false))
     var productState: StateFlow<Product> = _productState.asStateFlow()
 
     private val _timingState =
@@ -40,7 +42,7 @@ class ProductViewModel @Inject constructor(
     var timingState: StateFlow<Timing> = _timingState.asStateFlow()
 
     private val _recommendProductState =
-        MutableStateFlow(listOf(Product("", "", "", "", "", 0, "", "", "", "", false)))
+        MutableStateFlow(listOf(Product("", "", "", "", "", 0, "", "", "", "", false, false)))
     var recommendProductState: StateFlow<List<Product>> = _recommendProductState.asStateFlow()
 
     private val _productGraphState =
