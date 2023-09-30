@@ -1,5 +1,6 @@
 package appaanjanda.snooping.external.logstash.service;
 
+import appaanjanda.snooping.domain.product.entity.price.DigitalPrice;
 import appaanjanda.snooping.domain.product.entity.price.FoodPrice;
 import appaanjanda.snooping.domain.product.entity.product.FoodProduct;
 import appaanjanda.snooping.domain.product.repository.price.FoodPriceRepository;
@@ -55,15 +56,28 @@ public class FoodDataService {
                 LocalDateTime now = LocalDateTime.now();
                 int minute = now.getMinute();
 
-                if (minute < 10) {
-                    createPriceData(productInfo, productInfo.getCode());
+                // 정렬 기준
+                Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
 
+                // 가격 정보 최신순
+                List<FoodPrice> priceList = foodPriceRepository.findSortedByCode(productInfo.getCode(), sort);
+
+                // 마지막 가격 정보의 시간
+                FoodPrice lastPrice = priceList.get(0);
+                LocalDateTime lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
+
+                Duration duration = Duration.between(lastUpdate, now);
+                // 첫타임 데이터 중복 예방
+                if (duration.toMinutes() >= 50 && minute < 10) {
+                    createPriceData(productInfo, productInfo.getCode());
                 }
                 // 가격이 바뀌면 업데이트
                 if (originProduct.getPrice() != productInfo.getPrice()) {
                     log.info("가격 변동 {}", productInfo.getPrice());
                     updateData(originProduct, productInfo);
-                    updatePriceData(productInfo);
+                    if (minute >= 10) {
+                        updatePriceData(lastPrice, productInfo);
+                    }
                 }
                 String productCode = productInfo.getCode();
                 // 찜 여부 판단
@@ -110,25 +124,13 @@ public class FoodDataService {
     }
 
     // 그 시간대의 가격 정보 업데이트
-    public void updatePriceData(ProductInfo productInfo) {
+    public void updatePriceData(FoodPrice lastPrice, ProductInfo productInfo) {
 
-        LocalDateTime now = LocalDateTime.now();
-        int minute = now.getMinute();
+        // 마지막 가격 정보의 가격 업데이트
+        lastPrice.setPrice(productInfo.getPrice());
 
-        if (minute >= 10) {
+        foodPriceRepository.save(lastPrice);
 
-            // 정렬 기준
-            Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
-
-            // 가격 정보 최신순
-            List<FoodPrice> priceList = foodPriceRepository.findSortedByCode(productInfo.getCode(), sort);
-
-            // 마지막 가격 정보의 가격 업데이트
-            FoodPrice lastPrice = priceList.get(0);
-            lastPrice.setPrice(productInfo.getPrice());
-
-            foodPriceRepository.save(lastPrice);
-        }
     }
 
     // 가격 정보 생성
