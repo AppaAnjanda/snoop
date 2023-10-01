@@ -15,4 +15,10 @@ interface HomeRepository {
 
     // 식품 인기 상품 조회
     suspend fun getPopularFoodList() : NetworkResult<List<Product>>
+
+    // 찜 기반 상품 추천
+    suspend fun getRecommendProductList() : NetworkResult<List<Product>>
+
+    // 인기 검색어 조회
+    suspend fun getHotKeywordList() : NetworkResult<List<String>>
 }

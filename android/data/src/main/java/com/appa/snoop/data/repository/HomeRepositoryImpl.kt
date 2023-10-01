@@ -28,4 +28,12 @@ class HomeRepositoryImpl @Inject constructor(
         return handleApi { homeService.getPopularFoodList().map{ it.toDomain() } }
     }
 
+    override suspend fun getRecommendProductList(): NetworkResult<List<Product>> {
+        return handleApi { homeService.getRecommendProductList().map{ it.toDomain() } }
+    }
+
+    override suspend fun getHotKeywordList(): NetworkResult<List<String>> {
+        return handleApi { homeService.getHotKeywordList() }
+    }
+
 }

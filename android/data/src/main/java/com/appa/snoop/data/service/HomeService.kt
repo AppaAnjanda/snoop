@@ -20,4 +20,12 @@ interface HomeService {
     // 식품 인기 상품 조회
     @GET("api/home/hotProduct/food")
     suspend fun getPopularFoodList() : List<ProductResponse>
+
+    // 찜 기반 상품 추천
+    @GET("api/home/recommend/byWishbox")
+    suspend fun getRecommendProductList() : List<ProductResponse>
+
+    // 인기 검색어 조회
+    @GET("api/home/hotKeyword")
+    suspend fun getHotKeywordList() : List<String>
 }
