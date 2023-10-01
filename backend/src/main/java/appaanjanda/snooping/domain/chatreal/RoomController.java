@@ -89,6 +89,8 @@ public class RoomController {
 //				.build();
 //	}
 
+	@Operation(summary = "Room 입장 후 이전 채팅 50개 보기", description = "Room 입장시 이전 50개의 채팅 목록 조회 ", tags = { "Room Controller" })
+	@SecurityRequirement(name = "Bearer Authentication")
 	@GetMapping("/room/{roomId}/{page}")
 	public ChatResponse getRoom(@PathVariable Long roomId, @MemberInfo MembersInfo membersInfo,
 								@PathVariable int page) {
