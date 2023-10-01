@@ -27,8 +27,10 @@ public class ChatService {
 
         ChatDocument chatDocument = ChatDocument.builder()
                 .roomIdx(request.getRoomidx())
+                .email(request.getEmail())
                 .senderName(request.getSender())
                 .msg(request.getMsg())
+                .imageUrl(request.getImageUrl())
                 .createdAt(formattedDate)
                 .localDateTime(LocalDateTime.now())
                 .build();

@@ -1,5 +1,11 @@
 package appaanjanda.snooping.domain.chatreal;
 
+import appaanjanda.snooping.domain.chat.ChatRequest;
+import appaanjanda.snooping.domain.chat.ChatResponse;
+import appaanjanda.snooping.domain.member.entity.Member;
+import appaanjanda.snooping.domain.member.repository.MemberRepository;
+import appaanjanda.snooping.global.error.code.ErrorCode;
+import appaanjanda.snooping.global.error.exception.BusinessException;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +27,7 @@ public class RoomController {
 
 	private final ChatRoomRepository chatRoomRepository;
 	private final ChatRepository chatRepository;
+	private final MemberRepository memberRepository;
 
 	// 채팅방 목록 조회
 	@GetMapping("/rooms")
@@ -61,9 +68,23 @@ public class RoomController {
 	@SecurityRequirement(name = "Bearer Authentication")
 	@Operation(summary = "Room 입장 후 이전 채팅 50개 보기", description = "Room 입장시 이전 50개의 채팅 목록 조회 ", tags = { "Room Controller" })
 	@GetMapping("/room/{roomId}")
-	public Page<ChatDocument> getRoom(@PathVariable Long roomId, @MemberInfo MembersInfo membersInfo, Pageable pageable) {
+	public Page<ChatRequest> getRoom(@PathVariable Long roomId, @MemberInfo MembersInfo membersInfo, Pageable pageable) {
 		log.info("# get Char Room, roomId = [{}]", roomId);
-        return chatRepository.findByRoomIdxOrderByCreatedAtDesc(roomId, pageable);
+
+		Page<ChatDocument> chatDocuments = chatRepository.findByRoomIdxOrderByCreatedAtDesc(roomId, pageable);
+        return chatDocuments.map(this::convertToChatRequest);
+	}
+
+	private ChatRequest convertToChatRequest(ChatDocument chatDocument) {
+
+		return ChatRequest.builder()
+				.roomidx(chatDocument.getRoomIdx())
+				.email(chatDocument.getEmail())
+				.sender(chatDocument.getSenderName())
+				.msg(chatDocument.getMsg())
+				.imageUrl(chatDocument.getImageUrl())
+				.time(chatDocument.getCreatedAt())
+				.build();
 	}
 }
 
