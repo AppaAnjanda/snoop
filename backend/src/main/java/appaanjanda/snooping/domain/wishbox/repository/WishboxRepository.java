@@ -19,7 +19,7 @@ public interface WishboxRepository extends JpaRepository<Wishbox, Long> {
     @Query("SELECT w.productCode FROM Wishbox w")
     Set<String> findAllProductCode();
 
-    @Query("SELECT w.productCode, w.provider FROM Wishbox w")
+    @Query("SELECT DISTINCT w.productCode, w.provider FROM Wishbox w")
     Set<Object[]> findAllProductCodeAndProvider();
 
     // 회원 찜 목록중 상품 코드 일치 목록
