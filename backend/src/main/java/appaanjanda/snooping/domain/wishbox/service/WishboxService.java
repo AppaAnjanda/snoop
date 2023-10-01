@@ -22,6 +22,7 @@ import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -119,6 +120,12 @@ public class WishboxService {
     // 찜 상품 기져와서 업데이트
 	@Scheduled(cron = "0 */10 * * * *")
 	public void wishboxUpdate() {
+        LocalDateTime now = LocalDateTime.now();
+        if (now.getMinute() == 0) {
+            // 정각일 때는 실행하지 않음
+            return;
+        }
+
 		Set<Object[]> allWishboxCode = wishboxRepository.findAllProductCodeAndProvider();
 
 		for (Object[] wishbox : allWishboxCode) {
