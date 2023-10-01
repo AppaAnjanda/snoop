@@ -28,6 +28,7 @@ import com.appa.snoop.presentation.ui.theme.BlackColor
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
+const val baseImgUrl = "https://velog.velcdn.com/images/heeung/post/5f8cf415-76fb-4b2b-ba6e-1dabd59dd217/image.png"
 @Composable
 fun OtherChatView(
     modifier: Modifier = Modifier,
@@ -35,7 +36,7 @@ fun OtherChatView(
 ) {
     Row {
         ChatProfileView(
-            profileUrl = user.imageUrl
+            profileUrl = user.imageUrl ?: baseImgUrl
         )
         Spacer(modifier = modifier.width(8.sdp))
         Column(

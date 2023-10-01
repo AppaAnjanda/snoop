@@ -222,28 +222,6 @@ class CategoryViewModel @Inject constructor(
     // 로그인 유뮤 판단
     suspend fun isLogined() = getLoginStatusUseCase.invoke()
 
-    // 위시리스트 담기 기능
-    private val _wishToggleState = MutableStateFlow<Int>(0)
-    val wishToggleState = _wishToggleState.asStateFlow()
-
-//    fun postWishToggle(productCode: String) {
-//        viewModelScope.launch {
-//            val result = postWishToggleUseCase.invoke(productCode)
-//
-//            when(result) {
-//                is NetworkResult.Success -> {
-//                    if (result.data.wishYn) {
-//                        _wishToggleState.value++
-//                    }
-//                    Log.d(TAG, "postWishToggle: 위시리스트 토글 api통신 정상 처리 입니다. 현재 토글 값? -> ${result.data.wishYn}")
-//                }
-//                else -> {
-//                    Log.d(TAG, "postWishToggle: 위시리스트 토글 api통신 오류입니다.")
-//                }
-//            }
-//        }
-//    }
-
     suspend fun toggled(productCode: String) = postWishToggleUseCase.invoke(productCode)
 
     // 검색기록

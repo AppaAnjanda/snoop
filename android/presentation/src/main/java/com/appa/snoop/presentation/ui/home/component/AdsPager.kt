@@ -41,7 +41,6 @@ import kotlinx.coroutines.withContext
 @Composable
 fun MultipleImageView(
     modifier: Modifier = Modifier,
-//    images: List<Image>
     imageLinks: List<String>,
     imageLinksToCoupang: List<String>
 ) {
@@ -113,13 +112,11 @@ fun MultipleImageView(
 fun ImageViewWithNumber(
     modifier: Modifier = Modifier,
     number: Int,
-//    images: List<Image>
     imageLinks: List<String>,
     imageLinksToCoupang: List<String>
 ) {
     val context = LocalContext.current
     AsyncImage(
-//        model = imageLinks[number],
         model = ImageRequest.Builder(LocalContext.current)
             .data(imageLinks[number])
             .build(),

@@ -18,7 +18,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.appa.snoop.domain.model.chat.ChatItem
-import com.appa.snoop.presentation.ui.chatting.dummyChat1
 import com.appa.snoop.presentation.ui.theme.BlackColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor_70
 import ir.kaaveh.sdpcompose.sdp
@@ -74,12 +73,4 @@ fun MyChatView(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MyChattingViewPreview() {
-    MyChatView(
-        user = dummyChat1
-    )
 }

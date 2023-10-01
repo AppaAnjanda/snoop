@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.appa.snoop.presentation.ui.chatting.component.BottomChatFieldView
 import com.appa.snoop.presentation.ui.chatting.component.MyChatView
 import com.appa.snoop.presentation.ui.chatting.component.OtherChatView
@@ -66,6 +67,7 @@ fun ChattingScreen(
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
     val snackState = remember { SnackbarHostState() }
+    val pagingData = chattingViewModel.pagingDataFlow.collectAsLazyPagingItems()
 
     //TODO 구현
     LaunchedEffect(Unit) {
@@ -74,9 +76,12 @@ fun ChattingScreen(
         Log.d(TAG, "ChattingScreen: 방 번호는? ${mainViewModel.chatRoomId}")
         Log.d(TAG, "ChattingScreen: ${chattingViewModel.email}")
         chattingViewModel.runStomp()
-        snackState.showSnackbar(
-            message = mainViewModel.chatRoomName + " 채팅방에 입장하셨습니다. 자유롭게 정보를 나눠보세요!"
-        )
+        scope.launch {
+            snackState.showSnackbar(
+                message = mainViewModel.chatRoomName + " 채팅방에 입장하셨습니다. 자유롭게 정보를 나눠보세요!"
+            )
+        }
+        chattingViewModel.getChatList(mainViewModel.chatRoomId)
     }
 //    chattingViewModel.setRoomNumber(4)
 //    chattingViewModel.runStomp()
@@ -125,8 +130,12 @@ fun ChattingScreen(
             modifier = modifier
                 .fillMaxSize()
                 .background(color = WhiteColor)
-//                .padding(paddingValues)
-                .padding(top = 0.sdp, bottom = paddingValues.calculateBottomPadding(), start = paddingValues.calculateLeftPadding(LayoutDirection.Ltr), end = paddingValues.calculateRightPadding(LayoutDirection.Rtl)),
+                .padding(
+                    top = 0.sdp,
+                    bottom = paddingValues.calculateBottomPadding(),
+                    start = paddingValues.calculateLeftPadding(LayoutDirection.Ltr),
+                    end = paddingValues.calculateRightPadding(LayoutDirection.Rtl)
+                ),
             verticalArrangement = Arrangement.spacedBy(16.sdp),
             contentPadding = PaddingValues(16.sdp),
             state = lazyState,
@@ -141,6 +150,15 @@ fun ChattingScreen(
                     MyChatView(user = chat)
                 } else {
                     OtherChatView(user = chat)
+                }
+            }
+            items(
+                pagingData.itemCount
+            ) {it ->
+                if (pagingData[it]!!.email == chattingViewModel.email) {
+                    MyChatView(user = pagingData[it]!!)
+                } else {
+                    OtherChatView(user = pagingData[it]!!)
                 }
             }
         }

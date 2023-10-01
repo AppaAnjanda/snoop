@@ -3,6 +3,7 @@ package com.appa.snoop.di
 import android.content.Context
 import com.appa.snoop.data.local.PreferenceDataSource
 import com.appa.snoop.data.repository.CategoryRepositoryImpl
+import com.appa.snoop.data.repository.ChatRepositoryImpl
 import com.appa.snoop.data.repository.HomeRepositoryImpl
 import com.appa.snoop.data.repository.MemberRepositoryImpl
 import com.appa.snoop.data.repository.ProductRepositoryImpl
@@ -12,12 +13,14 @@ import com.appa.snoop.data.repository.datasource.BaseRemoteDataSource
 import com.appa.snoop.data.repository.datasourceImpl.BaseRemoteDataSourceImpl
 import com.appa.snoop.data.service.BaseService
 import com.appa.snoop.data.service.CategoryService
+import com.appa.snoop.data.service.ChatService
 import com.appa.snoop.data.service.HomeService
 import com.appa.snoop.data.service.MemberService
 import com.appa.snoop.data.service.ProductService
 import com.appa.snoop.data.service.RegisterService
 import com.appa.snoop.data.service.WishBoxService
 import com.appa.snoop.domain.repository.CategoryRepository
+import com.appa.snoop.domain.repository.ChatRepository
 import com.appa.snoop.domain.repository.HomeRepository
 import com.appa.snoop.domain.repository.MemberRepository
 import com.appa.snoop.domain.repository.ProductRepository
@@ -86,5 +89,11 @@ object RepositoryModule {
     @Singleton
     fun provideWishBoxRepository(wishBoxService: WishBoxService): WishBoxRepository {
         return WishBoxRepositoryImpl(wishBoxService = wishBoxService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatRepository(chatService: ChatService): ChatRepository {
+        return ChatRepositoryImpl(chatService = chatService)
     }
 }
