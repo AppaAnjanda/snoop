@@ -44,6 +44,7 @@ fun BottomSheet(viewModel: MyPageViewModel, sheetState: SheetState, onDismiss: (
         sheetState = sheetState,
         containerColor = WhiteColor,
         contentColor = WhiteColor,
+        tonalElevation = 0.sdp,
         onDismissRequest = {
             onDismiss()
         },

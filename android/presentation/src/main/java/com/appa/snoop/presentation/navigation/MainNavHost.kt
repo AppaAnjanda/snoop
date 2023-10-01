@@ -126,6 +126,7 @@ fun MainNavHost(
             route = Router.CATEGORY_PRODUCT_ROUTER_NAME
         ) {
             ProductDetailScreen(
+                showSnackBar = showSnackBar,
                 navController = navController
             )
         }
