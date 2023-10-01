@@ -2,6 +2,7 @@ package appaanjanda.snooping.external.logstash.service;
 
 import appaanjanda.snooping.domain.product.entity.price.FoodPrice;
 import appaanjanda.snooping.domain.product.entity.price.FurniturePrice;
+import appaanjanda.snooping.domain.product.entity.price.NecessariesPrice;
 import appaanjanda.snooping.domain.product.entity.product.FurnitureProduct;
 import appaanjanda.snooping.domain.product.repository.price.FurniturePriceRepository;
 import appaanjanda.snooping.domain.product.repository.product.FurnitureProductRepository;
@@ -39,15 +40,15 @@ public class FurnitureDataService {
         // 업데이트 경과 시간
         Duration duration = Duration.between(lastUpdateTime, now);
         // 10분 지났으면 업데이트 진행
-        if (duration.toMinutes() >= 10) return true;
+        if (duration.toMinutes() > 9) return true;
         else return false;
     }
 
     // 현재 가격과 저장된 가격 비교
     public void checkPrice(ProductInfo productInfo) {
-        String currentName = productInfo.getProductName();
+        String currentCode = productInfo.getCode();
 
-        Optional<FurnitureProduct> existProduct = furnitureProductRepository.findByProductName(currentName);
+        Optional<FurnitureProduct> existProduct = furnitureProductRepository.findByCode(currentCode);
         // 일치 상품 있는 경우
         if (existProduct.isPresent()) {
             FurnitureProduct originProduct = existProduct.get();
@@ -63,14 +64,11 @@ public class FurnitureDataService {
 
                 // 가격 정보 최신순
                 List<FurniturePrice> priceList = furniturePriceRepository.findSortedByCode(productInfo.getCode(), sort);
-                FurniturePrice lastPrice = null;
-                LocalDateTime lastUpdate = LocalDateTime.MIN;
+
                 // 마지막 가격 정보의 시간
-                if (!priceList.isEmpty()) {
-                    lastPrice = priceList.get(0);
-                    lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
-                    log.info("업뎃시간 {}", lastUpdate);
-                }
+                FurniturePrice lastPrice = priceList.get(0);
+                LocalDateTime lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
+
                 Duration duration = Duration.between(lastUpdate, now);
                 // 첫타임 데이터 중복 예방
                 if (duration.toMinutes() >= 50 && minute < 10) {
@@ -80,7 +78,7 @@ public class FurnitureDataService {
                 if (originProduct.getPrice() != productInfo.getPrice()) {
                     log.info("가격 변동 {}", productInfo.getPrice());
                     updateData(originProduct, productInfo);
-                    if (minute >= 10 && lastPrice != null) {
+                    if (minute >= 10) {
                         updatePriceData(lastPrice, productInfo);
                     }
                 }

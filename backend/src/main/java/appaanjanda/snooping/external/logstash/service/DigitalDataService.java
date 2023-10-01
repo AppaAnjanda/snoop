@@ -2,6 +2,7 @@ package appaanjanda.snooping.external.logstash.service;
 
 
 import appaanjanda.snooping.domain.product.entity.price.DigitalPrice;
+import appaanjanda.snooping.domain.product.entity.price.FoodPrice;
 import appaanjanda.snooping.domain.product.entity.product.DigitalProduct;
 import appaanjanda.snooping.domain.product.repository.price.DigitalPriceRepository;
 import appaanjanda.snooping.domain.product.repository.product.DigitalProductRepository;
@@ -40,7 +41,7 @@ public class DigitalDataService {
         Duration duration = Duration.between(lastUpdateTime, now);
         log.info("경과 시간 : {}", duration);
         // 10분 지났으면 업데이트 진행
-        if (duration.toMinutes() >= 10) {
+        if (duration.toMinutes() > 9) {
             log.info("업데이트 진행 !");
             return true;
         } else return false;
@@ -48,12 +49,12 @@ public class DigitalDataService {
 
     // 현재 가격과 저장된 가격 비교
     public void checkPrice(ProductInfo productInfo) {
-        String currentName = productInfo.getProductName();
+        String currentCode = productInfo.getCode();
 
-        Optional<DigitalProduct> existProduct = digitalProductRepository.findByProductName(currentName);
+        Optional<DigitalProduct> existProduct = digitalProductRepository.findByCode(currentCode);
         // 일치 상품 있는 경우
         if (existProduct.isPresent()) {
-            log.info("일치 상품 있음 {}", currentName);
+            log.info("일치 상품 있음 {}", currentCode);
             DigitalProduct originProduct = existProduct.get();
             // 최근에 업데이트 되었으면 중단
             if (checkUpdateTime(originProduct)) {
@@ -67,14 +68,11 @@ public class DigitalDataService {
 
                 // 가격 정보 최신순
                 List<DigitalPrice> priceList = digitalPriceRepository.findSortedByCode(productInfo.getCode(), sort);
-                DigitalPrice lastPrice = null;
-                LocalDateTime lastUpdate = LocalDateTime.MIN;
+
                 // 마지막 가격 정보의 시간
-                if (!priceList.isEmpty()) {
-                    lastPrice = priceList.get(0);
-                    lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
-                    log.info("업뎃시간 {}", lastUpdate);
-                }
+                DigitalPrice lastPrice = priceList.get(0);
+                LocalDateTime lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
+                log.info("업뎃시간 {}", lastUpdate);
 
                 Duration duration = Duration.between(lastUpdate, now);
                 log.info("경과시간 {}", duration);
@@ -82,13 +80,12 @@ public class DigitalDataService {
                 if (duration.toMinutes() >= 50 && minute < 10) {
                     log.info("첫타임 {}", minute);
                     createPriceData(productInfo, productInfo.getCode());
-
                 }
                 // 가격이 바뀌면 업데이트
                 if (originProduct.getPrice() != productInfo.getPrice()) {
                     log.info("가격 변동 {}", productInfo.getPrice());
                     updateData(originProduct, productInfo);
-                    if (minute >= 10 && lastPrice != null) {
+                    if (minute >= 10) {
                         updatePriceData(lastPrice, productInfo);
                     }
                 }
