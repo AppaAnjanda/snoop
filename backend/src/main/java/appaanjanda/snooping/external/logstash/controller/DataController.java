@@ -1,5 +1,6 @@
 package appaanjanda.snooping.external.logstash.controller;
 
+import appaanjanda.snooping.domain.product.entity.price.DigitalPrice;
 import appaanjanda.snooping.external.logstash.entity.ProductInfo;
 import appaanjanda.snooping.external.logstash.service.DigitalDataService;
 import appaanjanda.snooping.external.logstash.service.FoodDataService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -84,6 +86,17 @@ public class DataController {
             ProductInfo productInfo = objectMapper.treeToValue(parsedJson, ProductInfo.class);
 
             foodDataService.checkPrice(productInfo);
+        } catch (Exception e) {
+            throw new RuntimeException("요청 에러", e);
+        }
+    }
+
+    @Operation(summary = "test", description = "", tags = { "Logstash-Data Controller" })
+    @PostMapping("/test")
+    public DigitalPrice test(@RequestBody ProductInfo productInfo) {
+        try {
+
+            return digitalDataService.test(productInfo);
         } catch (Exception e) {
             throw new RuntimeException("요청 에러", e);
         }

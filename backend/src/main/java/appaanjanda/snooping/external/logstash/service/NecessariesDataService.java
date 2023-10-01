@@ -1,6 +1,7 @@
 package appaanjanda.snooping.external.logstash.service;
 
 import appaanjanda.snooping.domain.product.entity.price.FoodPrice;
+import appaanjanda.snooping.domain.product.entity.price.FurniturePrice;
 import appaanjanda.snooping.domain.product.entity.price.NecessariesPrice;
 import appaanjanda.snooping.domain.product.entity.product.NecessariesProduct;
 import appaanjanda.snooping.domain.product.repository.price.NecessariesPriceRepository;
@@ -63,21 +64,24 @@ public class NecessariesDataService {
 
                 // 가격 정보 최신순
                 List<NecessariesPrice> priceList = necessariesPriceRepository.findSortedByCode(productInfo.getCode(), sort);
-
+                NecessariesPrice lastPrice = null;
+                LocalDateTime lastUpdate = LocalDateTime.MIN;
                 // 마지막 가격 정보의 시간
-                NecessariesPrice lastPrice = priceList.get(0);
-                LocalDateTime lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
-
+                if (!priceList.isEmpty()) {
+                    lastPrice = priceList.get(0);
+                    lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
+                    log.info("업뎃시간 {}", lastUpdate);
+                }
                 Duration duration = Duration.between(lastUpdate, now);
                 // 첫타임 데이터 중복 예방
-                if (minute < 10) {
+                if (duration.toMinutes() >= 50 && minute < 10) {
                     createPriceData(productInfo, productInfo.getCode());
                 }
                 // 가격이 바뀌면 업데이트
                 if (originProduct.getPrice() != productInfo.getPrice()) {
                     log.info("가격 변동 {}", productInfo.getPrice());
                     updateData(originProduct, productInfo);
-                    if (minute >= 10) {
+                    if (minute >= 10 && lastPrice != null) {
                         updatePriceData(lastPrice, productInfo);
                     }
                 }

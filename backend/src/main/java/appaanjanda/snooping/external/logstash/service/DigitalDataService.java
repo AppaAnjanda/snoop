@@ -53,7 +53,7 @@ public class DigitalDataService {
         Optional<DigitalProduct> existProduct = digitalProductRepository.findByProductName(currentName);
         // 일치 상품 있는 경우
         if (existProduct.isPresent()) {
-            log.info("일치 상품 있음");
+            log.info("일치 상품 있음 {}", currentName);
             DigitalProduct originProduct = existProduct.get();
             // 최근에 업데이트 되었으면 중단
             if (checkUpdateTime(originProduct)) {
@@ -67,12 +67,15 @@ public class DigitalDataService {
 
                 // 가격 정보 최신순
                 List<DigitalPrice> priceList = digitalPriceRepository.findSortedByCode(productInfo.getCode(), sort);
-
+                DigitalPrice lastPrice = null;
+                LocalDateTime lastUpdate = LocalDateTime.MIN;
                 // 마지막 가격 정보의 시간
-                DigitalPrice lastPrice = priceList.get(0);
-                LocalDateTime lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
+                if (!priceList.isEmpty()) {
+                    lastPrice = priceList.get(0);
+                    lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
+                    log.info("업뎃시간 {}", lastUpdate);
+                }
 
-                log.info("업뎃시간 {}", lastUpdate);
                 Duration duration = Duration.between(lastUpdate, now);
                 log.info("경과시간 {}", duration);
                 // 첫타임 데이터 중복 예방
@@ -85,7 +88,7 @@ public class DigitalDataService {
                 if (originProduct.getPrice() != productInfo.getPrice()) {
                     log.info("가격 변동 {}", productInfo.getPrice());
                     updateData(originProduct, productInfo);
-                    if (minute >= 10) {
+                    if (minute >= 10 && lastPrice != null) {
                         updatePriceData(lastPrice, productInfo);
                     }
                 }
@@ -169,5 +172,31 @@ public class DigitalDataService {
         log.info("시간 생성 {}", now);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         return now.format(formatter);
+    }
+
+    public DigitalPrice test(ProductInfo productInfo) {
+        String currentName = productInfo.getProductName();
+
+        Optional<DigitalProduct> existProduct = digitalProductRepository.findByProductName(currentName);
+        // 일치 상품 있는 경우
+        if (existProduct.isPresent()) {
+            log.info("일치 상품 있음");
+            DigitalProduct originProduct = existProduct.get();
+            // 최근에 업데이트 되었으면 중단
+            if (checkUpdateTime(originProduct)) {
+
+                // 그 시간대의 첫 데이터인지 확인
+                LocalDateTime now = LocalDateTime.now();
+                int minute = now.getMinute();
+
+                // 정렬 기준
+                Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
+
+                List<DigitalPrice> priceList = digitalPriceRepository.findSortedByCode(productInfo.getCode(), sort);
+                return priceList.get(0);
+
+            }
+        }
+        return null;
     }
 }

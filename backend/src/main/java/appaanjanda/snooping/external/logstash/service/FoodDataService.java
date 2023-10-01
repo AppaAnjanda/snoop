@@ -61,11 +61,14 @@ public class FoodDataService {
 
                 // 가격 정보 최신순
                 List<FoodPrice> priceList = foodPriceRepository.findSortedByCode(productInfo.getCode(), sort);
-
+                FoodPrice lastPrice = null;
+                LocalDateTime lastUpdate = LocalDateTime.MIN;
                 // 마지막 가격 정보의 시간
-                FoodPrice lastPrice = priceList.get(0);
-                LocalDateTime lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
-
+                if (!priceList.isEmpty()) {
+                    lastPrice = priceList.get(0);
+                    lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
+                    log.info("업뎃시간 {}", lastUpdate);
+                }
                 Duration duration = Duration.between(lastUpdate, now);
                 // 첫타임 데이터 중복 예방
                 if (duration.toMinutes() >= 50 && minute < 10) {
@@ -75,7 +78,7 @@ public class FoodDataService {
                 if (originProduct.getPrice() != productInfo.getPrice()) {
                     log.info("가격 변동 {}", productInfo.getPrice());
                     updateData(originProduct, productInfo);
-                    if (minute >= 10) {
+                    if (minute >= 10 && lastPrice != null) {
                         updatePriceData(lastPrice, productInfo);
                     }
                 }
