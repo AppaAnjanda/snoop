@@ -102,4 +102,19 @@ public class WishboxController {
         String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
         return ResponseEntity.ok(wishboxService.addWishbox(membersInfo.getId(), decodedProductCode));
     }
+
+    // 찜 상품 삭제 (체크박스)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "조회 성공",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "400", description = "요청 오류 "),
+            @ApiResponse(responseCode = "500", description = "서버 내부 오류")
+    })
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "찜 상품 삭제 (체크박스)", description = "찜 페이지에서 선택항목에 대한 찜 상품 삭제", tags = { "Wishbox Controller" })
+    @DeleteMapping("/remove")
+    public ResponseEntity<String> removeWishboxCheck(@MemberInfo MembersInfo membersInfo, @RequestBody RemoveWishboxRequestDto removeWishboxRequestDto) {
+        return ResponseEntity.ok(wishboxService.removeWishboxCheck(removeWishboxRequestDto.getWishboxIds()));
+    }
 }
