@@ -31,6 +31,7 @@ public class AlertHistoryService {
                     .alertId(alertHistory.getId())
                     .title(alertHistory.getTitle())
                     .body(alertHistory.getBody())
+                    .time(alertHistory.getCreateTime())
                     .build();
             alertHistoryDtos.add(alertHistoryDto);
         }
@@ -38,6 +39,7 @@ public class AlertHistoryService {
         return alertHistoryDtos;
     }
 
+    // 알림 삭제
     public void deleteAlertHistory(Long alertId, Long memberId) {
         // 알림 기록 가져오기
         AlertHistory alertHistory = alertHistoryRepository.findById(alertId)
@@ -48,5 +50,16 @@ public class AlertHistoryService {
         }
         // 삭제
         alertHistoryRepository.delete(alertHistory);
+    }
+
+    // 알림 전체 삭제
+    public void deleteAllAlertHistory(Long memberId) {
+        // 현재 유저 알림 목록
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
+        List<AlertHistory> alertHistories = alertHistoryRepository.findAllByMember(member);
+
+        // 삭제
+        alertHistoryRepository.deleteAll(alertHistories);
     }
 }
