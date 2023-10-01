@@ -1,25 +1,20 @@
 package appaanjanda.snooping.domain.chat;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import lombok.*;
+import java.util.List;
 
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ChatResponse {
+    private List<ChatRequest> contents;
+    private Integer currentPage;
+    private Integer totalPage;
 
-    private Long chatRoomNo;
-    private String sender;
-    private String msg;
-
-
-    @Builder
-    public ChatResponse(Long chatRoomNo, String sender, String senderUuid, String msg, String imgUrl) {
-        this.chatRoomNo = chatRoomNo;
-        this.sender = sender;
-        this.msg = msg;
-    }
-
-    // 생성자, getter, setter 등이 필요하면 추가하세요.
 }
-
