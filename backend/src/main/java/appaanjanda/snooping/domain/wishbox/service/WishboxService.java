@@ -119,11 +119,13 @@ public class WishboxService {
     // 찜 상품 기져와서 업데이트
 	@Scheduled(cron = "0 */10 * * * *")
 	public void wishboxUpdate() {
-		List<Wishbox> allWishbox = wishboxRepository.findAll();
+		Set<Object[]> allWishboxCode = wishboxRepository.findAllProductCodeAndProvider();
 
-		for (Wishbox wishbox : allWishbox) {
-			String productCode = wishbox.getProductCode();
-			if (wishbox.getProvider().equals("쿠팡")){ continue;
+		for (Object[] wishbox : allWishboxCode) {
+            String productCode = (String) wishbox[0];
+            String provider = (String) wishbox[1];
+
+			if (provider.equals("쿠팡")){ continue;
 //				coupangCrawlingCaller.oneProductSearch(productCode);
 
 			} else {
