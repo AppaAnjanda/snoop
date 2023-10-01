@@ -242,4 +242,14 @@ public class WishboxService {
 		fcmNotificationService.sendNotification(requestDto);
 
 	}
+
+    // 찜 삭제 (체크박스)
+    public String removeWishboxCheck(List<Long> wishboxIds) {
+        for (Long wishboxId : wishboxIds) {
+            Wishbox wishbox = wishboxRepository.findById(wishboxId)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_WISHBOX_ID));
+            wishboxRepository.delete(wishbox);
+        }
+        return wishboxIds.toString();
+    }
 }
