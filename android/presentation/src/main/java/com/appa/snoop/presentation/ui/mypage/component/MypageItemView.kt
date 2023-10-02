@@ -29,7 +29,6 @@ import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.product.HomeLabel
 import com.appa.snoop.presentation.common.product.ProductItemView
 import com.appa.snoop.presentation.navigation.Router
-import com.appa.snoop.presentation.ui.home.dumy.itemList
 import com.appa.snoop.presentation.ui.mypage.common.MyPageLabel
 import com.appa.snoop.presentation.util.extensions.noRippleClickable
 import ir.kaaveh.sdpcompose.sdp

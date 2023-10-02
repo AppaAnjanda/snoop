@@ -96,24 +96,31 @@ class SignupViewModel @Inject constructor(
     var isSignupSuccess by mutableStateOf(false)
         private set
 
-    fun signUp(email: String, password: String, nickname: String, cardList: List<String> = listOf()) = viewModelScope.launch {
-        Log.d(TAG, "signUp: email $email")
-        Log.d(TAG, "signUp: password $password")
-        Log.d(TAG, "signUp: nickname $nickname")
-        Log.d(TAG, "signUp: cardList $cardList")
-        val register = Register(
-            email = email,
-            password = password,
-            nickname = nickname,
-        )
-        _signUpState.emit(signUpUseCase.invoke(register))
+    fun signUp(email: String, password: String, nickname: String, cardList: List<String> = listOf()) {
+        viewModelScope.launch {
+            Log.d(TAG, "signUp: email $email")
+            Log.d(TAG, "signUp: password $password")
+            Log.d(TAG, "signUp: nickname $nickname")
+//        Log.d(TAG, "signUp: cardList $cardList")
+            val register = Register(
+                email = email,
+                password = password,
+                nickname = nickname,
+            )
 
-        if (_signUpState.value is NetworkResult.Success) {
-            Log.d(TAG, "signUp 서버통신 성공적")
-            isSignupSuccess = true
-        } else {
-            Log.d(TAG, "signUp 서버통신 실패")
+            val result = signUpUseCase.invoke(register)
+//            val result = _signUpState.emit(signUpUseCase.invoke(register))
+
+            when (result) {
+                is NetworkResult.Success -> {
+                    Log.d(TAG, "signUp 서버통신 성공적")
+                    isSignupSuccess = true
+                }
+
+                else -> {
+                    Log.d(TAG, "signUp 서버통신 실패")
+                }
+            }
         }
-
     }
 }

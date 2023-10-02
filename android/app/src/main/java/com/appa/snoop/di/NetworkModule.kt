@@ -62,6 +62,7 @@ object NetworkModule {
             GsonConverterFactory.create(
                 GsonBuilder()
                     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                    .setLenient()
                     .create()
             )
         )

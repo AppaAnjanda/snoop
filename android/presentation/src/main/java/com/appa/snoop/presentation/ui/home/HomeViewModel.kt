@@ -10,6 +10,7 @@ import com.appa.snoop.domain.usecase.home.GetPopularDigitalListUseCase
 import com.appa.snoop.domain.usecase.home.GetPopularFoodListUseCase
 import com.appa.snoop.domain.usecase.home.GetPopularFurnitureListUseCase
 import com.appa.snoop.domain.usecase.home.GetPopularNecessariesListUseCase
+import com.appa.snoop.domain.usecase.home.GetRecommendProductListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +23,8 @@ class HomeViewModel @Inject constructor(
     private val getPopularDigitalListUseCase: GetPopularDigitalListUseCase,
     private val getPopularNecessariesListUseCase: GetPopularNecessariesListUseCase,
     private val getPopularFurnitureListUseCase: GetPopularFurnitureListUseCase,
-    private val getPopularFoodListUseCase: GetPopularFoodListUseCase
+    private val getPopularFoodListUseCase: GetPopularFoodListUseCase,
+    private val getRecommendProductListUseCase: GetRecommendProductListUseCase
 ) : ViewModel() {
 
     private val _digitalList = MutableStateFlow<List<Product>>(emptyList())
@@ -36,6 +38,9 @@ class HomeViewModel @Inject constructor(
 
     private val _foodList = MutableStateFlow<List<Product>>(emptyList())
     val foodList = _foodList.asStateFlow()
+
+    private val _recommendList = MutableStateFlow<List<Product>>(emptyList())
+    val recommendList = _recommendList.asStateFlow()
 
     fun getPopularDigitalList() {
         viewModelScope.launch {
@@ -92,6 +97,21 @@ class HomeViewModel @Inject constructor(
                 }
                 else -> {
                     Log.e(TAG, "식품 인기 상품 목록 조회 실패")
+                }
+            }
+        }
+    }
+
+    fun getRecommendProductList() {
+        viewModelScope.launch {
+            val result = getRecommendProductListUseCase.invoke()
+
+            when(result) {
+                is NetworkResult.Success -> {
+                    _recommendList.emit(result.data)
+                }
+                else -> {
+                    Log.e(TAG, "추천 상품 목록 조회 실패")
                 }
             }
         }

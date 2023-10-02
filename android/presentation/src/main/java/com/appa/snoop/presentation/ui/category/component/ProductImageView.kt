@@ -43,7 +43,6 @@ import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.LottieAnim
 import com.appa.snoop.presentation.ui.category.utils.LoadingLottieAnimation
 import com.appa.snoop.presentation.ui.category.utils.convertNaverUrl
-import com.appa.snoop.presentation.ui.home.dumy.imageLinksToCoupang
 import com.appa.snoop.presentation.ui.theme.BlackColor
 import com.appa.snoop.presentation.ui.theme.BlueColor
 import com.appa.snoop.presentation.ui.theme.GreenColor
