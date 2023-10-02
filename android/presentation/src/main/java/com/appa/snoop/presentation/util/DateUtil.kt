@@ -20,8 +20,8 @@ object DateUtil {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun dateToString(timeString: String): String {
-        val time = timeString.slice(0..22)
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
+        val time = timeString.slice(0..18)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val dateTime = LocalDateTime.parse(time, formatter)
 
         val currentTime = LocalDateTime.now()

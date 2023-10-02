@@ -5,6 +5,7 @@ import com.appa.snoop.data.local.PreferenceDataSource
 import com.appa.snoop.data.repository.CategoryRepositoryImpl
 import com.appa.snoop.data.repository.HomeRepositoryImpl
 import com.appa.snoop.data.repository.MemberRepositoryImpl
+import com.appa.snoop.data.repository.NotificationRepositoryImpl
 import com.appa.snoop.data.repository.ProductRepositoryImpl
 import com.appa.snoop.data.repository.RegisterRepositoryImpl
 import com.appa.snoop.data.repository.WishBoxRepositoryImpl
@@ -14,12 +15,14 @@ import com.appa.snoop.data.service.BaseService
 import com.appa.snoop.data.service.CategoryService
 import com.appa.snoop.data.service.HomeService
 import com.appa.snoop.data.service.MemberService
+import com.appa.snoop.data.service.NotificationService
 import com.appa.snoop.data.service.ProductService
 import com.appa.snoop.data.service.RegisterService
 import com.appa.snoop.data.service.WishBoxService
 import com.appa.snoop.domain.repository.CategoryRepository
 import com.appa.snoop.domain.repository.HomeRepository
 import com.appa.snoop.domain.repository.MemberRepository
+import com.appa.snoop.domain.repository.NotificationRepository
 import com.appa.snoop.domain.repository.ProductRepository
 import com.appa.snoop.domain.repository.RegisterRepository
 import com.appa.snoop.domain.repository.WishBoxRepository
@@ -86,5 +89,11 @@ object RepositoryModule {
     @Singleton
     fun provideWishBoxRepository(wishBoxService: WishBoxService): WishBoxRepository {
         return WishBoxRepositoryImpl(wishBoxService = wishBoxService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationRepository(notificationService: NotificationService): NotificationRepository {
+        return NotificationRepositoryImpl(notificationService = notificationService)
     }
 }

@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder
 import com.appa.snoop.data.interceptor.RequestInterceptor
 import com.appa.snoop.data.interceptor.ResponseInterceptor
 import com.appa.snoop.data.service.HomeService
+import com.appa.snoop.data.service.NotificationService
 import com.appa.snoop.data.service.ProductService
 import com.appa.snoop.data.service.WishBoxService
 import dagger.Module
@@ -108,4 +109,10 @@ object NetworkModule {
     fun provideWishBoxService(
         retrofit: Retrofit
     ): WishBoxService = retrofit.create(WishBoxService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideNotificationService(
+        retrofit: Retrofit
+    ): NotificationService = retrofit.create(NotificationService::class.java)
 }
