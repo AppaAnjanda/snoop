@@ -39,16 +39,12 @@ fun SelelctComponent(
             horizontalArrangement = Arrangement.Start
         ) {
             AllDelete("모두 선택", checkState) { onChangeCheckedState() }
-            Text(
-                text = "|",
-                style = TextStyle(fontSize = 12.ssp, fontWeight = FontWeight.Normal),
-            )
-            Spacer(modifier = Modifier.width(4.sdp))
-            Text(
-                text = "삭제",
-                style = TextStyle(fontSize = 12.ssp, fontWeight = FontWeight.Normal),
-            )
         }
+        Spacer(modifier = Modifier.width(4.sdp))
+        Text(
+            text = "삭제",
+            style = TextStyle(fontSize = 12.ssp, fontWeight = FontWeight.Normal),
+        )
     }
 }
 

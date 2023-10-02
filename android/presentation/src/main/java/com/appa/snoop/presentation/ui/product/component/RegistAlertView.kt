@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -147,7 +148,7 @@ fun RegistAlertButton(
     onAlertRequest: () -> Unit
 ) {
     Row(
-        modifier = Modifier.padding(start = 26.sdp, end = 26.sdp),
+        modifier = Modifier.padding(start = 24.sdp, end = 24.sdp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -157,7 +158,7 @@ fun RegistAlertButton(
                 .weight(1f)
                 .height(40.sdp),
             colors = ButtonDefaults.buttonColors(WhiteColor),
-            border = BorderStroke(0.5.dp, Color.LightGray)
+            border = BorderStroke(0.5.dp, Color.LightGray),
         ) {
             Text(
                 text = "찜 등록",
