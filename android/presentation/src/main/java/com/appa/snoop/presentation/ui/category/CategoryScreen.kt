@@ -11,6 +11,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -80,6 +81,7 @@ import com.appa.snoop.presentation.ui.theme.PrimaryColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.extensions.RoundRectangle
 import com.appa.snoop.presentation.util.extensions.addFocusCleaner
+import com.appa.snoop.presentation.util.extensions.horizontalScrollWithScrollbar
 import com.kakao.sdk.friend.m.s
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -326,6 +328,7 @@ fun CategoryScreen(
                     LazyVerticalGrid(
                         modifier = Modifier
                             .fillMaxSize(),
+//                            .horizontalScrollWithScrollbar(scrollState),
                         columns = GridCells.Fixed(SIZE),
                         state = lazyState
                     ) {

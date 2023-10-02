@@ -30,6 +30,7 @@ import com.appa.snoop.presentation.ui.home.component.HomeItemListTitleView
 import com.appa.snoop.presentation.ui.home.component.MultipleImageView
 import com.appa.snoop.presentation.ui.login.component.GoSignupText
 import com.appa.snoop.presentation.util.effects.MainLaunchedEffect
+import com.appa.snoop.presentation.util.extensions.verticalScrollWithScrollbar
 import ir.kaaveh.sdpcompose.sdp
 
 @Composable
@@ -59,6 +60,7 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollableState)
+//            .verticalScrollWithScrollbar(scrollableState)
 //            .background(WhiteColor),
     ) {
         if (recommendList.isNotEmpty()) {
