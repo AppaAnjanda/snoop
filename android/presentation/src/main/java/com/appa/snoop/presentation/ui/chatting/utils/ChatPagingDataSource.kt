@@ -21,6 +21,7 @@ class ChatPagingDataSource @Inject constructor(
 
             when (result) {
                 is NetworkResult.Success -> {
+                    Log.d(TAG, "load: 현재 페이지? ${result.data.currentPage}")
                     Log.d(TAG, "load: 토탈 페이지? ${result.data.totalPage}")
                     Log.d(TAG, "load: 리스트 목록 -> ${result.data.contents}")
                     LoadResult.Page(

@@ -32,6 +32,7 @@ import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.ui.theme.BackgroundColor
 import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor
+import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.extensions.noRippleClickable
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -46,6 +47,7 @@ fun BottomChatFieldView(
 ) {
     Row(
         modifier = modifier
+            .background(WhiteColor)
             .wrapContentHeight()
             .padding(top = 8.sdp, bottom = 8.sdp, start = 16.sdp),
         verticalAlignment = Alignment.CenterVertically

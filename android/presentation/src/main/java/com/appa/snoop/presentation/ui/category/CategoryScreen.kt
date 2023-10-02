@@ -277,7 +277,9 @@ fun CategoryScreen(
                 SnackbarHost(snackState)
             },
             floatingActionButton = {
-                if (pagingData.itemCount > 6) {
+//                if (pagingData.itemCount > 6) {
+                //TODO 확인 필요
+                if (lazyState.canScrollBackward) {
                     FloatingActionButton(
                         onClick = {
                             scope.launch {
@@ -293,6 +295,7 @@ fun CategoryScreen(
                         )
                     }
                 }
+//                }
             }
         ) { paddingValue ->
             paddingValue

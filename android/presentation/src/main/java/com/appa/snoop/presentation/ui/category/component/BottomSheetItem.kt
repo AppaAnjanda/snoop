@@ -6,6 +6,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -33,7 +33,6 @@ import com.appa.snoop.presentation.ui.main.MainViewModel
 import com.appa.snoop.presentation.ui.theme.BackgroundColor2
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 const val START_ROOM_NUMBER = 6
@@ -56,13 +55,14 @@ fun BottomSheetItem(
             .fillMaxWidth()
             .height(30.sdp)
             .clickable { onClick() },
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.sdp)
     ) {
         Icon(
-            painter = if (categoryState) painterResource(id = R.drawable.ic_arrow_down) else painterResource(id = R.drawable.ic_arrow_right),
+            painter = if (categoryState) painterResource(id = R.drawable.ic_arrow_down) else painterResource(id = R.drawable.ic_arrow_forward),
             contentDescription = null,
             modifier = Modifier
-                .size(16.sdp),
+                .size(8.sdp),
         )
         Text(
             text = majorName,
