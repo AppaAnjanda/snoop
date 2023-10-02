@@ -73,27 +73,30 @@ fun LikeScreen(
         allSelected = checkedStates.all { it }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(WhiteColor)
-    ) {
-        SelelctComponent(allSelected,
-            onChangeCheckedState = { toggleSelectAll() }
-        )
-        HorizontalDivider(thickness = 1.sdp, color = BackgroundColor2)
-        LazyColumn {
-            item {
-                HorizontalDivider(thickness = 6.sdp, color = BackgroundColor2)
-            }
-            itemsIndexed(checkedStates) { index, isChecked ->
-                LikeItem(item = wishboxList[index],
-                    value = isChecked,
-                    focusManager = focusManager,
-                    onCheckedChange = { toggleIndividualSelection(index) },
-                    onDeleteClick = { /* TODO delete */ },
-                    onUpdateClick = { /* TODO update */})
-                HorizontalDivider(color = BackgroundColor2)
+        Log.d(TAG, "checkedStates: $checkedStates")
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(WhiteColor)
+        ) {
+            SelelctComponent(allSelected,
+                onChangeCheckedState = { toggleSelectAll() }
+            )
+            HorizontalDivider(thickness = 1.sdp, color = BackgroundColor2)
+            LazyColumn {
+                item {
+                    HorizontalDivider(thickness = 6.sdp, color = BackgroundColor2)
+                }
+                if (checkedStates.isNotEmpty() && wishboxList.size == checkedStates.size) {
+                itemsIndexed(checkedStates) { index, isChecked ->
+                    LikeItem(item = wishboxList[index],
+                        value = isChecked,
+                        focusManager = focusManager,
+                        onCheckedChange = { toggleIndividualSelection(index) },
+                        onDeleteClick = { /* TODO delete */ },
+                        onUpdateClick = { /* TODO update */ })
+                    HorizontalDivider(color = BackgroundColor2)
+                }
             }
         }
     }

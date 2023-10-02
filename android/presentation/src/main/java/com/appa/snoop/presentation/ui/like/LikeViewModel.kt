@@ -26,7 +26,7 @@ class LikeViewModel @Inject constructor(
     private val updateWishBoxPriceUseCase: UpdateWishBoxPriceUseCase
 ) : ViewModel() {
     private val _wishboxListState =
-        MutableStateFlow(listOf(WishBox(0, false, 0, "", "", "", 0)))
+        MutableStateFlow(emptyList<WishBox>())
     var wishboxListState: StateFlow<List<WishBox>> = _wishboxListState.asStateFlow()
 
     private val _deleteWishboxState =
