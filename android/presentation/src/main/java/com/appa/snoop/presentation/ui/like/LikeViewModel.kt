@@ -7,6 +7,7 @@ import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.product.AlertPrice
 import com.appa.snoop.domain.model.wishbox.WishBox
 import com.appa.snoop.domain.model.wishbox.WishBoxDelete
+import com.appa.snoop.domain.usecase.wishbox.DeleteWishBoxListUseCase
 import com.appa.snoop.domain.usecase.wishbox.DeleteWishBoxUseCase
 import com.appa.snoop.domain.usecase.wishbox.GetWishBoxListUseCase
 import com.appa.snoop.domain.usecase.wishbox.UpdateWishBoxPriceUseCase
@@ -23,7 +24,8 @@ private const val TAG = "[김진영] LikeViewModel"
 class LikeViewModel @Inject constructor(
     private val deleteWishBoxUseCase: DeleteWishBoxUseCase,
     private val getWishBoxListUseCase: GetWishBoxListUseCase,
-    private val updateWishBoxPriceUseCase: UpdateWishBoxPriceUseCase
+    private val updateWishBoxPriceUseCase: UpdateWishBoxPriceUseCase,
+    private val deleteWishBoxListUseCase: DeleteWishBoxListUseCase
 ) : ViewModel() {
     private val _wishboxListState =
         MutableStateFlow(emptyList<WishBox>())
@@ -61,6 +63,8 @@ class LikeViewModel @Inject constructor(
             when (result) {
                 is NetworkResult.Success -> {
                     _deleteWishboxState.emit(result.data)
+                    val updatedList = _wishboxListState.value.filter { it.wishboxId != wishboxId }
+                    _wishboxListState.emit(updatedList)
                     Log.d(TAG, "deleteWishBox: ${result.data}")
                 }
 
@@ -89,5 +93,10 @@ class LikeViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    suspend fun refreshLikeList(wishboxId: Int) {
+        val updatedList = _wishboxListState.value.filter { it.wishboxId != wishboxId }
+        _wishboxListState.emit(updatedList)
     }
 }

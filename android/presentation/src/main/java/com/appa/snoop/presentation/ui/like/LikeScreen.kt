@@ -1,6 +1,5 @@
 package com.appa.snoop.presentation.ui.like
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +23,7 @@ import com.appa.snoop.presentation.ui.like.component.LikeItem
 import com.appa.snoop.presentation.ui.like.component.SelelctComponent
 import com.appa.snoop.presentation.ui.theme.BackgroundColor2
 import com.appa.snoop.presentation.ui.theme.WhiteColor
+import com.appa.snoop.presentation.util.PriceUtil
 import com.appa.snoop.presentation.util.effects.MainLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
 
@@ -39,6 +39,8 @@ fun LikeScreen(
     val focusManager = LocalFocusManager.current
 
     val wishboxList by likeViewModel.wishboxListState.collectAsState()
+    val updatedWishbox by likeViewModel.updateWishboxState.collectAsState()
+    val deletedWishbox by likeViewModel.deleteWishboxState.collectAsState()
     // 전체 아이템의 체크 상태를 저장하는 리스트
     var numberOfItems by remember {
         mutableStateOf(0)
@@ -48,15 +50,13 @@ fun LikeScreen(
     // '모두 선택' 체크박스의 상태
     var allSelected by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(key1 = Unit, key2 = updatedWishbox) {
         likeViewModel.getWishBoxList()
-        Log.d(TAG, "LikeScreen: ${wishboxList.size}")
     }
 
     LaunchedEffect(wishboxList) {
         numberOfItems = wishboxList.size
         checkedStates = List(numberOfItems) { false }
-        Log.d(TAG, "numberOfItems: $numberOfItems")
     }
 
     // '모두 선택' 체크박스 상태 변경
@@ -73,28 +73,34 @@ fun LikeScreen(
         allSelected = checkedStates.all { it }
     }
 
-        Log.d(TAG, "checkedStates: $checkedStates")
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(WhiteColor)
-        ) {
-            SelelctComponent(allSelected,
-                onChangeCheckedState = { toggleSelectAll() }
-            )
-            HorizontalDivider(thickness = 1.sdp, color = BackgroundColor2)
-            LazyColumn {
-                item {
-                    HorizontalDivider(thickness = 6.sdp, color = BackgroundColor2)
-                }
-                if (checkedStates.isNotEmpty() && wishboxList.size == checkedStates.size) {
-                itemsIndexed(checkedStates) { index, isChecked ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(WhiteColor)
+    ) {
+        SelelctComponent(allSelected,
+            onChangeCheckedState = { toggleSelectAll() }
+        )
+        HorizontalDivider(thickness = 1.sdp, color = BackgroundColor2)
+        LazyColumn {
+            item {
+                HorizontalDivider(thickness = 6.sdp, color = BackgroundColor2)
+            }
+            if (checkedStates.isNotEmpty() && wishboxList.size == checkedStates.size) {
+                itemsIndexed(items = checkedStates) { index, isChecked ->
                     LikeItem(item = wishboxList[index],
                         value = isChecked,
                         focusManager = focusManager,
                         onCheckedChange = { toggleIndividualSelection(index) },
-                        onDeleteClick = { /* TODO delete */ },
-                        onUpdateClick = { /* TODO update */ })
+                        onDeleteClick = {
+                            likeViewModel.deleteWishBox(wishboxList[index].wishboxId)
+                        },
+                        onUpdateClick = { price ->
+                            likeViewModel.updateWishBoxPrice(
+                                wishboxList[index].wishboxId,
+                                PriceUtil.parseFormattedPrice(price)
+                            )
+                        })
                     HorizontalDivider(color = BackgroundColor2)
                 }
             }

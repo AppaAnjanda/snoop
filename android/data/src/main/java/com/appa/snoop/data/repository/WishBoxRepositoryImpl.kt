@@ -8,6 +8,7 @@ import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.product.AlertPrice
 import com.appa.snoop.domain.model.wishbox.WishBox
 import com.appa.snoop.domain.model.wishbox.WishBoxDelete
+import com.appa.snoop.domain.model.wishbox.WishBoxDeleteList
 import com.appa.snoop.domain.repository.WishBoxRepository
 import javax.inject.Inject
 
@@ -25,6 +26,12 @@ class WishBoxRepositoryImpl @Inject constructor(
     override suspend fun deleteWishBox(wishboxId: Int): NetworkResult<WishBoxDelete> {
         return handleApi {
             wishBoxService.deleteWishBox(wishboxId).toDomain()
+        }
+    }
+
+    override suspend fun deleteListWishBox(wishBoxDeleteList: WishBoxDeleteList): NetworkResult<List<Int>> {
+        return handleApi {
+            wishBoxService.deleteListWishBox(wishBoxDeleteList.toDto())
         }
     }
 

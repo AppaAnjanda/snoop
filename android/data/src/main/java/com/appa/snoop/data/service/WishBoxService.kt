@@ -1,6 +1,7 @@
 package com.appa.snoop.data.service
 
 import com.appa.snoop.data.model.product.request.AlertPriceRequest
+import com.appa.snoop.data.model.wishbox.request.WishBoxDeleteListRequest
 import com.appa.snoop.data.model.wishbox.response.WishBoxDeleteResponse
 import com.appa.snoop.data.model.wishbox.response.WishBoxResponse
 import retrofit2.http.Body
@@ -18,6 +19,11 @@ interface WishBoxService {
     suspend fun deleteWishBox(
         @Path("wishboxId") wishboxId: Int
     ): WishBoxDeleteResponse
+
+    @DELETE("api/wishbox/remove")
+    suspend fun deleteListWishBox(
+        @Body wishBoxDeleteListRequest: WishBoxDeleteListRequest
+    ): List<Int>
 
     @POST("api/wishbox/update/{wishboxId}")
     suspend fun updateWishBoxPrice(
