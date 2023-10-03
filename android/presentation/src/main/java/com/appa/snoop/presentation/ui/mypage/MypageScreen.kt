@@ -1,5 +1,7 @@
 package com.appa.snoop.presentation.ui.mypage
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
@@ -29,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.appa.snoop.presentation.MainActivity
 import com.appa.snoop.presentation.navigation.ModifyProfileNav
 import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.main.MainViewModel
@@ -38,6 +41,8 @@ import com.appa.snoop.presentation.ui.mypage.component.CurrentProductItemView
 import com.appa.snoop.presentation.ui.mypage.component.LogoutDialog
 import com.appa.snoop.presentation.ui.mypage.component.MyPageInformation
 import com.appa.snoop.presentation.ui.mypage.component.SettingComponent
+import com.appa.snoop.presentation.ui.mypage.utils.findActivity
+import com.appa.snoop.presentation.ui.mypage.utils.openSourceLicenses
 import com.appa.snoop.presentation.ui.theme.BackgroundColor2
 import com.appa.snoop.presentation.util.effects.MainLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
@@ -64,6 +69,7 @@ fun MypageScreen(
         MyPageLabel.MODIFY_PROFILE,
         MyPageLabel.SELECT_CARD,
         MyPageLabel.LOGOUT,
+        MyPageLabel.OSS,
         MyPageLabel.WITHDRAWAL,
     )
     val context = LocalContext.current
@@ -132,6 +138,7 @@ fun MypageScreen(
                     }
 
                     MyPageLabel.LOGOUT -> showDialog = true
+                    MyPageLabel.OSS -> openSourceLicenses(context)
                     else -> {}
                 }
             }

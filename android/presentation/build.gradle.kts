@@ -88,4 +88,6 @@ dependencies {
     implementation(libs.stomp)
     //rx
     implementation(libs.bundles.rx)
+    // oss-licenses
+    implementation(libs.oss.licenses)
 }
