@@ -193,13 +193,16 @@ fun ProductDetailScreen(
                 }
             )
             BuyTimingView(modifier = Modifier, timing = timing.timing)
-            PriceGraph(modifier = Modifier,
-                lines = listOf(graphData),
-                productGraph = productGraph,
-                selectChipLabel = selectChip,
-                selectChips = {
-                    selectChip = it.label
-                })
+            if (productGraph.isNotEmpty()) {
+                PriceGraph(modifier = Modifier,
+                    lines = listOf(graphData),
+                    productGraph = productGraph,
+                    selectChipLabel = selectChip,
+                    selectChips = {
+                        selectChip = it.label
+                    })
+            }
+
             RecommendListView(modifier = Modifier, recommendProduct, onItemClicked = { code ->
                 val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
                     "{productCode}",

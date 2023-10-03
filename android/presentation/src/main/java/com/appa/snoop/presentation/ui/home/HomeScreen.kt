@@ -1,5 +1,6 @@
 package com.appa.snoop.presentation.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,6 +34,7 @@ import com.appa.snoop.presentation.util.effects.MainLaunchedEffect
 import com.appa.snoop.presentation.util.extensions.verticalScrollWithScrollbar
 import ir.kaaveh.sdpcompose.sdp
 
+private const val TAG = "HomeScreen_싸피"
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -83,6 +85,7 @@ fun HomeScreen(
                     product = it,
                     onItemClicked = {
                         // TODO 상세화면으로 넘어가기 추가
+                        Log.d(TAG, "HomeScreen: ${it.code}")
                         val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
                             "{productCode}",
                             it.code
@@ -110,8 +113,11 @@ fun HomeScreen(
                     modifier = Modifier,
                     product = it,
                     onItemClicked = {
-                        // TODO 상세화면으로 넘어가기 추가
-                        navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
+                        val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
+                            "{productCode}",
+                            it.code
+                        )
+                        navController.navigate(route)
                     },
                 )
             }
@@ -134,8 +140,11 @@ fun HomeScreen(
                     modifier = Modifier,
                     product = it,
                     onItemClicked = {
-                        // TODO 상세화면으로 넘어가기 추가
-                        navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
+                        val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
+                            "{productCode}",
+                            it.code
+                        )
+                        navController.navigate(route)
                     },
                 )
             }
@@ -155,8 +164,11 @@ fun HomeScreen(
                     modifier = Modifier,
                     product = it,
                     onItemClicked = {
-                        // TODO 상세화면으로 넘어가기 추가
-                        navController.navigate(Router.CATEGORY_PRODUCT_ROUTER_NAME)
+                        val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
+                            "{productCode}",
+                            it.code
+                        )
+                        navController.navigate(route)
                     },
                 )
             }

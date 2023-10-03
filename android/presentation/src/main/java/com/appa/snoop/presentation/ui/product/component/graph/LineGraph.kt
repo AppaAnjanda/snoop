@@ -50,6 +50,7 @@ import kotlin.math.ceil
  * with the xOffset where the selection occurred in the graph and the [DataPoint]s that are selected. If there
  * are multiple lines, you will get multiple data points.
  */
+private const val TAG = "LineGraph_싸피"
 @Composable
 fun LineGraph(
     plot: LinePlot, modifier: Modifier = Modifier,
@@ -303,6 +304,7 @@ private fun getXAxisScale(
     points: List<DataPoint>,
     plot: LinePlot
 ): Triple<Float, Float, Float> {
+    Log.d(TAG, "getXAxisScale: ${points}")
     val xMin = points.minOf { it.x }
     val xMax = points.maxOf { it.x }
     val totalSteps =
