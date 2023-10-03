@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.appa.snoop.domain.model.notification.Notification
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.util.DateUtil
 import ir.kaaveh.sdpcompose.sdp
@@ -50,13 +51,13 @@ fun NotificationItemComponent(item: Notification) {
                     )
                     Spacer(modifier = Modifier.size(4.sdp))
                     Text(
-                        text = "${item.type} 알림",
+                        text = item.title,
                         style = TextStyle(fontWeight = FontWeight.Normal, fontSize = 12.ssp)
                     )
                 }
                 Spacer(modifier = Modifier.size(4.sdp))
                 Text(
-                    text = "${item.name} 현재 ${item.type}입니다!",
+                    text = item.body,
                     lineHeight = 18.ssp,
                     style = TextStyle(
                         fontWeight = FontWeight.Normal,
@@ -66,7 +67,7 @@ fun NotificationItemComponent(item: Notification) {
                 )
                 Spacer(modifier = Modifier.size(8.sdp))
                 Text(
-                    text = DateUtil.dateToString(item.date),
+                    text = DateUtil.dateToString(item.createTime),
                     lineHeight = 18.ssp,
                     style = TextStyle(
                         fontWeight = FontWeight.Normal,
@@ -76,16 +77,16 @@ fun NotificationItemComponent(item: Notification) {
                 )
             }
 
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(item.img)
-                    .build(),
-                contentDescription = "상품 사진",
-                modifier = Modifier
-                    .weight(1f)
-                    .aspectRatio(1f),
-                contentScale = ContentScale.Inside
-            )
+//            AsyncImage(
+//                model = ImageRequest.Builder(LocalContext.current)
+//                    .data(item.img)
+//                    .build(),
+//                contentDescription = "상품 사진",
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .aspectRatio(1f),
+//                contentScale = ContentScale.Inside
+//            )
         }
         HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
     }

@@ -6,6 +6,7 @@ import com.appa.snoop.data.repository.CategoryRepositoryImpl
 import com.appa.snoop.data.repository.ChatRepositoryImpl
 import com.appa.snoop.data.repository.HomeRepositoryImpl
 import com.appa.snoop.data.repository.MemberRepositoryImpl
+import com.appa.snoop.data.repository.NotificationRepositoryImpl
 import com.appa.snoop.data.repository.ProductRepositoryImpl
 import com.appa.snoop.data.repository.RegisterRepositoryImpl
 import com.appa.snoop.data.repository.WishBoxRepositoryImpl
@@ -16,6 +17,7 @@ import com.appa.snoop.data.service.CategoryService
 import com.appa.snoop.data.service.ChatService
 import com.appa.snoop.data.service.HomeService
 import com.appa.snoop.data.service.MemberService
+import com.appa.snoop.data.service.NotificationService
 import com.appa.snoop.data.service.ProductService
 import com.appa.snoop.data.service.RegisterService
 import com.appa.snoop.data.service.WishBoxService
@@ -23,6 +25,7 @@ import com.appa.snoop.domain.repository.CategoryRepository
 import com.appa.snoop.domain.repository.ChatRepository
 import com.appa.snoop.domain.repository.HomeRepository
 import com.appa.snoop.domain.repository.MemberRepository
+import com.appa.snoop.domain.repository.NotificationRepository
 import com.appa.snoop.domain.repository.ProductRepository
 import com.appa.snoop.domain.repository.RegisterRepository
 import com.appa.snoop.domain.repository.WishBoxRepository
@@ -95,5 +98,11 @@ object RepositoryModule {
     @Singleton
     fun provideChatRepository(chatService: ChatService): ChatRepository {
         return ChatRepositoryImpl(chatService = chatService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationRepository(notificationService: NotificationService): NotificationRepository {
+        return NotificationRepositoryImpl(notificationService = notificationService)
     }
 }
