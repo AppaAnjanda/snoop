@@ -33,17 +33,17 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.category.utils.convertNaverUrl
-import com.appa.snoop.presentation.ui.mypage.component.BottomSheet
 import com.appa.snoop.presentation.ui.product.component.AlarmSnackBar
-import com.appa.snoop.presentation.ui.product.component.AlertBottomSheet
 import com.appa.snoop.presentation.ui.product.component.ButtonView
 import com.appa.snoop.presentation.ui.product.component.BuyTimingView
 import com.appa.snoop.presentation.ui.product.component.PriceGraph
 import com.appa.snoop.presentation.ui.product.component.ProductDetailView
 import com.appa.snoop.presentation.ui.product.component.RecommendListView
+import com.appa.snoop.presentation.ui.product.component.RegistAlertDialog
 import com.appa.snoop.presentation.ui.product.component.graph.DataPoint
 import com.appa.snoop.presentation.ui.product.data.Period
 import com.appa.snoop.presentation.ui.theme.WhiteColor
+import com.appa.snoop.presentation.util.PriceUtil
 import com.appa.snoop.presentation.util.effects.ProductLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.delay
@@ -51,11 +51,11 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "[김진영] ProductDetailScreen"
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
+    showSnackBar: (String) -> Unit,
     productViewModel: ProductViewModel = hiltViewModel()
 ) {
     val productCode = navController.currentBackStackEntry?.arguments?.getString("productCode")
@@ -64,8 +64,10 @@ fun ProductDetailScreen(
     val recommendProduct by productViewModel.recommendProductState.collectAsState()
     val productGraph by productViewModel.productGraphState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState()
     val focusManager = LocalFocusManager.current
+    val scrollState = rememberScrollState()
+    val context = LocalContext.current
+    val snackState = remember { SnackbarHostState() }
     var selectChip by remember { mutableStateOf(Period.WEEK.label) }
     var graphData by remember {
         mutableStateOf(
@@ -74,6 +76,8 @@ fun ProductDetailScreen(
             )
         )
     }
+    var alertPrice by remember { mutableStateOf(0) }
+    var alarmChecked by remember { mutableStateOf(false) }
     ProductLaunchedEffect(navController = navController)
     LaunchedEffect(productCode) {
         Log.d(TAG, "ProductDetailScreen: $productCode")
@@ -98,33 +102,82 @@ fun ProductDetailScreen(
         Log.d(TAG, "ProductDetailScreen: $graphData")
     }
 
-    var alarmChecked by remember { mutableStateOf(product.alertYn) }
+    LaunchedEffect(product) {
+        alarmChecked = product.alertYn
+        Log.d(TAG, "ProductDetailScreen: $alarmChecked, ${product.alertYn}")
+    }
 
-    if (sheetState.isVisible) {
-        AlertBottomSheet(
-            viewModel = productViewModel,
-            sheetState = sheetState,
+    // 다이얼로그
+    var showDialog by remember { mutableStateOf(false) }
+    if (showDialog && productCode != null) {
+        RegistAlertDialog(visible = showDialog,
             focusManager = focusManager,
-            onValueChanged = {
-
+            onValueChanged = { price ->
+                alertPrice = PriceUtil.parseFormattedPrice(price)
             },
-            onDismiss = {
+            onWishboxRequest = {
+                productViewModel.registWishProduct(productCode, 0)
+                showSnackBar("찜목록에 등록하였습니다!")
+                showDialog = !showDialog
+            },
+            onAlertRequest = {
+                alarmChecked = !alarmChecked
+                productViewModel.registWishProduct(productCode, alertPrice)
                 coroutineScope.launch {
-                    sheetState.hide()
+                    snackState.showSnackbar(
+                        ""
+                    )
                 }
+                showDialog = !showDialog
+            },
+            onDismissRequest = {
+                showDialog = !showDialog
             }
         )
     }
 
-    val scrollState = rememberScrollState()
-    val context = LocalContext.current
-    val snackState = remember { SnackbarHostState() }
+    // 알람 클릭
+    var alarmClicked by remember { mutableStateOf(false) }
+    LaunchedEffect(alarmClicked) {
+
+        Log.d(TAG, "alarmChecked 확인 : $alarmChecked")
+
+        // 알람 클릭이 되었을때 SnackBar Show
+        if (alarmClicked && !alarmChecked) {
+            showDialog = true
+            alarmClicked = false
+//                        coroutineScope.launch {
+//                            showDialog = true
+//                            val job = coroutineScope.launch {
+//                                snackState.showSnackbar(
+//                                    "",
+//                                    duration = SnackbarDuration.Indefinite
+//                                )
+//                            }
+//                            delay(1500L)
+//                            job.cancel()
+//                        }
+        } else if(alarmClicked && alarmChecked) {
+            // 알림이 체크 되어있는 상태에서 알림 클릭
+            alarmClicked = false
+            alarmChecked = false
+            coroutineScope.launch {
+                if (productCode != null) {
+                    Log.d(TAG, "ProductDetailScreen: 알림 해제!!")
+                    productViewModel.registWishProduct(productCode, 0)
+                }
+                showSnackBar("지정가 알림이 취소되었습니다!")
+            }
+        }
+    }
+
+
     // TODO(Domain model 가져오면 추후에 교체)
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(color = WhiteColor)
-            .padding(16.sdp),
+            .padding(start = 16.sdp, end = 16.sdp, bottom = 8.sdp),
     ) {
         Column(
             modifier = modifier
@@ -157,12 +210,12 @@ fun ProductDetailScreen(
         }
         AlarmSnackBar(
             hostState = snackState,
-            price = "2,640,000",
-            percent = 10
+            price = PriceUtil.formatPrice(alertPrice.toString()),
+            percent = PriceUtil.calculateDiscountPercentage(product.price, alertPrice).toString()
         )
         Spacer(modifier = Modifier.height(16.sdp))
         ButtonView(
-            alarmChecked = product.alertYn,
+            alarmChecked = alarmChecked,
             onBuyClicked = {
                 val url =
                     if (product.provider == "네이버")
@@ -177,24 +230,7 @@ fun ProductDetailScreen(
             },
             onAlarmClicked = {
                 if (snackState.currentSnackbarData == null) {
-
-                    // 알람을 클릭이 되었을때 SnackBar Show
-                    if (!alarmChecked) {
-                        coroutineScope.launch {
-                            sheetState.partialExpand()
-                            val job = coroutineScope.launch {
-                                snackState.showSnackbar(
-                                    "",
-                                    duration = SnackbarDuration.Indefinite
-                                )
-                            }
-                            delay(1500L)
-                            job.cancel()
-                        }
-                    } else {
-                        productViewModel
-                    }
-                    alarmChecked = !alarmChecked
+                    alarmClicked = true
                 }
             }
         )
@@ -204,5 +240,5 @@ fun ProductDetailScreen(
 @Preview
 @Composable
 fun PreviewProductDetailScreen() {
-    ProductDetailScreen(navController = rememberNavController())
+//    ProductDetailScreen(navController = rememberNavController())
 }

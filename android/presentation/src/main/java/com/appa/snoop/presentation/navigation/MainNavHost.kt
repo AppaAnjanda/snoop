@@ -17,7 +17,6 @@ import com.appa.snoop.presentation.ui.home.HomeScreen
 import com.appa.snoop.presentation.ui.like.LikeScreen
 import com.appa.snoop.presentation.ui.login.LoginScreen
 import com.appa.snoop.presentation.ui.main.MainViewModel
-import com.appa.snoop.presentation.ui.mypage.MyPageViewModel
 import com.appa.snoop.presentation.ui.mypage.MypageScreen
 import com.appa.snoop.presentation.ui.mypage.modifyprofile.ModifyProfileScreen
 import com.appa.snoop.presentation.ui.notification.NotificationScreen
@@ -67,7 +66,10 @@ fun MainNavHost(
         ) {
             Log.d(TAG, "MainNavHost: 중복 스크린입니다...")
             if (mainViewModel.loginState) {
-                LikeScreen(navController, mainViewModel)
+                LikeScreen(
+                    navController = navController,
+                    showSnackBar = showSnackBar
+                )
             } else {
                 LoginScreen(
                     navController = navController,
@@ -83,7 +85,7 @@ fun MainNavHost(
                 MypageScreen(
                     navController = navController,
                     showSnackBar = showSnackBar,
-                    mainViewModel
+                    mainViewModel = mainViewModel
                 )
             } else {
                 LoginScreen(
@@ -126,6 +128,7 @@ fun MainNavHost(
             route = Router.CATEGORY_PRODUCT_ROUTER_NAME
         ) {
             ProductDetailScreen(
+                showSnackBar = showSnackBar,
                 navController = navController
             )
         }
