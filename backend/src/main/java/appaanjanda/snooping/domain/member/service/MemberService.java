@@ -8,6 +8,7 @@ import java.util.List;
 import appaanjanda.snooping.domain.member.service.dto.*;
 import appaanjanda.snooping.global.error.exception.BusinessException;
 import appaanjanda.snooping.global.s3.S3Uploader;
+import org.elasticsearch.client.security.DeleteUserRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -127,10 +128,16 @@ public class MemberService {
     }
 
     // 유저 삭제
-    public void deleteUser(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(() ->
+    public void deleteUser(DeleteUserRequestDto requestDto) {
+
+        if(!requestDto.getPassword().equals(requestDto.getCheckPassword())){
+            throw new BusinessException(ErrorCode.INVALID_USER_DATA);
+        }
+
+        Member member = memberRepository.findMemberByEmail(requestDto.getEmail()).orElseThrow(() ->
                 new BusinessException(ErrorCode.NOT_EXISTS_USER_ID)
         );
+
         memberRepository.delete(member);
     }
 

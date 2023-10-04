@@ -44,6 +44,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mockito:mockito-core:3.12.4'
 	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
 	// spring boot 2.3 버전부터는 web 내부에 있는 validation 의존성이 없어져서 필요함.
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.6'
@@ -122,6 +124,10 @@ dependencies {
 //tasks.named('test') {
 //	useJUnitPlatform()
 //}
+
+test {
+	useJUnitPlatform()
+}
 
 tasks.withType(JavaCompile).configureEach {
 	options.compilerArgs << "-Xlint:deprecation"
