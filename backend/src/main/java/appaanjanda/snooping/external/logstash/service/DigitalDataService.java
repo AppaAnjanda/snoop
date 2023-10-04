@@ -54,8 +54,9 @@ public class DigitalDataService {
         Optional<DigitalProduct> existProduct = digitalProductRepository.findByCode(currentCode);
         // 일치 상품 있는 경우
         if (existProduct.isPresent()) {
-            log.info("일치 상품 있음 {}", currentCode);
             DigitalProduct originProduct = existProduct.get();
+            currentCode = originProduct.getCode();
+            log.info("일치 상품 있음 {}", currentCode);
             // 최근에 업데이트 되었으면 중단
             if (checkUpdateTime(originProduct)) {
 
@@ -67,7 +68,7 @@ public class DigitalDataService {
                 Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
 
                 // 가격 정보 최신순
-                List<DigitalPrice> priceList = digitalPriceRepository.findSortedByCode(productInfo.getCode(), sort);
+                List<DigitalPrice> priceList = digitalPriceRepository.findSortedByCode(currentCode, sort);
 
                 // 마지막 가격 정보의 시간
                 DigitalPrice lastPrice = priceList.get(0);
@@ -79,7 +80,7 @@ public class DigitalDataService {
                 // 첫타임 데이터 중복 예방
                 if (duration.toMinutes() >= 50 && minute < 10) {
                     log.info("첫타임 {}", minute);
-                    createPriceData(productInfo, productInfo.getCode());
+                    createPriceData(productInfo, currentCode);
                 }
                 // 가격이 바뀌면 업데이트
                 if (originProduct.getPrice() != productInfo.getPrice()) {
@@ -89,13 +90,13 @@ public class DigitalDataService {
                         updatePriceData(lastPrice, productInfo);
                     }
                 }
-                String productCode = productInfo.getCode();
+
                 // 찜 여부 판단
                 log.info("찜");
-                if (wishboxService.checkWishbox(productCode)) {
+                if (wishboxService.checkWishbox(currentCode)) {
                     // 알림여부 판단 후 가격 비교하고 알림보내기
-                    log.info("알림전송 {}", productCode);
-                    wishboxService.checkAlertPrice(productCode, productInfo.getPrice(), productInfo.getProductImage());
+                    log.info("알림전송 {}", currentCode);
+                    wishboxService.checkAlertPrice(currentCode, productInfo.getPrice(), productInfo.getProductImage());
                 }
             }
         } else {

@@ -52,6 +52,8 @@ public class FurnitureDataService {
         // 일치 상품 있는 경우
         if (existProduct.isPresent()) {
             FurnitureProduct originProduct = existProduct.get();
+            currentCode = originProduct.getCode();
+            log.info("일치 상품 있음 {}", currentCode);
             // 최근에 업데이트 되었으면 중단
             if (checkUpdateTime(originProduct)) {
 
@@ -63,8 +65,9 @@ public class FurnitureDataService {
                 Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
 
                 // 가격 정보 최신순
-                List<FurniturePrice> priceList = furniturePriceRepository.findSortedByCode(productInfo.getCode(), sort);
+                List<FurniturePrice> priceList = furniturePriceRepository.findSortedByCode(currentCode, sort);
 
+                log.info(priceList.toString());
                 // 마지막 가격 정보의 시간
                 FurniturePrice lastPrice = priceList.get(0);
                 LocalDateTime lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
@@ -72,7 +75,7 @@ public class FurnitureDataService {
                 Duration duration = Duration.between(lastUpdate, now);
                 // 첫타임 데이터 중복 예방
                 if (duration.toMinutes() >= 50 && minute < 10) {
-                    createPriceData(productInfo, productInfo.getCode());
+                    createPriceData(productInfo, currentCode);
                 }
                 // 가격이 바뀌면 업데이트
                 if (originProduct.getPrice() != productInfo.getPrice()) {
@@ -82,11 +85,11 @@ public class FurnitureDataService {
                         updatePriceData(lastPrice, productInfo);
                     }
                 }
-                String productCode = productInfo.getCode();
+
                 // 찜 여부 판단
-                if (wishboxService.checkWishbox(productCode)) {
+                if (wishboxService.checkWishbox(currentCode)) {
                     // 알림여부 판단 후 가격 비교하고 알림보내기
-                    wishboxService.checkAlertPrice(productCode, productInfo.getPrice(), productInfo.getProductImage());
+                    wishboxService.checkAlertPrice(currentCode, productInfo.getPrice(), productInfo.getProductImage());
                 }
             }
         } else {
