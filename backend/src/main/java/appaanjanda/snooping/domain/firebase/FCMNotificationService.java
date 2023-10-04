@@ -36,11 +36,13 @@ public class FCMNotificationService {
             Notification notification = Notification.builder()
                     .setTitle(requestDto.getTitle())
                     .setBody(requestDto.getBody())
+                    .setImage(requestDto.getImageUrl())
                     .build();
 
             Message message = Message.builder()
                     .setToken(member.getFirebaseToken())
                     .setNotification(notification)
+                    .putData("productCode", requestDto.getProductCode())
                     .build();
 
             try {

@@ -214,20 +214,20 @@ public class WishboxService {
     }
 
     // 알림 가격 체크
-    public void checkAlertPrice(String productCode, int price) {
+    public void checkAlertPrice(String productCode, int price, String imageUrl) {
 
         List<Wishbox> wishboxList = wishboxRepository.findWishboxByProductCode(productCode);
 
         for (Wishbox wishbox : wishboxList) {
             log.info("알림가격체크 {}", price);
 			if (wishbox.getAlertYn() && wishbox.getAlertPrice() >= price) {
-				sendAlert(wishbox, price);
+				sendAlert(wishbox, price, imageUrl);
 			}
         }
     }
 
 	// 알림보내기
-	public void sendAlert(Wishbox wishbox, int price) {
+	public void sendAlert(Wishbox wishbox, int price, String imageUrl) {
 
 		int length = wishbox.getProductCode().length();
 		String productName = wishbox.getProductCode().substring(2, length);
@@ -237,6 +237,8 @@ public class WishboxService {
 				.memberId(wishbox.getMember().getId())
 				.title("지정가 알림")
 				.body(productName + "의 가격이 " + price + "에 도달했습니다 !")
+                .imageUrl(imageUrl)
+                .productCode(wishbox.getProductCode())
 				.build();
 
 		fcmNotificationService.sendNotification(requestDto);

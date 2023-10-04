@@ -12,4 +12,6 @@ public class FCMNotificationRequestDto {
     private Long memberId;
     private String title;
     private String body;
+    private String imageUrl;
+    private String productCode;
 }

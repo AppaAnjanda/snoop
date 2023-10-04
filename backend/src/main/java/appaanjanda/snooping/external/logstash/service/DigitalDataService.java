@@ -95,7 +95,7 @@ public class DigitalDataService {
                 if (wishboxService.checkWishbox(productCode)) {
                     // 알림여부 판단 후 가격 비교하고 알림보내기
                     log.info("알림전송 {}", productCode);
-                    wishboxService.checkAlertPrice(productCode, productInfo.getPrice());
+                    wishboxService.checkAlertPrice(productCode, productInfo.getPrice(), productInfo.getProductImage());
                 }
             }
         } else {
