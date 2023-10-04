@@ -63,8 +63,6 @@ internal fun PriceGraph(
         val points = remember { mutableStateOf(listOf<DataPoint>()) }
         val density = LocalDensity.current
 
-        /* TODO 가격 기웃기웃 */
-
         Box(
             Modifier
                 .wrapContentHeight()

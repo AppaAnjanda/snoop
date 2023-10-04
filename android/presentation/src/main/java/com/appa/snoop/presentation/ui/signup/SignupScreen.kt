@@ -1,6 +1,8 @@
 package com.appa.snoop.presentation.ui.signup
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,16 +38,21 @@ import com.appa.snoop.presentation.ui.signup.component.KakaoCertButton
 import com.appa.snoop.presentation.ui.signup.component.SignupDoneButton
 import com.appa.snoop.presentation.ui.signup.component.SignupPasswordTextField
 import com.appa.snoop.presentation.ui.signup.component.SignupTextField
+import com.appa.snoop.presentation.ui.theme.BackgroundColor
+import com.appa.snoop.presentation.ui.theme.BackgroundColor2
 import com.appa.snoop.presentation.ui.theme.BlueColor
+import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.RedColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.effects.SignupLaunchedEffect
 import com.appa.snoop.presentation.util.extensions.addFocusCleaner
+import com.appa.snoop.presentation.util.extensions.noRippleClickable
 import com.kakao.sdk.friend.m.t
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 import kotlinx.coroutines.flow.onSubscription
 
+const val PRIVACY_POLICY = "https://sites.google.com/view/snoopsnoop/홈"
 private const val TAG = "[김희웅] SignupScreen"
 @Composable
 fun SignupScreen(
@@ -95,8 +102,6 @@ fun SignupScreen(
         var passwordValid by remember { mutableStateOf(false) }
         var nicknameValid by remember { mutableStateOf(false) }
 
-        // TODO 코드 교체 필요
-//        val signupViewModel = SignupViewModel()
         idValid = signupViewModel.isKakaoLoginSuccess
 
         Column(
@@ -117,14 +122,12 @@ fun SignupScreen(
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    // TODO 카카오 이메일 인증하면 아이디 입력하게 할지 카카오 이메일 쓸지 결정 해야됨.
                     SignupTextField(
                         modifier = Modifier
                             .weight(1f),
                         title = if (!signupViewModel.isKakaoLoginSuccess) "인증이 필요합니다." else "인증 되었습니다!",
                         text = signupViewModel.kakaoEmail,
                         onValueChange = {
-                            // TODO 서버 통신 코드 구현 필요
                             textId = it
                         },
                         focusManager = focusManager,
@@ -133,8 +136,6 @@ fun SignupScreen(
                     )
                     Spacer(modifier = Modifier.width(10.sdp))
 
-                    // TODO 카카오 인증 로직 구현
-                    // TODO 읽고있다가 값에 변경이 있으면 버튼 색 바꿔주고, 이메일 칸 채워주는 코드 필요
                     KakaoCertButton(
                         context,
                         signupViewModel
@@ -147,7 +148,6 @@ fun SignupScreen(
                     title = "비밀번호 (영어, 숫자, 특수문자 포함 8 ~ 20자)",
                     text = textPass,
                     onValueChange = { text, isValid ->
-                        // TODO 서버 통신 코드 구현 필요
                         textPass = text
                         passwordValid = (textPass == textPassCheck && textPass.isNotEmpty() && isValid)
                     },
@@ -198,18 +198,34 @@ fun SignupScreen(
                     focusManager = focusManager
                 )
             }
-            SignupDoneButton(
-                idValid,
-                passwordValid,
-                nicknameValid,
-                onClick = {
-                    signupViewModel.signUp(
-                        email = signupViewModel.kakaoEmail,
-                        password = textPass,
-                        nickname = textNickname
-                    )
-                }
-            )
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    modifier = Modifier
+                        .noRippleClickable {
+                            val url = PRIVACY_POLICY // 열고자 하는 링크 URL을 지정합니다.
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            context.startActivity(intent)
+                        },
+                    text = "개인정보 처리방침",
+                    color = DarkGrayColor
+                )
+                Spacer(Modifier.height(4.sdp))
+                SignupDoneButton(
+                    idValid,
+                    passwordValid,
+                    nicknameValid,
+                    onClick = {
+                        signupViewModel.signUp(
+                            email = signupViewModel.kakaoEmail,
+                            password = textPass,
+                            nickname = textNickname
+                        )
+                    }
+                )
+            }
         }
     }
 }

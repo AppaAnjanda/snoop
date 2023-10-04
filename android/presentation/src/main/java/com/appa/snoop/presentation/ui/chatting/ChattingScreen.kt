@@ -61,7 +61,6 @@ import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
 
 private const val TAG = "[김희] ChattingScreen_싸피"
-// TODO(실 데이터로 나중에 ChatList 교체)
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun ChattingScreen(
@@ -79,7 +78,6 @@ fun ChattingScreen(
     val snackState = remember { SnackbarHostState() }
     val pagingData = chattingViewModel.pagingDataFlow.collectAsLazyPagingItems()
 
-    //TODO 구현
     LaunchedEffect(Unit) {
         chattingViewModel.getEmailInfo()
         chattingViewModel.setRoomNumber(mainViewModel.chatRoomId)
@@ -184,7 +182,6 @@ fun ChattingScreen(
                 chattingViewModel.chatList.value,
 //                chattingViewModel.chatListState.value
             ) { chat ->
-                //TODO 이메일 Shared에서 가져와서 변경
                 if (chat.email == chattingViewModel.email) {
                     MyChatView(user = chat)
                 } else {

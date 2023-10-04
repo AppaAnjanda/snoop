@@ -84,7 +84,6 @@ fun HomeScreen(
                     modifier = Modifier,
                     product = it,
                     onItemClicked = {
-                        // TODO 상세화면으로 넘어가기 추가
                         Log.d(TAG, "HomeScreen: ${it.code}")
                         val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
                             "{productCode}",

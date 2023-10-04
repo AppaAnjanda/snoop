@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.util.Base64
 import android.util.Log
+import com.appa.snoop.BuildConfig.API_KEY
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 import java.security.MessageDigest
@@ -16,7 +17,7 @@ class SnoopApp: Application() {
     override fun onCreate() {
         super.onCreate()
         getHashKey()
-        KakaoSdk.init(this, getString(R.string.NATIVE_APP_KEY))
+        KakaoSdk.init(this, API_KEY)
     }
 
     // 카카오 로그인을 위해 해시키를 발급합니다.

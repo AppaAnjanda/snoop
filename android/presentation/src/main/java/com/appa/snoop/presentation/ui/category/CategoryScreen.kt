@@ -149,7 +149,6 @@ fun CategoryScreen(
             }.launchIn(this)
     }
 
-    // TODO 검색에 성공해도 스낵바가 뜨는 버그가 있음
     LaunchedEffect(pagingData.itemCount, categoryViewModel.keywordSearchState) {
         if (pagingData.itemCount == 0 && categoryViewModel.keywordSearchState > 0) {
             showSnackBar("검색 결과가 없습니다.")
@@ -279,8 +278,6 @@ fun CategoryScreen(
                 SnackbarHost(snackState)
             },
             floatingActionButton = {
-//                if (pagingData.itemCount > 6) {
-                //TODO 확인 필요
                 if (lazyState.canScrollBackward) {
                     FloatingActionButton(
                         onClick = {
@@ -328,7 +325,6 @@ fun CategoryScreen(
                     LazyVerticalGrid(
                         modifier = Modifier
                             .fillMaxSize(),
-//                            .horizontalScrollWithScrollbar(scrollState),
                         columns = GridCells.Fixed(SIZE),
                         state = lazyState
                     ) {
@@ -352,7 +348,6 @@ fun CategoryScreen(
                                 onLikeClicked = {
                                     pagingData[it]!!.wishYn = !pagingData[it]!!.wishYn
 
-                                    // TODO 구현 찜 토글
                                     scope.launch {
                                         when (categoryViewModel.isLogined().accessToken) {
                                             "no_token_error" -> { // 미 로그인 시
@@ -380,7 +375,6 @@ fun CategoryScreen(
                                                                         actionLabel = "확인하러 가기 ->"
                                                                     )
                                                                 ) {
-                                                                    // TODO 다시 돌아와도 하트가 눌려있지 않음
                                                                     SnackbarResult.ActionPerformed -> {
                                                                         NavUtil.navigate(
                                                                             navController as NavHostController,
