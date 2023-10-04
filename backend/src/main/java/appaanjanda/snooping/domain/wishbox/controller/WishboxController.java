@@ -113,7 +113,7 @@ public class WishboxController {
     })
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "찜 상품 삭제 (체크박스)", description = "찜 페이지에서 선택항목에 대한 찜 상품 삭제", tags = { "Wishbox Controller" })
-    @DeleteMapping("/remove")
+    @PostMapping("/remove")
     public ResponseEntity<String> removeWishboxCheck(@MemberInfo MembersInfo membersInfo, @RequestBody RemoveWishboxRequestDto removeWishboxRequestDto) {
         return ResponseEntity.ok(wishboxService.removeWishboxCheck(removeWishboxRequestDto.getWishboxIds()));
     }
