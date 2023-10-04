@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,6 +102,7 @@ public class ProductDetailService {
             if (result.size() >= cnt) break; // 일정 기간까지
 
         }
+        Collections.reverse(result);
         return result;
     }
 
