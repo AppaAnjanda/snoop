@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
 from kafka_producer import send_to_kafka
+from pydantic import BaseModel
 import time
 import re
 
