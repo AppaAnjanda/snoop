@@ -95,8 +95,6 @@ fun SignupScreen(
         var passwordValid by remember { mutableStateOf(false) }
         var nicknameValid by remember { mutableStateOf(false) }
 
-        // TODO 코드 교체 필요
-//        val signupViewModel = SignupViewModel()
         idValid = signupViewModel.isKakaoLoginSuccess
 
         Column(
@@ -117,14 +115,12 @@ fun SignupScreen(
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    // TODO 카카오 이메일 인증하면 아이디 입력하게 할지 카카오 이메일 쓸지 결정 해야됨.
                     SignupTextField(
                         modifier = Modifier
                             .weight(1f),
                         title = if (!signupViewModel.isKakaoLoginSuccess) "인증이 필요합니다." else "인증 되었습니다!",
                         text = signupViewModel.kakaoEmail,
                         onValueChange = {
-                            // TODO 서버 통신 코드 구현 필요
                             textId = it
                         },
                         focusManager = focusManager,
@@ -133,8 +129,6 @@ fun SignupScreen(
                     )
                     Spacer(modifier = Modifier.width(10.sdp))
 
-                    // TODO 카카오 인증 로직 구현
-                    // TODO 읽고있다가 값에 변경이 있으면 버튼 색 바꿔주고, 이메일 칸 채워주는 코드 필요
                     KakaoCertButton(
                         context,
                         signupViewModel
@@ -147,7 +141,6 @@ fun SignupScreen(
                     title = "비밀번호 (영어, 숫자, 특수문자 포함 8 ~ 20자)",
                     text = textPass,
                     onValueChange = { text, isValid ->
-                        // TODO 서버 통신 코드 구현 필요
                         textPass = text
                         passwordValid = (textPass == textPassCheck && textPass.isNotEmpty() && isValid)
                     },

@@ -31,7 +31,6 @@ private const val TAG = "[김희웅] SignupViewModel"
 class SignupViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase
 ): ViewModel() {
-    //TODO 읽고있다가 값에 변경이 있으면 버튼 색 바꿔주고, 이메일 칸 채워주는 코드 필요
     var isKakaoLoginSuccess by mutableStateOf<Boolean>(false)
 //    val isLoginSuccess = _isLoginSuccess
 
