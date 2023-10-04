@@ -144,11 +144,9 @@ class ChattingViewModel @Inject constructor(
 
     @SuppressLint("CheckResult")
     fun sendStomp(msg: String) {
-//        val sender = ApplicationClass.sharedPreferences.getString("userEmail")!!
 
         val data = JSONObject()
         data.put("roomidx", roomNumber.value)
-        //TODO 바꿔야됨
         data.put("email", email)
         data.put("message", msg)
 
@@ -168,94 +166,8 @@ class ChattingViewModel @Inject constructor(
         )
     }
 
-//    suspend fun sendTest(msg: String) {
-//        val cur = ChatItem(4, "skdi550@nate.com", "희웅", msg, "", "오후 6:02")
-//
-//        val chatContent = _chatListState.value
-//        chatContent.add(0, cur)
-//
-//        _chatListState.emit(chatContent)
-//    }
-
-
-    private var compositeDisposable: CompositeDisposable? = null
-
-    private val mGson = GsonBuilder().create()
-
-
-    @SuppressLint("CheckResult")
-    fun connectStomp() {
-        resetSubscriptions();
-
-//        stompClient.topic("/sub/chat/4").subscribe() {topicMessage ->
-//            Log.d(TAG, "message Recieve: ${topicMessage.payload}")
-//        }
-
-//        viewModelScope.launch {
-//            // TODO 헤더 필요 유무?
-//            val accessToken = getLoginStatusUseCase.invoke()
-//            val headerList = arrayListOf<StompHeader>()
-//            headerList.add(StompHeader("Authorization", "Bearer $accessToken"))
-//            stompClient.connect(headerList)
-//        }
-
-        stompClient.lifecycle().subscribe { lifecycleEvent ->
-            when (lifecycleEvent.type) {
-                LifecycleEvent.Type.OPENED -> {
-                    Log.i("OPEND", "!!")
-                }
-                LifecycleEvent.Type.CLOSED -> {
-                    resetSubscriptions();
-                    Log.i("CLOSED", "!!")
-
-                }
-                LifecycleEvent.Type.ERROR -> {
-                    Log.i("ERROR", "!!")
-                    Log.e("CONNECT ERROR", lifecycleEvent.exception.toString())
-                }
-                else ->{
-                    Log.i("ELSE", lifecycleEvent.message)
-                }
-            }
-        }
-
-        // TODO 통신 코드로 바꿔야함
-//        val data = JSONObject()
-//        data.put("roomidx", 4)
-//        data.put("email", "skdi550@nate.com")
-//        data.put("sender", "희웅")
-//        data.put("msg", "test chat")
-//        data.put("imageUrl", "")
-//        data.put("time", "")
-
-        val dispTopic: Disposable = stompClient.topic("/sub/chat/room/4")
-            .subscribe({ topicMessage ->
-//                Log.d(TAG, "Received " + topicMessage.getPayload())
-                // TODO 대화 내용 List에 추가
-                addItem(mGson.fromJson(topicMessage.getPayload(), ChatItem::class.java))
-            }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
-
-        compositeDisposable!!.add(dispTopic)
-
-        stompClient.connect()
-//        stompClient.send("/pub/chat/4", data.toString()).subscribe()
-    }
-
     fun disconnectStomp() {
         stompClient.disconnect()
-    }
-
-    private fun addItem(chatItem: ChatItem) {
-//        mDataSet.add(chatItem.getEcho() + " - " + mTimeFormat.format(Date()))
-        // TODO 리스트 안에 담는 코드
-    }
-
-
-    private fun resetSubscriptions() {
-        if (compositeDisposable != null) {
-            compositeDisposable!!.dispose()
-        }
-        compositeDisposable = CompositeDisposable()
     }
 
     // 채팅 내역 페이징

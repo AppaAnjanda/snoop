@@ -88,7 +88,7 @@ fun PreviewProductItemView() {
 //        product = product,
 //        label = HomeLabel,
 //        ratio = 0.9f,
-//        onItemClicked = { /*TODO*/ }
+//        onItemClicked = {  }
 //    ) {
 //
 //    }

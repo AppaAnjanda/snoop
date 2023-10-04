@@ -28,7 +28,7 @@ import com.appa.snoop.presentation.ui.theme.BlackColor
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
-const val baseImgUrl = "https://velog.velcdn.com/images/heeung/post/5f8cf415-76fb-4b2b-ba6e-1dabd59dd217/image.png"
+const val baseImgUrl = "https://d3oh64wne7x39t.cloudfront.net/%E1%84%86%E1%85%B5%E1%84%8B%E1%85%A5%E1%84%8F%E1%85%A2%E1%86%BA.jpeg"
 @Composable
 fun OtherChatView(
     modifier: Modifier = Modifier,

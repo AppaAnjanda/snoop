@@ -94,7 +94,6 @@ class LoginViewModel @Inject constructor(
                 else -> {
                     isLoginSuccessState = false
                     loginButtonClickToggle++
-                    Log.e(TAG, "login에 실패하였습니다. $isLoginSuccessState 랑 $loginButtonClickToggle")
                 }
             }
         }

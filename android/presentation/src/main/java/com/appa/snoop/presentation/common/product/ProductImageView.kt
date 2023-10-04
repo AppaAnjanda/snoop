@@ -124,7 +124,6 @@ fun ProductImageView(
                     .clip(CircleShape)
                     .background(color = WhiteColor)
                     .noRippleClickable {
-                        // TODO("서버에 찜목록 추가")
                         onLikeClicked()
                         liked = !liked
                     }
