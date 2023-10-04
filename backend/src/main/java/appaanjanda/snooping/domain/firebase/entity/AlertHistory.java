@@ -21,16 +21,22 @@ public class AlertHistory extends BaseTimeEntity {
 
     private String body;
 
+    private String imageUrl;
+
+    private String productCode;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @JsonIgnore
     private Member member;
 
     @Builder
-    public AlertHistory(Long id, String title, String body, Member member) {
+    public AlertHistory(Long id, String title, String body, String imageUrl, String productCode, Member member) {
         this.id = id;
         this.title = title;
         this.body = body;
         this.member = member;
+        this.imageUrl = imageUrl;
+        this.productCode = productCode;
     }
 }

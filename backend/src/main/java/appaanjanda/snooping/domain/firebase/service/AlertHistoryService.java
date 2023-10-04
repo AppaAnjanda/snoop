@@ -32,6 +32,8 @@ public class AlertHistoryService {
                     .title(alertHistory.getTitle())
                     .body(alertHistory.getBody())
                     .time(alertHistory.getCreateTime())
+                    .imageUrl(alertHistory.getImageUrl())
+                    .productCode(alertHistory.getProductCode())
                     .build();
             alertHistoryDtos.add(alertHistoryDto);
         }

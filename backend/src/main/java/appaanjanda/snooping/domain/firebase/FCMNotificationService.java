@@ -56,7 +56,10 @@ public class FCMNotificationService {
                 AlertHistory alertHistory = AlertHistory.builder()
                         .title(requestDto.getTitle())
                         .body(requestDto.getBody())
-                        .member(member).build();
+                        .member(member)
+                        .imageUrl(requestDto.getImageUrl())
+                        .productCode(requestDto.getProductCode())
+                        .build();
                 alertHistoryRepository.save(alertHistory);
 
                 return "send 성공";
