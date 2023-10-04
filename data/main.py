@@ -3,6 +3,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from coupang import coupang_product, coupang_products_digital, coupang_products_furniture, coupang_products_necessaries, coupang_products_food
 from naver import naver_product, naver_products_digital, naver_products_furniture, naver_products_necessaries, naver_products_food
 from kafka_producer import send_to_kafka
+from pydantic import BaseModel
 import pandas as pd
 import requests
 
@@ -13,6 +14,9 @@ food_list = ["생수/음료","과일/채소","과자","축산/계란","가공식
 
 # fast api 서버
 app = FastAPI()
+
+class KeywordDto(BaseModel):
+    keyword : str
 
 ########################################## 쿠팡 #####################################################
 
@@ -46,8 +50,11 @@ def coupang_food():
 
 # 네이버 쇼핑 API 찜 상품 함수
 @app.get("/naver")
-def naver(query:str):
-    return naver_product(query)
+def naver(keyword_Dto:KeywordDto):
+    result = keyword_Dto.keyword
+    print(result)
+    return naver_product(result)
+
 
 # 네이버 쇼핑 API 전체 조회 함수
 @app.get("/naver/all")
