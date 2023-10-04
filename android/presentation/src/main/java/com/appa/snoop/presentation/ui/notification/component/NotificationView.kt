@@ -87,11 +87,9 @@ fun NotificationItem(
     }
 
     LaunchedEffect(show) {
-        Log.d(TAG, "NotificationItem: show")
         if (!show) {
-            Log.d(TAG, "NotificationItem: !show")
             onRemove(currentItem)
-            Toast.makeText(context, "Item removed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "알림이 삭제되었습니다!", Toast.LENGTH_SHORT).show()
         }
     }
 }
