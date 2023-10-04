@@ -8,6 +8,8 @@ fun NotificationResponse.toDomain(): Notification {
         body = body,
         createTime = createTime,
         id = id,
-        title = title
+        title = title,
+        imageUrl = imageUrl,
+        productCode = productCode
     )
 }

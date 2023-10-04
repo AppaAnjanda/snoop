@@ -26,20 +26,25 @@ import coil.request.ImageRequest
 import com.appa.snoop.domain.model.notification.Notification
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.util.DateUtil
+import com.appa.snoop.presentation.util.extensions.noRippleClickable
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NotificationItemComponent(item: Notification) {
+fun NotificationItemComponent(item: Notification, onClickedItem: () -> Unit) {
     Column {
         Row(
-            modifier = Modifier.padding(
-                start = 16.sdp,
-                end = 16.sdp,
-                top = 10.sdp,
-                bottom = 10.sdp
-            ),
+            modifier = Modifier
+                .padding(
+                    start = 16.sdp,
+                    end = 16.sdp,
+                    top = 10.sdp,
+                    bottom = 10.sdp
+                )
+                .noRippleClickable {
+                    onClickedItem()
+                },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(3f)) {
@@ -77,16 +82,16 @@ fun NotificationItemComponent(item: Notification) {
                 )
             }
 
-//            AsyncImage(
-//                model = ImageRequest.Builder(LocalContext.current)
-//                    .data(item.img)
-//                    .build(),
-//                contentDescription = "상품 사진",
-//                modifier = Modifier
-//                    .weight(1f)
-//                    .aspectRatio(1f),
-//                contentScale = ContentScale.Inside
-//            )
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(item.imageUrl)
+                    .build(),
+                contentDescription = "상품 사진",
+                modifier = Modifier
+                    .weight(1f)
+                    .aspectRatio(1f),
+                contentScale = ContentScale.Inside
+            )
         }
         HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
     }
