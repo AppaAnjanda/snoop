@@ -8,7 +8,9 @@ import com.appa.snoop.data.local.PreferenceDataSource.Companion.REFRESH_TOKEN
 import com.appa.snoop.data.model.error.response.ErrorResponse
 import com.appa.snoop.data.model.registration.request.RefreshTokenRequest
 import com.appa.snoop.data.service.RegisterService
+import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -67,7 +69,11 @@ class ResponseInterceptor @Inject constructor(
 
                         val result = Retrofit.Builder()
                             .baseUrl(BASE_URL)
-                            .addConverterFactory(GsonConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create(
+                                GsonBuilder()
+                                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                                .setLenient()
+                                .create()))
                             .build()
                             .create(RegisterService::class.java).poseRefreshToken(
                                 RefreshTokenRequest(prefs.getString(REFRESH_TOKEN)!!)
@@ -94,7 +100,7 @@ class ResponseInterceptor @Inject constructor(
 //                                    Log.d(TAG, "intercept: ${result.headers()}")
 //                                    Log.d(TAG, "intercept: ${result.message()}")
 //                                    Log.d(TAG, "intercept: ${result.errorBody()}")
-                            throw (IOException("refresh_exception"))
+//                            throw (IOException("refresh_exception"))
                         }
                     }
                 }
