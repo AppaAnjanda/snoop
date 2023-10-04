@@ -95,8 +95,8 @@ public class MemberController {
 	@SecurityRequirement(name = "Bearer Authentication")
 	@Operation(summary = "멤버 삭제", description = "멤버 정보 삭제", tags = { "Member Controller" })
 	@DeleteMapping("/delete")
-	public void delete (@MemberInfo MembersInfo membersInfo){
-		memberService.deleteUser(membersInfo.getId());
+	public void delete (@RequestBody DeleteUserRequestDto requestDto){
+		memberService.deleteUser(requestDto);
 	}
 
 
