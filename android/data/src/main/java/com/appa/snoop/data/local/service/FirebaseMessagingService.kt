@@ -14,12 +14,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.appa.snoop.data.R
-import com.appa.snoop.data.local.PreferenceDataSource
-import com.google.firebase.messaging.Constants
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import javax.inject.Inject
 
 private const val TAG = "[김진영] FirebaseMessaging"
 
@@ -31,67 +27,62 @@ class FirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        createNotificationChannel()
         var messageTitle = ""
         var messageBody = ""
         var productCode = ""
-        var type = ""
 
         // background 에 있을경우 혹은 foreground에 있을경우 두 경우 모두
         val notification = remoteMessage.notification
         val data = remoteMessage.data
 
-        productCode = data.getValue(productCode).toString()
-        Log.d(TAG, "onMessageReceived data: $data")
+        productCode = data.getValue("productCode").toString()
+
         messageTitle = notification?.title.toString()
         messageBody = notification?.body.toString()
-        Log.d(TAG, "onMessageReceived notification: $messageTitle, $messageBody")
 
-        val mainIntent = Intent(this, Class.forName("com.appa.snoop.presentation.MainActivity")).apply {
-//            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            putExtra("productCode", productCode)
-        }
+        val mainIntent =
+            Intent(this, Class.forName("com.appa.snoop.presentation.MainActivity")).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                putExtra("productCode", productCode)
+            }
 
         val mainPendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, 101, mainIntent,PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
 
+        var builder: NotificationCompat.Builder
+        var notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val summaryNotification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
-            .setSmallIcon(R.drawable.ic_logo)
+        builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(notificationChannel)
+            NotificationCompat.Builder(this@FirebaseMessagingService, CHANNEL_ID)
+        } else {
+            NotificationCompat.Builder(this@FirebaseMessagingService)
+        }
+
+        builder.setSmallIcon(R.drawable.ic_logo)
             .setContentTitle(messageTitle)
             .setContentText(messageBody)
-            .setContentIntent(mainPendingIntent)
-            .setGroupSummary(true)
             .setAutoCancel(true)
+            .setContentIntent(mainPendingIntent)
             .setFullScreenIntent(mainPendingIntent, true)
 
         NotificationManagerCompat.from(this).apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                if (ActivityCompat.checkSelfPermission(
-                        applicationContext,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    return
-                }
+            if (ActivityCompat.checkSelfPermission(
+                    this@FirebaseMessagingService,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
             }
-            notify(101, summaryNotification.build())
-        }
-
-    }
-
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance)
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+            notify(101, builder.build())
         }
     }
-
 
 }
 
