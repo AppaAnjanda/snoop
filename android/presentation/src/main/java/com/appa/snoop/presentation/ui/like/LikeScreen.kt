@@ -19,6 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.appa.snoop.domain.model.wishbox.WishBoxDeleteList
+import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.like.component.LikeItem
 import com.appa.snoop.presentation.ui.like.component.SelelctComponent
 import com.appa.snoop.presentation.ui.theme.BackgroundColor2
@@ -79,7 +81,13 @@ fun LikeScreen(
             .background(WhiteColor)
     ) {
         SelelctComponent(allSelected,
-            onChangeCheckedState = { toggleSelectAll() }
+            onChangeCheckedState = { toggleSelectAll() },
+            onDeletedLikeList = {
+                var wishBoxDeleteList = checkedStates.mapIndexed { index, value ->
+                    wishboxList[index].wishboxId
+                }
+                likeViewModel.deleteWishBoxList(WishBoxDeleteList(wishBoxDeleteList))
+            }
         )
         HorizontalDivider(thickness = 1.sdp, color = BackgroundColor2)
         LazyColumn {
@@ -100,6 +108,13 @@ fun LikeScreen(
                                 wishboxList[index].wishboxId,
                                 PriceUtil.parseFormattedPrice(price)
                             )
+                        },
+                        onItemClick = {
+                            val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
+                                "{productCode}",
+                                wishboxList[index].productCode
+                            )
+                            navController.navigate(route)
                         })
                     HorizontalDivider(color = BackgroundColor2)
                 }

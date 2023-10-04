@@ -20,7 +20,7 @@ interface WishBoxService {
         @Path("wishboxId") wishboxId: Int
     ): WishBoxDeleteResponse
 
-    @DELETE("api/wishbox/remove")
+    @POST("api/wishbox/remove")
     suspend fun deleteListWishBox(
         @Body wishBoxDeleteListRequest: WishBoxDeleteListRequest
     ): List<Int>

@@ -48,12 +48,14 @@ import ir.kaaveh.sdpcompose.ssp
 import kotlinx.coroutines.delay
 
 private const val TAG = "[김진영] NotificationView"
+
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotificationItem(
     item: Notification,
-    onRemove: (Notification) -> Unit
+    onRemove: (Notification) -> Unit,
+    onClickedItem: () -> Unit
 ) {
     val context = LocalContext.current
     var show by remember { mutableStateOf(true) }
@@ -76,7 +78,9 @@ fun NotificationItem(
                 DismissBackground(dismissState)
             },
             dismissContent = {
-                NotificationItemComponent(item)
+                NotificationItemComponent(item, onClickedItem = {
+                    onClickedItem()
+                })
             },
             directions = setOf(DismissDirection.EndToStart)
         )

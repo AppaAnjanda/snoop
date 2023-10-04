@@ -19,11 +19,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.notification.component.NotificationItem
 import com.appa.snoop.presentation.ui.notification.viewmodel.NotificationViewModel
 import com.appa.snoop.presentation.util.effects.NotificationLaunchedEffect
 
 private const val TAG = "[김진영] NotificationScreen"
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NotificationScreen(
@@ -51,10 +53,18 @@ fun NotificationScreen(
             items = notificationList,
             key = { item -> item.hashCode() }
         ) { notificationItem ->
-            NotificationItem(notificationItem, onRemove = { currentItem ->
+            NotificationItem(notificationItem,
+                onRemove = { currentItem ->
                 Log.d(TAG, "NotificationScreen: $currentItem")
                 removedItem = currentItem.id
-            })
+            },
+                onClickedItem = {
+                    val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
+                        "{productCode}",
+                        notificationItem.productCode
+                    )
+                    navController.navigate(route)
+                })
         }
     }
 }

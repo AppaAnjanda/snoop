@@ -7,6 +7,7 @@ import com.appa.snoop.domain.model.NetworkResult
 import com.appa.snoop.domain.model.product.AlertPrice
 import com.appa.snoop.domain.model.wishbox.WishBox
 import com.appa.snoop.domain.model.wishbox.WishBoxDelete
+import com.appa.snoop.domain.model.wishbox.WishBoxDeleteList
 import com.appa.snoop.domain.usecase.wishbox.DeleteWishBoxListUseCase
 import com.appa.snoop.domain.usecase.wishbox.DeleteWishBoxUseCase
 import com.appa.snoop.domain.usecase.wishbox.GetWishBoxListUseCase
@@ -34,6 +35,10 @@ class LikeViewModel @Inject constructor(
     private val _deleteWishboxState =
         MutableStateFlow(WishBoxDelete(0))
     var deleteWishboxState: StateFlow<WishBoxDelete> = _deleteWishboxState.asStateFlow()
+
+    private val _deleteWishboxListState =
+        MutableStateFlow(emptyList<Int>())
+    val deleteWishboxListState: StateFlow<List<Int>> = _deleteWishboxListState.asStateFlow()
 
     private val _updateWishboxState =
         MutableStateFlow(WishBox(0, false, 0, "", "", "", 0))
@@ -70,6 +75,27 @@ class LikeViewModel @Inject constructor(
 
                 else -> {
                     Log.d(TAG, "deleteWishBox: 찜 삭제 실패!")
+                }
+            }
+        }
+    }
+
+    fun deleteWishBoxList(wishBoxDeleteList: WishBoxDeleteList) {
+        viewModelScope.launch {
+            val result = deleteWishBoxListUseCase.invoke(wishBoxDeleteList = wishBoxDeleteList)
+
+            when (result) {
+                is NetworkResult.Success -> {
+                    _deleteWishboxListState.emit(result.data)
+                    val updatedList = _wishboxListState.value.filterNot { item ->
+                        wishBoxDeleteList.wishboxIds.any { it == item.wishboxId }
+                    }
+                    _wishboxListState.emit(updatedList)
+                    Log.d(TAG, "deleteWishBoxList: ${result.data}")
+                }
+
+                else -> {
+                    Log.d(TAG, "deleteWishBoxList: 찜 목록 삭제 실패!")
                 }
             }
         }
