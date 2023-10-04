@@ -15,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -34,8 +37,9 @@ public class WishboxController {
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "찜 상품 등록(상세페이지)", description = "상세 상품 화면에서 찜 버튼을 통해 상품id로 찜 상품 등록", tags = { "Wishbox Controller" })
     @PostMapping("/add/alert/{productCode}")
-    public ResponseEntity<AddAlertResponseDto> addAlert(@MemberInfo MembersInfo membersInfo, @PathVariable String productCode, @RequestBody AddAlertRequestDto addAlertRequestDto) {
-        return ResponseEntity.ok(wishboxService.addAlert(membersInfo.getId(), productCode, addAlertRequestDto));
+    public ResponseEntity<AddAlertResponseDto> addAlert(@MemberInfo MembersInfo membersInfo, @PathVariable String productCode, @RequestBody AddAlertRequestDto addAlertRequestDto) throws UnsupportedEncodingException {
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        return ResponseEntity.ok(wishboxService.addAlert(membersInfo.getId(), decodedProductCode, addAlertRequestDto));
     }
 
     // 찜 상품 목록 조회
@@ -94,7 +98,23 @@ public class WishboxController {
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "찜 상품 등록(상품 목록)", description = "상품 목록 화면에서 찜 버튼을 통한 찜 토글 API", tags = { "Wishbox Controller" })
     @PostMapping("/add/{productCode}")
-    public ResponseEntity<AddWishboxResponseDto> addWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable String productCode) {
-        return ResponseEntity.ok(wishboxService.addWishbox(membersInfo.getId(), productCode));
+    public ResponseEntity<AddWishboxResponseDto> addWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable String productCode) throws UnsupportedEncodingException{
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        return ResponseEntity.ok(wishboxService.addWishbox(membersInfo.getId(), decodedProductCode));
+    }
+
+    // 찜 상품 삭제 (체크박스)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "조회 성공",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "400", description = "요청 오류 "),
+            @ApiResponse(responseCode = "500", description = "서버 내부 오류")
+    })
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "찜 상품 삭제 (체크박스)", description = "찜 페이지에서 선택항목에 대한 찜 상품 삭제", tags = { "Wishbox Controller" })
+    @PostMapping("/remove")
+    public ResponseEntity<String> removeWishboxCheck(@MemberInfo MembersInfo membersInfo, @RequestBody RemoveWishboxRequestDto removeWishboxRequestDto) {
+        return ResponseEntity.ok(wishboxService.removeWishboxCheck(removeWishboxRequestDto.getWishboxIds()));
     }
 }

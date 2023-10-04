@@ -22,6 +22,7 @@ import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -48,9 +49,11 @@ public class WishboxService {
         Wishbox wishbox;
         // 찜이 없는 경우 -> 찜 목록에 등록 및 알림가격 설정
         if (!searchContentDto.isWishYn()) {
+            boolean yn = addAlertRequestDto.getAlertPrice() != 0;
+
             wishbox = Wishbox.builder()
                     .alertPrice(addAlertRequestDto.getAlertPrice())
-                    .alertYn(true)
+                    .alertYn(yn)
                     .productCode(productCode)
                     .member(member)
                     .provider(searchContentDto.getProvider())
@@ -115,20 +118,28 @@ public class WishboxService {
     }
 
     // 찜 상품 기져와서 업데이트
-//	@Scheduled(cron = "0 */10 * * * *")
-//	public void wishboxUpdate() {
-//		List<Wishbox> allWishbox = wishboxRepository.findAll();
-//
-//		for (Wishbox wishbox : allWishbox) {
-//			String productCode = wishbox.getProductCode();
-//			if (wishbox.getProvider().equals("쿠팡")){ continue;
-////				coupangCrawlingCaller.oneProductSearch(productCode);
-//
-//			} else {
-//				naverApiCaller.oneProductSearch(productCode);
-//			}
-//		}
-//	}
+	@Scheduled(cron = "0 */10 * * * *")
+	public void wishboxUpdate() {
+        LocalDateTime now = LocalDateTime.now();
+        if (now.getMinute() == 0) {
+            // 정각일 때는 실행하지 않음
+            return;
+        }
+
+		Set<Object[]> allWishboxCode = wishboxRepository.findAllProductCodeAndProvider();
+
+		for (Object[] wishbox : allWishboxCode) {
+            String productCode = (String) wishbox[0];
+            String provider = (String) wishbox[1];
+
+			if (provider.equals("쿠팡")){ continue;
+//				coupangCrawlingCaller.oneProductSearch(productCode);
+
+			} else {
+				naverApiCaller.oneProductSearch(productCode);
+			}
+		}
+	}
 
     // 찜 상품 알림 가격 변경
     public WishboxResponseDto updateAlertPrice(Long memberId, Long wishboxId, UpdateAlertPriceRequestDto updateAlertPriceRequestDto) {
@@ -203,20 +214,20 @@ public class WishboxService {
     }
 
     // 알림 가격 체크
-    public void checkAlertPrice(String productCode, int price) {
+    public void checkAlertPrice(String productCode, int price, String imageUrl) {
 
         List<Wishbox> wishboxList = wishboxRepository.findWishboxByProductCode(productCode);
 
         for (Wishbox wishbox : wishboxList) {
             log.info("알림가격체크 {}", price);
 			if (wishbox.getAlertYn() && wishbox.getAlertPrice() >= price) {
-				sendAlert(wishbox, price);
+				sendAlert(wishbox, price, imageUrl);
 			}
         }
     }
 
 	// 알림보내기
-	public void sendAlert(Wishbox wishbox, int price) {
+	public void sendAlert(Wishbox wishbox, int price, String imageUrl) {
 
 		int length = wishbox.getProductCode().length();
 		String productName = wishbox.getProductCode().substring(2, length);
@@ -226,9 +237,21 @@ public class WishboxService {
 				.memberId(wishbox.getMember().getId())
 				.title("지정가 알림")
 				.body(productName + "의 가격이 " + price + "에 도달했습니다 !")
+                .imageUrl(imageUrl)
+                .productCode(wishbox.getProductCode())
 				.build();
 
 		fcmNotificationService.sendNotification(requestDto);
 
 	}
+
+    // 찜 삭제 (체크박스)
+    public String removeWishboxCheck(List<Long> wishboxIds) {
+        for (Long wishboxId : wishboxIds) {
+            Wishbox wishbox = wishboxRepository.findById(wishboxId)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_WISHBOX_ID));
+            wishboxRepository.delete(wishbox);
+        }
+        return wishboxIds.toString();
+    }
 }

@@ -35,16 +35,24 @@ public class ChatDocument {
     @Field("msg")
     private String msg;
 
+    @Field("imageUrl")
+    private String imageUrl;
+
     @Field("created_at")
     private String createdAt;
 
+    @Field("create_time")
+    private LocalDateTime localDateTime;
+
     @Builder
-    public ChatDocument(String id, Long roomIdx, String email, String senderName, String msg, String createdAt) {
+    public ChatDocument(String id, Long roomIdx, String email, String senderName, String msg, String imageUrl, String createdAt, LocalDateTime localDateTime) {
         this.id = id;
         this.roomIdx = roomIdx;
         this.email = email;
         this.senderName = senderName;
         this.msg = msg;
+        this.imageUrl = imageUrl;
         this.createdAt = createdAt;
+        this.localDateTime = localDateTime;
     }
 }

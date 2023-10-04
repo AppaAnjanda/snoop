@@ -36,11 +36,13 @@ public class FCMNotificationService {
             Notification notification = Notification.builder()
                     .setTitle(requestDto.getTitle())
                     .setBody(requestDto.getBody())
+                    .setImage(requestDto.getImageUrl())
                     .build();
 
             Message message = Message.builder()
                     .setToken(member.getFirebaseToken())
                     .setNotification(notification)
+                    .putData("productCode", requestDto.getProductCode())
                     .build();
 
             try {
@@ -54,7 +56,10 @@ public class FCMNotificationService {
                 AlertHistory alertHistory = AlertHistory.builder()
                         .title(requestDto.getTitle())
                         .body(requestDto.getBody())
-                        .member(member).build();
+                        .member(member)
+                        .imageUrl(requestDto.getImageUrl())
+                        .productCode(requestDto.getProductCode())
+                        .build();
                 alertHistoryRepository.save(alertHistory);
 
                 return "send 성공";

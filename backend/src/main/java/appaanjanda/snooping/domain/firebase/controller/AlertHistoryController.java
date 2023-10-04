@@ -13,10 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,5 +36,23 @@ public class AlertHistoryController {
     @GetMapping("/history")
     public ResponseEntity<List<AlertHistoryDto>> getAlertHistory(@MemberInfo MembersInfo membersInfo) {
         return ResponseEntity.ok(alertHistoryService.getAlertHistory(membersInfo.getId()));
+    }
+
+    // 알림 단일 삭제
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "알림 기록 삭제", description = "알림 삭제", tags = { "AlertHistory Controller" })
+    @DeleteMapping("/history/{alertId}")
+    public ResponseEntity<String> deleteAlertHistory(@MemberInfo MembersInfo membersInfo, @PathVariable Long alertId) {
+        alertHistoryService.deleteAlertHistory(alertId, membersInfo.getId());
+        return ResponseEntity.ok(String.format("%d번 알림 삭제", alertId));
+    }
+
+    // 알림 전체 삭제
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "알림 전체 삭제", description = "알림 전체 삭제", tags = { "AlertHistory Controller" })
+    @DeleteMapping("/history/all")
+    public ResponseEntity<String> deleteAlertHistory(@MemberInfo MembersInfo membersInfo) {
+        alertHistoryService.deleteAllAlertHistory(membersInfo.getId());
+        return ResponseEntity.ok("알림 전체 삭제");
     }
 }
