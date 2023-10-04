@@ -10,6 +10,9 @@ CLIENT_SECRET = "aH1kfQkVIF"
 
 pattern = re.compile(r'<.*?>')
 
+class KeywordDto(BaseModel):
+    keyword : str
+
 ################################## 단일 키워드 API 호출 #####################################
 def naver_product(query):
     digital_list = {"TV" : "1", "냉장고" : "2", "세탁기": "3", "청소기": "4", "노트북": "5", "데스크탑": "6", "키보드": "7", "마우스": "8", "모니터": "9"}
