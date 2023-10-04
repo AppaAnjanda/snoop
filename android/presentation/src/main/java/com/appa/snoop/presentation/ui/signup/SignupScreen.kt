@@ -1,6 +1,8 @@
 package com.appa.snoop.presentation.ui.signup
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,16 +38,21 @@ import com.appa.snoop.presentation.ui.signup.component.KakaoCertButton
 import com.appa.snoop.presentation.ui.signup.component.SignupDoneButton
 import com.appa.snoop.presentation.ui.signup.component.SignupPasswordTextField
 import com.appa.snoop.presentation.ui.signup.component.SignupTextField
+import com.appa.snoop.presentation.ui.theme.BackgroundColor
+import com.appa.snoop.presentation.ui.theme.BackgroundColor2
 import com.appa.snoop.presentation.ui.theme.BlueColor
+import com.appa.snoop.presentation.ui.theme.DarkGrayColor
 import com.appa.snoop.presentation.ui.theme.RedColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.effects.SignupLaunchedEffect
 import com.appa.snoop.presentation.util.extensions.addFocusCleaner
+import com.appa.snoop.presentation.util.extensions.noRippleClickable
 import com.kakao.sdk.friend.m.t
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 import kotlinx.coroutines.flow.onSubscription
 
+const val PRIVACY_POLICY = "https://sites.google.com/view/snoopsnoop/홈"
 private const val TAG = "[김희웅] SignupScreen"
 @Composable
 fun SignupScreen(
@@ -191,18 +198,34 @@ fun SignupScreen(
                     focusManager = focusManager
                 )
             }
-            SignupDoneButton(
-                idValid,
-                passwordValid,
-                nicknameValid,
-                onClick = {
-                    signupViewModel.signUp(
-                        email = signupViewModel.kakaoEmail,
-                        password = textPass,
-                        nickname = textNickname
-                    )
-                }
-            )
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    modifier = Modifier
+                        .noRippleClickable {
+                            val url = PRIVACY_POLICY // 열고자 하는 링크 URL을 지정합니다.
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            context.startActivity(intent)
+                        },
+                    text = "개인정보 처리방침",
+                    color = DarkGrayColor
+                )
+                Spacer(Modifier.height(4.sdp))
+                SignupDoneButton(
+                    idValid,
+                    passwordValid,
+                    nicknameValid,
+                    onClick = {
+                        signupViewModel.signUp(
+                            email = signupViewModel.kakaoEmail,
+                            password = textPass,
+                            nickname = textNickname
+                        )
+                    }
+                )
+            }
         }
     }
 }

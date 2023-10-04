@@ -3,6 +3,7 @@ package com.appa.snoop.presentation.ui.mypage
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
@@ -43,6 +44,7 @@ import com.appa.snoop.presentation.ui.mypage.component.MyPageInformation
 import com.appa.snoop.presentation.ui.mypage.component.SettingComponent
 import com.appa.snoop.presentation.ui.mypage.utils.findActivity
 import com.appa.snoop.presentation.ui.mypage.utils.openSourceLicenses
+import com.appa.snoop.presentation.ui.signup.PRIVACY_POLICY
 import com.appa.snoop.presentation.ui.theme.BackgroundColor2
 import com.appa.snoop.presentation.util.effects.MainLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
@@ -69,7 +71,8 @@ fun MypageScreen(
         MyPageLabel.MODIFY_PROFILE,
         MyPageLabel.SELECT_CARD,
         MyPageLabel.LOGOUT,
-        MyPageLabel.OSS,
+        MyPageLabel.DECLARATION,
+        MyPageLabel.PRIVACY_POLICY,
         MyPageLabel.WITHDRAWAL,
     )
     val context = LocalContext.current
@@ -138,7 +141,12 @@ fun MypageScreen(
                     }
 
                     MyPageLabel.LOGOUT -> showDialog = true
-                    MyPageLabel.OSS -> openSourceLicenses(context)
+                    MyPageLabel.DECLARATION -> {}
+                    MyPageLabel.PRIVACY_POLICY -> {
+                        val url = PRIVACY_POLICY // 열고자 하는 링크 URL을 지정합니다.
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        context.startActivity(intent)
+                    }
                     else -> {}
                 }
             }
