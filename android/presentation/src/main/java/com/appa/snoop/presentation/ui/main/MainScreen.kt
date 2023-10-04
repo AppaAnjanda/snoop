@@ -24,6 +24,7 @@ import com.appa.snoop.presentation.common.topbar.SharedTopAppBar
 import com.appa.snoop.presentation.common.topbar.utils.rememberAppBarState
 import com.appa.snoop.presentation.navigation.MainNav
 import com.appa.snoop.presentation.navigation.MainNavHost
+import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.mypage.MyPageViewModel
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import ir.kaaveh.sdpcompose.sdp
@@ -33,8 +34,7 @@ private const val TAG = "[김희웅] MainScreen"
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(
-    type: String? = null,
-    articleId: String? = null,
+    productCode: String? = null,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val navController = rememberNavController()
@@ -70,9 +70,13 @@ fun MainScreen(
             mainViewModel
         )
         LaunchedEffect(Unit) {
-            if (type != null && articleId != null) {
+            if (productCode != null) {
                 Log.d("TEST", "MainScreen: PendingIntent 호출")
-//                navController.navigate("${BoardDetailNav.route}/${type.lowercase(Locale.getDefault())}/$articleId")
+                val route = Router.CATEGORY_PRODUCT_ROUTER_NAME.replace(
+                    "{productCode}",
+                    productCode
+                )
+                navController.navigate(route)
             }
         }
     }

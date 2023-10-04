@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.ComponentActivity
@@ -28,6 +29,8 @@ import dagger.hilt.android.AndroidEntryPoint
 const val CHANNEL_ID = "snoop_channel"
 const val CHANNEL_NAME = "기웃기웃"
 
+private const val TAG = "MainActivity_김진영"
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -42,7 +45,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         createNotificationChannel(notificationManager, CHANNEL_ID, CHANNEL_NAME)
-
+        Log.d(TAG, "onCreate: $productCode")
         // ime 동작 구현하기 위함
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
@@ -52,7 +55,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    MainScreen(productCode = productCode)
                 }
             }
         }
