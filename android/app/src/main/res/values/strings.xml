@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">기웃기웃</string>
-
+    <string name="NATIVE_APP_KEY">3c725efcd3941d2679e8199b069e6bd1</string>
+    <string name="default_notification_channel_id">snoop_channel</string>
 </resources>
