@@ -1,5 +1,6 @@
 package com.appa.snoop.presentation.ui.like.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,7 +49,8 @@ fun LikeItem(
     focusManager: FocusManager,
     onCheckedChange: (Any) -> Unit,
     onDeleteClick: () -> Unit,
-    onUpdateClick: (String) -> Unit
+    onUpdateClick: (String) -> Unit,
+    onItemClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -68,7 +70,9 @@ fun LikeItem(
                     .noRippleClickable { onDeleteClick() })
 
         }
-        Row {
+        Row(modifier = Modifier.clickable {
+            onItemClick()
+        }) {
             Box {
                 AsyncImage(
                     modifier = Modifier

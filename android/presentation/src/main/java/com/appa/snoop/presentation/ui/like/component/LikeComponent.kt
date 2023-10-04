@@ -24,7 +24,8 @@ import ir.kaaveh.sdpcompose.ssp
 @Composable
 fun SelelctComponent(
     checkState: Boolean,
-    onChangeCheckedState: () -> Unit
+    onChangeCheckedState: () -> Unit,
+    onDeletedLikeList: () -> Unit
 ) {
 
     Row(
@@ -42,6 +43,9 @@ fun SelelctComponent(
         }
         Spacer(modifier = Modifier.width(4.sdp))
         Text(
+            modifier = Modifier.noRippleClickable {
+                onDeletedLikeList()
+            },
             text = "삭제",
             style = TextStyle(fontSize = 12.ssp, fontWeight = FontWeight.Normal),
         )
