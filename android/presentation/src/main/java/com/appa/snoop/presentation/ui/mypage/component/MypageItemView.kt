@@ -84,7 +84,7 @@ fun CurrentProductItemView(products : List<Product>, onItemClicked: (String) -> 
     Spacer(modifier = Modifier.size(4.sdp))
     LazyRow {
         items(products) { product ->
-            ProductItemView(
+            MypageProductView(
                 product = product,
                 label = HomeLabel,
                 ratio = 0.85f,

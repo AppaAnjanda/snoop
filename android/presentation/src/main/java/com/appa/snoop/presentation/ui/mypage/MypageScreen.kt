@@ -69,7 +69,7 @@ fun MypageScreen(
     val settings = listOf(
         MyPageLabel.NOTIFICATION,
         MyPageLabel.MODIFY_PROFILE,
-        MyPageLabel.SELECT_CARD,
+//        MyPageLabel.SELECT_CARD,
         MyPageLabel.LOGOUT,
         MyPageLabel.DECLARATION,
         MyPageLabel.PRIVACY_POLICY,
@@ -136,9 +136,9 @@ fun MypageScreen(
                     }
 
                     MyPageLabel.MODIFY_PROFILE -> navController.navigate(ModifyProfileNav.route)
-                    MyPageLabel.SELECT_CARD -> scope.launch {
-                        sheetState.partialExpand()
-                    }
+//                    MyPageLabel.SELECT_CARD -> scope.launch {
+//                        sheetState.partialExpand()
+//                    }
 
                     MyPageLabel.LOGOUT -> showDialog = true
                     MyPageLabel.DECLARATION -> {}
