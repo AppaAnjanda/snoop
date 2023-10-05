@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.appa.snoop.domain.model.chat.ChatItem
 import com.appa.snoop.presentation.ui.theme.BackgroundColor
 import com.appa.snoop.presentation.ui.theme.BlackColor
+import com.appa.snoop.presentation.util.LinkifyText
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
@@ -63,13 +64,13 @@ fun OtherChatView(
                     modifier = modifier
                         .padding(8.sdp)
                 ) {
-                    Text(
+                    LinkifyText(
                         text = user.msg,
                         style = TextStyle(
                             color = BlackColor,
                             fontSize = 12.ssp
                         ),
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Medium,
                         maxLines = 10
                     )
                 }
