@@ -2,7 +2,6 @@ package appaanjanda.snooping.domain.search.entity;
 
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.global.common.BaseTimeEntity;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

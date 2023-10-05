@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Getter
@@ -32,9 +31,11 @@ public class Wishbox extends BaseTimeEntity {
 	private Boolean alertYn;
 
 	/**
-	Elasticsearch에 연결되는 상품 ID
+	Elasticsearch에 연결되는 상품 code
 	 */
-	private String productId;
+	private String productCode;
+
+	private String provider;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "wishboxList")
@@ -42,11 +43,21 @@ public class Wishbox extends BaseTimeEntity {
 	private Member member;
 
 	@Builder
-	public Wishbox(Long id, int alertPrice, Boolean alertYn, String productId, Member member) {
+	public Wishbox(Long id, int alertPrice, Boolean alertYn, String productCode, Member member, String provider) {
 		this.id = id;
 		this.alertPrice = alertPrice;
 		this.alertYn = alertYn;
-		this.productId = productId;
+		this.productCode = productCode;
 		this.member = member;
+		this.provider = provider;
+	}
+
+	public void updateAlertPrice(int alertPrice) {
+		if (alertPrice == 0) {
+			this.alertYn = false;
+		} else {
+			this.alertYn = true;
+		}
+		this.alertPrice = alertPrice;
 	}
 }

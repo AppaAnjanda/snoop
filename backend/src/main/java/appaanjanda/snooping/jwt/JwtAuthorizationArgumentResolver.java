@@ -2,6 +2,8 @@ package appaanjanda.snooping.jwt;
 
 import javax.servlet.http.HttpServletRequest;
 
+import appaanjanda.snooping.global.error.code.ErrorCode;
+import appaanjanda.snooping.global.error.exception.BusinessException;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -53,6 +55,6 @@ public class JwtAuthorizationArgumentResolver implements HandlerMethodArgumentRe
         }
 
         // 토큰 값이 없으면 에러
-        throw new RuntimeException("권한 없음.");
+        throw new BusinessException(ErrorCode.NO_PERMISSION);
     }
 }
