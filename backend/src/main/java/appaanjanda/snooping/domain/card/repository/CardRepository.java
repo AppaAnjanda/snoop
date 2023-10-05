@@ -20,5 +20,6 @@ public interface CardRepository extends JpaRepository<MyCard, Long> {
 	void deleteAllByMember(Member member);
 
 	List<MyCard> findMyCardByMemberId(Long id);
-	void deleteMyCardByCardType(String cardType);
+
+//	void deleteMyCardByCardType(String cardType);
 }

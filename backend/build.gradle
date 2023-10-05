@@ -71,7 +71,6 @@ dependencies {
 	implementation 'org.springframework.data:spring-data-elasticsearch:4.1.15'
 	implementation 'org.elasticsearch.client:transport:7.14.0'
 	implementation 'org.elasticsearch:elasticsearch:7.14.0'
-//	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch:2.5.2'
 
 	// RestHighLevelClient
 	implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.14.0'
@@ -133,7 +132,6 @@ tasks.withType(JavaCompile).configureEach {
 	options.compilerArgs << "-Xlint:deprecation"
 }
 
-//querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"
 querydsl {
 	jpa = true
@@ -148,4 +146,3 @@ configurations {
 compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
-//querydsl 추가 끝

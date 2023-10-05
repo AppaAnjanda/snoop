@@ -1,6 +1,5 @@
 package appaanjanda.snooping.domain.hotProduct.repository;
 
-import appaanjanda.snooping.domain.hotKeyword.entity.HotKeyword;
 import appaanjanda.snooping.domain.hotProduct.entity.HotProduct;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

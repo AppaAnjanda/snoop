@@ -24,7 +24,6 @@ public class SnoopingApplication {
 		SpringApplication.run(SnoopingApplication.class, args);
 
 		LocalDateTime now = LocalDateTime.now();
-		System.out.println("현재시간 " + now);
 	}
 
 }

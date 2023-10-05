@@ -19,16 +19,6 @@ public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
     @Value("${elasticsearch.port}")
     private int port;
 
-//    @Bean(name = "restHighLevelClientForManual")
-//    @Primary
-//    public RestHighLevelClient elasticsearchClient() {
-//        return new RestHighLevelClient(
-//                RestClient.builder(
-//                        // elasticsearch 연결
-//                        new HttpHost(host, port, "http"))
-//        );
-//    }
-
     // RestHighLevelClient 설정
     @Override
     public RestHighLevelClient elasticsearchClient() {

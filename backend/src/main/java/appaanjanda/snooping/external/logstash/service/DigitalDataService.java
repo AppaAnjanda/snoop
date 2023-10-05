@@ -33,15 +33,11 @@ public class DigitalDataService {
     public boolean checkUpdateTime(DigitalProduct digitalProduct) {
         log.info("업데이트 체크");
         LocalDateTime now = LocalDateTime.now();
-        log.info("현재 시간 : {}", now);
         LocalDateTime lastUpdateTime = LocalDateTime.parse(digitalProduct.getTimestamp());
-        log.info("lastUpdate : {}", lastUpdateTime);
         // 업데이트 경과 시간
         Duration duration = Duration.between(lastUpdateTime, now);
-        log.info("경과 시간 : {}", duration);
         // 10분 지났으면 업데이트 진행
         if (duration.toMinutes() >= 10) {
-            log.info("업데이트 진행 !");
             return true;
         } else return false;
     }

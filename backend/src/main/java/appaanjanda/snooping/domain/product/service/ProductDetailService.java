@@ -4,11 +4,9 @@ import appaanjanda.snooping.domain.product.dto.BuyTimingDto;
 import appaanjanda.snooping.domain.product.dto.PriceHistoryDto;
 import appaanjanda.snooping.domain.product.entity.price.Price;
 import appaanjanda.snooping.domain.product.entity.product.Product;
-import appaanjanda.snooping.domain.product.entity.product.ProductInterface;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.*;
@@ -61,10 +59,6 @@ public class ProductDetailService {
                 .subAggregation(minAggregation)
                 .order(BucketOrder.key(false));
 
-//        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
-//                .query(QueryBuilders.termQuery("code.keyword", productCode))
-//                .aggregation(dateMinAggregation)
-//                .size(30);
         // code일치하는 상품
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(QueryBuilders.termQuery("code.keyword", productCode))

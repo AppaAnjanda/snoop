@@ -46,10 +46,7 @@ public class FCMNotificationService {
                     .build();
 
             try {
-                log.info("메시지 진짜 전송");
                 log.info("title {}", requestDto.getTitle());
-                log.info("body {}", requestDto.getBody());
-                log.info("token {}", member.getFirebaseToken());
                 firebaseMessaging.send(message);
 
                 // 알림 내역 저장

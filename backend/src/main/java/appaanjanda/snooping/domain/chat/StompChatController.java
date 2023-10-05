@@ -5,8 +5,6 @@ import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.repository.MemberRepository;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
-import appaanjanda.snooping.jwt.MemberInfo;
-import appaanjanda.snooping.jwt.MembersInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;

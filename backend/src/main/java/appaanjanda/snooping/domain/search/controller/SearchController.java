@@ -2,20 +2,14 @@ package appaanjanda.snooping.domain.search.controller;
 
 
 import appaanjanda.snooping.domain.hotKeyword.service.HotKeywordService;
-import appaanjanda.snooping.domain.member.service.dto.UserResponse;
 import appaanjanda.snooping.domain.search.dto.SearchResponseDto;
 import appaanjanda.snooping.domain.search.service.SearchService;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

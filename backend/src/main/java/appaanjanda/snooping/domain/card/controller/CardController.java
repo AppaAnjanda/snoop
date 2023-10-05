@@ -21,7 +21,7 @@ public class CardController {
 	private final CardService cardService;
 
 //	@SecurityRequirement(name = "Bearer Authentication")
-//	@Operation(summary = "카드 추가", description = "유저 정보를 jwt로 확인하고 request로 넘겨준 cardname을 추가한다.", tags = { "Card Controller" })
+//	@Operation(summary = "카드 삭제", description = "내 jwtToken으로 갖고 있는 카드를 삭제할 수 있다.", tags = { "Card Controller" })
 //	@DeleteMapping("/delete")
 //	public void deleteMyCard(@MemberInfo MembersInfo membersInfo, @RequestBody DeleteCardRequest request){
 //		cardService.deleteMyCard(membersInfo.getId(), request);

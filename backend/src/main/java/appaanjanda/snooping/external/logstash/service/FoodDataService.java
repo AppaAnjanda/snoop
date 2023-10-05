@@ -1,6 +1,5 @@
 package appaanjanda.snooping.external.logstash.service;
 
-import appaanjanda.snooping.domain.product.entity.price.DigitalPrice;
 import appaanjanda.snooping.domain.product.entity.price.FoodPrice;
 import appaanjanda.snooping.domain.product.entity.product.FoodProduct;
 import appaanjanda.snooping.domain.product.repository.price.FoodPriceRepository;
