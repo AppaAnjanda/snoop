@@ -1,5 +1,6 @@
 package com.appa.snoop.di
 
+import com.appa.snoop.BuildConfig.BASE_URL
 import com.appa.snoop.data.service.BaseService
 import com.appa.snoop.data.service.CategoryService
 import com.appa.snoop.data.service.MemberService
@@ -13,6 +14,7 @@ import com.appa.snoop.data.service.HomeService
 import com.appa.snoop.data.service.NotificationService
 import com.appa.snoop.data.service.ProductService
 import com.appa.snoop.data.service.WishBoxService
+import com.appa.snoop.di.NetworkModule_ProvideOkHttpClientFactory.provideOkHttpClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,7 +35,7 @@ object NetworkModule {
     @Singleton
     @Provides
     @Named("BASE_URL")
-    fun BaseUrl() : String = "http://52.78.159.20:8080/"
+    fun BaseUrl() : String = BASE_URL
 
     @Singleton
     @Provides

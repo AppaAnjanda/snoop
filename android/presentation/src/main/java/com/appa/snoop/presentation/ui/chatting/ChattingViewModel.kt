@@ -79,7 +79,7 @@ class ChattingViewModel @Inject constructor(
     }
 
     // 주소 선언 & 클라이언트 생성 부
-    private val baseUrl = "ws://52.78.159.20:8080/ws" // baseUrl
+    private val baseUrl = "wss://snooping.store:443/ws" // baseUrl
     private val stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, baseUrl)
 
     @SuppressLint("CheckResult")

@@ -16,7 +16,7 @@ class PreferenceDataSource @Inject constructor(
         const val ACCESS_TOKEN = "access_token"
         const val REFRESH_TOKEN = "refresh_token"
         const val EMAIL = "email"
-        const val BASE_URL = "http://52.78.159.20:8080/"
+        const val BASE_URL = "https://snooping.store:443/"
 //        const val MEMBER_INFO = "member"
     }
 
