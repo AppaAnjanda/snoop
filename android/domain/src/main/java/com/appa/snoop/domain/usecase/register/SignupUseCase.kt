@@ -9,7 +9,7 @@ import javax.inject.Inject
 class SignUpUseCase @Inject constructor(
     private val registerRepository : RegisterRepository
 ) {
-    suspend operator fun invoke(register: Register) : NetworkResult<RegisterDone> {
+    suspend operator fun invoke(register: Register) : NetworkResult<String> {
         return registerRepository.registerMember(register)
     }
 }

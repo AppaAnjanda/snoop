@@ -10,5 +10,7 @@ data class LoginRequest(
     @SerializedName("email")
     val email: String,
     @SerializedName("password")
-    val password: String
+    val password: String,
+    @SerializedName("fcmToken")
+    val fcmToken: String
 ): Parcelable

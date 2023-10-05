@@ -13,6 +13,10 @@ class PreferenceDataSource @Inject constructor(
 
     companion object {
         private const val PREFERENCE_NAME = "snoop"
+        const val ACCESS_TOKEN = "access_token"
+        const val REFRESH_TOKEN = "refresh_token"
+        const val EMAIL = "email"
+        const val BASE_URL = "https://snooping.store:443/"
 //        const val MEMBER_INFO = "member"
     }
 

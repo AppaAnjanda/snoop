@@ -8,7 +8,7 @@ import com.appa.snoop.domain.model.member.RegisterDone
 
 interface RegisterRepository {
     // 회원가입
-    suspend fun registerMember(register: Register): NetworkResult<RegisterDone>
+    suspend fun registerMember(register: Register): NetworkResult<String>
 
     // 로그인
     suspend fun login(loginInfo: LoginInfo): NetworkResult<JwtTokens>
@@ -21,4 +21,13 @@ interface RegisterRepository {
 
     // 로그아웃
     suspend fun logout()
+
+    // firebase fcm token 발급
+    suspend fun getFcmToken() : String
+
+    // 유저 이메일 저장
+    suspend fun putEmail(email: String)
+
+    // 유저 이메일 get
+    suspend fun getEmail(): String
 }
