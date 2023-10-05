@@ -47,7 +47,6 @@ import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.effects.SignupLaunchedEffect
 import com.appa.snoop.presentation.util.extensions.addFocusCleaner
 import com.appa.snoop.presentation.util.extensions.noRippleClickable
-import com.kakao.sdk.friend.m.t
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 import kotlinx.coroutines.flow.onSubscription
