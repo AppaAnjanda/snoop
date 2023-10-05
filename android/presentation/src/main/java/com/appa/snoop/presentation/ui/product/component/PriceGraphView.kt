@@ -96,9 +96,7 @@ internal fun PriceGraph(
                             val value = points.value
                             if (value.isNotEmpty()) {
                                 val time = productGraph[(value[0].x).toInt()].timestamp
-//                                val x = DecimalFormat("#.#").format(value[0].x)
                                 Text(
-//                                    text = "$x:00 가격",
                                     text = DateUtil.formatDate(time, selectChipLabel),
                                     style = TextStyle(
                                         fontWeight = FontWeight.Normal,
