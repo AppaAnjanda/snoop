@@ -545,15 +545,32 @@ Remote Directory : /home/ubuntu
 ## 9. 🌐NGINX
 
 #### 9.1. Nginx 설치
-```
+```bash
 # Nginx 설치
 $ sudo apt-get install nginx
-# NGINX 설정파일 수정
-$ sudo nano /etc/nginx/sites-available/default
 ```
 
-#### 9.2. 설정파일 수정
+#### 9.2. 도메인 발급
+> 카페24를 통해 원하는 도메인 구입<br>
+> 구매한 도메인의 DNS 관리에서 서버 IP를 A레코드에 추가<br>
+
+#### 9.3. 인증서 발급
+- letsencrypt를 통해 SSL인증서 발급
+
+```bash
+$ sudo apt-get install python3-certbot-nginx
+$ sudo certbot --nginx
 ```
+![img_1.png](nginx.png)
+1. 알림 받을 이메일 입력<br>
+2. 수신 여부 입력<br>
+3. 구매한 도메인 주소 입력
+
+![img_1.png](nginx2.png)
+2번 선택
+
+#### 9.4. 설정 파일 수정
+```bash
 ##
 
 server {
@@ -613,6 +630,8 @@ server {
 }
 ```
 
+![img_1.png](nginx-conf.png)
+밑줄 부분 수정
 <br>
 
 ## 10. 📱APK
