@@ -4,6 +4,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -77,22 +78,6 @@ fun NotificationScreen(
                         navController.navigate(route)
                     })
             }
-        }
-    } else {
-//        NoAlertMessage(text = "알림 내역이 없습니다.")
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .offset(y = (-60).sdp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_error), contentDescription = "alert",
-                modifier = Modifier.size(42.sdp)
-            )
-            Spacer(modifier = Modifier.size(12.sdp))
-            Text(text = "알림 내역이 없습니다.", style = TextStyle(color = Color.Gray, fontSize = 14.ssp))
         }
     }
 
