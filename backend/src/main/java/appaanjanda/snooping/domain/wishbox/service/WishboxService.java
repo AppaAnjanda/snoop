@@ -118,7 +118,7 @@ public class WishboxService {
     }
 
     // 찜 상품 기져와서 업데이트
-	@Scheduled(cron = "0 */10 * * * *")
+	@Scheduled(cron = "0 * * * * *")
 	public void wishboxUpdate() {
         LocalDateTime now = LocalDateTime.now();
         if (now.getMinute() == 0) {
