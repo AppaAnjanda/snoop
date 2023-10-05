@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -60,10 +61,8 @@ fun LikeScreen(
 
     // '모두 선택' 체크박스의 상태
     var allSelected by remember { mutableStateOf(false) }
-    var isEmptyState by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit, key2 = updatedWishbox) {
         likeViewModel.getWishBoxList()
-        if (wishboxList.isEmpty()) isEmptyState = true
     }
 
     LaunchedEffect(wishboxList) {
@@ -131,27 +130,9 @@ fun LikeScreen(
                         })
                     HorizontalDivider(color = BackgroundColor2)
                 }
-            } else if (isEmptyState) {
-                item {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Spacer(modifier = Modifier.size(160.sdp))
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_error),
-                            contentDescription = "alert",
-                            modifier = Modifier
-                                .size(42.sdp)
-                        )
-                        Spacer(modifier = Modifier.size(12.sdp))
-                        Text(
-                            text = "찜 내역이 없습니다.",
-                            style = TextStyle(color = Color.Gray, fontSize = 14.ssp)
-                        )
-                    }
-
-                }
             }
+
+
         }
     }
 }
