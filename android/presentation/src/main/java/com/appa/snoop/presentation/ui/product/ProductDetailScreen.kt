@@ -12,10 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -30,7 +27,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.category.utils.convertNaverUrl
 import com.appa.snoop.presentation.ui.product.component.AlarmSnackBar
@@ -46,7 +42,6 @@ import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.PriceUtil
 import com.appa.snoop.presentation.util.effects.ProductLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private const val TAG = "[김진영] ProductDetailScreen"
@@ -146,18 +141,7 @@ fun ProductDetailScreen(
         if (alarmClicked && !alarmChecked) {
             showDialog = true
             alarmClicked = false
-//                        coroutineScope.launch {
-//                            showDialog = true
-//                            val job = coroutineScope.launch {
-//                                snackState.showSnackbar(
-//                                    "",
-//                                    duration = SnackbarDuration.Indefinite
-//                                )
-//                            }
-//                            delay(1500L)
-//                            job.cancel()
-//                        }
-        } else if(alarmClicked && alarmChecked) {
+        } else if (alarmClicked && alarmChecked) {
             // 알림이 체크 되어있는 상태에서 알림 클릭
             alarmClicked = false
             alarmChecked = false
@@ -189,8 +173,14 @@ fun ProductDetailScreen(
                 Modifier,
                 product,
                 onSharedClicked = { url ->
-
+                    Log.d(TAG, "ProductDetailScreen: $url")
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, url)
+                    }
+                    context.startActivity(Intent.createChooser(intent, url))
                 }
+
             )
             BuyTimingView(modifier = Modifier, timing = timing.timing)
             if (productGraph.isNotEmpty()) {
