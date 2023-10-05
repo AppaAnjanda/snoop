@@ -37,20 +37,22 @@ public class DigitalDataService {
         // 업데이트 경과 시간
         Duration duration = Duration.between(lastUpdateTime, now);
         // 10분 지났으면 업데이트 진행
-        if (duration.toMinutes() >= 10) {
+        if (duration.toMinutes() > 9) {
+            log.info("업데이트 진행 !");
             return true;
         } else return false;
     }
 
     // 현재 가격과 저장된 가격 비교
     public void checkPrice(ProductInfo productInfo) {
-        String currentName = productInfo.getProductName();
+        String currentCode = productInfo.getCode();
 
-        Optional<DigitalProduct> existProduct = digitalProductRepository.findByProductName(currentName);
+        Optional<DigitalProduct> existProduct = digitalProductRepository.findByCode(currentCode);
         // 일치 상품 있는 경우
         if (existProduct.isPresent()) {
-            log.info("일치 상품 있음");
             DigitalProduct originProduct = existProduct.get();
+            currentCode = originProduct.getCode();
+            log.info("일치 상품 있음 {}", currentCode);
             // 최근에 업데이트 되었으면 중단
             if (checkUpdateTime(originProduct)) {
 
@@ -62,20 +64,18 @@ public class DigitalDataService {
                 Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
 
                 // 가격 정보 최신순
-                List<DigitalPrice> priceList = digitalPriceRepository.findSortedByCode(productInfo.getCode(), sort);
+                List<DigitalPrice> priceList = digitalPriceRepository.findSortedByCode(currentCode, sort);
 
                 // 마지막 가격 정보의 시간
                 DigitalPrice lastPrice = priceList.get(0);
                 LocalDateTime lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
-
                 log.info("업뎃시간 {}", lastUpdate);
+
                 Duration duration = Duration.between(lastUpdate, now);
-                log.info("경과시간 {}", duration);
                 // 첫타임 데이터 중복 예방
                 if (duration.toMinutes() >= 50 && minute < 10) {
                     log.info("첫타임 {}", minute);
-                    createPriceData(productInfo, productInfo.getCode());
-
+                    createPriceData(productInfo, currentCode);
                 }
                 // 가격이 바뀌면 업데이트
                 if (originProduct.getPrice() != productInfo.getPrice()) {
@@ -85,13 +85,12 @@ public class DigitalDataService {
                         updatePriceData(lastPrice, productInfo);
                     }
                 }
-                String productCode = productInfo.getCode();
+
                 // 찜 여부 판단
-                log.info("찜");
-                if (wishboxService.checkWishbox(productCode)) {
+                if (wishboxService.checkWishbox(currentCode)) {
                     // 알림여부 판단 후 가격 비교하고 알림보내기
-                    log.info("알림전송 {}", productCode);
-                    wishboxService.checkAlertPrice(productCode, productInfo.getPrice(), productInfo.getProductImage());
+                    log.info("알림전송 {}", currentCode);
+                    wishboxService.checkAlertPrice(currentCode, productInfo.getPrice(), productInfo.getProductImage());
                 }
             }
         } else {
@@ -165,5 +164,31 @@ public class DigitalDataService {
         log.info("시간 생성 {}", now);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         return now.format(formatter);
+    }
+
+    public DigitalPrice test(ProductInfo productInfo) {
+        String currentName = productInfo.getProductName();
+
+        Optional<DigitalProduct> existProduct = digitalProductRepository.findByProductName(currentName);
+        // 일치 상품 있는 경우
+        if (existProduct.isPresent()) {
+            log.info("일치 상품 있음");
+            DigitalProduct originProduct = existProduct.get();
+            // 최근에 업데이트 되었으면 중단
+            if (checkUpdateTime(originProduct)) {
+
+                // 그 시간대의 첫 데이터인지 확인
+                LocalDateTime now = LocalDateTime.now();
+                int minute = now.getMinute();
+
+                // 정렬 기준
+                Sort sort = Sort.by(Sort.Order.desc("@timestamp"));
+
+                List<DigitalPrice> priceList = digitalPriceRepository.findSortedByCode(productInfo.getCode(), sort);
+                return priceList.get(0);
+
+            }
+        }
+        return null;
     }
 }
