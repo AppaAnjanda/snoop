@@ -57,7 +57,7 @@ public class ProductDetailController {
     @GetMapping("/{productCode}")
     public Object getProductDetail(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo) throws UnsupportedEncodingException {
         //디코딩
-        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8);
         Long memberId = membersInfo.getId();
         if (memberId != null) {
             // 최근 본 상품 추가
@@ -75,7 +75,7 @@ public class ProductDetailController {
     @Operation(summary = "기간별 상품 가격 그래프", description = "'week', 'day', 'hour'을 period에 입력해서 기간별 가격 리스트 조회", tags = { "Product Controller" })
     public List<PriceHistoryDto> getPriceHistory(@PathVariable String productCode, @PathVariable String period) throws UnsupportedEncodingException {
         //디코딩
-        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8);
         // 단위 시간
         DateHistogramInterval interval;
         // 기간
@@ -105,7 +105,7 @@ public class ProductDetailController {
     @Operation(summary = "구매 타이밍", description = "최근 30일간의 평균 가격과 비교 \n 평균가, 현재가, 가격차이 퍼센트, 7단계의 타이밍 제공", tags = { "Product Controller" })
     public BuyTimingDto getButTiming(@PathVariable String productCode) throws UnsupportedEncodingException {
         //디코딩
-        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8);
 
         return productDetailService.buyTiming(decodedProductCode);
     }
@@ -115,7 +115,7 @@ public class ProductDetailController {
     @Operation(summary = "상품 새로고침", description = "단일 상품 업데이트 직접 호출로 정보 업데이트", tags = { "Product Controller" })
     public ResponseEntity<String> refreshProduct(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo) throws UnsupportedEncodingException {
         //디코딩
-        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8);
 
         SearchContentDto searchContentDto = productSearchService.searchProductById(decodedProductCode, membersInfo.getId());
         if (searchContentDto.getProvider().equals("쿠팡")) {
@@ -132,7 +132,7 @@ public class ProductDetailController {
     @Operation(summary = "유사 제품 추천", description = "현재 상품과 유사 제품 추천", tags = { "Product Controller" })
     public List<SearchContentDto> getRecommendProduct(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo) throws UnsupportedEncodingException {
         //디코딩
-        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8);
 
         return productDetailService.getSimilarRecommend(decodedProductCode, membersInfo.getId());
     }
