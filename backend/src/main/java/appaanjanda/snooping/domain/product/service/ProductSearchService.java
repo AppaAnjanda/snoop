@@ -9,14 +9,12 @@ import appaanjanda.snooping.domain.product.repository.product.NecessariesProduct
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
 import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
-import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.Set;
 
 
@@ -31,24 +29,6 @@ public class ProductSearchService {
     private final FoodProductRepository foodProductRepository;
     private final WishboxRepository wishboxRepository;
 
-    // 상품코드 별 상품 엔티티
-    public Class<?> searchEntityById(String productCode) {
-        // 123 에서 1(대분류 코드) 추출
-        char index = productCode.charAt(0);
-
-        switch (index) {
-            case '1':
-                return DigitalProduct.class;
-            case '2':
-                return FurnitureProduct.class;
-            case '3':
-                return NecessariesProduct.class;
-            case '4':
-                return FoodProduct.class;
-            default:
-                throw new BusinessException(ErrorCode.NOT_EXISTS_CATEGORY);
-        }
-    }
 
     // 상품코드 별 가격 엔티티
     public Class<?> searchPriceById(String productCode) {

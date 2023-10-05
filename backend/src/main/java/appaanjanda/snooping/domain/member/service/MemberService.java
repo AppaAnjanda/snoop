@@ -1,9 +1,6 @@
 package appaanjanda.snooping.domain.member.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 
 import appaanjanda.snooping.domain.member.service.dto.*;
 import appaanjanda.snooping.global.error.exception.BusinessException;
@@ -11,7 +8,6 @@ import appaanjanda.snooping.global.s3.S3Uploader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import appaanjanda.snooping.domain.card.entity.MyCard;
 import appaanjanda.snooping.domain.card.repository.CardRepository;
 import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.entity.RefreshToken;
@@ -38,7 +34,6 @@ public class MemberService {
     private final TokenService tokenService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProvider jwtProvider;
-    private final CardRepository cardRepository;
     private final S3Uploader s3Uploader;
     private final PasswordEncoder passwordEncoder;
 
@@ -85,9 +80,6 @@ public class MemberService {
                 new BusinessException(ErrorCode.INVALID_USER_DATA)
         );
 
-        log.info("loginRequest.getPassword()={}", loginRequest.getPassword());
-        log.info("passwordEncoder.encrypt(member.getEmail(), member.getPassword())={}", passwordEncoder.encrypt(member.getEmail(), member.getPassword()));
-
         member.setFCMToken(loginRequest.getFcmToken());
 
         if (!member.getPassword().equals(passwordEncoder.encrypt(loginRequest.getEmail(), loginRequest.getPassword()))) {
@@ -127,18 +119,22 @@ public class MemberService {
     }
 
     // 유저 삭제
-    public void deleteUser(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(() ->
+    public void deleteUser(DeleteUserRequestDto requestDto) {
+
+        if(!requestDto.getPassword().equals(requestDto.getCheckPassword())){
+            throw new BusinessException(ErrorCode.INVALID_USER_DATA);
+        }
+
+        Member member = memberRepository.findMemberByEmail(requestDto.getEmail()).orElseThrow(() ->
                 new BusinessException(ErrorCode.NOT_EXISTS_USER_ID)
         );
+
         memberRepository.delete(member);
     }
 
 
     // 유저 accessToken 재발급
     public String getAccessToken(AccessTokenRequest request) {
-        log.info("refreshToken={}", request.getRefreshToken());
-
         AccessTokenResponse accessTokenResponse = tokenService.generateAccessToken(request);
 
         return accessTokenResponse.getAccessToken();
@@ -170,9 +166,8 @@ public class MemberService {
     }
 
     // id로 멤버 찾기
-    // TODO : exception 처리 수정
     public Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException("멤버를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
     }
 }

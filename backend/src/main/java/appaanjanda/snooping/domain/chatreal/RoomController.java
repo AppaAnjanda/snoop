@@ -2,10 +2,7 @@ package appaanjanda.snooping.domain.chatreal;
 
 import appaanjanda.snooping.domain.chat.ChatRequest;
 import appaanjanda.snooping.domain.chat.ChatResponse;
-import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.repository.MemberRepository;
-import appaanjanda.snooping.global.error.code.ErrorCode;
-import appaanjanda.snooping.global.error.exception.BusinessException;
 import appaanjanda.snooping.jwt.MemberInfo;
 import appaanjanda.snooping.jwt.MembersInfo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +25,10 @@ public class RoomController {
 
 	private final ChatRoomRepository chatRoomRepository;
 	private final ChatRepository chatRepository;
-	private final MemberRepository memberRepository;
 
 	// 채팅방 목록 조회
 	@GetMapping("/rooms")
 	public List<RoomsResponseDto> rooms() {
-		log.info("# All Chat Rooms");
-
 		List<ChatRoom> allRooms = chatRoomRepository.findAllRooms();
 
 		List<RoomsResponseDto> names = new ArrayList<>();

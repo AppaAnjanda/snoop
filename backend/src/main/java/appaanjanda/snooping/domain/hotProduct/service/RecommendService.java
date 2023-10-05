@@ -2,7 +2,6 @@ package appaanjanda.snooping.domain.hotProduct.service;
 
 import appaanjanda.snooping.domain.product.service.ProductDetailService;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
-import appaanjanda.snooping.domain.wishbox.entity.Wishbox;
 import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -96,12 +95,6 @@ public class RecommendService {
             if (string.equals("")) continue;
             sb.append(" ").append(string);
         }
-//        for (String string : tokenStrings) {
-//            if (string.equals("")) continue;
-//            sb.append(" ").append(string);
-//        }
-
-        log.info(String.valueOf(sb));
         return sb;
     }
 }

@@ -2,7 +2,6 @@ package appaanjanda.snooping.external.logstash.service;
 
 
 import appaanjanda.snooping.domain.product.entity.price.DigitalPrice;
-import appaanjanda.snooping.domain.product.entity.price.FoodPrice;
 import appaanjanda.snooping.domain.product.entity.product.DigitalProduct;
 import appaanjanda.snooping.domain.product.repository.price.DigitalPriceRepository;
 import appaanjanda.snooping.domain.product.repository.product.DigitalProductRepository;
@@ -34,12 +33,9 @@ public class DigitalDataService {
     public boolean checkUpdateTime(DigitalProduct digitalProduct) {
         log.info("업데이트 체크");
         LocalDateTime now = LocalDateTime.now();
-        log.info("현재 시간 : {}", now);
         LocalDateTime lastUpdateTime = LocalDateTime.parse(digitalProduct.getTimestamp());
-        log.info("lastUpdate : {}", lastUpdateTime);
         // 업데이트 경과 시간
         Duration duration = Duration.between(lastUpdateTime, now);
-        log.info("경과 시간 : {}", duration);
         // 10분 지났으면 업데이트 진행
         if (duration.toMinutes() > 9) {
             log.info("업데이트 진행 !");
@@ -76,7 +72,6 @@ public class DigitalDataService {
                 log.info("업뎃시간 {}", lastUpdate);
 
                 Duration duration = Duration.between(lastUpdate, now);
-                log.info("경과시간 {}", duration);
                 // 첫타임 데이터 중복 예방
                 if (duration.toMinutes() >= 50 && minute < 10) {
                     log.info("첫타임 {}", minute);
@@ -92,7 +87,6 @@ public class DigitalDataService {
                 }
 
                 // 찜 여부 판단
-                log.info("찜");
                 if (wishboxService.checkWishbox(currentCode)) {
                     // 알림여부 판단 후 가격 비교하고 알림보내기
                     log.info("알림전송 {}", currentCode);

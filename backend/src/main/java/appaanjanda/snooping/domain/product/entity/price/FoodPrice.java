@@ -9,7 +9,6 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.persistence.Id;
-import java.time.LocalDateTime;
 
 @Document(indexName = "식품가격")
 @Getter

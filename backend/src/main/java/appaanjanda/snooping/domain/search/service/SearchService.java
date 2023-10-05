@@ -8,7 +8,6 @@ import appaanjanda.snooping.domain.search.dto.SearchContentDto;
 import appaanjanda.snooping.domain.search.dto.SearchResponseDto;
 import appaanjanda.snooping.domain.search.entity.SearchHistory;
 import appaanjanda.snooping.domain.search.repository.SearchHistoryRepository;
-import appaanjanda.snooping.domain.wishbox.repository.WishboxRepository;
 import appaanjanda.snooping.domain.wishbox.service.WishboxService;
 import appaanjanda.snooping.global.error.code.ErrorCode;
 import appaanjanda.snooping.global.error.exception.BusinessException;
@@ -29,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j

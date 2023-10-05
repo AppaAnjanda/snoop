@@ -2,12 +2,9 @@ package appaanjanda.snooping.domain.member.controller;
 
 import appaanjanda.snooping.domain.member.service.MemberService;
 import appaanjanda.snooping.domain.member.service.dto.*;
-import appaanjanda.snooping.global.response.Response;
 import io.swagger.v3.oas.annotations.Operation;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import appaanjanda.snooping.jwt.MemberInfo;
@@ -95,8 +92,8 @@ public class MemberController {
 	@SecurityRequirement(name = "Bearer Authentication")
 	@Operation(summary = "멤버 삭제", description = "멤버 정보 삭제", tags = { "Member Controller" })
 	@DeleteMapping("/delete")
-	public void delete (@MemberInfo MembersInfo membersInfo){
-		memberService.deleteUser(membersInfo.getId());
+	public void delete (@RequestBody DeleteUserRequestDto requestDto){
+		memberService.deleteUser(requestDto);
 	}
 
 

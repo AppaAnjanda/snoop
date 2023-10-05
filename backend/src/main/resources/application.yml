@@ -1,4 +1,3 @@
-
 server:
   port: 8080
   servlet:
@@ -26,12 +25,6 @@ spring:
     username: ENC(JIxLlHeC+6u59PjTWidzjw==)
     password: ENC(uYYlHgHg5hh6vRr84SVLcEm7kq66Dw0A)
     driver-class-name: org.postgresql.Driver
-#    url : jdbc:h2:tcp://localhost/~/snooping
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
-
-
 
   mail:
     host: smtp.gmail.com

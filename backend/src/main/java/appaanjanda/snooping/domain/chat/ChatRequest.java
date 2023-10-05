@@ -1,9 +1,6 @@
 package appaanjanda.snooping.domain.chat;
 
-
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter

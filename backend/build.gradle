@@ -44,6 +44,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mockito:mockito-core:3.12.4'
 	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
 	// spring boot 2.3 버전부터는 web 내부에 있는 validation 의존성이 없어져서 필요함.
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.6'
@@ -69,7 +71,6 @@ dependencies {
 	implementation 'org.springframework.data:spring-data-elasticsearch:4.1.15'
 	implementation 'org.elasticsearch.client:transport:7.14.0'
 	implementation 'org.elasticsearch:elasticsearch:7.14.0'
-//	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch:2.5.2'
 
 	// RestHighLevelClient
 	implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.14.0'
@@ -123,11 +124,14 @@ dependencies {
 //	useJUnitPlatform()
 //}
 
+test {
+	useJUnitPlatform()
+}
+
 tasks.withType(JavaCompile).configureEach {
 	options.compilerArgs << "-Xlint:deprecation"
 }
 
-//querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"
 querydsl {
 	jpa = true
@@ -142,4 +146,3 @@ configurations {
 compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
-//querydsl 추가 끝

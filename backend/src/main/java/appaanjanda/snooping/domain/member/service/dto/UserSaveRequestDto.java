@@ -1,10 +1,8 @@
 package appaanjanda.snooping.domain.member.service.dto;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +11,8 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserSaveRequestDto {
 
 	@NotEmpty(message = "이메일은 필수 입력값입니다.")

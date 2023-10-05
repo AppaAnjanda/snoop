@@ -1,8 +1,5 @@
 package appaanjanda.snooping.external.logstash.service;
 
-import appaanjanda.snooping.domain.product.entity.price.DigitalPrice;
-import appaanjanda.snooping.domain.product.entity.price.FoodPrice;
-import appaanjanda.snooping.domain.product.entity.price.FurniturePrice;
 import appaanjanda.snooping.domain.product.entity.price.NecessariesPrice;
 import appaanjanda.snooping.domain.product.entity.product.NecessariesProduct;
 import appaanjanda.snooping.domain.product.repository.price.NecessariesPriceRepository;
@@ -68,7 +65,6 @@ public class NecessariesDataService {
                 // 가격 정보 최신순
                 List<NecessariesPrice> priceList = necessariesPriceRepository.findSortedByCode(currentCode, sort);
 
-                log.info(priceList.toString());
                 // 마지막 가격 정보의 시간
                 NecessariesPrice lastPrice = priceList.get(0);
                 LocalDateTime lastUpdate = LocalDateTime.parse(lastPrice.getTimestamp());
