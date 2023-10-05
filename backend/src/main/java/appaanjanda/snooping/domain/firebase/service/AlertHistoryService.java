@@ -23,7 +23,7 @@ public class AlertHistoryService {
     public List<AlertHistoryDto> getAlertHistory(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
-        List<AlertHistory> alertHistories = alertHistoryRepository.findAllByMember(member);
+        List<AlertHistory> alertHistories = alertHistoryRepository.findAllByMemberOrderByCreateTimeDesc(member);
 
         List<AlertHistoryDto> alertHistoryDtos = new ArrayList<>();
         for (AlertHistory alertHistory : alertHistories) {
@@ -59,7 +59,7 @@ public class AlertHistoryService {
         // 현재 유저 알림 목록
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXISTS_USER_ID));
-        List<AlertHistory> alertHistories = alertHistoryRepository.findAllByMember(member);
+        List<AlertHistory> alertHistories = alertHistoryRepository.findAllByMemberOrderByCreateTimeDesc(member);
 
         // 삭제
         alertHistoryRepository.deleteAll(alertHistories);
