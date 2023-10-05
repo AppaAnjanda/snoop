@@ -91,8 +91,12 @@ fun ProductDetailScreen(
     }
 
     LaunchedEffect(productGraph) {
-        graphData = productGraph.mapIndexed { index, graphItem ->
-            DataPoint(index.toFloat(), graphItem.price.toFloat())
+        var copyGraph = productGraph
+        graphData = copyGraph.mapIndexed { index, graphItem ->
+            if (graphItem.price == Int.MAX_VALUE && index > 0) {
+                copyGraph[index].price = copyGraph[index - 1].price
+            }
+            DataPoint(index.toFloat(), copyGraph[index].price.toFloat())
         }
         Log.d(TAG, "ProductDetailScreen: $graphData")
     }
@@ -135,8 +139,6 @@ fun ProductDetailScreen(
     var alarmClicked by remember { mutableStateOf(false) }
     LaunchedEffect(alarmClicked) {
 
-        Log.d(TAG, "alarmChecked 확인 : $alarmChecked")
-
         // 알람 클릭이 되었을때 SnackBar Show
         if (alarmClicked && !alarmChecked) {
             showDialog = true
@@ -156,7 +158,6 @@ fun ProductDetailScreen(
     }
 
 
-    // TODO(Domain model 가져오면 추후에 교체)
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -173,7 +174,6 @@ fun ProductDetailScreen(
                 Modifier,
                 product,
                 onSharedClicked = { url ->
-                    Log.d(TAG, "ProductDetailScreen: $url")
                     val intent = Intent(Intent.ACTION_SEND).apply {
                         type = "text/plain"
                         putExtra(Intent.EXTRA_TEXT, url)

@@ -64,7 +64,8 @@ fun MypageScreen(
     MainLaunchedEffect(navController)
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
-    var showDialog by remember { mutableStateOf(false) }
+    var showLogoutDialog by remember { mutableStateOf(false) }
+    var showWithDrawalDialog by remember { mutableStateOf(false) }
     val scrollableState = rememberScrollState()
     val settings = listOf(
         MyPageLabel.NOTIFICATION,
@@ -89,15 +90,29 @@ fun MypageScreen(
         }
     }
 
-    if (showDialog) {
-        LogoutDialog(visible = showDialog,
+    if (showLogoutDialog) {
+        LogoutDialog(visible = showLogoutDialog,
+            text = "로그아웃 하시겠습니까?",
             onConfirmRequest = {
                 mainViewModel.logout()
                 navController.popBackStack()
                 showSnackBar("로그아웃하였습니다!")
             },
             onDismissRequest = {
-                showDialog = !showDialog
+                showLogoutDialog = !showLogoutDialog
+            })
+    }
+
+    if (showWithDrawalDialog) {
+        LogoutDialog(visible = showWithDrawalDialog,
+            text = "정말 탈퇴하시겠습니까?",
+            onConfirmRequest = {
+                mainViewModel.logout()
+                navController.popBackStack()
+                showSnackBar("회원 탈퇴되었습니다.")
+            },
+            onDismissRequest = {
+                showWithDrawalDialog = !showWithDrawalDialog
             })
     }
 
@@ -140,12 +155,15 @@ fun MypageScreen(
                         sheetState.partialExpand()
                     }
 
-                    MyPageLabel.LOGOUT -> showDialog = true
+                    MyPageLabel.LOGOUT -> showLogoutDialog = true
                     MyPageLabel.DECLARATION -> {}
                     MyPageLabel.PRIVACY_POLICY -> {
                         val url = PRIVACY_POLICY // 열고자 하는 링크 URL을 지정합니다.
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                         context.startActivity(intent)
+                    }
+                    MyPageLabel.WITHDRAWAL -> {
+                        showWithDrawalDialog = true
                     }
                     else -> {}
                 }

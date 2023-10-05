@@ -33,6 +33,7 @@ import ir.kaaveh.sdpcompose.ssp
 @Composable
 fun LogoutDialog(
     visible: Boolean,
+    text: String,
     onConfirmRequest: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -50,7 +51,7 @@ fun LogoutDialog(
                 Text(
                     modifier = Modifier
                         .padding(top = 32.sdp, bottom = 8.sdp),
-                    text = "로그아웃 하시겠습니까?",
+                    text = text,
                     style = TextStyle(
                         fontWeight = FontWeight.Normal,
                         fontSize = 12.ssp

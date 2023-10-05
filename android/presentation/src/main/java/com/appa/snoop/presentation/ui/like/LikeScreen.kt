@@ -1,11 +1,15 @@
 package com.appa.snoop.presentation.ui.like
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -13,13 +17,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.appa.snoop.domain.model.wishbox.WishBoxDeleteList
+import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.navigation.Router
 import com.appa.snoop.presentation.ui.like.component.LikeItem
 import com.appa.snoop.presentation.ui.like.component.SelelctComponent
@@ -28,6 +37,7 @@ import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.PriceUtil
 import com.appa.snoop.presentation.util.effects.MainLaunchedEffect
 import ir.kaaveh.sdpcompose.sdp
+import ir.kaaveh.sdpcompose.ssp
 
 private const val TAG = "[김진영] LikeScreen"
 
@@ -42,7 +52,6 @@ fun LikeScreen(
 
     val wishboxList by likeViewModel.wishboxListState.collectAsState()
     val updatedWishbox by likeViewModel.updateWishboxState.collectAsState()
-    val deletedWishbox by likeViewModel.deleteWishboxState.collectAsState()
     // 전체 아이템의 체크 상태를 저장하는 리스트
     var numberOfItems by remember {
         mutableStateOf(0)
@@ -51,9 +60,10 @@ fun LikeScreen(
 
     // '모두 선택' 체크박스의 상태
     var allSelected by remember { mutableStateOf(false) }
-
+    var isEmptyState by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit, key2 = updatedWishbox) {
         likeViewModel.getWishBoxList()
+        if (wishboxList.isEmpty()) isEmptyState = true
     }
 
     LaunchedEffect(wishboxList) {
@@ -83,14 +93,17 @@ fun LikeScreen(
         SelelctComponent(allSelected,
             onChangeCheckedState = { toggleSelectAll() },
             onDeletedLikeList = {
-                var wishBoxDeleteList = checkedStates.mapIndexed { index, value ->
-                    wishboxList[index].wishboxId
-                }
+                val wishBoxDeleteList = checkedStates.withIndex()
+                    .filter { it.value }
+                    .map { wishboxList[it.index].wishboxId }
                 likeViewModel.deleteWishBoxList(WishBoxDeleteList(wishBoxDeleteList))
             }
         )
         HorizontalDivider(thickness = 1.sdp, color = BackgroundColor2)
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             item {
                 HorizontalDivider(thickness = 6.sdp, color = BackgroundColor2)
             }
@@ -117,6 +130,26 @@ fun LikeScreen(
                             navController.navigate(route)
                         })
                     HorizontalDivider(color = BackgroundColor2)
+                }
+            } else if (isEmptyState) {
+                item {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(modifier = Modifier.size(160.sdp))
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_error),
+                            contentDescription = "alert",
+                            modifier = Modifier
+                                .size(42.sdp)
+                        )
+                        Spacer(modifier = Modifier.size(12.sdp))
+                        Text(
+                            text = "찜 내역이 없습니다.",
+                            style = TextStyle(color = Color.Gray, fontSize = 14.ssp)
+                        )
+                    }
+
                 }
             }
         }
