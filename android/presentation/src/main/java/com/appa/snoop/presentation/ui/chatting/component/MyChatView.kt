@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.appa.snoop.domain.model.chat.ChatItem
 import com.appa.snoop.presentation.ui.theme.BlackColor
 import com.appa.snoop.presentation.ui.theme.PrimaryColor_70
+import com.appa.snoop.presentation.util.LinkifyText
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
@@ -47,7 +48,7 @@ fun MyChatView(
                     modifier = modifier
                         .padding(8.sdp)
                 ) {
-                    Text(
+                    LinkifyText(
                         modifier = Modifier
                             .widthIn(min = 10.sdp, max = 180.sdp),
                         text = user.msg,
@@ -55,9 +56,8 @@ fun MyChatView(
                             color = BlackColor,
                             fontSize = 12.ssp
                         ),
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Medium,
                         maxLines = 10,
-//                        softWrap = true
                     )
                 }
             }
