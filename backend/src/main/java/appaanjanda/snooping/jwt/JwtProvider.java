@@ -6,8 +6,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import appaanjanda.snooping.member.entity.Member;
-import appaanjanda.snooping.member.repository.MemberRepository;
+import appaanjanda.snooping.domain.member.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.JwtBuilder;
@@ -32,12 +31,10 @@ public class JwtProvider {
     @Value("${jwt.rtk}")
     private Long REFRESH_TOKEN_VALID_TIME;
 
-    private MemberRepository memberRepository;
-
 
     public String createAccessToken(Member member) {
         Date now = new Date();
-        Date expiration = expiration(now, REFRESH_TOKEN_VALID_TIME);
+        Date expiration = expiration(now, TOKEN_VALID_TIME);
         Claims claims = Jwts.claims();
         claims.put("id", member.getId());
         claims.put("username", member.getEmail());
@@ -95,7 +92,6 @@ public class JwtProvider {
                 .build()
                 .parseClaimsJws(removeBearer(token)).getBody().getExpiration();
             log.info("expiration={}",expiration);
-
 
             Date now = new Date();
 
