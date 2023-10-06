@@ -54,7 +54,7 @@ public class FurnitureDataService {
             currentCode = originProduct.getCode();
             log.info("일치 상품 있음 {}", currentCode);
             // 최근에 업데이트 되었으면 중단
-            if (checkUpdateTime(originProduct)) {
+            if (checkUpdateTime(originProduct) || originProduct.getPrice() != productInfo.getPrice()) {
 
                 // 그 시간대의 첫 데이터인지 확인
                 LocalDateTime now = LocalDateTime.now();
