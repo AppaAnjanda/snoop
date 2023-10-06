@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.application)
@@ -6,9 +8,16 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
+val localProperties = Properties()
+localProperties.load(project.rootProject.file("local.properties").inputStream())
+
 android {
     namespace = "com.appa.snoop"
     compileSdk = 34
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "com.appa.snoop"
@@ -21,6 +30,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "API_KEY", "\"" + localProperties["api_key"] + "\"")
+        buildConfigField("String", "BASE_URL", "\"" + localProperties["base_url"] + "\"")
+
+        addManifestPlaceholders(mutableMapOf("API_KEY" to localProperties["api_key"]!!))
     }
 
     buildTypes {
@@ -30,6 +43,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            buildConfigField("String", "API_KEY", "\"" + localProperties["api_key"] + "\"")
+            buildConfigField("String", "BASE_URL", "\"" + localProperties["base_url"] + "\"")
+
+            addManifestPlaceholders(mutableMapOf("API_KEY" to localProperties["api_key"]!!))
         }
     }
     compileOptions {

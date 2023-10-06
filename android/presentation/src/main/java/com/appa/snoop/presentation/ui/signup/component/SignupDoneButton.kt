@@ -37,7 +37,7 @@ fun SignupDoneButton(
     onClick: () -> Unit
 ) {
     Button(
-        onClick = { /* TODO 회원가입 완료 로직 구현 */ onClick() },
+        onClick = { onClick() },
         modifier = Modifier
             .height(44.sdp)
             .fillMaxWidth(),

@@ -11,14 +11,13 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.persistence.Id;
-import java.time.LocalDateTime;
 
 @Document(indexName = "디지털가전")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DigitalProduct {
+public class DigitalProduct implements ProductInterface{
 
     @Id
     private String id;

@@ -23,22 +23,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.appa.snoop.domain.model.notification.Notification
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.util.DateUtil
+import com.appa.snoop.presentation.util.extensions.noRippleClickable
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NotificationItemComponent(item: Notification) {
+fun NotificationItemComponent(item: Notification, onClickedItem: () -> Unit) {
     Column {
         Row(
-            modifier = Modifier.padding(
-                start = 16.sdp,
-                end = 16.sdp,
-                top = 10.sdp,
-                bottom = 10.sdp
-            ),
+            modifier = Modifier
+                .padding(
+                    start = 16.sdp,
+                    end = 16.sdp,
+                    top = 10.sdp,
+                    bottom = 10.sdp
+                )
+                .noRippleClickable {
+                    onClickedItem()
+                },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(3f)) {
@@ -50,13 +56,13 @@ fun NotificationItemComponent(item: Notification) {
                     )
                     Spacer(modifier = Modifier.size(4.sdp))
                     Text(
-                        text = "${item.type} 알림",
+                        text = item.title,
                         style = TextStyle(fontWeight = FontWeight.Normal, fontSize = 12.ssp)
                     )
                 }
                 Spacer(modifier = Modifier.size(4.sdp))
                 Text(
-                    text = "${item.name} 현재 ${item.type}입니다!",
+                    text = item.body,
                     lineHeight = 18.ssp,
                     style = TextStyle(
                         fontWeight = FontWeight.Normal,
@@ -66,7 +72,7 @@ fun NotificationItemComponent(item: Notification) {
                 )
                 Spacer(modifier = Modifier.size(8.sdp))
                 Text(
-                    text = DateUtil.dateToString(item.date),
+                    text = DateUtil.dateToString(item.createTime),
                     lineHeight = 18.ssp,
                     style = TextStyle(
                         fontWeight = FontWeight.Normal,
@@ -78,7 +84,7 @@ fun NotificationItemComponent(item: Notification) {
 
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(item.img)
+                    .data(item.imageUrl)
                     .build(),
                 contentDescription = "상품 사진",
                 modifier = Modifier

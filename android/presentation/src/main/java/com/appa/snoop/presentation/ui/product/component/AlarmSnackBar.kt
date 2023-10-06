@@ -23,7 +23,7 @@ import ir.kaaveh.sdpcompose.sdp
 fun AlarmSnackBar(
     hostState: SnackbarHostState,
     price: String,
-    percent: Int
+    percent: String
 ) {
     SnackbarHost(
         modifier = Modifier.fillMaxWidth(),
@@ -41,7 +41,7 @@ fun AlarmSnackBar(
 fun CustomSnackBar(
     @DrawableRes drawableRes: Int,
     message: String,
-    percent: Int
+    percent: String
 ) {
     Snackbar {
         Column(
@@ -68,5 +68,5 @@ fun PreviewAlarmSnackBar() {
     AlarmSnackBar(
         SnackbarHostState(),
         "2,640,000",
-        10)
+        "10")
 }

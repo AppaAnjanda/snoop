@@ -15,5 +15,6 @@ public interface SearchHistoryRepository extends JpaRepository<SearchHistory, Lo
     @Query("SELECT h FROM SearchHistory h WHERE h.member.id = :memberId ORDER BY h.createTime DESC")
     List<SearchHistory> findRecentKeywordsOrderByCreateTime(@Param("memberId") Long memberId);
 
+    // 검색어 삭제
     void deleteByKeywordAndMemberId(String keyword, Long memberId);
 }

@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
 from kafka_producer import send_to_kafka
+from pydantic import BaseModel
 import time
 import re
 
@@ -8,6 +9,9 @@ CLIENT_ID = "19zwPizN26iliYHy73Jf"
 CLIENT_SECRET = "aH1kfQkVIF"
 
 pattern = re.compile(r'<.*?>')
+
+class KeywordDto(BaseModel):
+    keyword : str
 
 ################################## 단일 키워드 API 호출 #####################################
 def naver_product(query):

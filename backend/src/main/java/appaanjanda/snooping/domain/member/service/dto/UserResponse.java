@@ -1,9 +1,6 @@
 package appaanjanda.snooping.domain.member.service.dto;
 
-import java.util.List;
 
-import appaanjanda.snooping.domain.card.entity.MyCard;
-import appaanjanda.snooping.domain.member.entity.enumType.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +16,5 @@ public class UserResponse {
 
 	private String nickname;
 
-	private List<String> myCardList;
-
-	private Role role;
+	private String profileUrl;
 }

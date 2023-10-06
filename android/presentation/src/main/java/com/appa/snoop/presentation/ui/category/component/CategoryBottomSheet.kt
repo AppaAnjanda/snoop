@@ -1,79 +1,71 @@
 package com.appa.snoop.presentation.ui.category.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
-import androidx.compose.material3.Text
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import com.appa.snoop.presentation.ui.category.CategoryList
 import com.appa.snoop.presentation.ui.category.CategoryViewModel
-import com.appa.snoop.presentation.ui.mypage.MyPageViewModel
-import com.appa.snoop.presentation.ui.mypage.component.CheckBoxRow
-import com.appa.snoop.presentation.ui.theme.PrimaryColor
-import com.appa.snoop.presentation.ui.theme.WhiteColor
+import com.appa.snoop.presentation.ui.main.MainViewModel
 import ir.kaaveh.sdpcompose.sdp
-import ir.kaaveh.sdpcompose.ssp
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryBottomSheet(
     categoryViewModel: CategoryViewModel,
+    mainViewModel: MainViewModel,
+    navController: NavController,
     sheetState: SheetState,
-    categoryList: List<String> = listOf("디지털/가전", "가구", "생활용품", "식품"),
+    snackState: SnackbarHostState,
     onDismiss: () -> Unit
 ) {
-    val scrollableState = rememberScrollState()
-
+    val scope = rememberCoroutineScope()
     ModalBottomSheet(
-//        modifier = Modifier
-//            .verticalScroll(scrollableState),
-        sheetState = sheetState,
         onDismissRequest = {
             onDismiss()
         },
+        sheetState = sheetState
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.sdp)
-//                .verticalScroll(scrollableState)
         ) {
-            BottomSheetItem(
-                majorName = "test",
-                categoryViewModel = categoryViewModel,
-                categoryState = categoryViewModel.firstCategoryState,
-                onClick = {
-
-                }
-            )
-            for (it in categoryList) {
+            for (it in CategoryList.list) {
                 BottomSheetItem(
-                    majorName = it,
+                    majorName = it.majorName,
                     categoryViewModel = categoryViewModel,
-//                    categoryState = categoryViewModel.firstCategoryState,
-                    categoryState = false,
+                    mainViewModel = mainViewModel,
+                    categoryState = when(it.majorName) {
+                        "디지털가전" -> categoryViewModel.digitalCategoryState
+                        "가구" -> categoryViewModel.furnitureCategoryState
+                        "생활용품" -> categoryViewModel.necessariesCategoryState
+                        "식품" -> categoryViewModel.foodCategoryState
+                        else -> false
+                    },
+                    minorList = it.minorList,
                     onClick = {
-
+                        categoryViewModel.sheetSelect(it.majorName)
+                    },
+                    onDismiss = {
+                        scope.launch {
+                            onDismiss()
+                            sheetState.hide()
+                        }
+                    },
+                    navController = navController,
+                    showSnackbar = {
+                        scope.launch {
+                            snackState.showSnackbar(it)
+                        }
                     }
                 )
             }
