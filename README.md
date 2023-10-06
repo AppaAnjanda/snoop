@@ -38,10 +38,11 @@
 
 <br>
 
-| ![](res/AOS_0.png){ width="220" } |  |  |
-|---|---|---|
-| ![](res/AOS_1.png){ width="220" } | ![](res/AOS_2.png){ width="220" } | ![](res/AOS_3.png){ width="220" } |
-| ![](res/AOS_4.png){ width="220" } | ![](res/AOS_5.png){ width="220" } | ![](res/AOS_6.png){ width="220" } |
+| ![](res/AOS_0.png){ width="220" } |                           |
+|-----------------------------------|---------------------------|
+| ![](res/AOS_1.png){ width="220" } | ![](res/AOS_2.png){ width="220" } |
+| ![](res/AOS_3.png){ width="220" } | ![](res/AOS_4.png){ width="220" } |
+| ![](res/AOS_5.png){ width="220" } | ![](res/AOS_6.png){ width="220" } |
 
 <br>
 
