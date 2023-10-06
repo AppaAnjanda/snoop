@@ -31,7 +31,7 @@ public class WishboxController {
     @Operation(summary = "찜 상품 등록(상세페이지)", description = "상세 상품 화면에서 찜 버튼을 통해 상품id로 찜 상품 등록", tags = { "Wishbox Controller" })
     @PostMapping("/add/alert/{productCode}")
     public ResponseEntity<AddAlertResponseDto> addAlert(@MemberInfo MembersInfo membersInfo, @PathVariable String productCode, @RequestBody AddAlertRequestDto addAlertRequestDto) throws UnsupportedEncodingException {
-        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8);
         return ResponseEntity.ok(wishboxService.addAlert(membersInfo.getId(), decodedProductCode, addAlertRequestDto));
     }
 
@@ -64,7 +64,7 @@ public class WishboxController {
     @Operation(summary = "찜 상품 등록(상품 목록)", description = "상품 목록 화면에서 찜 버튼을 통한 찜 토글 API", tags = { "Wishbox Controller" })
     @PostMapping("/add/{productCode}")
     public ResponseEntity<AddWishboxResponseDto> addWishbox(@MemberInfo MembersInfo membersInfo, @PathVariable String productCode) throws UnsupportedEncodingException{
-        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8);
         return ResponseEntity.ok(wishboxService.addWishbox(membersInfo.getId(), decodedProductCode));
     }
 

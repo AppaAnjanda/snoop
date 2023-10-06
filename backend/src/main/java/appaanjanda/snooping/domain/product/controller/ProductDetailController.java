@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
+@Slf4j
 public class ProductDetailController {
 
     private final RecentProductService recentProductService;
@@ -56,12 +58,14 @@ public class ProductDetailController {
     @Operation(summary = "상품 상세 조회", description = "상품code로 정보 조회", tags = { "Product Controller" })
     @GetMapping("/{productCode}")
     public Object getProductDetail(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo) throws UnsupportedEncodingException {
+        log.info(productCode);
         //디코딩
-        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8);
         Long memberId = membersInfo.getId();
+        log.info("디코딩 {}", decodedProductCode);
         if (memberId != null) {
             // 최근 본 상품 추가
-            recentProductService.updateRecentProduct(membersInfo.getId(), decodedProductCode);
+            recentProductService.updateRecentProduct(memberId, decodedProductCode);
         }
 
         // 조회수 추가
@@ -75,7 +79,7 @@ public class ProductDetailController {
     @Operation(summary = "기간별 상품 가격 그래프", description = "'week', 'day', 'hour'을 period에 입력해서 기간별 가격 리스트 조회", tags = { "Product Controller" })
     public List<PriceHistoryDto> getPriceHistory(@PathVariable String productCode, @PathVariable String period) throws UnsupportedEncodingException {
         //디코딩
-        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8);
         // 단위 시간
         DateHistogramInterval interval;
         // 기간
@@ -105,7 +109,7 @@ public class ProductDetailController {
     @Operation(summary = "구매 타이밍", description = "최근 30일간의 평균 가격과 비교 \n 평균가, 현재가, 가격차이 퍼센트, 7단계의 타이밍 제공", tags = { "Product Controller" })
     public BuyTimingDto getButTiming(@PathVariable String productCode) throws UnsupportedEncodingException {
         //디코딩
-        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8);
 
         return productDetailService.buyTiming(decodedProductCode);
     }
@@ -115,7 +119,7 @@ public class ProductDetailController {
     @Operation(summary = "상품 새로고침", description = "단일 상품 업데이트 직접 호출로 정보 업데이트", tags = { "Product Controller" })
     public ResponseEntity<String> refreshProduct(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo) throws UnsupportedEncodingException {
         //디코딩
-        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8);
 
         SearchContentDto searchContentDto = productSearchService.searchProductById(decodedProductCode, membersInfo.getId());
         if (searchContentDto.getProvider().equals("쿠팡")) {
@@ -132,7 +136,7 @@ public class ProductDetailController {
     @Operation(summary = "유사 제품 추천", description = "현재 상품과 유사 제품 추천", tags = { "Product Controller" })
     public List<SearchContentDto> getRecommendProduct(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo) throws UnsupportedEncodingException {
         //디코딩
-        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8.toString());
+        String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8);
 
         return productDetailService.getSimilarRecommend(decodedProductCode, membersInfo.getId());
     }

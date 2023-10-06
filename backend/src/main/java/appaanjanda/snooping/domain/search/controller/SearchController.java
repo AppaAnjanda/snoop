@@ -49,7 +49,7 @@ public class SearchController {
                                                  @RequestParam(value = "maxPrice", defaultValue = "99999999") int maxPrice) throws UnsupportedEncodingException {
 
         //디코딩
-        String decodedKeyword = URLDecoder.decode(keyword, StandardCharsets.UTF_8.toString());
+        String decodedKeyword = URLDecoder.decode(keyword, StandardCharsets.UTF_8);
         // 회원이면 검색 기록 추가
         if (membersInfo.getId() != null) {
             searchService.updateSearchHistory(decodedKeyword, membersInfo.getId());

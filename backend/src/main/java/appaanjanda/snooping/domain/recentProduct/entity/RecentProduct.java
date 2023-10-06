@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 // 최근 본 상품
 @Entity
@@ -25,4 +26,7 @@ public class RecentProduct extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    public void updateTime(){
+        this.updateTime = LocalDateTime.now();
+    }
 }

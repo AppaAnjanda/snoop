@@ -128,8 +128,8 @@ public class ProductDetailService {
         SearchHits<?> searchHits = getAvgPrice(productCode);
 
         // 마지막 데이터에서 현재 가격 가져오기
-        Price price = (Price) searchHits.getSearchHits().get(0).getContent();
-        int curPrice = price.getPrice();
+//        Price price = (Price) searchHits.getSearchHits().get(0).getContent();
+        int curPrice = productSearchService.getProduct(productCode).getPrice();
 
         // 평균가격
         ParsedAvg avgPriceAggregation = searchHits.getAggregations().get("avg_price");
