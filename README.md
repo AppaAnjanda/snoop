@@ -1,5 +1,5 @@
 <div align="center">
-<img src="res/기웃기웃.png" height="400px" width="400px" align="Center">
+<img src="res/기웃기웃.png" width="500px" align="Center">
 
 ### 📱 실시간 가격 최저가 모니터링 서비스 📱
 
@@ -38,17 +38,17 @@
 
 <br>
 
-| ![](res/AOS_0.png){ width="150" } |  |  |
+| ![](res/AOS_0.png){ width="220" } |  |  |
 |---|---|---|
-| ![](res/AOS_1.png){ width="150" } | ![](res/AOS_2.png){ width="150" } | ![](res/AOS_3.png){ width="150" } |
-| ![](res/AOS_4.png){ width="150" } | ![](res/AOS_5.png){ width="150" } | ![](res/AOS_6.png){ width="150" } |
+| ![](res/AOS_1.png){ width="220" } | ![](res/AOS_2.png){ width="220" } | ![](res/AOS_3.png){ width="220" } |
+| ![](res/AOS_4.png){ width="220" } | ![](res/AOS_5.png){ width="220" } | ![](res/AOS_6.png){ width="220" } |
 
 <br>
 
 <div id="2"></div>
 
 ## 📱 서비스 흐름도
-![](res/ServiceFlow.png){ width="700" }
+![](res/ServiceFlow.png){ width="800" }
 
 <br>
 
@@ -74,7 +74,7 @@
 
 ## 📃 데이터 구조
 
-![](res/ERD.png){ width="700" }
+![](res/ERD.png){ width="800" }
 
 <br>
 
@@ -82,7 +82,7 @@
 
 ## 🔎 시스템 구조도
 
-![](res/Architecture.png){ width="700" }
+![](res/Architecture.png){ width="800" }
 
 <br>
 
