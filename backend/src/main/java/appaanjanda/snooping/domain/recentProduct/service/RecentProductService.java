@@ -11,57 +11,78 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 @Slf4j
+@Transactional
 public class RecentProductService {
 
     private final ProductSearchService productSearchService;
     private final MemberService memberService;
     private final RecentProductRepository recentProductRepository;
+    private final EntityManager em;
 
 
     // 최근 본 상품 추가
+    @Transactional
     public void updateRecentProduct(Long memberId, String productCode) {
 
         Member member = memberService.findMemberById(memberId);
         // 최근 본 상품
-        List<RecentProduct> recentProducts = recentProductRepository.findRecentProductsOrderByCreateTime(memberId);
+        List<RecentProduct> recentProducts = recentProductRepository.findRecentProductsOrderByUpdateTime(memberId);
 
+        log.info("최근 본 상품");
         // 최근 본 상품에 현재 상품이 포함되어 있는지 확인, 없으면 null
-        RecentProduct existProduct = recentProducts.stream()
+        RecentProduct existProduct = findExistingProduct(recentProducts, productCode);
+        if(existProduct != null) {
+            log.info("중복");
+            existProduct.updateTime();
+        } else {
+            // 최근 본 상품 10개 이상이면 마지막꺼 지우기
+            log.info("10개");
+            checkAndRemoveOldestIfExceedsLimit(recentProducts);
+            log.info("생성");
+            saveNewRecentProduct(member, productCode);
+        }
+
+    }
+    // 이미 봤던 상품인지 확인
+    private RecentProduct findExistingProduct(List<RecentProduct> recentProducts, String productCode) {
+        log.info("봤는지 확인 {}", productCode);
+        return recentProducts.stream()
                 .filter(search -> search.getProductCode().equals(productCode))
                 .findFirst()
                 .orElse(null);
+    }
 
-        // 있으면 제거
-        if(existProduct != null) {
-            recentProductRepository.delete(existProduct);
-            recentProducts.remove(existProduct);
-        }
-
-        // 새로 본 상품 추가
+    // 최근 처음 조회하는 상품
+    private void saveNewRecentProduct(Member member, String productCode) {
+        log.info("처음조회");
         RecentProduct newWatchProduct = new RecentProduct();
         newWatchProduct.setMember(member);
         newWatchProduct.setProductCode(productCode);
         recentProductRepository.save(newWatchProduct);
+    }
 
-        // 최근 본 상품 10개 이상이면 마지막꺼 지우고 추가
+    private void checkAndRemoveOldestIfExceedsLimit(List<RecentProduct> recentProducts) {
         if (recentProducts.size() >= 10) {
+            log.info("10개22");
             RecentProduct oldestProduct = recentProducts.get(recentProducts.size()-1);
-            recentProductRepository.delete(oldestProduct);
+            log.info(String.valueOf(oldestProduct.getId()));
+            recentProductRepository.deleteByProductId(oldestProduct.getId());
         }
-
     }
 
     // 최근 본 상품 리스트
     public List<Object> getRecentProduct(Long memberId) {
         // 현재 사용자의 최근 본 상품들
-        List<RecentProduct> recentProducts = recentProductRepository.findRecentProductsOrderByCreateTime(memberId);
+        List<RecentProduct> recentProducts = recentProductRepository.findRecentProductsOrderByUpdateTime(memberId);
 
         // 최근 본 상품의 상세 정보 리스트
         List<Object> products = new ArrayList<>();

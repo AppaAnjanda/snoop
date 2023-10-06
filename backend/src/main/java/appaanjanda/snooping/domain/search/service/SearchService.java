@@ -4,6 +4,7 @@ import appaanjanda.snooping.domain.member.entity.Member;
 import appaanjanda.snooping.domain.member.service.MemberService;
 import appaanjanda.snooping.domain.product.entity.product.Product;
 import appaanjanda.snooping.domain.product.service.ProductSearchService;
+import appaanjanda.snooping.domain.recentProduct.entity.RecentProduct;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
 import appaanjanda.snooping.domain.search.dto.SearchResponseDto;
 import appaanjanda.snooping.domain.search.entity.SearchHistory;
@@ -161,23 +162,30 @@ public class SearchService {
         List<SearchHistory> recentKeywords = searchHistoryRepository.findRecentKeywordsOrderByCreateTime(memberId);
 
         // 최근 검색어중에 현재 검색어가 포함되어 있는지 확인, 없으면 null
-        SearchHistory existKeyword = recentKeywords.stream()
-                .filter(search -> search.getKeyword().equals(keyword))
-                .findFirst()
-                .orElse(null);
+        SearchHistory existKeyword = findExistingKeyword(recentKeywords, keyword);
 
         // 있으면 제거
         if(existKeyword != null) {
             searchHistoryRepository.delete(existKeyword);
-            recentKeywords.remove(existKeyword);
         }
 
         // 새로 검색어 추가
+        saveNewSearchHistory(member, keyword);
+        
+    }
+    // 이미 봤던 상품인지 확인
+    private SearchHistory findExistingKeyword(List<SearchHistory> recentKeywords, String keyword) {
+        return recentKeywords.stream()
+                .filter(search -> search.getKeyword().equals(keyword))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private void saveNewSearchHistory(Member member, String keyword) {
         SearchHistory newSearchHistory = new SearchHistory();
         newSearchHistory.setMember(member);
         newSearchHistory.setKeyword(keyword);
         searchHistoryRepository.save(newSearchHistory);
-        
     }
 
     // 검색 기록 조회

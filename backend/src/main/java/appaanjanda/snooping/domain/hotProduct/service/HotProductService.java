@@ -5,6 +5,7 @@ import appaanjanda.snooping.domain.hotProduct.repository.HotProductRepository;
 import appaanjanda.snooping.domain.product.service.ProductSearchService;
 import appaanjanda.snooping.domain.search.dto.SearchContentDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
 @RequiredArgsConstructor
 public class HotProductService {
 
@@ -57,10 +59,12 @@ public class HotProductService {
         Optional<HotProduct> hotProduct = hotProductRepository.findByProductCode(productCode);
         // 상품 있으면 count +1
         if (hotProduct.isPresent()) {
+            log.info("조회증가");
             HotProduct existHotProduct = hotProduct.get();
             existHotProduct.setCount(existHotProduct.getCount() + 1);
 
         } else { // 없으면 새로 생성
+            log.info("조회신규");
             String majorCategory = productSearchService.getProduct(productCode).getMajorCategory();
             HotProduct newHotProduct = new HotProduct(productCode, majorCategory, 1);
             hotProductRepository.save(newHotProduct);

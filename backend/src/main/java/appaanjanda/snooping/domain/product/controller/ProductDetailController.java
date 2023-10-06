@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
+@Slf4j
 public class ProductDetailController {
 
     private final RecentProductService recentProductService;
@@ -56,12 +58,14 @@ public class ProductDetailController {
     @Operation(summary = "상품 상세 조회", description = "상품code로 정보 조회", tags = { "Product Controller" })
     @GetMapping("/{productCode}")
     public Object getProductDetail(@PathVariable String productCode, @MemberInfo(required = false) MembersInfo membersInfo) throws UnsupportedEncodingException {
+        log.info(productCode);
         //디코딩
         String decodedProductCode = URLDecoder.decode(productCode, StandardCharsets.UTF_8);
         Long memberId = membersInfo.getId();
+        log.info("디코딩 {}", decodedProductCode);
         if (memberId != null) {
             // 최근 본 상품 추가
-            recentProductService.updateRecentProduct(membersInfo.getId(), decodedProductCode);
+            recentProductService.updateRecentProduct(memberId, decodedProductCode);
         }
 
         // 조회수 추가
