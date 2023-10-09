@@ -5,5 +5,7 @@ enum class MyPageLabel(val label: String) {
     MODIFY_PROFILE("프로필 변경"),
     SELECT_CARD("혜택 카드 선택"),
     LOGOUT("로그아웃"),
+    DECLARATION("신고"),
+    PRIVACY_POLICY("개인정보 처리방침"),
     WITHDRAWAL("회원탈퇴")
 }

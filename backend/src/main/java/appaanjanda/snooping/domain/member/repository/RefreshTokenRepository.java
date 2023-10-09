@@ -15,9 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RefreshTokenRepository {
 
-	@Value("${jwt.atk}")
-	private Long TOKEN_VALID_TIME;
-
 	@Value("${jwt.rtk}")
 	private Long REFRESH_TOKEN_VALID_TIME;
 

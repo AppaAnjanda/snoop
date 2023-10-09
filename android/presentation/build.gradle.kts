@@ -78,4 +78,16 @@ dependencies {
     implementation(libs.lottie)
     // kakao
     implementation(libs.bundles.kakao)
+    // Graph
+    implementation(libs.plot)
+    // permissions
+    implementation(libs.permissions)
+    // paging
+    implementation(libs.androidx.paging)
+    //stomp
+    implementation(libs.stomp)
+    //rx
+    implementation(libs.bundles.rx)
+    // oss-licenses
+    implementation(libs.oss.licenses)
 }

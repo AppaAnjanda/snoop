@@ -9,14 +9,13 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.persistence.Id;
-import java.time.LocalDateTime;
 
 @Document(indexName = "생활용품가격")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NecessariesPrice {
+public class NecessariesPrice implements PriceInterface {
 
     @Id
     private String id;

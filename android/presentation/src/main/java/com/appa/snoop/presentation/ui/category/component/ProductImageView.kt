@@ -1,8 +1,14 @@
 package com.appa.snoop.presentation.ui.category.component
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,23 +34,44 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.appa.snoop.domain.model.category.Product
 import com.appa.snoop.presentation.R
 import com.appa.snoop.presentation.common.LottieAnim
+import com.appa.snoop.presentation.ui.category.utils.LoadingLottieAnimation
+import com.appa.snoop.presentation.ui.category.utils.convertNaverUrl
 import com.appa.snoop.presentation.ui.theme.BlackColor
 import com.appa.snoop.presentation.ui.theme.BlueColor
+import com.appa.snoop.presentation.ui.theme.GreenColor
 import com.appa.snoop.presentation.ui.theme.RedColor
 import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.extensions.noRippleClickable
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
+private const val TAG = "[김희웅] ProductImageView"
+@SuppressLint("ResourceType")
 @Composable
 fun ProductImageView(
     modifier: Modifier = Modifier,
-    productState: String,
+    product: Product,
     onLikeClicked: () -> Unit
 ) {
-    var isChecked by remember { mutableStateOf(false) }
+//    var isChecked by remember { mutableStateOf(false) }
+    var isChecked by remember { mutableStateOf(product.wishYn) }
+    val context = LocalContext.current
+
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lottie_loading))
+
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        speed = 1f,
+        iterations = Int.MAX_VALUE
+    )
+
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(10.sdp))
@@ -56,22 +83,37 @@ fun ProductImageView(
                 .align(Alignment.Center)
                 .background(color = WhiteColor),
             model = ImageRequest.Builder(LocalContext.current)
-                .data("https://media.istockphoto.com/id/1358386001/photo/apple-macbook-pro.jpg?s=612x612&w=0&k=20&c=d14HA-i0EHpdvNvccdJQ5pAkQt8bahxjjb6fO6hs4E8=")
+                .data(product.productImage)
                 .build(),
             contentDescription = "제품 이미지",
-            contentScale = ContentScale.FillWidth
+            contentScale = ContentScale.FillWidth,
+            placeholder = painterResource(id = R.drawable.img_logo)
         )
 
         Box(
             modifier = modifier
                 .wrapContentSize()
                 .clip(RoundedCornerShape(10.sdp))
-                .background(color = BlueColor)
+                .background(
+                    color = if (product.provider == "쿠팡") BlueColor else GreenColor
+                )
+                .clickable {
+                    val url =
+                        if (product.provider == "네이버")
+                            convertNaverUrl(
+                                product.productLink
+                            )
+                        else
+                            product.productLink
+                    Log.d(TAG, "ProductImageView: ${url}")
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    context.startActivity(intent)
+                }
         ) {
             Text(
                 modifier = modifier
                     .padding(horizontal = 12.sdp, vertical = 4.sdp),
-                text = productState,
+                text = if (product.provider == "쿠팡") product.provider else "네이버",
                 style = TextStyle(
                     fontSize = 8.ssp,
                     fontWeight = FontWeight.ExtraBold,
@@ -95,24 +137,28 @@ fun ProductImageView(
                     .background(color = WhiteColor)
                     .padding(3.sdp)
                     .noRippleClickable {
-                        // TODO("서버에 찜목록 추가")
-                        onLikeClicked()
+//                        onLikeClicked()
+//                        isChecked = !isChecked
                     }
             ) {
                 LottieAnim(
                     res = R.raw.lottie_like,
                     isChecked = isChecked,
                     startTime = 0.2f,
-                    endTime = 0.7f
+                    endTime = 0.7f,
+                    onClick = {
+                        isChecked = !isChecked
+                        onLikeClicked()
+                    }
                 )
             }
         }
     }
 }
-@Composable
-@Preview
-fun Preview() {
-    ProductImageView(
-        productState = "지금 최저가"
-    ) {}
-}
+//@Composable
+//@Preview
+//fun Preview() {
+//    ProductImageView(
+//        productState = "지금 최저가"
+//    ) {}
+//}

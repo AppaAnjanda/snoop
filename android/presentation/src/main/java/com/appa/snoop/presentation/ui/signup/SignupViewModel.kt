@@ -31,7 +31,6 @@ private const val TAG = "[김희웅] SignupViewModel"
 class SignupViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase
 ): ViewModel() {
-    //TODO 읽고있다가 값에 변경이 있으면 버튼 색 바꿔주고, 이메일 칸 채워주는 코드 필요
     var isKakaoLoginSuccess by mutableStateOf<Boolean>(false)
 //    val isLoginSuccess = _isLoginSuccess
 
@@ -90,31 +89,37 @@ class SignupViewModel @Inject constructor(
         }
     }
 
-    private val _signUpState = MutableStateFlow<NetworkResult<RegisterDone>>(NetworkResult.Loading)
-    val signUpState : StateFlow<NetworkResult<RegisterDone>> = _signUpState
+    private val _signUpState = MutableStateFlow<NetworkResult<String>>(NetworkResult.Loading)
+    val signUpState : StateFlow<NetworkResult<String>> = _signUpState
 
     var isSignupSuccess by mutableStateOf(false)
         private set
 
-    fun signUp(email: String, password: String, nickname: String, cardList: List<String> = listOf()) = viewModelScope.launch {
-        Log.d(TAG, "signUp: email $email")
-        Log.d(TAG, "signUp: password $password")
-        Log.d(TAG, "signUp: nickname $nickname")
-        Log.d(TAG, "signUp: cardList $cardList")
-        val register = Register(
-            email = email,
-            password = password,
-            nickname = nickname,
-            cardList = cardList
-        )
-        _signUpState.emit(signUpUseCase.invoke(register))
+    fun signUp(email: String, password: String, nickname: String, cardList: List<String> = listOf()) {
+        viewModelScope.launch {
+            Log.d(TAG, "signUp: email $email")
+            Log.d(TAG, "signUp: password $password")
+            Log.d(TAG, "signUp: nickname $nickname")
+//        Log.d(TAG, "signUp: cardList $cardList")
+            val register = Register(
+                email = email,
+                password = password,
+                nickname = nickname,
+            )
 
-        if (signUpState.value is NetworkResult.Success) {
-            Log.d(TAG, "signUp 서버통신 성공적")
-            isSignupSuccess = true
-        } else {
-            Log.d(TAG, "signUp 서버통신 실패")
+            val result = signUpUseCase.invoke(register)
+//            val result = _signUpState.emit(signUpUseCase.invoke(register))
+
+            when (result) {
+                is NetworkResult.Success -> {
+                    Log.d(TAG, "signUp 서버통신 성공적")
+                    isSignupSuccess = true
+                }
+
+                else -> {
+                    Log.d(TAG, "signUp 서버통신 실패")
+                }
+            }
         }
-
     }
 }

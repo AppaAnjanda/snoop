@@ -8,5 +8,7 @@ import android.os.Parcelable
 @Parcelize
 data class AccessTokenResponse(
     @SerializedName("accessToken")
-    val accessToken: String
+    val accessToken: String,
+    @SerializedName("refreshToken")
+    val refreshToken: String
 ) : Parcelable

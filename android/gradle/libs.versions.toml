@@ -37,6 +37,16 @@ room = "2.5.2"
 coil = "2.4.0"
 lottie = "6.1.0"
 kakao = "2.16.0"
+plot = "0.1.1"
+permissions = "0.28.0"
+androidxPaging = "3.2.1"
+googleServices = "4.3.15"
+firebaseBom = "32.3.1"
+firebaseMessaging = "21.1.0"
+stomp = "1.6.6"
+rxjava = "2.2.5"
+rxandroid = "2.1.0"
+oss-licenses = "17.0.0"
 
 [libraries]
 
@@ -62,6 +72,7 @@ androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime
 androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "androixPagingCompose" }
+androidx-paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "androidxPaging" }
 
 #OKHTTP
 okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp" }
@@ -107,6 +118,9 @@ coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }
 #Lottie
 lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 
+#Graph
+plot = { group = "com.github.madrapps", name = "plot", version.ref = "plot" }
+
 #kakao
 kakao = { group = "com.kakao.sdk", name = "v2-all", version.ref = "kakao"}
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao"}
@@ -114,6 +128,24 @@ kakao-talk = { group = "com.kakao.sdk", name = "v2-talk", version.ref = "kakao"}
 kakao-share = { group = "com.kakao.sdk", name = "v2-share", version.ref = "kakao"}
 kakao-friend = { group = "com.kakao.sdk", name = "v2-friend", version.ref = "kakao"}
 kakao-cert = { group = "com.kakao.sdk", name = "v2-cert", version.ref = "kakao"}
+
+#Permission
+permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "permissions" }
+
+#Firebase
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
+
+#Stomp
+stomp = { group = "com.github.NaikSoftware", name = "StompProtocolAndroid", version.ref = "stomp" }
+
+#rx
+rxjava = { group = "io.reactivex.rxjava2", name = "rxjava", version.ref = "rxjava" }
+rxandroid = { group = "io.reactivex.rxjava2", name = "rxjava", version.ref = "rxandroid" }
+
+#opensource licenses
+oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "oss-licenses" }
 
 [plugins]
 
@@ -126,9 +158,12 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "parcelize" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 
 [bundles]
 okhttp = ["okhttp", "okhttp-bom", "okhttp-logging-interceptor"]
 retrofit = ["retrofit", "retrofit-converter-gson"]
 coil = ["coil", "coil-gif"]
 kakao = ["kakao", "kakao-friend", "kakao-share", "kakao-talk", "kakao-user", "kakao-cert"]
+firebase = ["firebase-bom", "firebase-analytics-ktx", "firebase-messaging"]
+rx = ["rxjava", "rxandroid"]

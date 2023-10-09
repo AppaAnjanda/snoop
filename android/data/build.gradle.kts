@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.parcelize)
     alias(libs.plugins.kapt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -54,4 +55,8 @@ dependencies {
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
     ksp(libs.room.compiler)
+    // fcm
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.messaging)
 }

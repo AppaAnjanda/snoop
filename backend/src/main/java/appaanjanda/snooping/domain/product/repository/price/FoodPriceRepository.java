@@ -1,6 +1,5 @@
 package appaanjanda.snooping.domain.product.repository.price;
 
-import appaanjanda.snooping.domain.product.entity.price.DigitalPrice;
 import appaanjanda.snooping.domain.product.entity.price.FoodPrice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;

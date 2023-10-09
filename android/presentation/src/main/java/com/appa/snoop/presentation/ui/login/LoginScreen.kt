@@ -8,23 +8,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -39,15 +33,16 @@ import com.appa.snoop.presentation.ui.theme.WhiteColor
 import com.appa.snoop.presentation.util.effects.LoginLaunchEffect
 import com.appa.snoop.presentation.util.extensions.addFocusCleaner
 import ir.kaaveh.sdpcompose.sdp
-import kotlinx.coroutines.launch
 
 private const val TAG = "[김희웅] LoginScreen"
+
 @Composable
 fun LoginScreen(
     navController: NavController,
     loginViewModel: LoginViewModel = hiltViewModel(),
     showSnackBar: (String) -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
     LoginLaunchEffect(navController)
 
     LaunchedEffect(
@@ -59,10 +54,12 @@ fun LoginScreen(
                 showSnackBar("로그인에 성공했습니다!")
                 navController.popBackStack()
             }
+
             false -> {
                 showSnackBar("다시 시도해주세요.")
                 Log.d(TAG, "LoginScreen: 여기까지 왔는데용")
             }
+
             null -> {
 
             }
@@ -110,7 +107,11 @@ fun LoginScreen(
                 )
                 LoginButton(
                     loginViewModel = loginViewModel,
-                    focusManager = focusManager
+                    focusManager = focusManager,
+                    onClick = {
+                        loginViewModel.login()
+                        focusManager.clearFocus()
+                    }
                 )
                 Spacer(modifier = Modifier.size(6.sdp))
                 GoSignupText(

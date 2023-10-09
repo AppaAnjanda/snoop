@@ -44,7 +44,11 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mockito:mockito-core:3.12.4'
 	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
+	// spring boot 2.3 버전부터는 web 내부에 있는 validation 의존성이 없어져서 필요함.
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.6'
 
 	// postgre
 	implementation 'org.postgresql:postgresql:42.6.0'
@@ -64,10 +68,12 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	// elasticsearch
-	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+	implementation 'org.springframework.data:spring-data-elasticsearch:4.1.15'
+	implementation 'org.elasticsearch.client:transport:7.14.0'
+	implementation 'org.elasticsearch:elasticsearch:7.14.0'
 
 	// RestHighLevelClient
-	//implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.15.0'
+	implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.14.0'
 
 	// p6spy
 	implementation group: 'p6spy', name: 'p6spy', version: '3.9.1'
@@ -78,30 +84,54 @@ dependencies {
 	// 비밀번호 찾기 위해 이메일 인증
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-    // AwsS3 관련 의존성
-//	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	// AwsS3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 	//querydsl 추가
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
 	// jasypt
-	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 
 	//mongoDB
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	// thymeleaf
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+	// firebase
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.1.1'
+
+	// https://mvnrepository.com/artifact/org.webjars/stomp-websocket
+	implementation 'org.webjars:stomp-websocket:2.3.4'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-reactor-netty
+	implementation 'org.springframework.boot:spring-boot-starter-reactor-netty:2.6.4'
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4.1'
+	// https://mvnrepository.com/artifact/org.webjars/sockjs-client
+	implementation 'org.webjars:sockjs-client:1.5.1'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-amqp
+	implementation 'org.springframework.boot:spring-boot-starter-amqp:2.6.4'
+
+	// json object
+	implementation 'org.json:json:20200518'
 }
 
-tasks.named('test') {
+//tasks.named('test') {
+//	useJUnitPlatform()
+//}
+
+test {
 	useJUnitPlatform()
 }
 
-//querydsl 추가 시작
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs << "-Xlint:deprecation"
+}
+
 def querydslDir = "$buildDir/generated/querydsl"
 querydsl {
 	jpa = true
@@ -116,4 +146,3 @@ configurations {
 compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
-//querydsl 추가 끝
