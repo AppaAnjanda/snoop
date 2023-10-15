@@ -38,8 +38,8 @@ public class FurnitureDataService {
         LocalDateTime lastUpdateTime = LocalDateTime.parse(furnitureProduct.getTimestamp());
         // 업데이트 경과 시간
         Duration duration = Duration.between(lastUpdateTime, now);
-        // 10분 지났으면 업데이트 진행
-        if (duration.toMinutes() > 9) return true;
+        // 5분 지났으면 업데이트 진행
+        if (duration.toMinutes() > 5) return true;
         else return false;
     }
 
@@ -53,7 +53,7 @@ public class FurnitureDataService {
             FurnitureProduct originProduct = existProduct.get();
             currentCode = originProduct.getCode();
             log.info("일치 상품 있음 {}", currentCode);
-            // 최근에 업데이트 되었으면 중단
+            // 최근에 업데이트 되었거나 가격 변화 없으면 중단
             if (checkUpdateTime(originProduct) || originProduct.getPrice() != productInfo.getPrice()) {
 
                 // 그 시간대의 첫 데이터인지 확인
@@ -80,7 +80,8 @@ public class FurnitureDataService {
                 if (originProduct.getPrice() != productInfo.getPrice()) {
                     log.info("가격 변동 {}", productInfo.getPrice());
                     updateData(originProduct, productInfo);
-                    if (minute >= 10) {
+                    // 첫 시간 데이터는 업데이트 할 필요 x, 가격 하락한 경우에만 가격 데이터 갱신
+                    if (minute >= 10 || originProduct.getPrice() > productInfo.getPrice()) {
                         updatePriceData(lastPrice, productInfo);
                     }
                 }
