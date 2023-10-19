@@ -118,28 +118,28 @@ public class WishboxService {
     }
 
     // 찜 상품 기져와서 업데이트
-	@Scheduled(cron = "0 */10 * * * *")
-	public void wishboxUpdate() {
-        LocalDateTime now = LocalDateTime.now();
-        if (now.getMinute() == 0) {
-            // 정각일 때는 실행하지 않음
-            return;
-        }
-
-		Set<Object[]> allWishboxCode = wishboxRepository.findAllProductCodeAndProvider();
-
-		for (Object[] wishbox : allWishboxCode) {
-            String productCode = (String) wishbox[0];
-            String provider = (String) wishbox[1];
-
-			if (provider.equals("쿠팡")){ continue;
-//				coupangCrawlingCaller.oneProductSearch(productCode);
-
-			} else {
-				naverApiCaller.oneProductSearch(productCode);
-			}
-		}
-	}
+//	@Scheduled(cron = "0 */10 * * * *")
+//	public void wishboxUpdate() {
+//        LocalDateTime now = LocalDateTime.now();
+//        if (now.getMinute() == 0) {
+//            // 정각일 때는 실행하지 않음
+//            return;
+//        }
+//
+//		Set<Object[]> allWishboxCode = wishboxRepository.findAllProductCodeAndProvider();
+//
+//		for (Object[] wishbox : allWishboxCode) {
+//            String productCode = (String) wishbox[0];
+//            String provider = (String) wishbox[1];
+//
+//			if (provider.equals("쿠팡")){ continue;
+////				coupangCrawlingCaller.oneProductSearch(productCode);
+//
+//			} else {
+//				naverApiCaller.oneProductSearch(productCode);
+//			}
+//		}
+//	}
 
     // 찜 상품 알림 가격 변경
     public WishboxResponseDto updateAlertPrice(Long memberId, Long wishboxId, UpdateAlertPriceRequestDto updateAlertPriceRequestDto) {

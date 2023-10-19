@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 public class NaverApiCaller {
 
     private final RestTemplate restTemplate;
-    private static final String NAVER_URL = "http://j9d104a.p.ssafy.io:8000/naver";
+    private static final String NAVER_URL = "http://15.165.116.126:8000/naver";
 
     public void oneProductSearch(String productCode) {
 
